@@ -82,7 +82,7 @@ namespace Test {
 	void TestClass::Run(const string & test)
 	{
 		for (map<string, function<void(void)>>::iterator it = _testMethods.begin(); it != _testMethods.end(); it++) {
-			if (String::Contains(it->first, test)) {
+			if (String::StartsWith(it->first, test)) {
 				Run(it);
 			}
 		}

@@ -77,12 +77,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Argument.h" />
+    <ClInclude Include="BitSet.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="TestClass.h" />
     <ClInclude Include="TestSuite.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BitSet.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="String.cpp" />
     <ClCompile Include="TestClass.cpp" />

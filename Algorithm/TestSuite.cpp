@@ -84,7 +84,7 @@ namespace Test {
 	void TestSuite::Run(const string & test)
 	{
 		for (map<string, TestClass *>::iterator it = _tests.begin(); it != _tests.end(); it++) {
-			if (String::Contains(it->first, test)) {
+			if (String::StartsWith(it->first, test)) {
 				Run(it);
 			}
 		}
@@ -93,7 +93,7 @@ namespace Test {
 	void TestSuite::Run(const string & test, const string & method)
 	{
 		for (map<string, TestClass *>::iterator it = _tests.begin(); it != _tests.end(); it++) {
-			if (String::Contains(it->first, test)) {
+			if (String::StartsWith(it->first, test)) {
 				Run(it, method);
 			}
 		}
