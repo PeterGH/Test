@@ -5,6 +5,7 @@
 #include "..\Algorithm\Argument.h"
 #include "..\Algorithm\Log.h"
 #include "..\Algorithm\TestSuite.h"
+#include "ArrayTest.h"
 #include "BitSetTest.h"
 #include "StringTest.h"
 
@@ -30,6 +31,8 @@ int main(int argc, char * argv[])
 	Test::LogLevel level = arg.Has("v") ? Test::LogLevel::Verbose : Test::LogLevel::Error;
 	Test::Log log(cout, level);
 	Test::TestSuite suite(log);
+
+	suite.Add(new ArrayTest(log));
 	suite.Add(new BitSetTest(log)); 
 	suite.Add(new StringTest(log));
 	

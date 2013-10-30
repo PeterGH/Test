@@ -30,6 +30,9 @@
     <ClInclude Include="BitSetTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ArrayTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -42,6 +45,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BitSetTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrayTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
