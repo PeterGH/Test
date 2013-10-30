@@ -62,7 +62,7 @@ namespace Test {
 	BitSet::~BitSet(void)
 	{
 		if (nullptr != _ints) {
-			delete _ints;
+			delete[] _ints;
 			_ints = nullptr;
 		}
 	}

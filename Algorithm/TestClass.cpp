@@ -10,17 +10,14 @@ namespace Test {
 	void TestClass::Run(map<string, function<void(void)>>::iterator & it)
 	{
 		try {
-			cout << "   == " << it->first << " ==" << endl;
 			it->second();
 			_pass++;
-		}
-		catch (AssertError & e) {
+		} catch (AssertError & e) {
 			_fail++;
-			_log.WriteError("%s: %s", typeid(e).name(), e.what());
-		}
-		catch (exception & e) {
+			_log.WriteError("%s: %s, %s\n", it->first, typeid(e).name(), e.what());
+		} catch (exception & e) {
 			_fail++;
-			_log.WriteError("%s: %s", typeid(e).name(), e.what());
+			_log.WriteError("%s: %s, %s\n", it->first, typeid(e).name(), e.what());
 		}
 	}
 
@@ -64,17 +61,14 @@ namespace Test {
 
 		parallel_for_each(_testMethods.begin(), _testMethods.end(), [&](pair<string, function<void(void)>> it) {
 			try {
-				cout << "   == " << it.first << " ==" << endl;
 				it.second();
 				InterlockedIncrement64((long long *)&_pass);
-			}
-			catch (AssertError & e) {
+			} catch (AssertError & e) {
 				InterlockedIncrement64((long long *)&_fail);
-				cout << "Error: " << typeid(e).name() << ": " << e.what() << endl;
-			}
-			catch (exception & e) {
+				_log.WriteError("%s: %s, %s\n", it.first, typeid(e).name(), e.what());
+			} catch (exception & e) {
 				InterlockedIncrement64((long long *)&_fail);
-				cout << "Error: " << typeid(e).name() << ": " << e.what() << endl;
+				_log.WriteError("%s: %s, %s\n", it.first, typeid(e).name(), e.what());
 			}
 		});
 	}
