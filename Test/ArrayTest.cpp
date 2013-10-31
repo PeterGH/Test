@@ -112,4 +112,215 @@ void ArrayTest::Init(void)
 
 		Test(A, B, length, columns, rows);
 	});
+
+	Add("Rotate(1)", [&](){
+		int A[1] = { 1 };
+
+		Test::Array::RotateLeft<int>(A, 1, 0);
+		ASSERT1(A[0] == 1);
+		Test::Array::RotateLeft<int>(A, 1, 1);
+		ASSERT1(A[0] == 1);
+		Test::Array::RotateLeft<int>(A, 1, 2);
+		ASSERT1(A[0] == 1);
+		Test::Array::RotateLeft<int>(A, 1, 3);
+		ASSERT1(A[0] == 1);
+		Test::Array::RotateRight<int>(A, 1, 3);
+		ASSERT1(A[0] == 1);
+		Test::Array::RotateRight<int>(A, 1, 2);
+		ASSERT1(A[0] == 1);
+		Test::Array::RotateRight<int>(A, 1, 1);
+		ASSERT1(A[0] == 1);
+		Test::Array::RotateRight<int>(A, 1, 0);
+		ASSERT1(A[0] == 1);
+	});
+
+	Add("Rotate(2)", [&](){
+		int A[2] = { 0, 1 };
+
+		Test::Array::RotateLeft<int>(A, 2, 0);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		Test::Array::RotateLeft<int>(A, 2, 1);
+		ASSERT1(A[0] == 1);
+		ASSERT1(A[1] == 0);
+		Test::Array::RotateLeft<int>(A, 2, 1);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		Test::Array::RotateLeft<int>(A, 2, 2);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		Test::Array::RotateLeft<int>(A, 2, 3);
+		ASSERT1(A[0] == 1);
+		ASSERT1(A[1] == 0);
+		Test::Array::RotateRight<int>(A, 2, 1);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		Test::Array::RotateRight<int>(A, 2, 1);
+		ASSERT1(A[0] == 1);
+		ASSERT1(A[1] == 0);
+		Test::Array::RotateRight<int>(A, 2, 1);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		Test::Array::RotateRight<int>(A, 2, 2);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		Test::Array::RotateRight<int>(A, 2, 3);
+		ASSERT1(A[0] == 1);
+		ASSERT1(A[1] == 0);
+	});
+
+	Add("Rotate(3)", [&](){
+		int A[3] = { 0, 1, 2 };
+
+		Test::Array::RotateLeft<int>(A, 3, 0);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		ASSERT1(A[2] == 2);
+		Test::Array::RotateLeft<int>(A, 3, 1);
+		ASSERT1(A[0] == 1);
+		ASSERT1(A[1] == 2);
+		ASSERT1(A[2] == 0);
+		Test::Array::RotateLeft<int>(A, 3, 1);
+		ASSERT1(A[0] == 2);
+		ASSERT1(A[1] == 0);
+		ASSERT1(A[2] == 1);
+		Test::Array::RotateLeft<int>(A, 3, 1);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		ASSERT1(A[2] == 2);
+		Test::Array::RotateLeft<int>(A, 3, 2);
+		ASSERT1(A[0] == 2);
+		ASSERT1(A[1] == 0);
+		ASSERT1(A[2] == 1);
+		Test::Array::RotateLeft<int>(A, 3, 2);
+		ASSERT1(A[0] == 1);
+		ASSERT1(A[1] == 2);
+		ASSERT1(A[2] == 0);
+		Test::Array::RotateLeft<int>(A, 3, 2);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		ASSERT1(A[2] == 2);
+		Test::Array::RotateLeft<int>(A, 3, 3);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		ASSERT1(A[2] == 2);
+		Test::Array::RotateLeft<int>(A, 3, 4);
+		ASSERT1(A[0] == 1);
+		ASSERT1(A[1] == 2);
+		ASSERT1(A[2] == 0);
+		Test::Array::RotateLeft<int>(A, 3, 5);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		ASSERT1(A[2] == 2);
+		Test::Array::RotateRight<int>(A, 3, 0);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		ASSERT1(A[2] == 2);
+		Test::Array::RotateRight<int>(A, 3, 1);
+		ASSERT1(A[0] == 2);
+		ASSERT1(A[1] == 0);
+		ASSERT1(A[2] == 1);
+		Test::Array::RotateRight<int>(A, 3, 1);
+		ASSERT1(A[0] == 1);
+		ASSERT1(A[1] == 2);
+		ASSERT1(A[2] == 0);
+		Test::Array::RotateRight<int>(A, 3, 1);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		ASSERT1(A[2] == 2);
+		Test::Array::RotateRight<int>(A, 3, 2);
+		ASSERT1(A[0] == 1);
+		ASSERT1(A[1] == 2);
+		ASSERT1(A[2] == 0);
+		Test::Array::RotateRight<int>(A, 3, 2);
+		ASSERT1(A[0] == 2);
+		ASSERT1(A[1] == 0);
+		ASSERT1(A[2] == 1);
+		Test::Array::RotateRight<int>(A, 3, 2);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		ASSERT1(A[2] == 2);
+		Test::Array::RotateRight<int>(A, 3, 3);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		ASSERT1(A[2] == 2);
+		Test::Array::RotateRight<int>(A, 3, 4);
+		ASSERT1(A[0] == 2);
+		ASSERT1(A[1] == 0);
+		ASSERT1(A[2] == 1);
+		Test::Array::RotateRight<int>(A, 3, 5);
+		ASSERT1(A[0] == 0);
+		ASSERT1(A[1] == 1);
+		ASSERT1(A[2] == 2);
+	});
+
+	Add("Rotate(10)", [&](){
+		int A[10];
+
+		function<void(void)> init = [&](){
+			for (int i = 0; i < 10; i++) {
+				A[i] = i;
+			}
+		};
+
+		function<void(int)> checkLeft = [&](int d){
+			for (int i = 0; i < 10; i++) {
+				ASSERT1(A[i] == (i + d) % 10);
+			}
+		};
+
+		for (int i = 0; i < 20; i++) {
+			init();
+			Test::Array::RotateLeft<int>(A, 10, i);
+			checkLeft(i);
+		}
+
+		function<void(int)> checkRight = [&](int d){
+			d = d % 10;
+			for (int i = 0; i < 10; i++) {
+				ASSERT1(A[i] == (i - d + 10) % 10);
+			}
+		};
+
+		for (int i = 0; i < 20; i++) {
+			init();
+			Test::Array::RotateRight<int>(A, 10, i);
+			checkRight(i);
+		}
+	});
+
+	Add("Rotate(11)", [&](){
+		int A[11];
+
+		function<void(void)> init = [&](){
+			for (int i = 0; i < 11; i++) {
+				A[i] = i;
+			}
+		};
+
+		function<void(int)> checkLeft = [&](int d){
+			for (int i = 0; i < 11; i++) {
+				ASSERT1(A[i] == (i + d) % 11);
+			}
+		};
+
+		for (int i = 0; i < 22; i++) {
+			init();
+			Test::Array::RotateLeft<int>(A, 11, i);
+			checkLeft(i);
+		}
+
+		function<void(int)> checkRight = [&](int d){
+			d = d % 11;
+			for (int i = 0; i < 11; i++) {
+				ASSERT1(A[i] == (i - d + 11) % 11);
+			}
+		};
+
+		for (int i = 0; i < 22; i++) {
+			init();
+			Test::Array::RotateRight<int>(A, 11, i);
+			checkRight(i);
+		}
+	});
 }
