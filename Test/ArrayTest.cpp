@@ -29,7 +29,7 @@ void ArrayTest::Test(int * A, int * B, int length, int columns, int rows)
 	}
 
 	Print(A, length, columns);
-	Test::Array::Transpose(B, length, columns);
+	Test::Array::Transpose<int>(B, length, columns);
 	Print(B, length, rows);
 
 	for (int i = 0; i < rows; i++) {
@@ -40,7 +40,7 @@ void ArrayTest::Test(int * A, int * B, int length, int columns, int rows)
 		}
 	}
 
-	Test::Array::Transpose(B, length, rows);
+	Test::Array::Transpose<int>(B, length, rows);
 	Print(B, length, columns);
 
 	for (int i = 0; i < rows; i++) {
@@ -111,6 +111,115 @@ void ArrayTest::Init(void)
 		int B[length];
 
 		Test(A, B, length, columns, rows);
+	});
+
+	Add("RowsToColumns(8, 8)", [&](){
+		const int length = 64;
+		const int columns = 8;
+		const int rows = 8;
+		int A[length];
+		int B[length];
+
+		for (int i = 0; i < length; i++) {
+			A[i] = i;
+			B[i] = i;
+		}
+
+		Print(A, length, columns);
+		Test::Array::TransposeRowsToColumns<int>(B, length, columns);
+		Print(B, length, rows);
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				int s = i * columns + j;
+				int t = j * rows + i;
+				ASSERT1(A[s] == B[t]);
+			}
+		}
+
+		Test::Array::TransposeColumnsToRows<int>(B, length, columns);
+		Print(B, length, columns);
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				int s = i * columns + j;
+				ASSERT1(A[s] == B[s]);
+			}
+		}
+	});
+
+	Add("RowsToColumns(2, 8)", [&](){
+		const int length = 16;
+		const int columns = 8;
+		const int rows = 2;
+		int A[length];
+		int B[length];
+
+		for (int i = 0; i < length; i++) {
+			A[i] = i;
+			B[i] = i;
+		}
+
+		Print(A, length, columns);
+		Test::Array::TransposeRowsToColumns<int>(B, length, columns);
+		Print(B, length, columns);
+
+		// Transpose element (m,n) to ((n % M), (k(m-1) + n/M)) means the index i = Nm + n is mapped to j = (n % M)N + k(m-1) + n/M
+		int k = columns / rows;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				int s = i * columns + j;
+				int t = (j % rows) * columns + k * i + j / rows;
+				ASSERT1(A[s] == B[t]);
+			}
+		}
+
+		Test::Array::TransposeColumnsToRows<int>(B, length, columns);
+		Print(B, length, columns);
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				int s = i * columns + j;
+				ASSERT1(A[s] == B[s]);
+			}
+		}
+	});
+	
+	Add("RowsToColumns(9, 3)", [&](){
+		const int length = 27;
+		const int columns = 3;
+		const int rows = 9;
+		int A[length];
+		int B[length];
+
+		for (int i = 0; i < length; i++) {
+			A[i] = i;
+			B[i] = i;
+		}
+
+		Print(A, length, columns);
+		Test::Array::TransposeRowsToColumns<int>(B, length, columns);
+		Print(B, length, columns);
+
+		// Transpose element (m,n) to ((m%k)N + n, m/k)) means the index i = Nm + n is mapped to j = (m%k)NN + nN + m/k
+		int k = rows / columns;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				int s = i * columns + j;
+				int t = (i % k) * columns * columns + j * columns + i / k;
+				ASSERT1(A[s] == B[t]);
+			}
+		}
+
+		Test::Array::TransposeColumnsToRows<int>(B, length, columns);
+		Print(B, length, columns);
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				int s = i * columns + j;
+				ASSERT1(A[s] == B[s]);
+			}
+		}
 	});
 
 	Add("Rotate(1)", [&](){
