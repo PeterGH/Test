@@ -79,6 +79,8 @@
     <ClInclude Include="Argument.h" />
     <ClInclude Include="Array.h" />
     <ClInclude Include="BitSet.h" />
+    <ClInclude Include="ColumnSort.h" />
+    <ClInclude Include="Heap.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="TestClass.h" />

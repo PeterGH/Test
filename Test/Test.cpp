@@ -7,6 +7,7 @@
 #include "..\Algorithm\TestSuite.h"
 #include "ArrayTest.h"
 #include "BitSetTest.h"
+#include "HeapTest.h"
 #include "StringTest.h"
 
 int main(int argc, char * argv[])
@@ -33,7 +34,8 @@ int main(int argc, char * argv[])
 	Test::TestSuite suite(log);
 
 	suite.Add(new ArrayTest(log));
-	suite.Add(new BitSetTest(log)); 
+	suite.Add(new BitSetTest(log));
+	suite.Add(new HeapTest(log));
 	suite.Add(new StringTest(log));
 	
 	if (arg.Has("l")) {

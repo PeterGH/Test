@@ -36,6 +36,12 @@
     <ClInclude Include="Array.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ColumnSort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">
