@@ -14,10 +14,10 @@ namespace Test {
 			_pass++;
 		} catch (AssertError & e) {
 			_fail++;
-			_log.WriteError("%s: %s, %s\n", it->first, typeid(e).name(), e.what());
+			_log.WriteError("%s: %s, %s\n", it->first.c_str(), typeid(e).name(), e.what());
 		} catch (exception & e) {
 			_fail++;
-			_log.WriteError("%s: %s, %s\n", it->first, typeid(e).name(), e.what());
+			_log.WriteError("%s: %s, %s\n", it->first.c_str(), typeid(e).name(), e.what());
 		}
 	}
 
@@ -28,7 +28,7 @@ namespace Test {
 			error += "\n";
 			error += file;
 			error += ", ";
-			error += STRING(line);
+			error += String::Format("%ld", line);
 			error += ": ";
 			error += statement;
 			throw AssertError(error);
@@ -65,10 +65,10 @@ namespace Test {
 				InterlockedIncrement64((long long *)&_pass);
 			} catch (AssertError & e) {
 				InterlockedIncrement64((long long *)&_fail);
-				_log.WriteError("%s: %s, %s\n", it.first, typeid(e).name(), e.what());
+				_log.WriteError("%s: %s, %s\n", it.first.c_str(), typeid(e).name(), e.what());
 			} catch (exception & e) {
 				InterlockedIncrement64((long long *)&_fail);
-				_log.WriteError("%s: %s, %s\n", it.first, typeid(e).name(), e.what());
+				_log.WriteError("%s: %s, %s\n", it.first.c_str(), typeid(e).name(), e.what());
 			}
 		});
 	}

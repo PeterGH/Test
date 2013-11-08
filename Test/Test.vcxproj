@@ -85,6 +85,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringTest.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TestClassTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrayTest.cpp" />
@@ -93,6 +94,7 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="StringTest.cpp" />
     <ClCompile Include="Test.cpp" />
+    <ClCompile Include="TestClassTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Algorithm\Algorithm.vcxproj">

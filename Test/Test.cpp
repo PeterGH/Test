@@ -9,6 +9,7 @@
 #include "BitSetTest.h"
 #include "HeapTest.h"
 #include "StringTest.h"
+#include "TestClassTest.h"
 
 int main(int argc, char * argv[])
 {
@@ -37,6 +38,7 @@ int main(int argc, char * argv[])
 	suite.Add(new BitSetTest(log));
 	suite.Add(new HeapTest(log));
 	suite.Add(new StringTest(log));
+	suite.Add(new TestClassTest(log));
 	
 	if (arg.Has("l")) {
 		if (arg.CountIndexedArgs() == 1) {

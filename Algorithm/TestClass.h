@@ -34,7 +34,7 @@ namespace Test {
 
 		// Run a particular test method
 		void Run(map<string, function<void(void)>>::iterator & it);
-			
+		
 	public:
 		__declspec(dllexport) TestClass(Log & log = Log()) : _pass(0), _fail(0), _log(log) {}
 
