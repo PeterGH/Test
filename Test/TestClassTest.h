@@ -1,6 +1,5 @@
 #pragma once
 
-#include "..\Algorithm\Log.h"
 #include "..\Algorithm\TestClass.h"
 
 class TestClassTest : public Test::TestClass {

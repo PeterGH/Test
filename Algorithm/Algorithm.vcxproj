@@ -82,6 +82,7 @@
     <ClInclude Include="ColumnSort.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="MergeSort.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="TestClass.h" />
     <ClInclude Include="TestSuite.h" />

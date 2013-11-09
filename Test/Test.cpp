@@ -3,11 +3,11 @@
 
 #include "stdafx.h"
 #include "..\Algorithm\Argument.h"
-#include "..\Algorithm\Log.h"
 #include "..\Algorithm\TestSuite.h"
 #include "ArrayTest.h"
 #include "BitSetTest.h"
 #include "HeapTest.h"
+#include "MergeSortTest.h"
 #include "StringTest.h"
 #include "TestClassTest.h"
 
@@ -37,6 +37,7 @@ int main(int argc, char * argv[])
 	suite.Add(new ArrayTest(log));
 	suite.Add(new BitSetTest(log));
 	suite.Add(new HeapTest(log));
+	suite.Add(new MergeSortTest(log));
 	suite.Add(new StringTest(log));
 	suite.Add(new TestClassTest(log));
 	

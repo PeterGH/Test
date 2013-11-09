@@ -1,6 +1,5 @@
 #pragma once
 
-#include "..\Algorithm\Log.h"
 #include "..\Algorithm\String.h"
 #include "..\Algorithm\TestClass.h"
 
