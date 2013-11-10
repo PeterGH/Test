@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClInclude Include="ArrayTest.h" />
     <ClInclude Include="BitSetTest.h" />
+    <ClInclude Include="ColumnSortTest.h" />
     <ClInclude Include="HeapTest.h" />
     <ClInclude Include="MergeSortTest.h" />
     <ClInclude Include="stdafx.h" />
@@ -91,6 +92,7 @@
   <ItemGroup>
     <ClCompile Include="ArrayTest.cpp" />
     <ClCompile Include="BitSetTest.cpp" />
+    <ClCompile Include="ColumnSortTest.cpp" />
     <ClCompile Include="HeapTest.cpp" />
     <ClCompile Include="MergeSortTest.cpp" />
     <ClCompile Include="stdafx.cpp" />

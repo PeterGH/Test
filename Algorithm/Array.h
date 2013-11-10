@@ -36,6 +36,9 @@ namespace Test {
 
 	template<class T> void Array::Swap(T * first, T * second, const int count)
 	{
+		if (first == nullptr) throw invalid_argument("first is nullptr");
+		if (second == nullptr) throw invalid_argument("second is nullptr");
+
 		T t;
 		for (int i = 0; i < count; i++) {
 			t = first[i];
@@ -46,9 +49,9 @@ namespace Test {
 
 	template<class T> void Array::RotateLeft(T * input, const int length, int distance)
 	{
-		if (input == nullptr) return;
-		if (length <= 0) return;
-		if (distance <= 0) return;
+		if (input == nullptr) throw invalid_argument("input is nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is not positive", length));
+		if (distance < 0) throw invalid_argument(String::Format("distance %d is negative", distance));
 		distance = distance % length;
 		if (distance == 0) return;
 
@@ -77,9 +80,9 @@ namespace Test {
 
 	template<class T> void Array::RotateRight(T * input, const int length, int distance)
 	{
-		if (input == nullptr) return;
-		if (length <= 0) return;
-		if (distance <= 0) return;
+		if (input == nullptr) throw invalid_argument("input is nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is not positive", length));
+		if (distance < 0) throw invalid_argument(String::Format("distance %d is negative", distance));
 		distance = distance % length;
 		if (distance == 0) return;
 		RotateLeft(input, length, length - distance);
@@ -87,14 +90,10 @@ namespace Test {
 
 	template<class T> void Array::Permute(T * input, const int length, const int columns, function<int(int, int, int)> & permute)
 	{
-		if (length <= 0)
-			throw invalid_argument(String::Format("length %d is not positive.", length));
-
-		if (columns <= 0)
-			throw invalid_argument(String::Format("columns %d is not positive.", columns));
-
-		if (length % columns > 0)
-			throw invalid_argument(String::Format("length %d is not multiple of columns %d.", length, columns));
+		if (input == nullptr) throw invalid_argument("input is nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is not positive.", length));
+		if (columns <= 0) throw invalid_argument(String::Format("columns %d is not positive.", columns));
+		if (length % columns > 0) throw invalid_argument(String::Format("length %d is not multiple of columns %d.", length, columns));
 
 		int rows = length / columns;
 		
@@ -155,14 +154,10 @@ namespace Test {
 	// P(i) = P(Nm + n) = M(Nm + n) mod (MN - 1) = MNm + Mn mod (MN - 1) = (MN-1)m + m + Mn mod (MN - 1) = Mn + m
 	template<class T> void Array::Transpose(T * input, const int length, const int columns)
 	{
-		if (length <= 0)
-			throw invalid_argument(String::Format("length %d is not positive.", length));
-
-		if (columns <= 0)
-			throw invalid_argument(String::Format("columns %d is not positive.", columns));
-
-		if (length % columns > 0)
-			throw invalid_argument(String::Format("length %d is not multiple of columns %d.", length, columns));
+		if (input == nullptr) throw invalid_argument("input is nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is not positive.", length));
+		if (columns <= 0) throw invalid_argument(String::Format("columns %d is not positive.", columns));
+		if (length % columns > 0) throw invalid_argument(String::Format("length %d is not multiple of columns %d.", length, columns));
 
 		int rows = length / columns;
 
@@ -240,14 +235,10 @@ namespace Test {
 	// 2. From i to j is a one-to-one mapping
 	template<class T> void Array::TransposeRowsToColumns(T * input, const int length, const int columns)
 	{
-		if (length <= 0)
-			throw invalid_argument(String::Format("length %d is not positive.", length));
-
-		if (columns <= 0)
-			throw invalid_argument(String::Format("columns %d is not positive.", columns));
-
-		if (length % columns > 0)
-			throw invalid_argument(String::Format("length %d is not multiple of columns %d.", length, columns));
+		if (input == nullptr) throw invalid_argument("input is nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is not positive.", length));
+		if (columns <= 0) throw invalid_argument(String::Format("columns %d is not positive.", columns));
+		if (length % columns > 0) throw invalid_argument(String::Format("length %d is not multiple of columns %d.", length, columns));
 
 		int rows = length / columns;
 
@@ -339,14 +330,10 @@ namespace Test {
 	// 2. From i to j is a one-to-one mapping
 	template<class T> void Array::TransposeColumnsToRows(T * input, const int length, const int columns)
 	{
-		if (length <= 0)
-			throw invalid_argument(String::Format("length %d is not positive.", length));
-
-		if (columns <= 0)
-			throw invalid_argument(String::Format("columns %d is not positive.", columns));
-
-		if (length % columns > 0)
-			throw invalid_argument(String::Format("length %d is not multiple of columns %d.", length, columns));
+		if (input == nullptr) throw invalid_argument("input is nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is not positive.", length));
+		if (columns <= 0) throw invalid_argument(String::Format("columns %d is not positive.", columns));
+		if (length % columns > 0) throw invalid_argument(String::Format("length %d is not multiple of columns %d.", length, columns));
 
 		int rows = length / columns;
 
