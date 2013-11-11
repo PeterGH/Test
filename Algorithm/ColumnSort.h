@@ -74,6 +74,9 @@ namespace Test {
 	//                             ......
 	//     (r-2,0) (r-2,1) (r-2,2) ...... (r-2,s-2) (r-2,s-1)
 	//     (r-1,0) (r-1,1) (r-1,2) ...... (r-1,s-2) (r-1,s-1)
+	//
+	// When step 8 completes, the matrix is sorted in column-major order: Reading down the leftmost column 
+	// and continuing with the rest of columns, the elements are in sorted order.
 
 	// This implementation use a row-based variant, a.k.a. RowSort, to sort a two-dimensional matrix stored in an array.
 	// Sort an array of s rows and r columns such that
@@ -127,6 +130,9 @@ namespace Test {
 	//                             ......
 	//     (s-2,0) (s-2,1) (s-2,2) ...... (s-2,r-2) (s-2,r-1)
 	//     (s-1,0) (s-1,1) (s-1,2) ...... (s-1,r-2) (s-1,r-1)
+	//
+	// When step 8 completes, the matrix is sorted in row-major order: Reading right the topmost row 
+	// and continuing with the rest of rows, the elements are in sorted order.
 	class __declspec(dllexport) RowSort {
 	public:
 		// Check if each column is sorted
@@ -135,7 +141,7 @@ namespace Test {
 		// Check if each row is sorted
 		template<class T> static bool IsRowsSorted(T * input, const int length, const int columns);
 
-		// Check if each row is sorted and if each column is sorted
+		// Check if input is sorted in row-major order
 		template<class T> static bool IsSorted(T * input, const int length, const int columns);
 
 		// Sort each row
@@ -208,7 +214,21 @@ namespace Test {
 		if (length <= 0) throw invalid_argument(String::Format("length %d is not positive.", length));
 		if (columns <= 0) throw invalid_argument(String::Format("columns %d is not positive.", columns));
 
-		return IsColumnsSorted(input, length, columns) && IsRowsSorted(input, length, columns);
+		int rows = length / columns;
+		if (length % columns > 0) rows++;
+		int begin = 0;
+		for (int i = 0; i < rows; i++) {
+			int end = begin + columns - 1;
+			if (end >= length - 1) end = length - 2;
+			for (int j = begin; j <= end; j++) {
+				// When j = end, j+1 is the begin of next row
+				if (input[j] > input[j + 1]) return false;
+			}
+
+			begin += columns;
+		}
+
+		return true;
 	}
 
 	template<class T> void RowSort::SortRows(T * input, const int length, const int columns)
@@ -310,20 +330,21 @@ namespace Test {
 		if (length <= 0) throw invalid_argument(String::Format("length %d is not positive.", length));
 		if (columns <= 0) throw invalid_argument(String::Format("columns %d is not positive.", columns));
 
+		int rows = length / columns;
+		if (length % columns > 0) rows++;
 		bool sorted = true;
 		cancellation_token_source tokenSource;
 		run_with_cancellation_token([&](){
-			parallel_invoke(
-				[&](){
-					if (!IsColumnsSorted(input, length, columns)) {
+			parallel_for(int(0), rows, [&](int i){
+				int begin = i * columns;
+				int end = begin + columns - 1;
+				if (end >= length - 1) end = length - 2;
+				for (int j = begin; j <= end; j++) {
+					if (input[j] > input[j + 1]) {
+						// When j = end, j+1 is the begin of next row
 						sorted = false;
 						tokenSource.cancel();
 					}
-				},
-				[&](){
-				if (!IsRowsSorted(input, length, columns)) {
-					sorted = false;
-					tokenSource.cancel();
 				}
 			});
 		}, tokenSource.get_token());
