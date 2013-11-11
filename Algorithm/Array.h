@@ -9,6 +9,10 @@ using namespace std;
 namespace Test {
 	class __declspec(dllexport) Array {
 	public:
+		// Find the indices of min and max elements.
+		// minIndex will be the index of the minimum value (first index if there are more than on minimum value).
+		// maxIndex will be the index of the maximum value (last index if there are more than on maximum value).
+		template<class T> static void MinMax(const T * input, const int length, int & minIndex, int & maxIndex);
 
 		// Permute a two dimensional matrix in place. 
 		// The permute function takes three parameters: index of the element to permute, number of rows and number of columns,
@@ -33,6 +37,40 @@ namespace Test {
 		// Transpose columns to rows for a two dimensional matrix in place. Not change the dimensions.
 		template<class T> static void TransposeColumnsToRows(T * input, const int length, const int columns);
 	};
+
+	template<class T> void Array::MinMax(const T * input, const int length, int & minIndex, int & maxIndex)
+	{
+		minIndex = -1;
+		maxIndex = -1;
+		if (input == nullptr || length <= 0) return;
+
+		int startIndex = 0;
+		if (length % 2 == 1) {
+			minIndex = 0;
+			maxIndex = 0;
+			startIndex = 1;
+		} else {
+			if (input[0] <= input[1]) {
+				minIndex = 0;
+				maxIndex = 1;
+			} else {
+				minIndex = 1;
+				maxIndex = 0;
+			}
+
+			startIndex = 2;
+		}
+
+		for (int i = startIndex; i < length; i += 2) {
+			if (input[i] <= input[i + 1]) {
+				if (input[i] < input[minIndex]) minIndex = i;
+				if (input[i + 1] >= input[maxIndex]) maxIndex = i + 1;
+			} else {
+				if (input[i + 1] < input[minIndex]) minIndex = i + 1;
+				if (input[i] >= input[maxIndex]) maxIndex = i;
+			}
+		}
+	}
 
 	template<class T> void Array::Swap(T * first, T * second, const int count)
 	{

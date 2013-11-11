@@ -53,6 +53,222 @@ void ArrayTest::Test(int * A, int * B, int length, int columns, int rows)
 
 void ArrayTest::Init(void)
 {
+	Add("MinMax 1", [&](){
+		int A[] = { 1 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 1, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 0);
+	});
+
+	Add("MinMax 2 0", [&](){
+		int A[] = { 2, 2 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 2, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 1);
+	});
+
+	Add("MinMax 2 1", [&](){
+		int A[] = { 1, 2 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 2, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 1);
+	});
+
+	Add("MinMax 2 2", [&](){
+		int A[] = { 2, 1 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 2, minIndex, maxIndex);
+		ASSERT1(minIndex == 1);
+		ASSERT1(maxIndex == 0);
+	});
+
+	Add("MinMax 3 0", [&](){
+		int A[] = { 2, 2, 2 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 2);
+	});
+
+	Add("MinMax 3 1", [&](){
+		int A[] = { 1, 2, 2 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 2);
+	});
+
+	Add("MinMax 3 2", [&](){
+		int A[] = { 2, 1, 2 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		ASSERT1(minIndex == 1);
+		ASSERT1(maxIndex == 2);
+	});
+
+	Add("MinMax 3 3", [&](){
+		int A[] = { 2, 2, 1 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		ASSERT1(minIndex == 2);
+		ASSERT1(maxIndex == 1);
+	});
+
+	Add("MinMax 3 4", [&](){
+		int A[] = { 1, 1, 2 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 2);
+	});
+
+	Add("MinMax 3 5", [&](){
+		int A[] = { 1, 2, 1 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 1);
+	});
+
+	Add("MinMax 3 6", [&](){
+		int A[] = { 2, 1, 1 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		ASSERT1(minIndex == 1);
+		ASSERT1(maxIndex == 0);
+	});
+
+	Add("MinMax 3 7", [&](){
+		int A[] = { 1, 2, 3 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 2);
+	});
+
+	Add("MinMax 3 8", [&](){
+		int A[] = { 3, 2, 1 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		ASSERT1(minIndex == 2);
+		ASSERT1(maxIndex == 0);
+	});
+
+	Add("MinMax 4 0", [&](){
+		int A[] = { 4, 4, 4, 4 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 3);
+	});
+
+	Add("MinMax 4 1", [&](){
+		int A[] = { 1, 4, 4, 4 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 3);
+	});
+
+	Add("MinMax 4 2", [&](){
+		int A[] = { 4, 1, 4, 4 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		ASSERT1(minIndex == 1);
+		ASSERT1(maxIndex == 3);
+	});
+
+	Add("MinMax 4 3", [&](){
+		int A[] = { 4, 4, 1, 4 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		ASSERT1(minIndex == 2);
+		ASSERT1(maxIndex == 3);
+	});
+
+	Add("MinMax 4 4", [&](){
+		int A[] = { 4, 4, 4, 1 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		ASSERT1(minIndex == 3);
+		ASSERT1(maxIndex == 2);
+	});
+
+	Add("MinMax 4 5", [&](){
+		int A[] = { 1, 1, 4, 4 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 3);
+	});
+
+	Add("MinMax 4 6", [&](){
+		int A[] = { 1, 4, 1, 4 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 3);
+	});
+
+	Add("MinMax 4 7", [&](){
+		int A[] = { 4, 1, 4, 1 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		ASSERT1(minIndex == 1);
+		ASSERT1(maxIndex == 2);
+	});
+
+	Add("MinMax 4 8", [&](){
+		int A[] = { 4, 4, 1, 1 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		ASSERT1(minIndex == 2);
+		ASSERT1(maxIndex == 1);
+	});
+
+	Add("MinMax 4 9", [&](){
+		int A[] = { 4, 3, 2, 1 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		ASSERT1(minIndex == 3);
+		ASSERT1(maxIndex == 0);
+	});
+
+	Add("MinMax 4 10", [&](){
+		int A[] = { 1, 3, 2, 4 };
+		int minIndex;
+		int maxIndex;
+		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		ASSERT1(minIndex == 0);
+		ASSERT1(maxIndex == 3);
+	});
+
 	Add("Transpose(1,1)", [&](){
 		const int length = 1;
 		const int columns = 1;
