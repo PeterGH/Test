@@ -9,6 +9,7 @@
 #include "ColumnSortTest.h"
 #include "HeapTest.h"
 #include "MergeSortTest.h"
+#include "RandomTest.h"
 #include "StringTest.h"
 #include "TestClassTest.h"
 
@@ -40,6 +41,7 @@ int main(int argc, char * argv[])
 	suite.Add(new ColumnSortTest(log));
 	suite.Add(new HeapTest(log));
 	suite.Add(new MergeSortTest(log));
+	suite.Add(new RandomTest(log));
 	suite.Add(new StringTest(log));
 	suite.Add(new TestClassTest(log));
 	
