@@ -84,6 +84,7 @@
     <ClInclude Include="ColumnSortTest.h" />
     <ClInclude Include="HeapTest.h" />
     <ClInclude Include="MergeSortTest.h" />
+    <ClInclude Include="QuickSortTest.h" />
     <ClInclude Include="RandomTest.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringTest.h" />
@@ -96,6 +97,7 @@
     <ClCompile Include="ColumnSortTest.cpp" />
     <ClCompile Include="HeapTest.cpp" />
     <ClCompile Include="MergeSortTest.cpp" />
+    <ClCompile Include="QuickSortTest.cpp" />
     <ClCompile Include="RandomTest.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="StringTest.cpp" />

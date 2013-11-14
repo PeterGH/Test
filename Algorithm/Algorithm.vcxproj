@@ -83,6 +83,7 @@
     <ClInclude Include="Heap.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="MergeSort.h" />
+    <ClInclude Include="QuickSort.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="TestClass.h" />
