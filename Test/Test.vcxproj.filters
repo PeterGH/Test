@@ -51,6 +51,9 @@
     <ClInclude Include="QuickSortTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PartitionTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -84,6 +87,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="QuickSortTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PartitionTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
