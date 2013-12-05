@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArrayTest.h" />
+    <ClInclude Include="BinarySearchTest.h" />
     <ClInclude Include="BitSetTest.h" />
     <ClInclude Include="ColumnSortTest.h" />
     <ClInclude Include="HeapTest.h" />
@@ -94,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrayTest.cpp" />
+    <ClCompile Include="BinarySearchTest.cpp" />
     <ClCompile Include="BitSetTest.cpp" />
     <ClCompile Include="ColumnSortTest.cpp" />
     <ClCompile Include="HeapTest.cpp" />

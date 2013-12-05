@@ -18,6 +18,9 @@ namespace Test {
 		} catch (exception & e) {
 			_fail++;
 			_log.WriteError("%s: %s, %s\n", it->first.c_str(), typeid(e).name(), e.what());
+		} catch (...) {
+			_fail++;
+			_log.WriteError("%s\n", it->first.c_str());
 		}
 	}
 

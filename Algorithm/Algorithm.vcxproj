@@ -78,6 +78,7 @@
   <ItemGroup>
     <ClInclude Include="Argument.h" />
     <ClInclude Include="Array.h" />
+    <ClInclude Include="BinarySearch.h" />
     <ClInclude Include="BitSet.h" />
     <ClInclude Include="ColumnSort.h" />
     <ClInclude Include="Heap.h" />
