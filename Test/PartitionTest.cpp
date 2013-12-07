@@ -337,4 +337,103 @@ void PartitionTest::Init(void)
 			}
 		}
 	});
+
+	Add("Partition Quantiles 1", [&](){
+		int A[] = { 1 };
+		int I[1];
+		Test::Partition::PartitionArrayByQuantiles(A, 1, I, 1);
+		ASSERT1(A[0] == 1);
+	});
+
+	Add("Partition Quantiles 2", [&](){
+		int A1[] = { 1, 2 };
+		int I1[1];
+		Test::Partition::PartitionArrayByQuantiles(A1, 2, I1, 2);
+		ASSERT1(A1[0] == 1);
+		ASSERT1(A1[1] == 2);
+		ASSERT1(I1[0] == 0);
+
+		int A2[] = { 2, 1 };
+		int I2[1];
+		Test::Partition::PartitionArrayByQuantiles(A2, 2, I2, 2);
+		ASSERT1(A2[0] == 1);
+		ASSERT1(A2[1] == 2);
+		ASSERT1(I2[0] == 0);
+	});
+
+	Add("Partition Quantiles 3", [&](){
+		int A1[6][3] = {
+			{ 1, 2, 3 },
+			{ 1, 3, 2 },
+			{ 2, 1, 3 },
+			{ 2, 3, 1 },
+			{ 3, 1, 2 },
+			{ 3, 2, 1 }
+		};
+
+		for (int i = 0; i < 6; i++) {
+			int I[1];
+			Test::Partition::PartitionArrayByQuantiles(A1[i], 3, I, 2);
+			ASSERT1(A1[i][0] == 1);
+			ASSERT1(A1[i][1] == 2);
+			ASSERT1(A1[i][2] == 3);
+			ASSERT1(I[0] == 1);
+		}
+
+		int A2[6][3] = {
+			{ 1, 2, 3 },
+			{ 1, 3, 2 },
+			{ 2, 1, 3 },
+			{ 2, 3, 1 },
+			{ 3, 1, 2 },
+			{ 3, 2, 1 }
+		};
+
+		for (int i = 0; i < 6; i++) {
+			int I[2];
+			Test::Partition::PartitionArrayByQuantiles(A2[i], 3, I, 3);
+			ASSERT1(A2[i][0] == 1);
+			ASSERT1(A2[i][1] == 2);
+			ASSERT1(A2[i][2] == 3);
+			ASSERT1(I[0] == 1);
+			ASSERT1(I[1] == 2);
+		}
+	});
+
+	Add("Partition Quantiles Random", [&](){
+		for (int i = 0; i < 100; i++) {
+			int length = 1 + Test::Random::Next();
+			int len = 1 + Test::Random::Next(length - 1);
+
+			Logger().WriteInformation("Run %d: %d elements %d indices\n", i, length, len - 1);
+
+			unique_ptr<int[]> input(new int[length]);
+			for (int j = 0; j < length; j++) {
+				input[j] = Test::Random::Next();
+			}
+
+			unique_ptr<int[]> indices(new int[len - 1]);
+
+			Test::Partition::PartitionArrayByQuantiles((int *)input.get(), length, (int *)indices.get(), len);
+
+			for (int i = 0; i < len - 3; i++) {
+				int d1 = indices[i + 1] - indices[i];
+				int d2 = indices[i + 2] - indices[i + 1];
+				ASSERT1(abs(d1 - d2) <= 1);
+			}
+
+			int index = 0;
+			for (int j = 0; j < length; j++) {
+				if (j == indices[index]) {
+					index++;
+				}
+
+				if (index < len - 1)
+					ASSERT1(input[j] <= input[indices[index]]);
+
+				if (index > 0)
+					ASSERT1(input[j] >= input[indices[index - 1]]);
+			}
+		}
+	});
 }
