@@ -1,11 +1,20 @@
 #pragma once
 
+#include <functional>
 #include "BinarySearch.h"
 #include "Random.h"
+
+using namespace std;
 
 namespace Test {
 	class _declspec(dllexport) Partition {
 	public:
+		// Reorder input[low..i], input[(i+1)..(j-1)], input[j..high] using input[high],
+		// such that transform(input[low..i]) < transform(input[high]) <= transform(input[(i+1)..(j-1)]).
+		// Return the new index of element input[high]
+		// If all elements are equal, then return index low
+		template<class T, class C> static int PartitionArray(T * input, int low, int high, function<C(T)> transform);
+
 		// Reorder input[low..i], input[(i+1)..(j-1)], input[j..high] using input[high],
 		// such that input[low..i] < input[high] <= input[(i+1)..(j-1)].
 		// Return the new index of element input[high]
@@ -14,7 +23,15 @@ namespace Test {
 
 		// Randomly select an element to partition the input.
 		// Return the new index of selected element
+		template<class T, class C> static int PartitionArrayRandomly(T * input, int low, int high, function<C(T)> transform);
+
+		// Randomly select an element to partition the input.
+		// Return the new index of selected element
 		template<class T> static int PartitionArrayRandomly(T * input, int low, int high);
+
+		// Reorder input[low..high] such that it is partioned by the i-th order element, 
+		// i.e., input[low..(low+i-1)] <= input[low+i] <= input[low+i+1..high]
+		template<class T, class C> static T & PartitionArray(T * input, int low, int high, int i, function<C(T)> transform);
 
 		// Reorder input[low..high] such that it is partioned by the i-th order element, 
 		// i.e., input[low..(low+i-1)] <= input[low+i] <= input[low+i+1..high]
@@ -32,15 +49,20 @@ namespace Test {
 		// This method partition the input array and return the indices of the k-1 elements forming the quantiles.
 		// Parameter order defines the order of quantiles, i.e., array indices will be used to return order-1 indices.
 		template<class T> static void PartitionArrayByQuantiles(T * input, int length, int * indices, int order);
+
+		// Find k closest neighbors to the i-th order element.
+		// Parameter pivotIndex is the order of the input element.
+		// When the method finishes, the first 1 + countNeighbors elements are the pivot element and its closest neighbors.
+		template<class T> static T SelectClosestNeighbors(T * input, int length, int pivotIndex, int countNeighbors);
 	};
 
-	template<class T> int Partition::PartitionArray(T * input, int low, int high)
+	template<class T, class C> int Partition::PartitionArray(T * input, int low, int high, function<C(T)> transform)
 	{
 		if (input == nullptr) throw invalid_argument("input is nullptr");
 		if (low >= 0 && low <= high) {
 			int i = low - 1;
 			for (int j = low; j < high; j++) {
-				if (input[j] < input[high]) {
+				if (transform(input[j]) < transform(input[high])) {
 					// The check can be <=.
 					// The difference is:
 					// 1. <= incurs more swaps, but it is stable because all elements equal to input[high] 
@@ -61,8 +83,13 @@ namespace Test {
 			return -1;
 		}
 	}
+	
+	template<class T> int Partition::PartitionArray(T * input, int low, int high)
+	{
+		return PartitionArray<T, T>(input, low, high, [](T v)->T{ return v; });
+	}
 
-	template<class T> int Partition::PartitionArrayRandomly(T * input, int low, int high)
+	template<class T, class C> int Partition::PartitionArrayRandomly(T * input, int low, int high, function<C(T)> transform)
 	{
 		if (input == nullptr) throw invalid_argument("input is nullptr");
 		if (low >= 0) {
@@ -70,15 +97,20 @@ namespace Test {
 			else if (low < high) {
 				int i = low + Random::Next(high - low);
 				swap(input[i], input[high]);
-				i = PartitionArray(input, low, high);
+				i = PartitionArray(input, low, high, transform);
 				return i;
 			}
 		}
-		
+
 		return -1;
 	}
+	
+	template<class T> int Partition::PartitionArrayRandomly(T * input, int low, int high)
+	{
+		return PartitionArrayRandomly<T, T>(input, low, high, [](T v)->T{ return v; });
+	}
 
-	template<class T> T & Partition::PartitionArray(T * input, int low, int high, int i)
+	template<class T, class C> T & Partition::PartitionArray(T * input, int low, int high, int i, function<C(T)> transform)
 	{
 		if (input == nullptr) throw invalid_argument("input is nullptr");
 		if (low < 0) throw invalid_argument(String::Format("low %d is less than zero", low));
@@ -86,25 +118,32 @@ namespace Test {
 		if (i > high - low) throw invalid_argument(String::Format("i %d is greater than high %d - low %d", i, high, low));
 		if (low == high) return input[low];
 		else {
-			int m = PartitionArrayRandomly(input, low, high);
+			int m = PartitionArrayRandomly(input, low, high, transform);
 			int k = m - low;
 			if (i == k) {
 				// low ......... m ......... high
 				// 0   ......... k
 				// 0   ......... i
 				return input[m];
-			} else if (i < k) {
+			}
+			else if (i < k) {
 				// low ............ m ...... high
 				// 0   ............ k
 				// 0   ...... i
-				return PartitionArray(input, low, m - 1, i);
-			} else {
+				return PartitionArray(input, low, m - 1, i, transform);
+			}
+			else {
 				// low ...... m ............ high
 				// 0   ...... k
 				// 0   ............ i
-				return PartitionArray(input, m + 1, high, i - k - 1);
+				return PartitionArray(input, m + 1, high, i - k - 1, transform);
 			}
 		}
+	}
+
+	template<class T> T & Partition::PartitionArray(T * input, int low, int high, int i)
+	{
+		return PartitionArray<T, T>(input, low, high, i, [](T v)->T{ return v; });
 	}
 
 	template<class T> void Partition::PartitionArray(T * input, int low, int high, int * indices, int first, int last)
@@ -203,5 +242,17 @@ namespace Test {
 		}
 
 		PartitionArray(input, 0, length - 1, indices, 0, order - 2);
+	}
+
+	template<class T> T Partition::SelectClosestNeighbors(T * input, int length, int pivotIndex, int countNeighbors)
+	{
+		if (input == nullptr) throw invalid_argument("input is nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is less than or equal to zero", length));
+		if (pivotIndex < 0 || pivotIndex >= length) throw invalid_argument(String::Format("pivotIndex %d is not in [0, %d]", pivotIndex, length - 1));
+		if (countNeighbors < 0 || countNeighbors >= length) throw invalid_argument(String::Format("countNeighbors %d is not in [0, %d]", countNeighbors, length - 1));
+		PartitionArray(input, 0, length - 1, pivotIndex);
+		T pivot = input[pivotIndex];
+		PartitionArray<T, int>(input, 0, length - 1, countNeighbors, [&pivot](T v)->int{ return abs(v - pivot); });
+		return pivot;
 	}
 }

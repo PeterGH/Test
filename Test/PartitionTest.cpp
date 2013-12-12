@@ -351,14 +351,14 @@ void PartitionTest::Init(void)
 		Test::Partition::PartitionArrayByQuantiles(A1, 2, I1, 2);
 		ASSERT1(A1[0] == 1);
 		ASSERT1(A1[1] == 2);
-		ASSERT1(I1[0] == 0);
+		ASSERT1(I1[0] == 1);
 
 		int A2[] = { 2, 1 };
 		int I2[1];
 		Test::Partition::PartitionArrayByQuantiles(A2, 2, I2, 2);
 		ASSERT1(A2[0] == 1);
 		ASSERT1(A2[1] == 2);
-		ASSERT1(I2[0] == 0);
+		ASSERT1(I2[0] == 1);
 	});
 
 	Add("Partition Quantiles 3", [&](){
@@ -433,6 +433,135 @@ void PartitionTest::Init(void)
 
 				if (index > 0)
 					ASSERT1(input[j] >= input[indices[index - 1]]);
+			}
+		}
+	});
+
+	Add("Select Neighbors 2", [&](){
+		int A1[] = { 1, 2 };
+		Test::Partition::SelectClosestNeighbors(A1, 2, 0, 1);
+		ASSERT1(A1[0] == 1);
+		ASSERT1(A1[1] == 2);
+
+		Test::Partition::SelectClosestNeighbors(A1, 2, 1, 1);
+		ASSERT1(A1[0] == 2);
+		ASSERT1(A1[1] == 1);
+
+		Test::Partition::SelectClosestNeighbors(A1, 2, 0, 1);
+		ASSERT1(A1[0] == 1);
+		ASSERT1(A1[1] == 2);
+
+		Test::Partition::SelectClosestNeighbors(A1, 2, 1, 1);
+		ASSERT1(A1[0] == 2);
+		ASSERT1(A1[1] == 1);
+
+		Test::Partition::SelectClosestNeighbors(A1, 2, 0, 0);
+		ASSERT1(A1[0] == 1);
+		ASSERT1(A1[1] == 2);
+
+		Test::Partition::SelectClosestNeighbors(A1, 2, 1, 0);
+		ASSERT1(A1[0] == 2);
+		ASSERT1(A1[1] == 1);
+	});
+
+	Add("Select Neighbors 3", [&](){
+		int A1[6][3] = {
+			{ 1, 2, 3 },
+			{ 1, 3, 2 },
+			{ 2, 1, 3 },
+			{ 2, 3, 1 },
+			{ 3, 1, 2 },
+			{ 3, 2, 1 }
+		};
+
+		for (int i = 0; i < 6; i++) {
+			Test::Partition::SelectClosestNeighbors(A1[i], 3, 0, 0);
+			ASSERT1(A1[i][0] == 1);
+		}
+
+		int A2[6][3] = {
+			{ 1, 2, 3 },
+			{ 1, 3, 2 },
+			{ 2, 1, 3 },
+			{ 2, 3, 1 },
+			{ 3, 1, 2 },
+			{ 3, 2, 1 }
+		};
+
+		for (int i = 0; i < 6; i++) {
+			Test::Partition::SelectClosestNeighbors(A2[i], 3, 0, 1);
+			ASSERT1(A2[i][0] == 1);
+			ASSERT1(A2[i][1] == 2);
+		}
+
+		int A3[6][3] = {
+			{ 1, 2, 3 },
+			{ 1, 3, 2 },
+			{ 2, 1, 3 },
+			{ 2, 3, 1 },
+			{ 3, 1, 2 },
+			{ 3, 2, 1 }
+		};
+
+		for (int i = 0; i < 6; i++) {
+			Test::Partition::SelectClosestNeighbors(A3[i], 3, 1, 0);
+			ASSERT1(A3[i][0] == 2);
+		}
+
+		int A4[6][3] = {
+			{ 1, 2, 3 },
+			{ 1, 3, 2 },
+			{ 2, 1, 3 },
+			{ 2, 3, 1 },
+			{ 3, 1, 2 },
+			{ 3, 2, 1 }
+		};
+
+		for (int i = 0; i < 6; i++) {
+			Test::Partition::SelectClosestNeighbors(A4[i], 3, 2, 0);
+			ASSERT1(A4[i][0] == 3);
+		}
+
+		int A5[6][3] = {
+			{ 1, 2, 3 },
+			{ 1, 3, 2 },
+			{ 2, 1, 3 },
+			{ 2, 3, 1 },
+			{ 3, 1, 2 },
+			{ 3, 2, 1 }
+		};
+
+		for (int i = 0; i < 6; i++) {
+			Test::Partition::SelectClosestNeighbors(A5[i], 3, 2, 1);
+			ASSERT1(A5[i][0] == 3);
+			ASSERT1(A5[i][1] == 2);
+		}
+	});
+
+	Add("Select Neighbors Random", [&](){
+		for (int i = 0; i < 100; i++) {
+			int length = 1 + Test::Random::Next();
+			int pivotIndex = Test::Random::Next(length - 1);
+			int countNeighbors = Test::Random::Next(length - 1);
+
+			Logger().WriteInformation("Run %d: %d elements, select %d elements closest to pivotIndex %d\n", i, length, countNeighbors, pivotIndex);
+
+			unique_ptr<int[]> input(new int[length]);
+			for (int j = 0; j < length; j++) {
+				input[j] = Test::Random::Next();
+			}
+
+			int pivot = Test::Partition::SelectClosestNeighbors((int *)input.get(), length, pivotIndex, countNeighbors);
+			
+			int maxDistance = 0;
+			for (int i = 0; i <= countNeighbors ; i++) {
+				int d = abs(input[i] - pivot);
+				if (d > maxDistance) maxDistance = d;
+			}
+
+			for (int i = countNeighbors + 1; i < length; i++) {
+				int d = abs(input[i] - pivot);
+				ASSERT1(d >= maxDistance);
 			}
 		}
 	});
