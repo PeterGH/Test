@@ -1,6 +1,8 @@
 #pragma once
 
 #include "..\Algorithm\BinarySearch.h"
+#include "..\Algorithm\MergeSort.h"
+#include "..\Algorithm\Random.h"
 #include "..\Algorithm\TestClass.h"
 
 class BinarySearchTest : public Test::TestClass {
