@@ -87,6 +87,7 @@
     <ClInclude Include="Partition.h" />
     <ClInclude Include="QuickSort.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="SingleLinkList.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="TestClass.h" />
     <ClInclude Include="TestSuite.h" />
