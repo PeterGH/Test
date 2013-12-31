@@ -14,6 +14,7 @@
 #include "QuickSortTest.h"
 #include "RandomTest.h"
 #include "SingleLinkListTest.h"
+#include "SortedSingleLinkListTest.h"
 #include "StringTest.h"
 #include "TestClassTest.h"
 
@@ -50,6 +51,7 @@ int main(int argc, char * argv[])
 	suite.Add(new QuickSortTest(log));
 	suite.Add(new RandomTest(log));
 	suite.Add(new SingleLinkListTest(log));
+	suite.Add(new SortedSingleLinkListTest(log));
 	suite.Add(new StringTest(log));
 	suite.Add(new TestClassTest(log));
 	

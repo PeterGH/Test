@@ -11,7 +11,7 @@ namespace Test {
 	template<class T> class SingleLinkList {
 		template<class T> friend ostream & operator<<(ostream &, const SingleLinkList<T> &);
 		template<class T> friend Log & operator<<(Log &, const SingleLinkList<T> &);
-	private:
+	protected:
 		class Node {
 		public:
 			T data;
@@ -21,10 +21,15 @@ namespace Test {
 			~Node(void) { next = nullptr; }
 		} * head;
 
+		// Return the pointer to the first instance of input data
+		Node * Search(const T & data) const;
 	public:
 		SingleLinkList(void) : head(nullptr) {}
 		~SingleLinkList(void);
-		void Insert(const T & data);
+		bool Contain(const T & data) const;
+		// Delete the first instance of input data
+		void Delete(const T & data);
+		virtual void Insert(const T & data);
 		const T & Middle(void) const;
 		void Reverse(void);
 		const T & operator[](unsigned int index) const;
@@ -93,6 +98,44 @@ namespace Test {
 			p = head;
 			head = p->next;
 			delete p;
+		}
+	}
+
+	template<class T> typename SingleLinkList<T>::Node * SingleLinkList<T>::Search(const T & data) const
+	{
+		Node * p = head;
+		while (nullptr != p && p->data != data) {
+			p = p->next;
+		}
+
+		// p == nullptr || p->data == data
+		return p;
+	}
+
+	template<class T> bool SingleLinkList<T>::Contain(const T & data) const
+	{
+		return nullptr != Search(data);
+	}
+
+	template<class T> void SingleLinkList<T>::Delete(const T & data)
+	{
+		if (nullptr == head) return;
+
+		Node * p = head;
+		if (p->data == data) {
+			head = p->next;
+			delete p;
+			return;
+		}
+
+		while (nullptr != p->next && p->next->data != data) {
+			p = p->next;
+		}
+
+		if (nullptr != p->next) {
+			Node * t = p->next;
+			p->next = t->next;
+			delete t;
 		}
 	}
 

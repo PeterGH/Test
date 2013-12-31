@@ -1,9 +1,9 @@
-#include "SingleLinkListTest.h"
+#include "SortedSingleLinkListTest.h"
 
-void SingleLinkListTest::Init(void)
+void SortedSingleLinkListTest::Init(void)
 {
 	Add("Delete", [&]() {
-		Test::SingleLinkList<int> list;
+		Test::SortedSingleLinkList<int> list;
 		(Logger() << list).WriteInformation("\n");
 		for (int i = 0; i < 10; i++) {
 			list.Insert(i);
@@ -32,25 +32,28 @@ void SingleLinkListTest::Init(void)
 			ASSERT1(!list.Contain(i));
 		}
 	});
-	
+
 	Add("Insert", [&]() {
-		Test::SingleLinkList<int> list;
-		(Logger() << list).WriteInformation("\n");
+		Test::SortedSingleLinkList<int> list1;
+		Test::SortedSingleLinkList<int> list2;
+		(Logger() << list1).WriteInformation("\n");
+		(Logger() << list2).WriteInformation("\n");
 		for (int i = 0; i < 10; i++) {
-			list.Insert(i);
-			(Logger() << list).WriteInformation("\n");
+			list1.Insert(i);
+			list2.Insert(9 - i);
+			(Logger() << list1).WriteInformation("\n");
+			(Logger() << list2).WriteInformation("\n");
 		}
 
 		for (int i = 0; i < 10; i++) {
-			int v = list[i];
-			ASSERT2(v == (9 - i), Test::String::Format("list[%d] = %d", i, v));
+			int v = list1[i];
+			ASSERT2(v == i, Test::String::Format("list1[%d] = %d", i, v));
+			ASSERT2(v == list2[i], Test::String::Format("list2[%d] = %d", i, v));
 		}
-
-		ASSERTERROR(list[10], std::invalid_argument);
 	});
 
 	Add("Middle", [&]() {
-		Test::SingleLinkList<int> list;
+		Test::SortedSingleLinkList<int> list;
 		(Logger() << list).WriteInformation("\n");
 		ASSERTERROR(list.Middle(), std::invalid_argument);
 
@@ -59,14 +62,14 @@ void SingleLinkListTest::Init(void)
 			(Logger() << list).WriteInformation("\n");
 			int v = list.Middle();
 			Logger().WriteInformation("Middle = %d\n", v);
-			ASSERT2(v == i - (i >> 1), Test::String::Format("list[%d] = %d", i, v));
+			ASSERT2(v == (i >> 1), Test::String::Format("list[%d] = %d", i, v));
 		}
 
 		ASSERTERROR(list[10], std::invalid_argument);
 	});
 
 	Add("Reverse", [&]() {
-		Test::SingleLinkList<int> list;
+		Test::SortedSingleLinkList<int> list;
 		(Logger() << list).WriteInformation("\n");
 		list.Reverse();
 		(Logger() << list).WriteInformation("\n");
@@ -77,7 +80,7 @@ void SingleLinkListTest::Init(void)
 			(Logger() << list).WriteInformation("\n");
 			for (int j = 0; j <= i; j++) {
 				int v = list[j];
-				ASSERT2(v == j, Test::String::Format("list[%d] = %d", j, v));
+				ASSERT2(v == i - j, Test::String::Format("list[%d] = %d", j, v));
 			}
 
 			list.Reverse();
@@ -87,15 +90,15 @@ void SingleLinkListTest::Init(void)
 	});
 
 	Add("Iterator", [&]() {
-		Test::SingleLinkList<int> list;
+		Test::SortedSingleLinkList<int> list;
 		(Logger() << list).WriteInformation("\n");
 		for (int i = 0; i < 10; i++) {
-			list.Insert(9 - i);
+			list.Insert(i);
 			(Logger() << list).WriteInformation("\n");
 		}
 
 		Logger().WriteInformation("++ it, it->\n");
-		for (Test::SingleLinkList<int>::iterator it = list.begin(); it != list.end(); ++it) {
+		for (Test::SortedSingleLinkList<int>::iterator it = list.begin(); it != list.end(); ++it) {
 			unsigned int i = it.Index();
 			int v = it->data;
 			Logger().WriteInformation("%d\t%d\n", i, v);
@@ -103,7 +106,7 @@ void SingleLinkListTest::Init(void)
 		}
 
 		Logger().WriteInformation("it ++, it.current()\n");
-		for (Test::SingleLinkList<int>::iterator it = list.begin(); it != list.end(); it++) {
+		for (Test::SortedSingleLinkList<int>::iterator it = list.begin(); it != list.end(); it++) {
 			unsigned int i = it.Index();
 			int v = it.current();
 			Logger().WriteInformation("%d\t%d\n", i, v);
@@ -111,7 +114,7 @@ void SingleLinkListTest::Init(void)
 		}
 
 		Logger().WriteInformation("++ it, *it\n");
-		for (Test::SingleLinkList<int>::iterator it = list.begin(); it != list.end(); ++it) {
+		for (Test::SortedSingleLinkList<int>::iterator it = list.begin(); it != list.end(); ++it) {
 			unsigned int i = it.Index();
 			int v = *it;
 			Logger().WriteInformation("%d\t%d\n", i, v);
@@ -119,11 +122,30 @@ void SingleLinkListTest::Init(void)
 		}
 
 		Logger().WriteInformation("bool(it) == true\n");
-		Test::SingleLinkList<int>::iterator it = list.begin();
+		Test::SortedSingleLinkList<int>::iterator it = list.begin();
 		ASSERT1(it);
 
 		Logger().WriteInformation("bool(it) == false\n");
 		it = list.end();
 		ASSERTERROR(it, std::invalid_argument);
+	});
+
+	Add("Override", [&](){		
+		Test::SingleLinkList<int> * list1 = new Test::SingleLinkList<int>();
+		Test::SingleLinkList<int> * list2 = new Test::SortedSingleLinkList<int>();
+		(Logger() << *list1).WriteInformation("\n");
+		(Logger() << *list2).WriteInformation("\n");
+		for (int i = 0; i < 10; i++) {
+			list1->Insert(9 - i);
+			list2->Insert(i);
+			(Logger() << *list1).WriteInformation("\n");
+			(Logger() << *list2).WriteInformation("\n");
+		}
+
+		for (int i = 0; i < 10; i++) {
+			int v = (*list1)[i];
+			ASSERT2(v == i, Test::String::Format("list1[%d] = %d", i, v));
+			ASSERT2(v == (*list2)[i], Test::String::Format("list2[%d] = %d", i, v));
+		}
 	});
 }
