@@ -7,6 +7,7 @@
 #include "ArrayTest.h"
 #include "BinarySearchTest.h"
 #include "BitSetTest.h"
+#include "CircularSingleLinkListTest.h"
 #include "ColumnSortTest.h"
 #include "HeapTest.h"
 #include "MergeSortTest.h"
@@ -44,6 +45,7 @@ int main(int argc, char * argv[])
 	suite.Add(new ArrayTest(log));
 	suite.Add(new BinarySearchTest(log));
 	suite.Add(new BitSetTest(log));
+	suite.Add(new CircularSingleLinkListTest(log));
 	suite.Add(new ColumnSortTest(log));
 	suite.Add(new HeapTest(log));
 	suite.Add(new MergeSortTest(log));

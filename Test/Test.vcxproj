@@ -82,6 +82,7 @@
     <ClInclude Include="ArrayTest.h" />
     <ClInclude Include="BinarySearchTest.h" />
     <ClInclude Include="BitSetTest.h" />
+    <ClInclude Include="CircularSingleLinkListTest.h" />
     <ClInclude Include="ColumnSortTest.h" />
     <ClInclude Include="HeapTest.h" />
     <ClInclude Include="MergeSortTest.h" />
@@ -99,6 +100,7 @@
     <ClCompile Include="ArrayTest.cpp" />
     <ClCompile Include="BinarySearchTest.cpp" />
     <ClCompile Include="BitSetTest.cpp" />
+    <ClCompile Include="CircularSingleLinkListTest.cpp" />
     <ClCompile Include="ColumnSortTest.cpp" />
     <ClCompile Include="HeapTest.cpp" />
     <ClCompile Include="MergeSortTest.cpp" />

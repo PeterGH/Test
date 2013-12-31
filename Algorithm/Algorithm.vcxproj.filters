@@ -63,6 +63,9 @@
     <ClInclude Include="SortedSingleLinkList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CircularSingleLinkList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">

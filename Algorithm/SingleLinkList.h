@@ -22,17 +22,17 @@ namespace Test {
 		} * head;
 
 		// Return the pointer to the first instance of input data
-		Node * Search(const T & data) const;
+		virtual Node * Search(const T & data) const;
 	public:
 		SingleLinkList(void) : head(nullptr) {}
-		~SingleLinkList(void);
-		bool Contain(const T & data) const;
+		virtual ~SingleLinkList(void);
+		virtual bool Contain(const T & data) const;
 		// Delete the first instance of input data
-		void Delete(const T & data);
+		virtual void Delete(const T & data);
 		virtual void Insert(const T & data);
 		const T & Middle(void) const;
 		void Reverse(void);
-		const T & operator[](unsigned int index) const;
+		virtual const T & operator[](unsigned int index) const;
 
 		class iterator;
 		friend class iterator;

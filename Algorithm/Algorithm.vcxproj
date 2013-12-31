@@ -80,6 +80,7 @@
     <ClInclude Include="Array.h" />
     <ClInclude Include="BinarySearch.h" />
     <ClInclude Include="BitSet.h" />
+    <ClInclude Include="CircularSingleLinkList.h" />
     <ClInclude Include="ColumnSort.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="Log.h" />
