@@ -7,14 +7,14 @@ namespace Test {
 	template<class T> class CircularSingleLinkList : public SingleLinkList<T> {
 		template<class T> friend ostream & operator<<(ostream &, const CircularSingleLinkList<T> &);
 		template<class T> friend Log & operator<<(Log &, const CircularSingleLinkList<T> &);
-	private:
+	protected:
 		Node * Search(const T & data) const;
 	public:
 		~CircularSingleLinkList(void);
 		bool Contain(const T & data) const;
 		void Delete(const T & data);
 		// Insert data between head and head->next, then set head to the new node
-		void Insert(const T & data);
+		virtual void Insert(const T & data);
 		const T & operator[](unsigned int index) const;
 	};
 
