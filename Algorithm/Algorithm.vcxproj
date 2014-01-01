@@ -83,6 +83,7 @@
     <ClInclude Include="CircularSingleLinkList.h" />
     <ClInclude Include="ColumnSort.h" />
     <ClInclude Include="Heap.h" />
+    <ClInclude Include="InsertionSort.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="MergeSort.h" />
     <ClInclude Include="Partition.h" />
