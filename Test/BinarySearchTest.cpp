@@ -1,6 +1,5 @@
 #include "BinarySearchTest.h"
 
-
 void BinarySearchTest::Init(void)
 {
 	Add("Search", [&](){
@@ -767,5 +766,314 @@ void BinarySearchTest::Init(void)
 
 			ASSERT1(median == median2);
 		}
+	});
+
+	Add("PairsBySum 1", [&](){
+		std::vector<pair<int, int>> pairs, pairs2;
+		int I[][1] = { { -1 }, { 0 }, { 1 } };
+		int S[] = { -1, 0, 1 };
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				Test::BinarySearch::FindPairsBySum<int>(I[i], 1, S[j], pairs);
+				Test::BinarySearch::FindPairsBySum2<int>(I[i], 1, S[j], pairs2);
+				ASSERT1(pairs.size() == 0);
+				ASSERT1(pairs2.size() == 0);
+			}
+		}
+	});
+
+	Add("PairsBySum 2", [&](){
+		std::vector<pair<int, int>> pairs, pairs2;
+		int I[][2] = { { -3, -1 }, { -2, -2 }, { -4, 0 }, { 1, -5 } };
+		int S[] = { 0, -1, -2, -3, -5, -6, -7, -8 };
+		for (int j = 0; j < 4; j++) {
+			for (int i = 0; i < 8; i++) {
+				Test::BinarySearch::FindPairsBySum<int>(I[j], 2, S[i], pairs);
+				ASSERT1(pairs.size() == 0);
+				Test::BinarySearch::FindPairsBySum2<int>(I[j], 2, S[i], pairs2);
+				ASSERT1(pairs2.size() == 0);
+			}
+
+			Test::BinarySearch::FindPairsBySum<int>(I[j], 2, -4, pairs);
+			for_each(pairs.begin(), pairs.end(), [&](pair<int, int> p){
+				Logger().WriteInformation("I1[%d] + I1[%d] = %d + %d = %d\n", p.first, p.second, I[j][p.first], I[j][p.second], I[j][p.first] + I[j][p.second]);
+			});
+
+			ASSERT1(pairs.size() == 1);
+			ASSERT1(I[j][pairs[0].first] + I[j][pairs[0].second] == -4);
+
+			pairs.clear();
+
+			Test::BinarySearch::FindPairsBySum2<int>(I[j], 2, -4, pairs2);
+			for_each(pairs2.begin(), pairs2.end(), [&](pair<int, int> p){
+				Logger().WriteInformation("I1[%d] + I1[%d] = %d + %d = %d\n", p.first, p.second, I[j][p.first], I[j][p.second], I[j][p.first] + I[j][p.second]);
+			});
+
+			ASSERT1(pairs2.size() == 1);
+			ASSERT1(I[j][pairs2[0].first] + I[j][pairs2[0].second] == -4);
+
+			pairs2.clear();
+		}
+	});
+
+	Add("PairsBySum 3", [&](){
+		std::vector<pair<int, int>> pairs, pairs2;
+		int I[][2] = { { 3, 1 }, { 2, 2 }, { 4, 0 }, { -1, 5 } };
+		int S[] = { 0, 1, 2, 3, 5, 6, 7, 8 };
+		for (int j = 0; j < 4; j++) {
+			for (int i = 0; i < 8; i++) {
+				Test::BinarySearch::FindPairsBySum<int>(I[j], 2, S[i], pairs);
+				ASSERT1(pairs.size() == 0);
+				Test::BinarySearch::FindPairsBySum2<int>(I[j], 2, S[i], pairs2);
+				ASSERT1(pairs2.size() == 0);
+			}
+
+			Test::BinarySearch::FindPairsBySum<int>(I[j], 2, 4, pairs);
+			for_each(pairs.begin(), pairs.end(), [&](pair<int, int> p){
+				Logger().WriteInformation("I1[%d] + I1[%d] = %d + %d = %d\n", p.first, p.second, I[j][p.first], I[j][p.second], I[j][p.first] + I[j][p.second]);
+			});
+
+			ASSERT1(pairs.size() == 1);
+			ASSERT1(I[j][pairs[0].first] + I[j][pairs[0].second] == 4);
+
+			pairs.clear();
+
+			Test::BinarySearch::FindPairsBySum2<int>(I[j], 2, 4, pairs2);
+			for_each(pairs2.begin(), pairs2.end(), [&](pair<int, int> p){
+				Logger().WriteInformation("I1[%d] + I1[%d] = %d + %d = %d\n", p.first, p.second, I[j][p.first], I[j][p.second], I[j][p.first] + I[j][p.second]);
+			});
+
+			ASSERT1(pairs2.size() == 1);
+			ASSERT1(I[j][pairs2[0].first] + I[j][pairs2[0].second] == 4);
+
+			pairs2.clear();
+		}
+	});
+
+	Add("PairsBySum 4", [&](){
+		std::vector<pair<int, int>> pairs, pairs2;
+		int I[][2] = { { 0, 0 }, { -1, 1 }, { 2, -2 }, { 3, -3 }, { -4, 4 } };
+		int S[] = { -9, -8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		for (int j = 0; j < 5; j++) {
+			for (int i = 0; i < 18; i++) {
+				Test::BinarySearch::FindPairsBySum<int>(I[j], 2, S[i], pairs);
+				ASSERT1(pairs.size() == 0);
+				Test::BinarySearch::FindPairsBySum2<int>(I[j], 2, S[i], pairs2);
+				ASSERT1(pairs2.size() == 0);
+			}
+
+			Test::BinarySearch::FindPairsBySum<int>(I[j], 2, 0, pairs);
+			for_each(pairs.begin(), pairs.end(), [&](pair<int, int> p){
+				Logger().WriteInformation("I1[%d] + I1[%d] = %d + %d = %d\n", p.first, p.second, I[j][p.first], I[j][p.second], I[j][p.first] + I[j][p.second]);
+			});
+
+			ASSERT1(pairs.size() == 1);
+			ASSERT1(I[j][pairs[0].first] + I[j][pairs[0].second] == 0);
+
+			pairs.clear();
+
+			Test::BinarySearch::FindPairsBySum2<int>(I[j], 2, 0, pairs2);
+			for_each(pairs2.begin(), pairs2.end(), [&](pair<int, int> p){
+				Logger().WriteInformation("I1[%d] + I1[%d] = %d + %d = %d\n", p.first, p.second, I[j][p.first], I[j][p.second], I[j][p.first] + I[j][p.second]);
+			});
+
+			ASSERT1(pairs2.size() == 1);
+			ASSERT1(I[j][pairs2[0].first] + I[j][pairs2[0].second] == 0);
+
+			pairs2.clear();
+		}
+	});
+
+	Add("PairsBySum 5", [&](){
+		std::vector<pair<int, int>> pairs, pairs2;
+		int I[][3] = { { -3, -2, -1 }, { -4, -2, -1 }, { -5, 1, 0 }, { 1, 0, -6 }, { 1, 2, -7 } };
+		int S[] = { -1, -2, -7, -8, -9, -10, -11, -12, -13, -14, -15 };
+		for (int j = 0; j < 5; j++) {
+			for (int i = 0; i < 11; i++) {
+				Test::BinarySearch::FindPairsBySum<int>(I[j], 3, S[i], pairs);
+				ASSERT1(pairs.size() == 0);
+
+				Test::BinarySearch::FindPairsBySum2<int>(I[j], 3, S[i], pairs2);
+				ASSERT1(pairs2.size() == 0);
+			}
+
+			Test::BinarySearch::FindPairsBySum<int>(I[j], 3, -5, pairs);
+			for_each(pairs.begin(), pairs.end(), [&](pair<int, int> p){
+				Logger().WriteInformation("I1[%d] + I1[%d] = %d + %d = %d\n", p.first, p.second, I[j][p.first], I[j][p.second], I[j][p.first] + I[j][p.second]);
+			});
+
+			ASSERT1(pairs.size() == 1);
+			ASSERT1(I[j][pairs[0].first] + I[j][pairs[0].second] == -5);
+
+			pairs.clear();
+
+			Test::BinarySearch::FindPairsBySum2<int>(I[j], 3, -5, pairs2);
+			for_each(pairs2.begin(), pairs2.end(), [&](pair<int, int> p){
+				Logger().WriteInformation("I1[%d] + I1[%d] = %d + %d = %d\n", p.first, p.second, I[j][p.first], I[j][p.second], I[j][p.first] + I[j][p.second]);
+			});
+
+			ASSERT1(pairs2.size() == 1);
+			ASSERT1(I[j][pairs2[0].first] + I[j][pairs2[0].second] == -5);
+
+			pairs2.clear();
+		}
+	});
+
+	Add("PairsBySum 6", [&](){
+		std::vector<pair<int, int>> pairs, pairs2;
+		int I[][3] = { { 3, 2, 1 }, { 4, 2, 1 }, { 5, -1, 0 }, { -1, 0, 6 }, { -1, -2, 7 } };
+		int S[] = { 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+		for (int j = 0; j < 5; j++) {
+			for (int i = 0; i < 11; i++) {
+				Test::BinarySearch::FindPairsBySum<int>(I[j], 3, S[i], pairs);
+				ASSERT1(pairs.size() == 0);
+				Test::BinarySearch::FindPairsBySum2<int>(I[j], 3, S[i], pairs2);
+				ASSERT1(pairs2.size() == 0);
+			}
+
+			Test::BinarySearch::FindPairsBySum<int>(I[j], 3, 5, pairs);
+			for_each(pairs.begin(), pairs.end(), [&](pair<int, int> p){
+				Logger().WriteInformation("I1[%d] + I1[%d] = %d + %d = %d\n", p.first, p.second, I[j][p.first], I[j][p.second], I[j][p.first] + I[j][p.second]);
+			});
+
+			ASSERT1(pairs.size() == 1);
+			ASSERT1(I[j][pairs[0].first] + I[j][pairs[0].second] == 5);
+
+			pairs.clear();
+
+			Test::BinarySearch::FindPairsBySum2<int>(I[j], 3, 5, pairs2);
+			for_each(pairs2.begin(), pairs2.end(), [&](pair<int, int> p){
+				Logger().WriteInformation("I1[%d] + I1[%d] = %d + %d = %d\n", p.first, p.second, I[j][p.first], I[j][p.second], I[j][p.first] + I[j][p.second]);
+			});
+
+			ASSERT1(pairs2.size() == 1);
+			ASSERT1(I[j][pairs2[0].first] + I[j][pairs2[0].second] == 5);
+
+			pairs2.clear();
+		}
+	});
+
+	Add("PairsBySum 7", [&](){
+		std::vector<pair<int, int>> pairs, pairs2;
+		int I[][3] = { { 0, 1, 0 }, { 0, -1, 0 }, { -1, 0, 1 }, { 0, 2, -2 }, { 3, -3, 0 }, { -4, 0, 4 } };
+		int S[] = { -9, -8, -7, -6, -5, 5, 6, 7, 8, 9 };
+		for (int j = 0; j < 6; j++) {
+			for (int i = 0; i < 10; i++) {
+				Test::BinarySearch::FindPairsBySum<int>(I[j], 3, S[i], pairs);
+				ASSERT1(pairs.size() == 0);
+				Test::BinarySearch::FindPairsBySum2<int>(I[j], 3, S[i], pairs2);
+				ASSERT1(pairs2.size() == 0);
+			}
+
+			Test::BinarySearch::FindPairsBySum<int>(I[j], 3, 0, pairs);
+			for_each(pairs.begin(), pairs.end(), [&](pair<int, int> p){
+				Logger().WriteInformation("I1[%d] + I1[%d] = %d + %d = %d\n", p.first, p.second, I[j][p.first], I[j][p.second], I[j][p.first] + I[j][p.second]);
+			});
+
+			ASSERT1(pairs.size() == 1);
+			ASSERT1(I[j][pairs[0].first] + I[j][pairs[0].second] == 0);
+
+			pairs.clear();
+
+			Test::BinarySearch::FindPairsBySum2<int>(I[j], 3, 0, pairs2);
+			for_each(pairs2.begin(), pairs2.end(), [&](pair<int, int> p){
+				Logger().WriteInformation("I1[%d] + I1[%d] = %d + %d = %d\n", p.first, p.second, I[j][p.first], I[j][p.second], I[j][p.first] + I[j][p.second]);
+			});
+
+			ASSERT1(pairs2.size() == 1);
+			ASSERT1(I[j][pairs2[0].first] + I[j][pairs2[0].second] == 0);
+
+			pairs2.clear();
+		}
+	});
+
+	Add("PairsBySum Random", [&](){
+		vector<pair<LONGLONG, LONGLONG>> times;
+
+		for (int j = 0; j < 100; j++) {
+			int length = 1 + Test::Random::Next();
+			int size = length * sizeof(long);
+
+			unique_ptr<long[]> input(new long[length]);
+			unique_ptr<long[]> input1(new long[length]);
+			unique_ptr<long[]> input2(new long[length]);
+
+			int bias = RAND_MAX >> 1;
+			long min = 0;
+			long max = 0;
+			for (int i = 0; i < length; i++) {
+				int t = Test::Random::Next() - bias;
+				input[i] = t;
+
+				if (t < min) min = t;
+				if (t > max) max = t;
+			}
+
+			min = min << 1;
+			max = max << 1;
+			int loops = 100;
+			int delta = (max - min) / loops;
+
+			LONGLONG ticks, time1, time2;
+			function<LONGLONG(void)> GetTicks = [&](void)->LONGLONG{
+				LARGE_INTEGER t;
+				if (!QueryPerformanceCounter(&t)) {
+					t.QuadPart = 0;
+				}
+
+				return t.QuadPart;
+			};
+
+			vector<pair<int, int>> pairs1, pairs2;
+			for (long s = min; s <= max; s += delta) {
+				memcpy_s(input1.get(), size, input.get(), size);
+
+				ticks = GetTicks();
+				Test::BinarySearch::FindPairsBySum<long>(input1.get(), length, s, pairs1);
+				time1 = GetTicks() - ticks;
+
+				for_each(pairs1.begin(), pairs1.end(), [&](pair<int, int> p){
+					ASSERT2(
+						input1[p.first] + input1[p.second] == s,
+						Test::String::Format(
+						"input1[%d] + input1[%d] = %d + %d = %d != %d\n",
+						p.first, p.second, input1[p.first], input1[p.second], input1[p.first] + input1[p.second], s));
+				});
+
+				memcpy_s(input2.get(), size, input.get(), size);
+				
+				ticks = GetTicks();
+				Test::BinarySearch::FindPairsBySum2<long>(input2.get(), length, s, pairs2);
+				time2 = GetTicks() - ticks;
+
+				for_each(pairs2.begin(), pairs2.end(), [&](pair<int, int> p){
+					ASSERT2(
+						input2[p.first] + input2[p.second] == s,
+						Test::String::Format(
+						"input2[%d] + input2[%d] = %d + %d = %d != %d\n",
+						p.first, p.second, input2[p.first], input2[p.second], input2[p.first] + input2[p.second], s));
+				});
+
+				ASSERT2(
+					pairs1.size() == pairs2.size(),
+					Test::String::Format("input1 has %d pairs sumed up to %d, but input2 has %d pairs\n", pairs1.size(), s, pairs2.size()));
+
+				if (pairs1.size() != 0 || pairs2.size() != 0) {
+					Logger().WriteInformation(
+						"Run %d, %d elements, sum %d, pairs1 %d (time1 %I64d), pairs2 %d (time2 %I64d)\n", 
+						j, length, s, pairs1.size(), time1, pairs2.size(), time2);
+					pairs1.clear();
+					pairs2.clear();
+				}
+
+				times.push_back(make_pair(time1, time2));
+			}
+		}
+
+		int count = count_if(times.begin(), times.end(), [&](pair<LONGLONG, LONGLONG> p)->bool{
+			return p.first < p.second;
+		});
+
+		Logger().WriteInformation("In total %d runs, there are %d runs where FindPairsBySum is faster than FindPairsBySum2\n", times.size(), count);
 	});
 }

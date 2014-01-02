@@ -1,9 +1,13 @@
 #pragma once
 
+#include <algorithm>
+#include <Windows.h>
 #include "..\Algorithm\BinarySearch.h"
 #include "..\Algorithm\MergeSort.h"
 #include "..\Algorithm\Random.h"
 #include "..\Algorithm\TestClass.h"
+
+using namespace std;
 
 class BinarySearchTest : public Test::TestClass {
 public:

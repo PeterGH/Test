@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MergeSort.h"
+#include "Partition.h"
 #include "String.h"
 
 namespace Test {
@@ -31,6 +33,16 @@ namespace Test {
 		// If the two arrays contain odd number of elements, then the median is unique.
 		// If the two arrays contain even number of elements, then return the lower median.
 		template<class T> static T FindMedian(const T * input1, int length1, const T * input2, int length2);
+
+		// Find all pairs of elements each of which is summed up to a given value
+		// Return the indices using a vector
+		// The elements of input will be rearranged so the indices returned are not the original ones
+		template<class T> static void FindPairsBySum(T * input, int length, const T sum, vector<pair<int, int>> & indices);
+
+		// Find all pairs of elements each of which is summed up to a given value
+		// Return the indices using a vector
+		// The elements of input will be rearranged so the indices returned are not the original ones
+		template<class T> static void FindPairsBySum2(T * input, int length, const T sum, vector<pair<int, int>> & indices);
 	};
 
 	template<class T> int BinarySearch::Search(const T & element, const T * input, int length, bool firstIndex)
@@ -259,6 +271,145 @@ namespace Test {
 			} else {
 				return shortArray[m];
 			}
+		}
+	}
+
+	template<class T> void BinarySearch::FindPairsBySum(T * input, int length, const T sum, vector<pair<int, int>> & indices)
+	{
+		if (input == nullptr) throw invalid_argument("input is a nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is invalid", length));
+
+		if (length == 1) return;
+
+		T half = sum >> 1;
+
+		// input may contain positive and negative values
+
+		int shortRangeBegin;
+		int shortRangeEnd;
+		int longRangeBegin;
+		int longRangeEnd;
+
+		if ((sum & 0x1) == 0) {
+			//
+			// sum is even
+			// +--------------------------+---------------------+------------------------------+
+			// 0                          i1                    i2                          length-1
+			//           < sum/2                  = sum/2                > sum/2
+
+			// Partition input so that input[0..i1] <= half - 1 < input[i1+1..length-1]
+			int i1 = Partition::PartitionArrayByValue(input, 0, length - 1, half - 1);
+			if (i1 == length - 1) {
+				// All elements are less than sum/2 - 1, no matter whether sum is positive or negative.
+				return;
+			}
+
+			// Partition input once more so that input[i1+1..i2] = half < input[i2+1..length-1]
+			int i2 = Partition::PartitionArrayByValue(input, i1 + 1, length - 1, half);
+			if (i2 == -1) {
+				// All elements are greater than sum/2, no matter whether sum is positive or negative.
+				return;
+			}
+
+			// Now input[i1+1..i2] == sum/2
+			for (int i = i1 + 1; i < i2; i++) {
+				for (int j = i + 1; j <= i2; j++) {
+					indices.push_back(make_pair(i, j));
+				}
+			}
+
+			if (i1 == -1 || i2 == length - 1) {
+				return;
+			}
+
+			if (i1 + 1 >= length - 1 - i2) {
+				shortRangeBegin = i2 + 1;
+				shortRangeEnd = length - 1;
+				longRangeBegin = 0;
+				longRangeEnd = i1;
+			} else {
+				shortRangeBegin = 0;
+				shortRangeEnd = i1;
+				longRangeBegin = i2 + 1;
+				longRangeEnd = length - 1;
+			}
+		} else {
+			//
+			// sum is odd
+			// +-------------------------------------+-----------------------------------------+
+			// 0                                     i1                                     length-1
+			//                 <= sum/2                             >= sum/2 + 1
+
+			// Partition input so that input[0..i1] <= half < input[i1+1..length-1]
+			int i1 = Partition::PartitionArrayByValue(input, 0, length - 1, half);
+
+			if (i1 == -1) {
+				// All elements are greater than sum/2, no matter whether sum is positive or negative.
+				return;
+			}
+
+			if (i1 == length - 1) {
+				// All elements are less than or equal to sum/2, no matter whether sum is positive or negative.
+				return;
+			}
+
+			if (i1 + 1 >= length - 1 - i1) {
+				shortRangeBegin = i1 + 1;
+				shortRangeEnd = length - 1;
+				longRangeBegin = 0;
+				longRangeEnd = i1;
+			} else {
+				shortRangeBegin = 0;
+				shortRangeEnd = i1;
+				longRangeBegin = i1 + 1;
+				longRangeEnd = length - 1;
+			}
+		}
+
+		MergeSort::Sort<T>(input, shortRangeBegin, shortRangeEnd);
+
+		for (int i = longRangeBegin; i <= longRangeEnd; i++) {
+			T v = sum - input[i];
+			int j = Search<T>(v, &input[shortRangeBegin], shortRangeEnd - shortRangeBegin + 1, true);
+			if (j == -1) {
+				// No element == sum - input[i]
+				continue;
+			}
+
+			j = shortRangeBegin + j;
+
+			do {
+				indices.push_back(make_pair(i, j));
+				j++;
+			} while (j <= shortRangeEnd && input[j] == v);
+		}
+	}
+
+	template<class T> void BinarySearch::FindPairsBySum2(T * input, int length, const T sum, vector<pair<int, int>> & indices)
+	{
+		if (input == nullptr) throw invalid_argument("input is a nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is invalid", length));
+
+		if (length == 1) return;
+
+		MergeSort::Sort<T>(input, length);
+
+		T half = sum >> 1;
+
+		for (int i = 0; i < length - 1; i++) {
+			T v = sum - input[i];
+			int j = Search<T>(v, &input[i + 1], length - 1 - i, true);
+			if (j == -1) {
+				// No element == sum - input[i]
+				continue;
+			}
+
+			j = i + 1 + j;
+
+			do {
+				indices.push_back(make_pair(i, j));
+				j++;
+			} while (j < length && input[j] == v);
 		}
 	}
 }

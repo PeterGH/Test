@@ -89,6 +89,6 @@ namespace Test {
 		if (input == nullptr) throw invalid_argument("input is nullptr");
 		if (length <= 0) throw invalid_argument(String::Format("Invalid length %d", length));
 		if (i < 0 || i >= length) throw invalid_argument(String::Format("Invalid i %d", i));
-		return Partition::PartitionArray(input, 0, length - 1, i);
+		return Partition::PartitionArrayByOrder(input, 0, length - 1, i);
 	}
 }

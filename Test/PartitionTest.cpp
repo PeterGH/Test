@@ -43,34 +43,34 @@ void PartitionTest::Init(void)
 		int I[] = { 3, 43, 42, 1, 3, 3556, 7, 34, 8, 8769, 96656532, 1, 445, 35, 64 };
 		int L = sizeof(I) / sizeof(I[0]);
 
-		int i = Test::Partition::PartitionArray(I, 0, 0, 0);
+		int i = Test::Partition::PartitionArrayByOrder(I, 0, 0, 0);
 		ASSERT1(i == 3);
 
-		i = Test::Partition::PartitionArray(I, L - 1, L - 1, 0);
+		i = Test::Partition::PartitionArrayByOrder(I, L - 1, L - 1, 0);
 		ASSERT1(i == 64);
 
-		i = Test::Partition::PartitionArray(I, 0, 1, 0);
+		i = Test::Partition::PartitionArrayByOrder(I, 0, 1, 0);
 		ASSERT1(i == 3);
 		ASSERT1(I[0] == 3);
 		ASSERT1(I[1] == 43);
 
-		i = Test::Partition::PartitionArray(I, 0, 1, 1);
+		i = Test::Partition::PartitionArrayByOrder(I, 0, 1, 1);
 		ASSERT1(i == 43);
 		ASSERT1(I[0] == 3);
 		ASSERT1(I[1] == 43);
 		
-		i = Test::Partition::PartitionArray(I, 2, 3, 0);
+		i = Test::Partition::PartitionArrayByOrder(I, 2, 3, 0);
 		ASSERT1(i == 1);
 		ASSERT1(I[2] == 1);
 		ASSERT1(I[3] == 42);
 
-		i = Test::Partition::PartitionArray(I, 2, 3, 1);
+		i = Test::Partition::PartitionArrayByOrder(I, 2, 3, 1);
 		ASSERT1(i == 42);
 		ASSERT1(I[2] == 1);
 		ASSERT1(I[3] == 42);
 		
 		for (int j = 0; j < L; j++) {
-			i = Test::Partition::PartitionArray(I, 0, L - 1, j);
+			i = Test::Partition::PartitionArrayByOrder(I, 0, L - 1, j);
 			ASSERT1(i == I[j]);
 			for (int k = 0; k < L - 1; k++) {
 				if (k < j) ASSERT1(I[k] <= I[j]);
@@ -82,39 +82,39 @@ void PartitionTest::Init(void)
 	Add("Partition Array 1", [&](){
 		int A[] = { 1 };
 		int I[] = { 0 };
-		Test::Partition::PartitionArray(A, 0, 0, I, 0, 0);
+		Test::Partition::PartitionArrayByOrders(A, 0, 0, I, 0, 0);
 		ASSERT1(A[0] == 1);
 	});
 
 	Add("Partition Array 2", [&](){
 		int A[] = { 1, 2 };
 		int I1[] = { 0 };
-		Test::Partition::PartitionArray(A, 0, 1, I1, 0, 0);
+		Test::Partition::PartitionArrayByOrders(A, 0, 1, I1, 0, 0);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 
 		int I2[] = { 1 };
-		Test::Partition::PartitionArray(A, 0, 1, I2, 0, 0);
+		Test::Partition::PartitionArrayByOrders(A, 0, 1, I2, 0, 0);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 
 		int I3[] = { 0, 1 };
-		Test::Partition::PartitionArray(A, 0, 1, I3, 0, 1);
+		Test::Partition::PartitionArrayByOrders(A, 0, 1, I3, 0, 1);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 
 		int B1[] = { 2, 1 };
-		Test::Partition::PartitionArray(B1, 0, 1, I1, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B1, 0, 1, I1, 0, 0);
 		ASSERT1(B1[0] == 1);
 		ASSERT1(B1[1] == 2);
 
 		int B2[] = { 2, 1 };
-		Test::Partition::PartitionArray(B2, 0, 1, I2, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B2, 0, 1, I2, 0, 0);
 		ASSERT1(B2[0] == 1);
 		ASSERT1(B2[1] == 2);
 
 		int B3[] = { 2, 1 };
-		Test::Partition::PartitionArray(B3, 0, 1, I3, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B3, 0, 1, I3, 0, 1);
 		ASSERT1(B3[0] == 1);
 		ASSERT1(B3[1] == 2);
 	});
@@ -122,115 +122,115 @@ void PartitionTest::Init(void)
 	Add("Partition Array 3", [&](){
 		int A[] = { 1, 2, 3 };
 		int I1[] = { 0 };
-		Test::Partition::PartitionArray(A, 0, 2, I1, 0, 0);
+		Test::Partition::PartitionArrayByOrders(A, 0, 2, I1, 0, 0);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 		ASSERT1(A[2] == 3);
 
 		int I2[] = { 1 };
-		Test::Partition::PartitionArray(A, 0, 2, I2, 0, 0);
+		Test::Partition::PartitionArrayByOrders(A, 0, 2, I2, 0, 0);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 		ASSERT1(A[2] == 3);
 
 		int I3[] = { 2 };
-		Test::Partition::PartitionArray(A, 0, 2, I3, 0, 0);
+		Test::Partition::PartitionArrayByOrders(A, 0, 2, I3, 0, 0);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 		ASSERT1(A[2] == 3);
 
 		int I4[] = { 0, 1 };
-		Test::Partition::PartitionArray(A, 0, 2, I4, 0, 1);
+		Test::Partition::PartitionArrayByOrders(A, 0, 2, I4, 0, 1);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 		ASSERT1(A[2] == 3);
 
 		int I5[] = { 0, 2 };
-		Test::Partition::PartitionArray(A, 0, 2, I5, 0, 1);
+		Test::Partition::PartitionArrayByOrders(A, 0, 2, I5, 0, 1);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 		ASSERT1(A[2] == 3);
 
 		int I6[] = { 1, 2 };
-		Test::Partition::PartitionArray(A, 0, 2, I6, 0, 1);
+		Test::Partition::PartitionArrayByOrders(A, 0, 2, I6, 0, 1);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 		ASSERT1(A[2] == 3);
 
 		int I7[] = { 0, 1, 2 };
-		Test::Partition::PartitionArray(A, 0, 2, I7, 0, 2);
+		Test::Partition::PartitionArrayByOrders(A, 0, 2, I7, 0, 2);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 		ASSERT1(A[2] == 3);
 
 		int B1[] = { 2, 1, 3 };
-		Test::Partition::PartitionArray(B1, 0, 2, I1, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B1, 0, 2, I1, 0, 0);
 		ASSERT1(B1[0] == 1);
 		ASSERT1(B1[1] > B1[0]);
 		ASSERT1(B1[2] > B1[0]);
 
 		int B2[] = { 2, 3, 1 };
-		Test::Partition::PartitionArray(B2, 0, 2, I1, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B2, 0, 2, I1, 0, 0);
 		ASSERT1(B2[0] == 1);
 		ASSERT1(B2[1] > B2[0]);
 		ASSERT1(B2[2] > B2[0]);
 
 		int B3[] = { 3, 1, 2 };
-		Test::Partition::PartitionArray(B3, 0, 2, I1, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B3, 0, 2, I1, 0, 0);
 		ASSERT1(B3[0] == 1);
 		ASSERT1(B3[1] > B3[0]);
 		ASSERT1(B3[2] > B3[0]);
 
 		int B4[] = { 3, 2, 1 };
-		Test::Partition::PartitionArray(B4, 0, 2, I1, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B4, 0, 2, I1, 0, 0);
 		ASSERT1(B4[0] == 1);
 		ASSERT1(B4[1] > B4[0]);
 		ASSERT1(B4[2] > B4[0]);
 
 		int B5[] = { 2, 1, 3 };
-		Test::Partition::PartitionArray(B5, 0, 2, I2, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B5, 0, 2, I2, 0, 0);
 		ASSERT1(B5[0] == 1);
 		ASSERT1(B5[1] == 2);
 		ASSERT1(B5[2] == 3);
 
 		int B6[] = { 2, 3, 1 };
-		Test::Partition::PartitionArray(B6, 0, 2, I2, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B6, 0, 2, I2, 0, 0);
 		ASSERT1(B6[0] == 1);
 		ASSERT1(B6[1] == 2);
 		ASSERT1(B6[2] == 3);
 
 		int B7[] = { 3, 1, 2 };
-		Test::Partition::PartitionArray(B7, 0, 2, I2, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B7, 0, 2, I2, 0, 0);
 		ASSERT1(B7[0] == 1);
 		ASSERT1(B7[1] == 2);
 		ASSERT1(B7[2] == 3);
 
 		int B8[] = { 3, 2, 1 };
-		Test::Partition::PartitionArray(B8, 0, 2, I2, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B8, 0, 2, I2, 0, 0);
 		ASSERT1(B8[0] == 1);
 		ASSERT1(B8[1] == 2);
 		ASSERT1(B8[2] == 3);
 
 		int B9[] = { 2, 1, 3 };
-		Test::Partition::PartitionArray(B9, 0, 2, I3, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B9, 0, 2, I3, 0, 0);
 		ASSERT1(B9[0] < B9[2]);
 		ASSERT1(B9[1] < B9[2]);
 		ASSERT1(B9[2] == 3);
 
 		int B10[] = { 2, 3, 1 };
-		Test::Partition::PartitionArray(B10, 0, 2, I3, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B10, 0, 2, I3, 0, 0);
 		ASSERT1(B10[0] < B10[2]);
 		ASSERT1(B10[1] < B10[2]);
 		ASSERT1(B10[2] == 3);
 
 		int B11[] = { 3, 1, 2 };
-		Test::Partition::PartitionArray(B11, 0, 2, I3, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B11, 0, 2, I3, 0, 0);
 		ASSERT1(B11[0] < B11[2]);
 		ASSERT1(B11[1] < B11[2]);
 		ASSERT1(B11[2] == 3);
 
 		int B12[] = { 3, 2, 1 };
-		Test::Partition::PartitionArray(B12, 0, 2, I3, 0, 0);
+		Test::Partition::PartitionArrayByOrders(B12, 0, 2, I3, 0, 0);
 		ASSERT1(B12[0] < B12[2]);
 		ASSERT1(B12[1] < B12[2]);
 		ASSERT1(B12[2] == 3);
@@ -245,7 +245,7 @@ void PartitionTest::Init(void)
 		};
 
 		for (int i = 0; i < 6; i++) {
-			Test::Partition::PartitionArray(B13[i], 0, 2, I4, 0, 1);
+			Test::Partition::PartitionArrayByOrders(B13[i], 0, 2, I4, 0, 1);
 			ASSERT1(B13[i][0] == 1);
 			ASSERT1(B13[i][1] == 2);
 			ASSERT1(B13[i][2] == 3);
@@ -261,7 +261,7 @@ void PartitionTest::Init(void)
 		};
 
 		for (int i = 0; i < 6; i++) {
-			Test::Partition::PartitionArray(B14[i], 0, 2, I5, 0, 1);
+			Test::Partition::PartitionArrayByOrders(B14[i], 0, 2, I5, 0, 1);
 			ASSERT1(B14[i][0] == 1);
 			ASSERT1(B14[i][1] == 2);
 			ASSERT1(B14[i][2] == 3);
@@ -277,7 +277,7 @@ void PartitionTest::Init(void)
 		};
 
 		for (int i = 0; i < 6; i++) {
-			Test::Partition::PartitionArray(B15[i], 0, 2, I6, 0, 1);
+			Test::Partition::PartitionArrayByOrders(B15[i], 0, 2, I6, 0, 1);
 			ASSERT1(B15[i][0] == 1);
 			ASSERT1(B15[i][1] == 2);
 			ASSERT1(B15[i][2] == 3);
@@ -293,7 +293,7 @@ void PartitionTest::Init(void)
 		};
 
 		for (int i = 0; i < 6; i++) {
-			Test::Partition::PartitionArray(B16[i], 0, 2, I7, 0, 2);
+			Test::Partition::PartitionArrayByOrders(B16[i], 0, 2, I7, 0, 2);
 			ASSERT1(B16[i][0] == 1);
 			ASSERT1(B16[i][1] == 2);
 			ASSERT1(B16[i][2] == 3);
@@ -321,7 +321,7 @@ void PartitionTest::Init(void)
 
 			ASSERT1(indices[len - 1] < length);
 
-			Test::Partition::PartitionArray((int *)input.get(), 0, length - 1, (int *)indices.get(), 0, len - 1);
+			Test::Partition::PartitionArrayByOrders((int *)input.get(), 0, length - 1, (int *)indices.get(), 0, len - 1);
 
 			int index = 0;
 			for (int j = 0; j < length; j++) {
