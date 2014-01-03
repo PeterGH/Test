@@ -88,6 +88,7 @@
     <ClInclude Include="MergeSort.h" />
     <ClInclude Include="MRInteger.h" />
     <ClInclude Include="Partition.h" />
+    <ClInclude Include="Permutation.h" />
     <ClInclude Include="QuickSort.h" />
     <ClInclude Include="RadixSort.h" />
     <ClInclude Include="Random.h" />
@@ -103,6 +104,7 @@
     <ClCompile Include="BitSet.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="MRInteger.cpp" />
+    <ClCompile Include="Permutation.cpp" />
     <ClCompile Include="RadixSort.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="String.cpp" />

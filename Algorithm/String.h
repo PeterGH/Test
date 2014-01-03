@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bitset>
+#include <sstream>
 #include <stdarg.h>
 #include <string>
 
@@ -83,6 +84,17 @@ namespace Test {
 		// Remove duplicate characters from string input.
 		// Return the new length of string input with only unique characters.
 		__declspec(dllexport) static int RemoveDuplicateChars(char * input, int length);
+
+		template<class T, class C> static basic_string<C> Join(const T * input, int length, const C * separator)
+		{
+			basic_stringstream<C> ss;
+			ss << input[0];
+			for (int i = 1; i < length; i++) {
+				ss << separator << input[i];
+			}
+
+			return ss.str();
+		}
 	};
 
 	template<class T> basic_string<T> String::ToLower(const basic_string<T> & input)

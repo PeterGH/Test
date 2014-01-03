@@ -75,6 +75,9 @@
     <ClInclude Include="MRIntegerTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PermutationTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -132,6 +135,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MRIntegerTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PermutationTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

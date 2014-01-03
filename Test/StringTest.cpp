@@ -36,4 +36,24 @@ void StringTest::Init(void)
 		ASSERT1(0 == strcmp("", c4));
 		ASSERT1(0 == l);
 	});
+
+	Add("Join", [&](){
+		int i1[] = { 0, 1, 2, 3 };
+		string o1 = Test::String::Join(i1, 4, ":");
+		Logger().WriteInformation("%s\n", o1.c_str());
+		ASSERT1(0 == strcmp("0:1:2:3", o1.c_str()));
+
+		wstring o2 = Test::String::Join(i1, 4, L":");
+		Logger().WriteInformation("%S\n", o2.c_str());
+		ASSERT1(0 == wcscmp(L"0:1:2:3", o2.c_str()));
+
+		double i2[] = { 0.1, 1.2, 2.3, 3.4 };
+		string o3 = Test::String::Join(i2, 4, ":");
+		Logger().WriteInformation("%s\n", o3.c_str());
+		ASSERT1(0 == strcmp("0.1:1.2:2.3:3.4", o3.c_str()));
+
+		wstring o4 = Test::String::Join(i2, 4, L":");
+		Logger().WriteInformation("%S\n", o4.c_str());
+		ASSERT1(0 == wcscmp(L"0.1:1.2:2.3:3.4", o4.c_str()));
+	});
 }

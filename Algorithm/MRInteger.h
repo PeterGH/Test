@@ -48,6 +48,7 @@ namespace Test {
 		__declspec(dllexport) bool operator>=(const MRInteger & mrint) const { return !((*this) < mrint); }
 		__declspec(dllexport) bool operator>(const MRInteger & mrint) const;
 		__declspec(dllexport) bool operator<=(const MRInteger & mrint) const { return !((*this) > mrint); }
+		// maximum number of integers can be represented
 		__declspec(dllexport) const unsigned long Max(void) const { return _max; }
 		__declspec(dllexport) const unsigned int Length(void) const { return _length; }
 		__declspec(dllexport) const unsigned int operator[](unsigned int) const;

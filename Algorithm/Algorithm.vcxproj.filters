@@ -78,6 +78,9 @@
     <ClInclude Include="RadixSort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Permutation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">
@@ -105,6 +108,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RadixSort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Permutation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

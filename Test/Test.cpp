@@ -14,6 +14,7 @@
 #include "MergeSortTest.h"
 #include "MRIntegerTest.h"
 #include "PartitionTest.h"
+#include "PermutationTest.h"
 #include "QuickSortTest.h"
 #include "RandomTest.h"
 #include "SingleLinkListTest.h"
@@ -55,6 +56,7 @@ int main(int argc, char * argv[])
 	suite.Add(new MergeSortTest(log));
 	suite.Add(new MRIntegerTest(log));
 	suite.Add(new PartitionTest(log));
+	suite.Add(new PermutationTest(log));
 	suite.Add(new QuickSortTest(log));
 	suite.Add(new RandomTest(log));
 	suite.Add(new SingleLinkListTest(log));
