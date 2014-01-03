@@ -81,6 +81,9 @@
     <ClInclude Include="Permutation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HeapSort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">
@@ -111,6 +114,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Permutation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HeapSort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
