@@ -9,6 +9,15 @@ using namespace std;
 namespace Test {
 	class __declspec(dllexport) Array {
 	public:
+
+		// Find a subarray of contiguous elements whose sum is maximized
+		// If array contains both positive and negative numbers, return the maximum subarray
+		// If array contains positive numbers, return entire array A
+		// If array contains non-positive numbers, return the maximum number
+		// Parameter sum is the summation of the returned subarray
+		// Parameters start and end are the start and end indices of the returned subarray
+		static void MaxSubArray(const int * input, int length, int & start, int & end, long & sum);
+
 		// Find the indices of min and max elements.
 		// minIndex will be the index of the minimum value (first index if there are more than on minimum value).
 		// maxIndex will be the index of the maximum value (last index if there are more than on maximum value).

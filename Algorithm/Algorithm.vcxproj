@@ -97,6 +97,7 @@
     <ClInclude Include="TestSuite.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Array.cpp" />
     <ClCompile Include="BitSet.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Random.cpp" />

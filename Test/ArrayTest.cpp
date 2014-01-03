@@ -648,4 +648,99 @@ void ArrayTest::Init(void)
 			checkRight(i);
 		}
 	});
+
+	Add("MaxSubArray", [&](){
+		int A1[] = { 13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7 };
+		int L = sizeof(A1) / sizeof(A1[0]);
+		int l, r;
+		long sum;
+
+		auto check = [&](int el, int er, int es) -> void {
+			ASSERT1(el == l);
+			ASSERT1(er == r);
+			ASSERT1(es == (int)sum);
+		};
+
+		Test::Array::MaxSubArray(A1, L, l, r, sum);
+		check(7, 10, 43);
+
+		Test::Array::MaxSubArray(A1, 1, l, r, sum);
+		check(0, 0, 13);
+
+		Test::Array::MaxSubArray(A1, 2, l, r, sum);
+		check(0, 0, 13);
+
+		Test::Array::MaxSubArray(A1, 3, l, r, sum);
+		check(0, 0, 13);
+
+		Test::Array::MaxSubArray(A1, 4, l, r, sum);
+		check(3, 3, 20);
+
+		Test::Array::MaxSubArray(A1, 5, l, r, sum);
+		check(3, 3, 20);
+
+		Test::Array::MaxSubArray(A1, 8, l, r, sum);
+		check(3, 3, 20);
+
+		int A2[] = { 13, 3, 25, 20, 3, 16, 23, 18, 20, 7, 12, 5, 22, 15, 4, 7 };
+		Test::Array::MaxSubArray(A2, L, l, r, sum);
+		check(0, L - 1, 213);
+
+		Test::Array::MaxSubArray(A2, 1, l, r, sum);
+		check(0, 0, 13);
+
+		Test::Array::MaxSubArray(A2, 2, l, r, sum);
+		check(0, 1, 16);
+
+		Test::Array::MaxSubArray(A2, 3, l, r, sum);
+		check(0, 2, 41);
+
+		int A3[] = { -13, -3, -25, -20, -3, -16, -23, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
+		Test::Array::MaxSubArray(A3, L, l, r, sum);
+		check(1, 1, -3);
+
+		Test::Array::MaxSubArray(A3, 1, l, r, sum);
+		check(0, 0, -13);
+
+		Test::Array::MaxSubArray(A3, 2, l, r, sum);
+		check(1, 1, -3);
+
+		int A4[] = { 0, 0, -25, -20, -3, -16, -23, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
+		Test::Array::MaxSubArray(A4, L, l, r, sum);
+		check(0, 0, 0);
+
+		Test::Array::MaxSubArray(A4, 1, l, r, sum);
+		check(0, 0, 0);
+
+		int A5[] = { 0, 0, 25, 20, 3, 16, 23, 18, 20, 7, 12, 5, 22, 15, 0, 0 };
+		Test::Array::MaxSubArray(A5, L, l, r, sum);
+		check(2, 13, 186);
+
+		Test::Array::MaxSubArray(A5, 1, l, r, sum);
+		check(0, 0, 0);
+
+		int A6[] = { -25, -20, -3, 0, 0, -16, -23, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
+		Test::Array::MaxSubArray(A6, L, l, r, sum);
+		check(3, 3, 0);
+
+		Test::Array::MaxSubArray(A6, 1, l, r, sum);
+		check(0, 0, -25);
+
+		Test::Array::MaxSubArray(A6, 2, l, r, sum);
+		check(1, 1, -20);
+
+		Test::Array::MaxSubArray(A6, 5, l, r, sum);
+		check(3, 3, 0);
+
+		int A7[] = { 1, 1, 1, -1, -1, -1, -1, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
+		Test::Array::MaxSubArray(A7, L, l, r, sum);
+		check(0, 2, 3);
+
+		Test::Array::MaxSubArray(A7, 6, l, r, sum);
+		check(0, 2, 3);
+
+		int A8[] = { 1, 1, 1, -1, -1, -1, -1, -18, -20, -7, -12, -5, -22, -15, -4, 7 };
+		Test::Array::MaxSubArray(A8, L, l, r, sum);
+		check(L - 1, L - 1, 7);
+	});
 }

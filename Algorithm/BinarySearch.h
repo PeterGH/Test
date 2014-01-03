@@ -394,8 +394,6 @@ namespace Test {
 
 		MergeSort::Sort<T>(input, length);
 
-		T half = sum >> 1;
-
 		for (int i = 0; i < length - 1; i++) {
 			T v = sum - input[i];
 			int j = Search<T>(v, &input[i + 1], length - 1 - i, true);
