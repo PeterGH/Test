@@ -72,6 +72,12 @@
     <ClInclude Include="InsertionSort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MRInteger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RadixSort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">
@@ -93,6 +99,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MRInteger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RadixSort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

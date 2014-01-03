@@ -19,7 +19,7 @@ namespace Test {
 		// Beginning 
 		int l = 0;
 		// Cumulative sum up to current element
-		long long c = 0;
+		long c = 0;
 		// The index of the maximum element seen so far
 		int max = 0;
 

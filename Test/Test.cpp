@@ -12,6 +12,7 @@
 #include "HeapTest.h"
 #include "InsertionSortTest.h"
 #include "MergeSortTest.h"
+#include "MRIntegerTest.h"
 #include "PartitionTest.h"
 #include "QuickSortTest.h"
 #include "RandomTest.h"
@@ -52,6 +53,7 @@ int main(int argc, char * argv[])
 	suite.Add(new HeapTest(log));
 	suite.Add(new InsertionSortTest(log));
 	suite.Add(new MergeSortTest(log));
+	suite.Add(new MRIntegerTest(log));
 	suite.Add(new PartitionTest(log));
 	suite.Add(new QuickSortTest(log));
 	suite.Add(new RandomTest(log));
