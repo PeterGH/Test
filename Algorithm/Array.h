@@ -28,6 +28,8 @@ namespace Test {
 		// and output the index of the new position of the element.
 		template<class T> static void Permute(T * input, const int length, const int columns, function<int(int, int, int)> & permute);
 
+		template<class T> static void Print(Log & log, const T * input, const int length, const int columns);
+
 		// Rotate an input array to the left by a distance. The elements rotated out are shifted into the right.
 		template<class T> static void RotateLeft(T * input, const int length, int distance);
 
@@ -36,6 +38,9 @@ namespace Test {
 
 		// Swap contiguous elements between the first and the second positions.
 		template<class T> static void Swap(T * first, T * second, const int count);
+
+		// Swap elements at two positions
+		template<class T> static void Swap(T * buffer, unsigned int position1, unsigned int position2);
 
 		// Transpose a two dimensional matrix in place
 		template<class T> static void Transpose(T * input, const int length, const int columns);
@@ -91,6 +96,15 @@ namespace Test {
 			t = first[i];
 			first[i] = second[i];
 			second[i] = t;
+		}
+	}
+
+	template<class T> void Array::Swap(T * buffer, unsigned int position1, unsigned int position2)
+	{
+		if (position1 != position2) {
+			T t = buffer[position1];
+			buffer[position1] = buffer[position2];
+			buffer[position2] = t;
 		}
 	}
 
@@ -414,6 +428,37 @@ namespace Test {
 			Permute(input, length, columns, permute);
 		} else {
 			Transpose(input, length, columns);
+		}
+	}
+
+	template<class T> void Array::Print(Log & log, const T * input, const int length, const int columns)
+	{
+		if (input == nullptr || length <= 0) return;
+
+		for (int i = 0; i < columns; i++) {
+			log.WriteInformation("\t%d", i);
+		}
+
+		log.WriteInformation("\n");
+
+		int rows = length / columns;
+		for (int i = 0; i < rows; i++) {
+			log.WriteInformation("%d", i);
+			for (int j = 0; j < columns; j++) {
+				log.WriteInformation("\t%d", *(input + i * columns + j));
+			}
+
+			log.WriteInformation("\n");
+		}
+
+		int remainders = length % columns;
+		if (remainders > 0) {
+			log.WriteInformation("%d", rows);
+			for (int j = 0; j < remainders; j++) {
+				log.WriteInformation("\t%d", *(input + rows * columns + j));
+			}
+
+			log.WriteInformation("\n");
 		}
 	}
 }

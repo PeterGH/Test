@@ -13,6 +13,11 @@ namespace Test {
 		// In-place and stable.
 		template<class T> static void Merge(T * input, int head, int middle, int tail);
 
+		// Assuming input[head..(middle-1)] and input[middle..tail] are already sorted,
+		// rearrange elements every step so that input[head..tail] is sorted.
+		// In-place and stable.
+		template<class T> static void Merge(T * input, int head, int middle, int tail, int step);
+
 		// An inversion is a pair {input[i], input[j]} such that input[i] > input[j] when i < j.
 		// We can extend the concept to two sub arrays of input, and the set of inversions
 		// contains every inversion whose elements each falls into different sub arrays, e.g.,
@@ -27,6 +32,8 @@ namespace Test {
 		// Sort input[head..tail] using merge
 		template<class T> static void Sort(T * input, int head, int tail);
 		template<class T> static void Sort(T * input, int length) { Sort(input, 0, length - 1); }
+
+		template<class T> static void Sort(T * input, int head, int tail, int step);
 
 		template<class T> static void ParallelSort(T * input, int head, int tail);
 		template<class T> static void ParallelSort(T * input, int length) { ParallelSort(input, 0, length - 1); }
@@ -67,6 +74,31 @@ namespace Test {
 		}
 	}
 
+	template<class T> void MergeSort::Merge(T * input, int head, int middle, int tail, int step)
+	{
+		if (input == nullptr || head < 0 || middle <= 0 || tail < middle || tail <= head || step <= 0) return;
+		// head and middle point to the heads of two sub sorted arrays.
+		while (head < middle && middle <= tail) {
+			if (input[head] <= input[middle]) {
+				head += step;
+			} else {
+				// Should move input[middle] to position head
+				T t = input[middle];
+
+				// Shift input[head..(middle-step)] to input[(head+step)..middle]
+				for (int i = middle; i > head; i -= step) {
+					input[i] = input[i - step];
+				}
+
+				input[head] = t;
+
+				// Move to the next pair of elements
+				head += step;
+				middle += step;
+			}
+		}
+	}
+	
 	template<class T> int MergeSort::CountInversions(T * input, int head, int middle, int tail)
 	{
 		if (input == nullptr || head < 0 || middle <= 0 || tail < middle || tail <= head) return 0;
@@ -103,7 +135,7 @@ namespace Test {
 	{
 		if (input == nullptr || head < 0 || tail < 0 || tail < head) return;
 		if (head < tail) {
-			int middle = head + ((tail - head) >> 2) + 1;
+			int middle = head + ((tail - head) >> 1) + 1;
 			Sort(input, head, middle - 1);
 			Sort(input, middle, tail);
 			Merge(input, head, middle, tail);
@@ -114,7 +146,7 @@ namespace Test {
 	{
 		if (input == nullptr || head < 0 || tail < 0 || tail < head) return;
 		if (head < tail) {
-			int middle = head + ((tail - head) >> 2) + 1;
+			int middle = head + ((tail - head) >> 1) + 1;
 
 			// parallel_invoke returns only when two actions finish
 			parallel_invoke(
@@ -127,12 +159,23 @@ namespace Test {
 		}
 	}
 
+	template<class T> void MergeSort::Sort(T * input, int head, int tail, int step)
+	{
+		if (input == nullptr || head < 0 || tail < 0 || tail < head || step <= 0) return;
+		if (head < tail) {
+			int middle = head + (((tail - head) / step) >> 1) * step + step;
+			Sort(input, head, middle - step, step);
+			Sort(input, middle, tail, step);
+			Merge(input, head, middle, tail, step);			
+		}
+	}
+	
 	template<class T> int MergeSort::CountInversions(T * input, int head, int tail)
 	{
 		if (input == nullptr || head < 0 || tail < 0 || tail < head) return 0;
 		int count = 0;
 		if (head < tail) {
-			int middle = head + ((tail - head) >> 2) + 1;
+			int middle = head + ((tail - head) >> 1) + 1;
 
 			// Sort and count inversions in each sub array
 			count += CountInversions(input, head, middle - 1);

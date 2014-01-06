@@ -99,6 +99,7 @@
     <ClInclude Include="String.h" />
     <ClInclude Include="TestClass.h" />
     <ClInclude Include="TestSuite.h" />
+    <ClInclude Include="YoungTableau.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Array.cpp" />
