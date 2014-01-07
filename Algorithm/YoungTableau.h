@@ -65,6 +65,7 @@ namespace Test {
 		void SortColumns(T * input, int length);
 		// Convert the input as a tableau
 		void Create(T * input, int length);
+		void Create2(T * input, int length);
 		// If down is true and the input element is smaller than input[0], 
 		// then replace input[0] with the element and push it down. 
 		// If down is false and the input element is greater than existing maximum, 
@@ -262,6 +263,15 @@ namespace Test {
 	}
 
 	template<class T> void YoungTableau<T>::Create(T * input, int length)
+	{
+		if (input == nullptr || length <= 0) return;
+
+		for (int i = 0; i < length; i++) {
+			this->PushUp(input, length, i);
+		}
+	}
+
+	template<class T> void YoungTableau<T>::Create2(T * input, int length)
 	{
 		if (input == nullptr || length <= 0) return;
 
