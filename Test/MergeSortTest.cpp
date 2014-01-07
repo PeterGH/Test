@@ -82,6 +82,32 @@ void MergeSortTest::Init(void)
 		}
 	});
 
+	Add("Sort Random", [&](){
+		for (int j = 0; j < 100; j++) {
+			unsigned int length = (unsigned int)Test::Random::Next();
+			Logger().WriteInformation("Run %d, %d elements\n", j, length);
+
+			unique_ptr<int[]> a1(new int[length]);
+			unique_ptr<int[]> a2(new int[length]);
+			vector<int> v;
+			for (unsigned int i = 0; i < length; i++) {
+				int t = Test::Random::Next();
+				a1[i] = t;
+				a2[i] = t;
+				v.push_back(t);
+			}
+
+			Test::MergeSort::Sort(a1.get(), length);
+			Test::MergeSort::ParallelSort(a2.get(), length);
+			std::sort(v.begin(), v.end());
+
+			for (unsigned int i = 0; i < length; i++) {
+				ASSERT2(a1[i] == a2[i], Test::String::Format("a1[%d] %d != a2[%d] %d", i, a1[i], i, a2[i]));
+				ASSERT2(a1[i] == v[i], Test::String::Format("a1[%d] %d != v[%d] %d", i, a1[i], i, v[i]));
+			}
+		}
+	});
+
 	Add("Count inversions", [&](){
 		auto check = [&](int * A, int L, int expected) -> void {
 			int count = Test::MergeSort::CountInversions<int>(A, L);

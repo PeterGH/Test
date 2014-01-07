@@ -1,6 +1,7 @@
 #pragma once
 
 #include "..\Algorithm\MergeSort.h"
+#include "..\Algorithm\Random.h"
 #include "..\Algorithm\TestClass.h"
 
 class MergeSortTest : public Test::TestClass {

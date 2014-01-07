@@ -23,6 +23,7 @@
 #include "SortedSingleLinkListTest.h"
 #include "StringTest.h"
 #include "TestClassTest.h"
+#include "YoungTableauTest.h"
 
 int main(int argc, char * argv[])
 {
@@ -66,6 +67,7 @@ int main(int argc, char * argv[])
 	suite.Add(new SortedSingleLinkListTest(log));
 	suite.Add(new StringTest(log));
 	suite.Add(new TestClassTest(log));
+	suite.Add(new YoungTableauTest(log));
 	
 	if (arg.Has("l")) {
 		if (arg.CountIndexedArgs() == 1) {
