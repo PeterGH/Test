@@ -92,6 +92,7 @@
     <ClInclude Include="MRIntegerTest.h" />
     <ClInclude Include="PartitionTest.h" />
     <ClInclude Include="PermutationTest.h" />
+    <ClInclude Include="QueueTest.h" />
     <ClInclude Include="QuickSortTest.h" />
     <ClInclude Include="RandomTest.h" />
     <ClInclude Include="SingleLinkListTest.h" />
@@ -117,6 +118,7 @@
     <ClCompile Include="MRIntegerTest.cpp" />
     <ClCompile Include="PartitionTest.cpp" />
     <ClCompile Include="PermutationTest.cpp" />
+    <ClCompile Include="QueueTest.cpp" />
     <ClCompile Include="QuickSortTest.cpp" />
     <ClCompile Include="RandomTest.cpp" />
     <ClCompile Include="SingleLinkListTest.cpp" />

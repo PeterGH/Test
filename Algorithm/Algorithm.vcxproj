@@ -91,6 +91,7 @@
     <ClInclude Include="MRInteger.h" />
     <ClInclude Include="Partition.h" />
     <ClInclude Include="Permutation.h" />
+    <ClInclude Include="Queue.h" />
     <ClInclude Include="QuickSort.h" />
     <ClInclude Include="RadixSort.h" />
     <ClInclude Include="Random.h" />
