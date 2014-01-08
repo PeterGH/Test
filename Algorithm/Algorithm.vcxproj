@@ -98,6 +98,7 @@
     <ClInclude Include="SingleLinkList.h" />
     <ClInclude Include="SortedCircularSingleLinkList.h" />
     <ClInclude Include="SortedSingleLinkList.h" />
+    <ClInclude Include="Stack.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="TestClass.h" />
     <ClInclude Include="TestSuite.h" />
