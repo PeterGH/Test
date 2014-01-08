@@ -82,6 +82,7 @@
     <ClInclude Include="BitSet.h" />
     <ClInclude Include="CircularSingleLinkList.h" />
     <ClInclude Include="ColumnSort.h" />
+    <ClInclude Include="CountingSort.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="HeapSort.h" />
     <ClInclude Include="InsertionSort.h" />
@@ -104,6 +105,7 @@
   <ItemGroup>
     <ClCompile Include="Array.cpp" />
     <ClCompile Include="BitSet.cpp" />
+    <ClCompile Include="CountingSort.cpp" />
     <ClCompile Include="HeapSort.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="MRInteger.cpp" />

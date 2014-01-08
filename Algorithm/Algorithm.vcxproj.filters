@@ -87,6 +87,9 @@
     <ClInclude Include="YoungTableau.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CountingSort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">
@@ -120,6 +123,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HeapSort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CountingSort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
