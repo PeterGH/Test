@@ -79,6 +79,8 @@
     <ClInclude Include="Argument.h" />
     <ClInclude Include="Array.h" />
     <ClInclude Include="BinarySearch.h" />
+    <ClInclude Include="BinarySearchTree.h" />
+    <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="BitSet.h" />
     <ClInclude Include="CircularSingleLinkList.h" />
     <ClInclude Include="ColumnSort.h" />

@@ -6,6 +6,8 @@
 #include "..\Algorithm\TestSuite.h"
 #include "ArrayTest.h"
 #include "BinarySearchTest.h"
+#include "BinarySearchTreeTest.h"
+#include "BinaryTreeTest.h"
 #include "BitSetTest.h"
 #include "CircularSingleLinkListTest.h"
 #include "ColumnSortTest.h"
@@ -53,6 +55,8 @@ int main(int argc, char * argv[])
 
 	suite.Add(new ArrayTest(log));
 	suite.Add(new BinarySearchTest(log));
+	suite.Add(new BinarySearchTreeTest(log));
+	suite.Add(new BinaryTreeTest(log));
 	suite.Add(new BitSetTest(log));
 	suite.Add(new CircularSingleLinkListTest(log));
 	suite.Add(new ColumnSortTest(log));

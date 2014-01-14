@@ -81,6 +81,8 @@
   <ItemGroup>
     <ClInclude Include="ArrayTest.h" />
     <ClInclude Include="BinarySearchTest.h" />
+    <ClInclude Include="BinarySearchTreeTest.h" />
+    <ClInclude Include="BinaryTreeTest.h" />
     <ClInclude Include="BitSetTest.h" />
     <ClInclude Include="CircularSingleLinkListTest.h" />
     <ClInclude Include="ColumnSortTest.h" />
@@ -108,6 +110,8 @@
   <ItemGroup>
     <ClCompile Include="ArrayTest.cpp" />
     <ClCompile Include="BinarySearchTest.cpp" />
+    <ClCompile Include="BinarySearchTreeTest.cpp" />
+    <ClCompile Include="BinaryTreeTest.cpp" />
     <ClCompile Include="BitSetTest.cpp" />
     <ClCompile Include="CircularSingleLinkListTest.cpp" />
     <ClCompile Include="ColumnSortTest.cpp" />
