@@ -37,11 +37,17 @@ void BinarySearchTreeTest::Init(void)
 		tree.PreOrderWalk(p);
 		cout << endl;
 
-		cout << "InOrder:";
+		cout << "InOrder: ";
 		tree.InOrderWalk(p);
 		cout << endl;
+		cout << "InOrder: ";
+		tree.InOrderWalk2(p);
+		cout << endl;
+		cout << "InOrder: ";
+		tree.InOrderWalk3(p);
+		cout << endl;
 
-		cout << "PostOrder:";
+		cout << "PostOrder: ";
 		tree.PostOrderWalk(p);
 		cout << endl;
 
@@ -52,6 +58,44 @@ void BinarySearchTreeTest::Init(void)
 		v = tree.Predecessor(42);
 		cout << "Predecessor of 42: " << v << endl;
 		ASSERT1(v == 35);
+	});
+
+	Add("InOrder", [&](){
+		for (int i = 0; i < 100; i++) {
+			Test::BinarySearchTree<int> tree;
+			int count = 1 + Test::Random::Next();
+			cout << "Run " << i << ", " << count << "elements" << endl;
+
+			for (int j = 0; j < count; j++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			vector<int> v1;
+			vector<int> v2;
+			vector<int> v3;
+
+			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function<void(int)>{
+				function<void(int)> w = [&](int n){
+					v.push_back(n);
+				};
+
+				return w;
+			};
+
+			tree.InOrderWalk(f(v1));
+			tree.InOrderWalk2(f(v2));
+			tree.InOrderWalk3(f(v3));
+
+			ASSERT1(v1.size() == count);
+			ASSERT1(v2.size() == count);
+			ASSERT1(v3.size() == count);
+
+			for (int j = 0; j < count; j++) {
+				ASSERT1(v1[j] == v2[j]);
+				ASSERT1(v1[j] == v3[j]);
+			}
+		}
 	});
 
 	Add("Delete 1", [&]() {
