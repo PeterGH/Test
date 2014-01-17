@@ -60,11 +60,49 @@ void BinarySearchTreeTest::Init(void)
 		ASSERT1(v == 35);
 	});
 
+	Add("PreOrder", [&](){
+		for (int i = 0; i < 100; i++) {
+			Test::BinarySearchTree<int> tree;
+			int count = 1 + Test::Random::Next();
+			cout << "Run " << i << ", " << count << " elements" << endl;
+
+			for (int j = 0; j < count; j++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			vector<int> v1;
+			vector<int> v2;
+			vector<int> v3;
+
+			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function<void(int)>{
+				function<void(int)> w = [&](int n){
+					v.push_back(n);
+				};
+
+				return w;
+			};
+
+			tree.PreOrderWalk(f(v1));
+			tree.PreOrderWalk2(f(v2));
+			tree.PreOrderWalk3(f(v3));
+
+			ASSERT2(v1.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v1.size()));
+			ASSERT2(v2.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v2.size()));
+			ASSERT2(v3.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v3.size()));
+
+			for (int j = 0; j < count; j++) {
+				ASSERT1(v1[j] == v2[j]);
+				ASSERT1(v1[j] == v3[j]);
+			}
+		}
+	});
+
 	Add("InOrder", [&](){
 		for (int i = 0; i < 100; i++) {
 			Test::BinarySearchTree<int> tree;
 			int count = 1 + Test::Random::Next();
-			cout << "Run " << i << ", " << count << "elements" << endl;
+			cout << "Run " << i << ", " << count << " elements" << endl;
 
 			for (int j = 0; j < count; j++) {
 				int v = Test::Random::Next();
@@ -87,9 +125,47 @@ void BinarySearchTreeTest::Init(void)
 			tree.InOrderWalk2(f(v2));
 			tree.InOrderWalk3(f(v3));
 
-			ASSERT1(v1.size() == count);
-			ASSERT1(v2.size() == count);
-			ASSERT1(v3.size() == count);
+			ASSERT2(v1.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v1.size()));
+			ASSERT2(v2.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v2.size()));
+			ASSERT2(v3.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v3.size()));
+
+			for (int j = 0; j < count; j++) {
+				ASSERT1(v1[j] == v2[j]);
+				ASSERT1(v1[j] == v3[j]);
+			}
+		}
+	});
+
+	Add("PostOrder", [&](){
+		for (int i = 0; i < 100; i++) {
+			Test::BinarySearchTree<int> tree;
+			int count = 1 + Test::Random::Next();
+			cout << "Run " << i << ", " << count << " elements" << endl;
+
+			for (int j = 0; j < count; j++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			vector<int> v1;
+			vector<int> v2;
+			vector<int> v3;
+
+			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function<void(int)>{
+				function<void(int)> w = [&](int n){
+					v.push_back(n);
+				};
+
+				return w;
+			};
+
+			tree.PostOrderWalk(f(v1));
+			tree.PostOrderWalk2(f(v2));
+			tree.PostOrderWalk3(f(v3));
+
+			ASSERT2(v1.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v1.size()));
+			ASSERT2(v2.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v2.size()));
+			ASSERT2(v3.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v3.size()));
 
 			for (int j = 0; j < count; j++) {
 				ASSERT1(v1[j] == v2[j]);

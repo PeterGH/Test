@@ -48,7 +48,53 @@ namespace Test {
 				PreOrderWalk(node->right, f);
 			}
 
+			// Recursive
 			void PreOrderWalk(function<void(Node *)> f) { PreOrderWalk(this, f); }
+
+			// Non-recursive with stack
+			static void PreOrderWalk2(Node * node, function<void(Node *)> f)
+			{
+				if (node == nullptr || f == nullptr) return;
+				stack<Node *> path;
+				while (!path.empty() || node != nullptr) {
+					if (node != nullptr) {
+						f(node);
+						path.push(node);
+						node = node->left;
+					} else {
+						node = path.top()->right;
+						path.pop();
+					}
+				}
+			}
+
+			// Non-recursive without stack
+			static void PreOrderWalk3(Node * node, function<void(Node *)> f)
+			{
+				if (node == nullptr || f == nullptr) return;
+				Node * prev = node;
+				while (node != nullptr) {
+					if (prev == node->right) {
+						prev = node;
+						node = node->parent;
+					} else if (node->left != nullptr && prev != node->left) {
+						f(node);
+						prev = node;
+						node = node->left;
+					} else {
+						if (node->left == nullptr) {
+							f(node);
+						}
+
+						prev = node;
+						if (node->right != nullptr) {
+							node = node->right;
+						} else {
+							node = node->parent;
+						}
+					}
+				}
+			}
 
 			// Recursive
 			static void InOrderWalk(Node * node, function<void(Node *)> f)
@@ -103,6 +149,7 @@ namespace Test {
 				}
 			}
 
+			// Recursive
 			static void PostOrderWalk(Node * node, function<void(Node *)> f)
 			{
 				if (node == nullptr || f == nullptr) return;
@@ -112,6 +159,54 @@ namespace Test {
 			}
 
 			void PostOrderWalk(function<void(Node *)> f) { PostOrderWalk(this, f); }
+
+			// Non-recursive with stack
+			static void PostOrderWalk2(Node * node, function<void(Node *)> f)
+			{
+				if (node == nullptr || f == nullptr) return;
+				stack<Node *> path;
+				Node * prev = nullptr;
+				while (!path.empty() || node != nullptr) {
+					if (node != nullptr) {
+						path.push(node);
+						node = node->left;
+					} else {
+						Node * top = path.top();
+						if (top->right != nullptr && top->right != prev) {
+							node = top->right;
+						} else {
+							path.pop();
+							f(top);
+							prev = top;
+						}
+					}
+				}
+			}
+
+			// Non-recursive without stack
+			static void PostOrderWalk3(Node * node, function<void(Node *)> f)
+			{
+				if (node == nullptr || f == nullptr) return;
+				Node * prev = node;
+				while (node != nullptr) {
+					if (prev == node->right) {
+						f(node);
+						prev = node;
+						node = node->parent;
+					} else if (node->left != nullptr && prev != node->left) {
+						prev = node;
+						node = node->left;
+					} else {
+						prev = node;
+						if (node->right != nullptr) {
+							node = node->right;
+						} else {
+							f(node);
+							node = node->parent;
+						}
+					}
+				}
+			}
 
 			// Delete all the children of node
 			static void Empty(Node * node)
@@ -187,12 +282,16 @@ namespace Test {
 		virtual void Insert(T & content);
 
 		void PreOrderWalk(function<void(T)> f);
+		void PreOrderWalk2(function<void(T)> f);
+		void PreOrderWalk3(function<void(T)> f);
 
 		void InOrderWalk(function<void(T)> f);
 		void InOrderWalk2(function<void(T)> f);
 		void InOrderWalk3(function<void(T)> f);
 
 		void PostOrderWalk(function<void(T)> f);
+		void PostOrderWalk2(function<void(T)> f);
+		void PostOrderWalk3(function<void(T)> f);
 
 		void Print(void);
 	};
@@ -288,6 +387,22 @@ namespace Test {
 		}
 	}
 
+	template<class T> void BinaryTree<T>::PreOrderWalk2(function<void(T)> f)
+	{
+		if (this->root != nullptr) {
+			auto fNode = [=](Node * x){ f(x->Content()); };
+			Node::PreOrderWalk2(this->root, fNode);
+		}
+	}
+
+	template<class T> void BinaryTree<T>::PreOrderWalk3(function<void(T)> f)
+	{
+		if (this->root != nullptr) {
+			auto fNode = [=](Node * x){ f(x->Content()); };
+			Node::PreOrderWalk3(this->root, fNode);
+		}
+	}
+
 	template<class T> void BinaryTree<T>::InOrderWalk(function<void(T)> f)
 	{
 		if (this->root != nullptr) {
@@ -317,6 +432,22 @@ namespace Test {
 		if (this->root != nullptr) {
 			auto fNode = [=](Node * x){ f(x->Content()); };
 			Node::PostOrderWalk(this->root, fNode);
+		}
+	}
+
+	template<class T> void BinaryTree<T>::PostOrderWalk2(function<void(T)> f)
+	{
+		if (this->root != nullptr) {
+			auto fNode = [=](Node * x){ f(x->Content()); };
+			Node::PostOrderWalk2(this->root, fNode);
+		}
+	}
+
+	template<class T> void BinaryTree<T>::PostOrderWalk3(function<void(T)> f)
+	{
+		if (this->root != nullptr) {
+			auto fNode = [=](Node * x){ f(x->Content()); };
+			Node::PostOrderWalk3(this->root, fNode);
 		}
 	}
 
