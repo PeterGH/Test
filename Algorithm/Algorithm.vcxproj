@@ -97,6 +97,7 @@
     <ClInclude Include="QuickSort.h" />
     <ClInclude Include="RadixSort.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="RedBlackTree.h" />
     <ClInclude Include="SingleLinkList.h" />
     <ClInclude Include="SortedCircularSingleLinkList.h" />
     <ClInclude Include="SortedSingleLinkList.h" />

@@ -7,9 +7,11 @@ namespace Test {
 	private:
 		// Insert a content to the subtree at node and return node.
 		// If node is NULL, then return a new node with the content.
+		static Node * Insert(Node * node, Node * newNode);
 		static Node * Insert(Node * node, T & content);
 
 		static Node * Search(Node * node, T & content);
+		static Node * Search2(Node * node, T & content);
 
 		static Node * Min(Node * node);
 
@@ -30,7 +32,7 @@ namespace Test {
 
 	public:
 
-		void Insert(T & content);
+		virtual void Insert(T & content);
 
 		T & Min(void);
 
@@ -45,9 +47,8 @@ namespace Test {
 		bool Verify(void);
 	};
 
-	template<class T> typename BinaryTree<T>::Node * BinarySearchTree<T>::Insert(Node * node, T & content)
+	template<class T> typename BinaryTree<T>::Node * BinarySearchTree<T>::Insert(Node * node, Node * newNode)
 	{
-		Node * newNode = new Node(content);
 		Node * parent = node;
 		Node * current = node;
 		while (current != nullptr) {
@@ -71,11 +72,30 @@ namespace Test {
 		return node;
 	}
 
+	template<class T> typename BinaryTree<T>::Node * BinarySearchTree<T>::Insert(Node * node, T & content)
+	{
+		Node * newNode = new Node(content);
+		return Insert(node, newNode);
+	}
+
 	template<class T> typename BinaryTree<T>::Node * BinarySearchTree<T>::Search(Node * node, T & content)
 	{
 		if (node == nullptr || node->content == content) return node;
 		if (content < node->content) return Search(node->left, content);
 		else return Search(node->right, content);
+	}
+
+	template<class T> typename BinaryTree<T>::Node * BinarySearchTree<T>::Search2(Node * node, T & content)
+	{
+		if (node == nullptr || node->content == content) return node;
+		while (node != nullptr && content != node->content) {
+			if (content < node->content)
+				node = node->left;
+			else
+				node = node->right;
+		}
+
+		return node;
 	}
 
 	template<class T> typename BinaryTree<T>::Node * BinarySearchTree<T>::Min(Node * node)
@@ -111,7 +131,7 @@ namespace Test {
 		//      (A)
 		//      / \
 		//     () NULL
-		// The successor of A is the lowest ancestor B whos left child C contains A in its right substree
+		// The successor of A is the lowest ancestor B whose left child C contains A in its right substree
 		Node * parent = node->parent;
 		while (parent != nullptr && node == parent->right) {
 			node = parent;
@@ -153,7 +173,7 @@ namespace Test {
 		//   (A)
 		//   / \
 		// NULL ()
-		// The predecessor of A is the lowest ancestor B whos right child C contains A in its left substree
+		// The predecessor of A is the lowest ancestor B whose right child C contains A in its left substree
 		Node * parent = node->parent;
 		while (parent != nullptr && node == parent->left) {
 			node = parent;
@@ -213,6 +233,7 @@ namespace Test {
 			delete (*node);
 			*node = nullptr;
 			if (r != nullptr && r->parent == nullptr) {
+				// r is the new root
 				*node = r;
 			}
 
@@ -227,10 +248,12 @@ namespace Test {
 			// (B) NULL
 			Node * l = (*node)->left;
 			Transplant((*node), l);
+
 			// delete node will not delete its children
 			delete (*node);
 			*node = nullptr;
 			if (l != nullptr && l->parent == nullptr) {
+				// l is the new root
 				*node = l;
 			}
 			
@@ -283,6 +306,7 @@ namespace Test {
 		delete (*node);
 		*node = nullptr;
 		if (successor->parent == nullptr) {
+			// successor is the new root
 			*node = successor;
 		}
 	}
@@ -321,7 +345,7 @@ namespace Test {
 	template<class T> T BinarySearchTree<T>::Successor(T content)
 	{
 		if (this->root != nullptr) {
-			Node * p = Search(this->root, content);
+			Node * p = Search2(this->root, content);
 			if (p != nullptr && ((p = Successor(p)) != nullptr)) return p->Content();
 		}
 
@@ -331,7 +355,7 @@ namespace Test {
 	template<class T> T BinarySearchTree<T>::Predecessor(T content)
 	{
 		if (this->root != nullptr) {
-			Node * p = Search(this->root, content);
+			Node * p = Search2(this->root, content);
 			if (p != nullptr && ((p = Predecessor(p)) != nullptr)) return p->Content();
 		}
 
@@ -341,7 +365,7 @@ namespace Test {
 	template<class T> void BinarySearchTree<T>::Delete(T content)
 	{
 		if (this->root != nullptr) {
-			Node * p = Search(this->root, content);
+			Node * p = Search2(this->root, content);
 			if (p != nullptr) {
 				if (p == this->root) Delete(&(this->root));
 				else Delete(&p);

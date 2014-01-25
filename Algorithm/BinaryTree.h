@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <sstream>
 #include <stack>
 #include <vector>
 #include "BitSet.h"
@@ -20,7 +21,7 @@ namespace Test {
 		class Node {
 			template<class T> friend class BinaryTree;
 			template<class T> friend class BinarySearchTree;
-		private:
+		protected:
 			T content;
 			Node * parent;
 			Node * left;
@@ -208,6 +209,53 @@ namespace Test {
 				}
 			}
 
+			static int Height(Node * node)
+			{
+				if (node == nullptr) return 0;
+				int left = Height(node->left);
+				int right = Height(node->right);
+				return 1 + std::max<int>(left, right);
+			}
+
+			// Get the height of subtree at node
+			static int Height2(Node * node)
+			{
+				if (node == nullptr) return 0;
+				Node * prev = node;
+				// Track the maximum height while traversing the tree
+				int max = 0;
+				// Track the height of current node
+				int h = 0;
+				while (node != nullptr) {
+					if (prev == node->right) {
+						h--;
+						prev = node;
+						node = node->parent;
+					} else if (node->left != nullptr && prev != node->left) {
+						h++;
+						if (h > max) max = h;
+						prev = node;
+						node = node->left;
+					} else {
+						if (prev == node->left) {
+							h--;
+						} else if (node->left == nullptr) {
+							h++;
+							if (h > max) max = h;
+						}
+
+						prev = node;
+						if (node->right == nullptr) {
+							node = node->parent;
+						} else {
+							node = node->right;
+						}
+					}
+				}
+
+				return max;
+			}
+
 			// Delete all the children of node
 			static void Empty(Node * node)
 			{
@@ -220,9 +268,12 @@ namespace Test {
 
 			void Empty(void) { Empty(this); }
 
-			static void Print(Node * node, int x, vector<int> y)
+			static stringstream & ToString(stringstream & ss, Node * node, int x, vector<int> & y)
 			{
-				printf("%3d", node->content);
+				static string link = "____";
+				string c = String::Format(" %d ", node->content);
+				ss << c;
+				x += c.length();
 
 				if (node->right != nullptr) {
 					// Record current x coordinate,
@@ -231,36 +282,38 @@ namespace Test {
 				}
 
 				if (node->left != nullptr) {
-					printf(" ___");
-					Print(node->left, x + 1, y);
+					ss << link;
+					ToString(ss, node->left, x + link.length(), y);
 				}
 
 				if (node->right != nullptr) {
-					printf("\n");
-					for (int i = 0; i < x; i++) {
-						if (find(y.begin(), y.end(), i) != y.end()) {
-							// Draw '|' because the parent node still has its right child not printed.
-							printf("   |   ");
-						} else {
-							printf("       ");
-						}
+					ss << endl;
+
+					for (size_t i = 0; i < y.size(); i++) {
+						int len = i == 0 ? y[i] : y[i] - y[i - 1];
+						string blank(len - 1, ' ');
+						ss << blank << '|';
 					}
 
-					printf("   |___");
+					ss << link;
 
 					// The right child is ready to print
 					// Remove its coordinate because it is not needed any more
 					y.pop_back();
 
-					Print(node->right, x + 1, y);
+					ToString(ss, node->right, x + link.length(), y);
 				}
+
+				return ss;
 			}
 
 			void Print(void)
 			{
+				stringstream ss;
 				vector<int> y;
-				Print(this, 0, y);
-				printf("\n");
+				ToString(ss, this, 0, y);
+				ss << endl;
+				cout << ss.str();
 			}
 
 		} * root;
@@ -293,6 +346,10 @@ namespace Test {
 		void PostOrderWalk2(function<void(T)> f);
 		void PostOrderWalk3(function<void(T)> f);
 
+		// Get the height of tree
+		int Height(void);
+		int Height2(void);
+
 		void Print(void);
 	};
 
@@ -313,7 +370,6 @@ namespace Test {
 	// Given height H, the number of nodes are in [2^(H - 1), 2^H - 1]
 	// The indices of nodes at height H are in [2^(H - 1) - 1, 2^H - 2]
 	// Given node index I, its children are 2*I+1 and 2*I+2
-
 	template<class T> int BinaryTree<T>::Height(int index)
 	{
 		unsigned int c = (unsigned int)(index + 1);
@@ -449,6 +505,16 @@ namespace Test {
 			auto fNode = [=](Node * x){ f(x->Content()); };
 			Node::PostOrderWalk3(this->root, fNode);
 		}
+	}
+
+	template<class T> int BinaryTree<T>::Height(void)
+	{
+		return Node::Height(this->root);
+	}
+
+	template<class T> int BinaryTree<T>::Height2(void)
+	{
+		return Node::Height2(this->root);
 	}
 
 	template<class T> void BinaryTree<T>::Print(void)

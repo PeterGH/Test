@@ -54,6 +54,16 @@ namespace Test {
 	MRInteger::MRInteger(const MRInteger & mrint)
 		: _bases(nullptr), _digits(nullptr), _length(0), _max(0)
 	{
+		if (_bases != nullptr) {
+			delete[] _bases;
+			_bases = nullptr;
+		}
+
+		if (_digits != nullptr) {
+			delete[] _digits;
+			_digits = nullptr;
+		}
+
 		_bases = new unsigned int[mrint._length];
 		_digits = new unsigned int[mrint._length];
 		_length = mrint._length;

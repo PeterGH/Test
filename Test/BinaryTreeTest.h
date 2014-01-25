@@ -1,6 +1,7 @@
 #pragma once
 
 #include "..\Algorithm\BinaryTree.h"
+#include "..\Algorithm\Random.h"
 #include "..\Algorithm\TestClass.h"
 
 class BinaryTreeTest : public Test::TestClass {

@@ -22,6 +22,7 @@
 #include "QueueTest.h"
 #include "QuickSortTest.h"
 #include "RandomTest.h"
+#include "RedBlackTreeTest.h"
 #include "SingleLinkListTest.h"
 #include "SortedCircularSingleLinkListTest.h"
 #include "SortedSingleLinkListTest.h"
@@ -71,6 +72,7 @@ int main(int argc, char * argv[])
 	suite.Add(new QueueTest(log));
 	suite.Add(new QuickSortTest(log));
 	suite.Add(new RandomTest(log));
+	suite.Add(new RedBlackTreeTest(log));
 	suite.Add(new SingleLinkListTest(log));
 	suite.Add(new SortedCircularSingleLinkListTest(log));
 	suite.Add(new SortedSingleLinkListTest(log));

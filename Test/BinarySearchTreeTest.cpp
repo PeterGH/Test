@@ -29,6 +29,7 @@ void BinarySearchTreeTest::Init(void)
 
 		ASSERT1(tree.Verify() == true);
 
+		cout << "Height: " << tree.Height() << endl;
 		cout << "Min: " << tree.Min() << endl;
 		cout << "Max: " << tree.Max() << endl;
 
@@ -64,12 +65,13 @@ void BinarySearchTreeTest::Init(void)
 		for (int i = 0; i < 100; i++) {
 			Test::BinarySearchTree<int> tree;
 			int count = 1 + Test::Random::Next();
-			cout << "Run " << i << ", " << count << " elements" << endl;
-
+			
 			for (int j = 0; j < count; j++) {
 				int v = Test::Random::Next();
 				tree.Insert(v);
 			}
+
+			cout << "Run " << i << ", " << count << " elements, height " << tree.Height() << endl;
 
 			vector<int> v1;
 			vector<int> v2;
@@ -102,12 +104,13 @@ void BinarySearchTreeTest::Init(void)
 		for (int i = 0; i < 100; i++) {
 			Test::BinarySearchTree<int> tree;
 			int count = 1 + Test::Random::Next();
-			cout << "Run " << i << ", " << count << " elements" << endl;
-
+			
 			for (int j = 0; j < count; j++) {
 				int v = Test::Random::Next();
 				tree.Insert(v);
 			}
+
+			cout << "Run " << i << ", " << count << " elements, height " << tree.Height() << endl;
 
 			vector<int> v1;
 			vector<int> v2;
@@ -140,12 +143,13 @@ void BinarySearchTreeTest::Init(void)
 		for (int i = 0; i < 100; i++) {
 			Test::BinarySearchTree<int> tree;
 			int count = 1 + Test::Random::Next();
-			cout << "Run " << i << ", " << count << " elements" << endl;
 
 			for (int j = 0; j < count; j++) {
 				int v = Test::Random::Next();
 				tree.Insert(v);
 			}
+
+			cout << "Run " << i << ", " << count << " elements, height " << tree.Height() << endl;
 
 			vector<int> v1;
 			vector<int> v2;
@@ -247,6 +251,23 @@ void BinarySearchTreeTest::Init(void)
 			tree.Delete(I[i]);
 			tree.Print();
 			ASSERT1(tree.Verify() == true);
+		}
+	});
+
+	Add("Height", [&](){
+		for (int i = 0; i < 100; i++) {
+			Test::BinarySearchTree<int> tree;
+			int count = 1 + Test::Random::Next();
+
+			for (int j = 0; j < count; j++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			int h = tree.Height();
+			int h2 = tree.Height2();
+			cout << "Run " << i << ", " << count << " elements, height " << h << " " << h2 << endl;
+			ASSERT1(h == h2);
 		}
 	});
 }
