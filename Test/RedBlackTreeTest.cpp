@@ -69,10 +69,13 @@ void RedBlackTreeTest::Init(void)
 
 			for (int i = 0; i < count; i++) {
 				v = vals[i];
-				cout << "Delete " << v << endl;
 				tree.Delete(v);
-				tree.Print();
 				valid = tree.Verify();
+				if (!valid) {
+					cout << "Delete " << v << endl;
+					tree.Print();
+				}
+
 				ASSERT1(valid == true);
 			}
 		}

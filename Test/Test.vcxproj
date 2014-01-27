@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArrayTest.h" />
+    <ClInclude Include="AVLTreeTest.h" />
     <ClInclude Include="BinarySearchTest.h" />
     <ClInclude Include="BinarySearchTreeTest.h" />
     <ClInclude Include="BinaryTreeTest.h" />
@@ -110,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArrayTest.cpp" />
+    <ClCompile Include="AVLTreeTest.cpp" />
     <ClCompile Include="BinarySearchTest.cpp" />
     <ClCompile Include="BinarySearchTreeTest.cpp" />
     <ClCompile Include="BinaryTreeTest.cpp" />

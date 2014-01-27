@@ -141,10 +141,9 @@ namespace Test {
 					return false;
 				}
 
-				bool result = true;
-				if (node->left != nullptr) result &= Verify(node->left);
-				if (node->right != nullptr) result &= Verify(node->right);
-				return result;
+				if (node->left != nullptr && !Verify(node->left)) return false;
+				if (node->right != nullptr && !Verify(node->right)) return false;
+				return true;
 			}
 
 			static void Empty(Node* node)

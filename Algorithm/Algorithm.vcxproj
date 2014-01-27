@@ -85,6 +85,7 @@
     <ClInclude Include="CircularSingleLinkList.h" />
     <ClInclude Include="ColumnSort.h" />
     <ClInclude Include="CountingSort.h" />
+    <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="HeapSort.h" />
     <ClInclude Include="InsertionSort.h" />

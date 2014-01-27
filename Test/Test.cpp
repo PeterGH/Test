@@ -5,6 +5,7 @@
 #include "..\Algorithm\Argument.h"
 #include "..\Algorithm\TestSuite.h"
 #include "ArrayTest.h"
+#include "AVLTreeTest.h"
 #include "BinarySearchTest.h"
 #include "BinarySearchTreeTest.h"
 #include "BinaryTreeTest.h"
@@ -55,6 +56,7 @@ int main(int argc, char * argv[])
 	Test::TestSuite suite(log);
 
 	suite.Add(new ArrayTest(log));
+	suite.Add(new AVLTreeTest(log));
 	suite.Add(new BinarySearchTest(log));
 	suite.Add(new BinarySearchTreeTest(log));
 	suite.Add(new BinaryTreeTest(log));
