@@ -99,6 +99,7 @@
     <ClInclude Include="QuickSortTest.h" />
     <ClInclude Include="RandomTest.h" />
     <ClInclude Include="RedBlackTreeTest.h" />
+    <ClInclude Include="RodCutTest.h" />
     <ClInclude Include="SingleLinkListTest.h" />
     <ClInclude Include="SortedCircularSingleLinkListTest.h" />
     <ClInclude Include="SortedSingleLinkListTest.h" />
@@ -130,6 +131,7 @@
     <ClCompile Include="QuickSortTest.cpp" />
     <ClCompile Include="RandomTest.cpp" />
     <ClCompile Include="RedBlackTreeTest.cpp" />
+    <ClCompile Include="RodCutTest.cpp" />
     <ClCompile Include="SingleLinkListTest.cpp" />
     <ClCompile Include="SortedCircularSingleLinkListTest.cpp" />
     <ClCompile Include="SortedSingleLinkListTest.cpp" />

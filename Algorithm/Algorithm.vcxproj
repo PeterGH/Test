@@ -99,6 +99,7 @@
     <ClInclude Include="RadixSort.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="RedBlackTree.h" />
+    <ClInclude Include="RodCut.h" />
     <ClInclude Include="SingleLinkList.h" />
     <ClInclude Include="SortedCircularSingleLinkList.h" />
     <ClInclude Include="SortedSingleLinkList.h" />
@@ -118,6 +119,7 @@
     <ClCompile Include="Permutation.cpp" />
     <ClCompile Include="RadixSort.cpp" />
     <ClCompile Include="Random.cpp" />
+    <ClCompile Include="RodCut.cpp" />
     <ClCompile Include="String.cpp" />
     <ClCompile Include="TestClass.cpp" />
     <ClCompile Include="TestSuite.cpp" />

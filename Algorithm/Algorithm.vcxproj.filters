@@ -108,6 +108,9 @@
     <ClInclude Include="AVLTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RodCut.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">
@@ -144,6 +147,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CountingSort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RodCut.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
