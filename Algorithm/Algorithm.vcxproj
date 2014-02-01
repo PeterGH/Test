@@ -90,6 +90,7 @@
     <ClInclude Include="HeapSort.h" />
     <ClInclude Include="InsertionSort.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="MatrixChain.h" />
     <ClInclude Include="MergeSort.h" />
     <ClInclude Include="MRInteger.h" />
     <ClInclude Include="Partition.h" />
@@ -115,6 +116,7 @@
     <ClCompile Include="CountingSort.cpp" />
     <ClCompile Include="HeapSort.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="MatrixChain.cpp" />
     <ClCompile Include="MRInteger.cpp" />
     <ClCompile Include="Permutation.cpp" />
     <ClCompile Include="RadixSort.cpp" />
