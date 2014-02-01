@@ -114,6 +114,9 @@
     <ClInclude Include="MatrixChain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LongestCommonSubsequence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">
@@ -156,6 +159,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MatrixChain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LongestCommonSubsequence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

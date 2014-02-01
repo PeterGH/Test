@@ -16,6 +16,7 @@
 #include "HeapSortTest.h"
 #include "HeapTest.h"
 #include "InsertionSortTest.h"
+#include "LongestCommonSubsequenceTest.h"
 #include "MatrixChainTest.h"
 #include "MergeSortTest.h"
 #include "MRIntegerTest.h"
@@ -69,6 +70,7 @@ int main(int argc, char * argv[])
 	suite.Add(new HeapSortTest(log));
 	suite.Add(new HeapTest(log));
 	suite.Add(new InsertionSortTest(log));
+	suite.Add(new LongestCommonSubsequenceTest(log));
 	suite.Add(new MatrixChainTest(log));
 	suite.Add(new MergeSortTest(log));
 	suite.Add(new MRIntegerTest(log));
