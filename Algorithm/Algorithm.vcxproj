@@ -91,6 +91,7 @@
     <ClInclude Include="InsertionSort.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="LongestCommonSubsequence.h" />
+    <ClInclude Include="LongestIncreasingSubsequence.h" />
     <ClInclude Include="MatrixChain.h" />
     <ClInclude Include="MergeSort.h" />
     <ClInclude Include="MRInteger.h" />
@@ -118,6 +119,7 @@
     <ClCompile Include="HeapSort.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LongestCommonSubsequence.cpp" />
+    <ClCompile Include="LongestIncreasingSubsequence.cpp" />
     <ClCompile Include="MatrixChain.cpp" />
     <ClCompile Include="MRInteger.cpp" />
     <ClCompile Include="Permutation.cpp" />
