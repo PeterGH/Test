@@ -78,6 +78,7 @@
   <ItemGroup>
     <ClInclude Include="Argument.h" />
     <ClInclude Include="Array.h" />
+    <ClInclude Include="Array2D.h" />
     <ClInclude Include="BinarySearch.h" />
     <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="BinaryTree.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="MatrixChain.h" />
     <ClInclude Include="MergeSort.h" />
     <ClInclude Include="MRInteger.h" />
+    <ClInclude Include="Palindrome.h" />
     <ClInclude Include="Partition.h" />
     <ClInclude Include="Permutation.h" />
     <ClInclude Include="Queue.h" />
@@ -122,6 +124,7 @@
     <ClCompile Include="LongestIncreasingSubsequence.cpp" />
     <ClCompile Include="MatrixChain.cpp" />
     <ClCompile Include="MRInteger.cpp" />
+    <ClCompile Include="Palindrome.cpp" />
     <ClCompile Include="Permutation.cpp" />
     <ClCompile Include="RadixSort.cpp" />
     <ClCompile Include="Random.cpp" />

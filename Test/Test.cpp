@@ -5,6 +5,7 @@
 #include "..\Algorithm\Argument.h"
 #include "..\Algorithm\TestSuite.h"
 #include "ArrayTest.h"
+#include "Array2DTest.h"
 #include "AVLTreeTest.h"
 #include "BinarySearchTest.h"
 #include "BinarySearchTreeTest.h"
@@ -21,6 +22,7 @@
 #include "MatrixChainTest.h"
 #include "MergeSortTest.h"
 #include "MRIntegerTest.h"
+#include "PalindromeTest.h"
 #include "PartitionTest.h"
 #include "PermutationTest.h"
 #include "QueueTest.h"
@@ -60,6 +62,7 @@ int main(int argc, char * argv[])
 	Test::TestSuite suite(log);
 
 	suite.Add(new ArrayTest(log));
+	suite.Add(new Array2DTest(log));
 	suite.Add(new AVLTreeTest(log));
 	suite.Add(new BinarySearchTest(log));
 	suite.Add(new BinarySearchTreeTest(log));
@@ -76,6 +79,7 @@ int main(int argc, char * argv[])
 	suite.Add(new MatrixChainTest(log));
 	suite.Add(new MergeSortTest(log));
 	suite.Add(new MRIntegerTest(log));
+	suite.Add(new PalindromeTest(log));
 	suite.Add(new PartitionTest(log));
 	suite.Add(new PermutationTest(log));
 	suite.Add(new QueueTest(log));

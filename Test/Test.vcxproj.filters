@@ -117,6 +117,12 @@
     <ClInclude Include="LongestIncreasingSubsequenceTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Array2DTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PalindromeTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -216,6 +222,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LongestIncreasingSubsequenceTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Array2DTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PalindromeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -79,6 +79,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Array2DTest.h" />
     <ClInclude Include="ArrayTest.h" />
     <ClInclude Include="AVLTreeTest.h" />
     <ClInclude Include="BinarySearchTest.h" />
@@ -96,6 +97,7 @@
     <ClInclude Include="MatrixChainTest.h" />
     <ClInclude Include="MergeSortTest.h" />
     <ClInclude Include="MRIntegerTest.h" />
+    <ClInclude Include="PalindromeTest.h" />
     <ClInclude Include="PartitionTest.h" />
     <ClInclude Include="PermutationTest.h" />
     <ClInclude Include="QueueTest.h" />
@@ -114,6 +116,7 @@
     <ClInclude Include="YoungTableauTest.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Array2DTest.cpp" />
     <ClCompile Include="ArrayTest.cpp" />
     <ClCompile Include="AVLTreeTest.cpp" />
     <ClCompile Include="BinarySearchTest.cpp" />
@@ -131,6 +134,7 @@
     <ClCompile Include="MatrixChainTest.cpp" />
     <ClCompile Include="MergeSortTest.cpp" />
     <ClCompile Include="MRIntegerTest.cpp" />
+    <ClCompile Include="PalindromeTest.cpp" />
     <ClCompile Include="PartitionTest.cpp" />
     <ClCompile Include="PermutationTest.cpp" />
     <ClCompile Include="QueueTest.cpp" />
