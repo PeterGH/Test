@@ -13,6 +13,8 @@ namespace Test {
 		~Array2D(void);
 
 		T & operator()(size_t r, size_t c);
+		const size_t Rows(void) const { return this->rows; }
+		const size_t Cols(void) const { return this->cols; }
 		void Print(void);
 	};
 
@@ -39,8 +41,8 @@ namespace Test {
 
 	template<class T> T & Array2D<T>::operator()(size_t r, size_t c)
 	{
-		if (r < 0) throw invalid_argument(String::Format("Invalid r %d", r));
-		if (c < 0) throw invalid_argument(String::Format("Invalid c %d", c));
+		if (r < 0 || r >= this->rows) throw invalid_argument(String::Format("Invalid r %d not in [0, %d]", r, this->rows - 1));
+		if (c < 0 || c >= this->cols) throw invalid_argument(String::Format("Invalid c %d not in [0, %d]", c, this->cols - 1));
 		T & value = *(this->buffer + r * this->cols + c);
 		return value;
 	}

@@ -105,6 +105,7 @@
     <ClInclude Include="Random.h" />
     <ClInclude Include="RedBlackTree.h" />
     <ClInclude Include="RodCut.h" />
+    <ClInclude Include="SeamCarving.h" />
     <ClInclude Include="SingleLinkList.h" />
     <ClInclude Include="SortedCircularSingleLinkList.h" />
     <ClInclude Include="SortedSingleLinkList.h" />

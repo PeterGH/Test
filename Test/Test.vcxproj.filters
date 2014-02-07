@@ -123,6 +123,9 @@
     <ClInclude Include="PalindromeTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SeamCarvingTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -228,6 +231,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PalindromeTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SeamCarvingTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
