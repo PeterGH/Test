@@ -11,6 +11,7 @@
 #include "BinarySearchTreeTest.h"
 #include "BinaryTreeTest.h"
 #include "BitSetTest.h"
+#include "BreakStringTest.h"
 #include "CircularSingleLinkListTest.h"
 #include "ColumnSortTest.h"
 #include "CountingSortTest.h"
@@ -69,6 +70,7 @@ int main(int argc, char * argv[])
 	suite.Add(new BinarySearchTreeTest(log));
 	suite.Add(new BinaryTreeTest(log));
 	suite.Add(new BitSetTest(log));
+	suite.Add(new BreakStringTest(log));
 	suite.Add(new CircularSingleLinkListTest(log));
 	suite.Add(new ColumnSortTest(log));
 	suite.Add(new CountingSortTest(log));

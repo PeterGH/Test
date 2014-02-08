@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include <stdexcept>
 #include "String.h"
 using namespace std;
@@ -15,6 +16,7 @@ namespace Test {
 		T & operator()(size_t r, size_t c);
 		const size_t Rows(void) const { return this->rows; }
 		const size_t Cols(void) const { return this->cols; }
+		void Print(function<void(T&)> p);
 		void Print(void);
 	};
 
@@ -47,7 +49,7 @@ namespace Test {
 		return value;
 	}
 
-	template<class T> void Array2D<T>::Print(void)
+	template<class T> void Array2D<T>::Print(function<void(T&)> p)
 	{
 		for (size_t i = 0; i < this->cols; i ++) {
 			cout << "\t" << i;
@@ -58,12 +60,18 @@ namespace Test {
 		for (size_t i = 0; i < this->rows; i ++) {
 			cout << i;			
 			for (size_t j = 0; j < this->cols; j ++) {
-				cout << "\t" << this->operator()(i, j);
+				cout << "\t";
+				p(this->operator()(i, j));
 			}
 
 			cout << endl;
 		}
 
 		cout << endl;
+	}
+
+	template<class T> void Array2D<T>::Print(void)
+	{
+		Print([&](T & e)->void{ cout << e; });
 	}
 }
