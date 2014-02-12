@@ -91,6 +91,7 @@
     <ClInclude Include="Heap.h" />
     <ClInclude Include="HeapSort.h" />
     <ClInclude Include="InsertionSort.h" />
+    <ClInclude Include="Knapsack.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="LongestCommonSubsequence.h" />
     <ClInclude Include="LongestIncreasingSubsequence.h" />
@@ -122,6 +123,7 @@
     <ClCompile Include="BreakString.cpp" />
     <ClCompile Include="CountingSort.cpp" />
     <ClCompile Include="HeapSort.cpp" />
+    <ClCompile Include="Knapsack.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LongestCommonSubsequence.cpp" />
     <ClCompile Include="LongestIncreasingSubsequence.cpp" />

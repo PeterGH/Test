@@ -129,6 +129,9 @@
     <ClInclude Include="BreakStringTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="KnapsackTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -240,6 +243,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BreakStringTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KnapsackTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
