@@ -116,6 +116,7 @@
     <ClInclude Include="StringTest.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TestClassTest.h" />
+    <ClInclude Include="UnitTimeTaskSchedulerTest.h" />
     <ClInclude Include="YoungTableauTest.h" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +157,7 @@
     <ClCompile Include="StringTest.cpp" />
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="TestClassTest.cpp" />
+    <ClCompile Include="UnitTimeTaskSchedulerTest.cpp" />
     <ClCompile Include="YoungTableauTest.cpp" />
   </ItemGroup>
   <ItemGroup>

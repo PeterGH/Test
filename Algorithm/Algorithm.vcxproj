@@ -115,6 +115,7 @@
     <ClInclude Include="String.h" />
     <ClInclude Include="TestClass.h" />
     <ClInclude Include="TestSuite.h" />
+    <ClInclude Include="UnitTimeTaskScheduler.h" />
     <ClInclude Include="YoungTableau.h" />
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +138,7 @@
     <ClCompile Include="String.cpp" />
     <ClCompile Include="TestClass.cpp" />
     <ClCompile Include="TestSuite.cpp" />
+    <ClCompile Include="UnitTimeTaskScheduler.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

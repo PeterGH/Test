@@ -39,6 +39,7 @@
 #include "StackTest.h"
 #include "StringTest.h"
 #include "TestClassTest.h"
+#include "UnitTimeTaskSchedulerTest.h"
 #include "YoungTableauTest.h"
 
 int main(int argc, char * argv[])
@@ -99,6 +100,7 @@ int main(int argc, char * argv[])
 	suite.Add(new StackTest(log));
 	suite.Add(new StringTest(log));
 	suite.Add(new TestClassTest(log));
+	suite.Add(new UnitTimeTaskSchedulerTest(log));
 	suite.Add(new YoungTableauTest(log));
 	
 	if (arg.Has("l")) {
