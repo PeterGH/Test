@@ -13,6 +13,7 @@
 #include "BitSetTest.h"
 #include "BreakStringTest.h"
 #include "CircularSingleLinkListTest.h"
+#include "CoinChangeTest.h"
 #include "ColumnSortTest.h"
 #include "CountingSortTest.h"
 #include "HeapSortTest.h"
@@ -74,6 +75,7 @@ int main(int argc, char * argv[])
 	suite.Add(new BitSetTest(log));
 	suite.Add(new BreakStringTest(log));
 	suite.Add(new CircularSingleLinkListTest(log));
+	suite.Add(new CoinChangeTest(log));
 	suite.Add(new ColumnSortTest(log));
 	suite.Add(new CountingSortTest(log));
 	suite.Add(new HeapSortTest(log));

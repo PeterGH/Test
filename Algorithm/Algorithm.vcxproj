@@ -85,6 +85,7 @@
     <ClInclude Include="BitSet.h" />
     <ClInclude Include="BreakString.h" />
     <ClInclude Include="CircularSingleLinkList.h" />
+    <ClInclude Include="CoinChange.h" />
     <ClInclude Include="ColumnSort.h" />
     <ClInclude Include="CountingSort.h" />
     <ClInclude Include="AVLTree.h" />
@@ -122,6 +123,7 @@
     <ClCompile Include="Array.cpp" />
     <ClCompile Include="BitSet.cpp" />
     <ClCompile Include="BreakString.cpp" />
+    <ClCompile Include="CoinChange.cpp" />
     <ClCompile Include="CountingSort.cpp" />
     <ClCompile Include="HeapSort.cpp" />
     <ClCompile Include="Knapsack.cpp" />

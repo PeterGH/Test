@@ -135,6 +135,9 @@
     <ClInclude Include="UnitTimeTaskSchedulerTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CoinChangeTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -252,6 +255,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UnitTimeTaskSchedulerTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CoinChangeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

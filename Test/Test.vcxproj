@@ -88,6 +88,7 @@
     <ClInclude Include="BitSetTest.h" />
     <ClInclude Include="BreakStringTest.h" />
     <ClInclude Include="CircularSingleLinkListTest.h" />
+    <ClInclude Include="CoinChangeTest.h" />
     <ClInclude Include="ColumnSortTest.h" />
     <ClInclude Include="CountingSortTest.h" />
     <ClInclude Include="HeapSortTest.h" />
@@ -129,6 +130,7 @@
     <ClCompile Include="BitSetTest.cpp" />
     <ClCompile Include="BreakStringTest.cpp" />
     <ClCompile Include="CircularSingleLinkListTest.cpp" />
+    <ClCompile Include="CoinChangeTest.cpp" />
     <ClCompile Include="ColumnSortTest.cpp" />
     <ClCompile Include="CountingSortTest.cpp" />
     <ClCompile Include="HeapSortTest.cpp" />
