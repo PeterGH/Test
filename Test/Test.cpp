@@ -20,6 +20,7 @@
 #include "HeapTest.h"
 #include "InsertionSortTest.h"
 #include "KnapsackTest.h"
+#include "ListGraphTest.h"
 #include "LongestCommonSubsequenceTest.h"
 #include "LongestIncreasingSubsequenceTest.h"
 #include "MatrixChainTest.h"
@@ -82,6 +83,7 @@ int main(int argc, char * argv[])
 	suite.Add(new HeapTest(log));
 	suite.Add(new InsertionSortTest(log));
 	suite.Add(new KnapsackTest(log));
+	suite.Add(new ListGraphTest(log));
 	suite.Add(new LongestCommonSubsequenceTest(log));
 	suite.Add(new LongestIncreasingSubsequenceTest(log));
 	suite.Add(new MatrixChainTest(log));

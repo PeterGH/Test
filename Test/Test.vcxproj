@@ -95,6 +95,7 @@
     <ClInclude Include="HeapTest.h" />
     <ClInclude Include="InsertionSortTest.h" />
     <ClInclude Include="KnapsackTest.h" />
+    <ClInclude Include="ListGraphTest.h" />
     <ClInclude Include="LongestCommonSubsequenceTest.h" />
     <ClInclude Include="LongestIncreasingSubsequenceTest.h" />
     <ClInclude Include="MatrixChainTest.h" />
@@ -137,6 +138,7 @@
     <ClCompile Include="HeapTest.cpp" />
     <ClCompile Include="InsertionSortTest.cpp" />
     <ClCompile Include="KnapsackTest.cpp" />
+    <ClCompile Include="ListGraphTest.cpp" />
     <ClCompile Include="LongestCommonSubsequenceTest.cpp" />
     <ClCompile Include="LongestIncreasingSubsequenceTest.cpp" />
     <ClCompile Include="MatrixChainTest.cpp" />

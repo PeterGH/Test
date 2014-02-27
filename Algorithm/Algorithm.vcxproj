@@ -89,10 +89,12 @@
     <ClInclude Include="ColumnSort.h" />
     <ClInclude Include="CountingSort.h" />
     <ClInclude Include="AVLTree.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="HeapSort.h" />
     <ClInclude Include="InsertionSort.h" />
     <ClInclude Include="Knapsack.h" />
+    <ClInclude Include="ListGraph.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="LongestCommonSubsequence.h" />
     <ClInclude Include="LongestIncreasingSubsequence.h" />
