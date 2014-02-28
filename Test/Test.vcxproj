@@ -99,6 +99,7 @@
     <ClInclude Include="LongestCommonSubsequenceTest.h" />
     <ClInclude Include="LongestIncreasingSubsequenceTest.h" />
     <ClInclude Include="MatrixChainTest.h" />
+    <ClInclude Include="MatrixGraphTest.h" />
     <ClInclude Include="MergeSortTest.h" />
     <ClInclude Include="MRIntegerTest.h" />
     <ClInclude Include="PalindromeTest.h" />
@@ -142,6 +143,7 @@
     <ClCompile Include="LongestCommonSubsequenceTest.cpp" />
     <ClCompile Include="LongestIncreasingSubsequenceTest.cpp" />
     <ClCompile Include="MatrixChainTest.cpp" />
+    <ClCompile Include="MatrixGraphTest.cpp" />
     <ClCompile Include="MergeSortTest.cpp" />
     <ClCompile Include="MRIntegerTest.cpp" />
     <ClCompile Include="PalindromeTest.cpp" />

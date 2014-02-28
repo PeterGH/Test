@@ -24,6 +24,7 @@
 #include "LongestCommonSubsequenceTest.h"
 #include "LongestIncreasingSubsequenceTest.h"
 #include "MatrixChainTest.h"
+#include "MatrixGraphTest.h"
 #include "MergeSortTest.h"
 #include "MRIntegerTest.h"
 #include "PalindromeTest.h"
@@ -87,6 +88,7 @@ int main(int argc, char * argv[])
 	suite.Add(new LongestCommonSubsequenceTest(log));
 	suite.Add(new LongestIncreasingSubsequenceTest(log));
 	suite.Add(new MatrixChainTest(log));
+	suite.Add(new MatrixGraphTest(log));
 	suite.Add(new MergeSortTest(log));
 	suite.Add(new MRIntegerTest(log));
 	suite.Add(new PalindromeTest(log));

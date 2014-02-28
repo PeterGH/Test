@@ -99,6 +99,7 @@
     <ClInclude Include="LongestCommonSubsequence.h" />
     <ClInclude Include="LongestIncreasingSubsequence.h" />
     <ClInclude Include="MatrixChain.h" />
+    <ClInclude Include="MatrixGraph.h" />
     <ClInclude Include="MergeSort.h" />
     <ClInclude Include="MRInteger.h" />
     <ClInclude Include="Palindrome.h" />
