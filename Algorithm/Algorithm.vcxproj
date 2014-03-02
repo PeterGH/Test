@@ -83,6 +83,7 @@
     <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="BitSet.h" />
+    <ClInclude Include="BreadthFirstSearchTree.h" />
     <ClInclude Include="BreakString.h" />
     <ClInclude Include="CircularSingleLinkList.h" />
     <ClInclude Include="CoinChange.h" />
@@ -125,6 +126,7 @@
   <ItemGroup>
     <ClCompile Include="Array.cpp" />
     <ClCompile Include="BitSet.cpp" />
+    <ClCompile Include="BreadthFirstSearchTree.cpp" />
     <ClCompile Include="BreakString.cpp" />
     <ClCompile Include="CoinChange.cpp" />
     <ClCompile Include="CountingSort.cpp" />

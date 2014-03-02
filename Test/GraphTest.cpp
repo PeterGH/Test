@@ -437,4 +437,44 @@ void GraphTest::Init(void)
 		Logger().WriteInformation("Directed MatrixGraph\n");
 		test(mg);
 	});
+
+	Add("BFSTreeDirected", [&](){
+		Test::Graph<int, int> g;
+		Test::ListGraph<int, int> lg;
+		Test::MatrixGraph<int, int> mg;
+
+		function<void(Test::Graph<int, int> &)> test = [&](Test::Graph<int, int> & g){
+			CreateGraph(g);
+			Test::BreadthFirstSearchTree tree(1);
+			tree.Create<int, int>(g);
+			tree.Print();
+		};
+
+		Logger().WriteInformation("Directed Graph\n");
+		test(g);
+		Logger().WriteInformation("Directed ListGraph\n");
+		test(lg);
+		Logger().WriteInformation("Directed MatrixGraph\n");
+		test(mg);
+	});
+
+	Add("BFSTreeUnDirected", [&](){
+		Test::Graph<int, int> g(false);
+		Test::ListGraph<int, int> lg(false);
+		Test::MatrixGraph<int, int> mg(false);
+
+		function<void(Test::Graph<int, int> &)> test = [&](Test::Graph<int, int> & g){
+			CreateGraph(g);
+			Test::BreadthFirstSearchTree tree(5);
+			tree.Create<int, int>(g);
+			tree.Print();
+		};
+
+		Logger().WriteInformation("Directed Graph\n");
+		test(g);
+		Logger().WriteInformation("Directed ListGraph\n");
+		test(lg);
+		Logger().WriteInformation("Directed MatrixGraph\n");
+		test(mg);
+	});
 }
