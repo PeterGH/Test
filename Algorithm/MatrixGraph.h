@@ -14,6 +14,7 @@ namespace Test {
 
 		map<pair<unsigned int, unsigned int>, unsigned int, Less> matrix;
 	public:
+		// Default the graph is directed
 		MatrixGraph(void) : Graph() {}
 		MatrixGraph(bool directed) : Graph(directed) {}
 		~MatrixGraph(void) {}
@@ -26,6 +27,126 @@ namespace Test {
 			if (!this->directed && from != to) {
 				key = make_pair(to, from);
 				this->matrix[key] = id;
+			}
+		}
+
+		int OutDegree(unsigned int id)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			map<unsigned int, Vertex *>::iterator to;
+			pair<unsigned int, unsigned int> key;
+			int i = 0;
+			for (to = this->vertices.begin(); to != this->vertices.end(); to++) {
+				key = make_pair(id, to->first);
+				if (this->matrix.find(key) != this->matrix.end()) {
+					int edgeId = this->matrix[key];
+					if (this->edges[edgeId]->from == id) i++;
+				}
+			}
+
+			return i;
+		}
+
+		int InDegree(unsigned int id)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			map<unsigned int, Vertex *>::iterator from;
+			pair<unsigned int, unsigned int> key;
+			int i = 0;
+			for (from = this->vertices.begin(); from != this->vertices.end(); from++) {
+				key = make_pair(from->first, id);
+				if (this->matrix.find(key) != this->matrix.end()) {
+					int edgeId = this->matrix[key];
+					if (this->edges[edgeId]->to == id) i++;
+				}
+			}
+
+			return i;
+		}
+
+		int Degree(unsigned int id)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			int i = 0;
+			if (!this->directed) {
+				map<unsigned int, Vertex *>::iterator it;
+				pair<unsigned int, unsigned int> key;
+				for (it = this->vertices.begin(); it != this->vertices.end(); it++) {
+					key = make_pair(id, it->first);
+					if (this->matrix.find(key) != this->matrix.end()) {
+						int edgeId = this->matrix[key];
+						if (this->edges[edgeId]->from == id) i++;
+						if (this->edges[edgeId]->to == id) i++;
+					}
+				}
+			} else {
+				i += OutDegree(id);
+				i += InDegree(id);
+			}
+
+			return i;
+		}
+
+		void OutNeighbors(unsigned int id, vector<unsigned int> & neighbors)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			map<unsigned int, Vertex *>::iterator to;
+			pair<unsigned int, unsigned int> key;
+			for (to = this->vertices.begin(); to != this->vertices.end(); to++) {
+				if (to->first == id) continue;
+				key = make_pair(id, to->first);
+				if (this->matrix.find(key) != this->matrix.end()) {
+					int edgeId = this->matrix[key];
+					if (this->edges[edgeId]->from == id) neighbors.push_back(this->edges[edgeId]->to);
+				}
+			}
+		}
+
+		void InNeighbors(unsigned int id, vector<unsigned int> & neighbors)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			map<unsigned int, Vertex *>::iterator from;
+			pair<unsigned int, unsigned int> key;
+			for (from = this->vertices.begin(); from != this->vertices.end(); from++) {
+				if (from->first == id) continue;
+				key = make_pair(from->first, id);
+				if (this->matrix.find(key) != this->matrix.end()) {
+					int edgeId = this->matrix[key];
+					if (this->edges[edgeId]->to == id) neighbors.push_back(this->edges[edgeId]->from);
+				}
+			}
+		}
+
+		void Neighbors(unsigned int id, vector<unsigned int> & neighbors)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			if (!this->directed) {
+				map<unsigned int, Vertex *>::iterator it;
+				pair<unsigned int, unsigned int> key;
+				for (it = this->vertices.begin(); it != this->vertices.end(); it++) {
+					if (it->first == id) continue;
+					key = make_pair(id, it->first);
+					if (this->matrix.find(key) != this->matrix.end()) {
+						int edgeId = this->matrix[key];
+						if (this->edges[edgeId]->from == id) neighbors.push_back(this->edges[edgeId]->to);
+						if (this->edges[edgeId]->to == id) neighbors.push_back(this->edges[edgeId]->from);
+					}
+				}
+			} else {
+				OutNeighbors(id, neighbors);
+				InNeighbors(id, neighbors);
 			}
 		}
 

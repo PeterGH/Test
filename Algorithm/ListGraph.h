@@ -19,6 +19,7 @@ namespace Test {
 
 		map<unsigned int, AdjacencyHead *> list;
 	public:
+		// Default the graph is directed
 		ListGraph(void) : Graph() {}
 		ListGraph(bool directed) : Graph(directed) {}
 		~ListGraph(void)
@@ -71,6 +72,113 @@ namespace Test {
 				
 				// Note the neighboring vertex is edge->from
 				link(to);
+			}
+		}
+
+		int OutDegree(unsigned int id)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			AdjacencyNode * n = this->list[id]->head;
+			int i = 0;
+			while (n != nullptr) {
+				// If the graph is undirected, then check if the edge is out or in.
+				if (this->edges[n->edgeId]->from == id) i++;
+				n = n->next;
+			}
+
+			return i;
+		}
+
+		int InDegree(unsigned int id)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			int i = 0;
+			if (!this->directed) {
+				AdjacencyNode * n = this->list[id]->head;
+				while (n != nullptr) {
+					if (this->edges[n->edgeId]->to == id) i++;
+					n = n->next;
+				}
+			} else {
+				// Directed graph. Have to enumerate all the edges.
+				i = Graph::InDegree(id);
+			}
+
+			return i;
+		}
+
+		int Degree(unsigned int id)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			int i = 0;
+			if (!this->directed) {
+				AdjacencyNode * n = this->list[id]->head;
+				while (n != nullptr) {
+					if (this->edges[n->edgeId]->from == id) i++;
+					if (this->edges[n->edgeId]->to == id) i++;
+					n = n->next;
+				}
+			} else {
+				i = Graph::Degree(id);
+			}
+
+			return i;
+		}
+
+		void OutNeighbors(unsigned int id, vector<unsigned int> & neighbors)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			AdjacencyNode * n = this->list[id]->head;
+			while (n != nullptr) {
+				Edge * e = this->edges[n->edgeId];
+				// If the graph is undirected, then check if the edge is out or in.
+				if (e->from == id && e->to != id) neighbors.push_back(e->to);
+				n = n->next;
+			}
+		}
+
+		void InNeighbors(unsigned int id, vector<unsigned int> & neighbors)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			if (!this->directed) {
+				AdjacencyNode * n = this->list[id]->head;
+				while (n != nullptr) {
+					Edge * e = this->edges[n->edgeId];
+					// If the graph is undirected, then check if the edge is out or in.
+					if (e->from != id && e->to == id) neighbors.push_back(e->from);
+					n = n->next;
+				}
+			} else {
+				Graph::InNeighbors(id, neighbors);
+			}
+		}
+
+		void Neighbors(unsigned int id, vector<unsigned int> & neighbors)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			if (!this->directed) {
+				AdjacencyNode * n = this->list[id]->head;
+				while (n != nullptr) {
+					Edge * e = this->edges[n->edgeId];
+					// If the graph is undirected, then check if the edge is out or in.
+					if (e->from == id && e->to != id) neighbors.push_back(e->to);
+					if (e->from != id && e->to == id) neighbors.push_back(e->from);
+					n = n->next;
+				}
+			} else {
+				Graph::Neighbors(id, neighbors);
 			}
 		}
 

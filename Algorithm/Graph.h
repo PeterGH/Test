@@ -1,6 +1,8 @@
 #pragma once
 #include <functional>
 #include <map>
+#include <set>
+#include <vector>
 #include "String.h"
 using namespace std;
 namespace Test {
@@ -30,6 +32,7 @@ namespace Test {
 		bool directed;
 
 	public:
+		// Default the graph is directed
 		Graph(void) : directed(true) {}
 		Graph(bool directed) : directed(directed) {}
 		virtual ~Graph(void)
@@ -66,5 +69,173 @@ namespace Test {
 
 			this->edges[id] = new Edge(id, from, to, value);
 		}
+
+		// Enumerate all the edges to compute the out-degree
+		virtual int OutDegree(unsigned int id)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			map<unsigned int, Edge *>::iterator it;
+			int i = 0;
+			for (it = this->edges.begin(); it != this->edges.end(); it++) {
+				if (it->second->from == id) i++;
+			}
+
+			return i;
+		}
+
+		// Enumerate all the edges to compute the in-degree
+		virtual int InDegree(unsigned int id)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			map<unsigned int, Edge *>::iterator it;
+			int i = 0;
+			for (it = this->edges.begin(); it != this->edges.end(); it++) {
+				if (it->second->to == id) i++;
+			}
+
+			return i;
+		}
+
+		// Enumerate all the edges to compute the degree
+		// degree == out-degree + in-degree.
+		virtual int Degree(unsigned int id)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			map<unsigned int, Edge *>::iterator it;
+			int i = 0;
+			for (it = this->edges.begin(); it != this->edges.end(); it++) {
+				if (it->second->from == id) i++;
+				if (it->second->to == id) i++;
+			}
+
+			return i;
+		}
+
+		void Transpose(Graph & transpose)
+		{
+			map<unsigned int, Vertex *>::iterator vit;
+			Vertex * v;
+			for (vit = this->vertices.begin(); vit != this->vertices.end(); vit++) {
+				v = vit->second;
+				transpose.InsertVertex(v->id, v->value);
+			}
+
+			map<unsigned int, Edge *>::iterator eit;
+			Edge * e;
+			for (eit = this->edges.begin(); eit != this->edges.end(); eit++) {
+				e = eit->second;
+				transpose.InsertEdge(e->id, e->to, e->from, e->value);
+			}
+		}
+
+		// Enumerate all the edges and get the neighbors pointing to a vertex.
+		virtual void OutNeighbors(unsigned int id, vector<unsigned int> & neighbors)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			map<unsigned int, Edge *>::iterator it;
+			for (it = this->edges.begin(); it != this->edges.end(); it++) {
+				Edge * e = it->second;
+				if (e->from == id && e->to != id) neighbors.push_back(e->to);
+			}
+		}
+
+		// Enumerate all the edges and get the neighbors being pointed from a vertex.
+		virtual void InNeighbors(unsigned int id, vector<unsigned int> & neighbors)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			map<unsigned int, Edge *>::iterator it;
+			for (it = this->edges.begin(); it != this->edges.end(); it++) {
+				Edge * e = it->second;
+				if (e->from != id && e->to == id) neighbors.push_back(e->from);
+			}
+		}
+
+		// Enumerate all the edges to compute neighbors
+		// neighbors == out-neighbors + in-neighbors.
+		virtual void Neighbors(unsigned int id, vector<unsigned int> & neighbors)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			map<unsigned int, Edge *>::iterator it;
+			for (it = this->edges.begin(); it != this->edges.end(); it++) {
+				Edge * e = it->second;
+				if (e->from == id && e->to != id) neighbors.push_back(e->to);
+				if (e->from != id && e->to == id) neighbors.push_back(e->from);
+			}
+		}
+
+		//	Starting at a vertex id, breadth-first search through the graph.
+		//  For each vertex call the provided function.
+		void BreadthFirstSearch(unsigned int id, function<void(unsigned int)> & visit)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			set<unsigned int> visited;
+			vector<unsigned int> frontier;
+			frontier.push_back(id);
+			while (!frontier.empty()) {
+				unsigned int u = frontier.front();
+				frontier.erase(frontier.begin());
+
+				visit(u);
+				visited.insert(u);
+
+				vector<unsigned int> neighbors;
+				if (this->directed) OutNeighbors(u, neighbors);
+				else Neighbors(u, neighbors);
+				for_each (neighbors.begin(), neighbors.end(), [&](unsigned int n)->void{
+					if (visited.find(n) == visited.end()
+						&& find(frontier.begin(), frontier.end(), n) == frontier.end()) {
+						frontier.push_back(n);
+					}
+				});
+			}
+		}
+
+		//	Starting at a vertex id, breadth-first search through the graph.
+		//  For each vertex and its unvisited child, call the provided function.
+		virtual void BreadthFirstSearch(unsigned int id, function<void(unsigned int, unsigned int)> & visit)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			set<unsigned int> visited;
+			vector<unsigned int> frontier;
+
+			visit(id, id);
+			visited.insert(id);
+
+			frontier.push_back(id);
+			while (!frontier.empty()) {
+				unsigned int u = frontier.front();
+				frontier.erase(frontier.begin());
+				vector<unsigned int> neighbors;
+				if (this->directed) OutNeighbors(u, neighbors);
+				else Neighbors(u, neighbors);
+				for_each (neighbors.begin(), neighbors.end(), [&](unsigned int n)->void{
+					if (visited.find(n) == visited.end()) {
+
+						visit(u, n);
+						visited.insert(n);
+
+						frontier.push_back(n);
+					}
+				});
+			}
+		}
+
+		virtual void Print(void) {}
 	};
 }
