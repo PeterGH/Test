@@ -1,12 +1,12 @@
-#include "BreadthFirstSearchTree.h"
+#include "GraphSearchTree.h"
 namespace Test {
-	BreadthFirstSearchTree::Node::~Node(void)
+	GraphSearchTree::Node::~Node(void)
 	{
 		this->parent = nullptr;
 		this->children.clear();
 	}
 
-	void BreadthFirstSearchTree::Node::PostOrderWalk(Node * node, function<void(Node *)> f)
+	void GraphSearchTree::Node::PostOrderWalk(Node * node, function<void(Node *)> f)
 	{
 		if (node == nullptr || f == nullptr) return;
 		stack<Node *> path;
@@ -29,7 +29,7 @@ namespace Test {
 		}
 	}
 
-	BreadthFirstSearchTree::Node * BreadthFirstSearchTree::Node::Search(Node * node, unsigned int id)
+	GraphSearchTree::Node * GraphSearchTree::Node::Search(Node * node, unsigned int id)
 	{
 		if (node == nullptr) return nullptr;
 		if (node->id == id) return node;
@@ -44,25 +44,25 @@ namespace Test {
 				q.push(c);
 			}
 		}
-		
+
 		return nullptr;
 	}
 
-	stringstream & BreadthFirstSearchTree::Node::ToString(stringstream & ss, Node * node, int x, vector<int> & y)
+	stringstream & GraphSearchTree::Node::ToString(stringstream & ss, Node * node, int x, vector<int> & y)
 	{
 		static string link = "____";
 		string c = String::Format(" %d:%d ", node->id, node->distance);
 		ss << c;
-		
+
 		if (node->children.size() == 0) return ss;
-		
+
 		x += c.length();
 		if (node->children.size() > 1) {
 			// Record current x coordinate,
 			// so it can be used to draw '|'
 			y.push_back(x);
 		}
-		
+
 		vector<Node *>::iterator it = node->children.begin();
 		ss << link;
 		ToString(ss, *it, x + link.length(), y);
@@ -81,7 +81,7 @@ namespace Test {
 				y.pop_back();
 			}
 
-			ss << link;			
+			ss << link;
 			ToString(ss, *it, x + link.length(), y);
 			it++;
 		}
@@ -89,18 +89,18 @@ namespace Test {
 		return ss;
 	}
 
-	BreadthFirstSearchTree::BreadthFirstSearchTree(unsigned int id)
+	GraphSearchTree::GraphSearchTree(unsigned int id)
 	{
 		this->rootId = id;
 		this->root = new Node(rootId);
 	}
 
-	BreadthFirstSearchTree::~BreadthFirstSearchTree()
+	GraphSearchTree::~GraphSearchTree()
 	{
 		Node::PostOrderWalk(this->root, [&](Node * n){ delete n; });
 	}
 
-	void BreadthFirstSearchTree::Visit(unsigned int parentId, unsigned int childId)
+	void GraphSearchTree::Visit(unsigned int parentId, unsigned int childId)
 	{
 		if (childId == this->rootId) return;
 		Node * p = Node::Search(this->root, parentId);
@@ -109,7 +109,7 @@ namespace Test {
 		p->children.push_back(c);
 	}
 
-	void BreadthFirstSearchTree::Print(void)
+	void GraphSearchTree::Print(void)
 	{
 		stringstream ss;
 		vector<int> y;

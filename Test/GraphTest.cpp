@@ -438,6 +438,118 @@ void GraphTest::Init(void)
 		test(mg);
 	});
 
+	Add("DFSUnDirected", [&](){
+		Test::Graph<int, int> g(false);
+		Test::ListGraph<int, int> lg(false);
+		Test::MatrixGraph<int, int> mg(false);
+
+		function<void(Test::Graph<int, int> &)> test = [&](Test::Graph<int, int> & g){
+			CreateGraph(g);
+
+			vector<unsigned int> visited;
+			function<void(unsigned int)> visit = [&](unsigned int id){
+				visited.push_back(id);
+			};
+
+			g.DepthFirstSearch(1, visit);
+			sort(visited.begin(), visited.end());
+
+			vector<unsigned int> visited2;
+			function<void(unsigned int, unsigned int)> visit2 = [&](unsigned int u, unsigned int id){
+				visited2.push_back(id);
+			};
+
+			g.DepthFirstSearch(1, visit2);
+			sort(visited2.begin(), visited2.end());
+
+			Logger().WriteInformation("Depth-First Search:");
+			for_each (visited.begin(), visited.end(), [&](unsigned int i){
+				Logger().WriteInformation("\t%d", i);
+			});
+
+			Logger().WriteInformation("\n");
+
+			Logger().WriteInformation("Depth-First Search 2:");
+			for_each (visited2.begin(), visited2.end(), [&](unsigned int i){
+				Logger().WriteInformation("\t%d", i);
+			});
+
+			Logger().WriteInformation("\n");
+
+			ASSERT1(visited.size() == 6);
+			ASSERT1(visited2.size() == 6);
+			for (int i = 1; i < 7; i++) {
+				ASSERT1(visited[i - 1] == i);
+				ASSERT1(visited2[i - 1] == i);
+			}
+		};
+
+		Logger().WriteInformation("Undirected Graph\n");
+		test(g);
+		Logger().WriteInformation("Undirected ListGraph\n");
+		test(lg);
+		Logger().WriteInformation("Undirected MatrixGraph\n");
+		test(mg);
+	});
+
+	Add("DFSDirected", [&](){
+		Test::Graph<int, int> g;
+		Test::ListGraph<int, int> lg;
+		Test::MatrixGraph<int, int> mg;
+
+		function<void(Test::Graph<int, int> &)> test = [&](Test::Graph<int, int> & g){
+			CreateGraph(g);
+
+			vector<unsigned int> visited;
+			function<void(unsigned int)> visit = [&](unsigned int id){
+				visited.push_back(id);
+			};
+
+			g.DepthFirstSearch(1, visit);
+			sort(visited.begin(), visited.end());
+
+			vector<unsigned int> visited2;
+			function<void(unsigned int, unsigned int)> visit2 = [&](unsigned int u, unsigned int id){
+				visited2.push_back(id);
+			};
+
+			g.DepthFirstSearch(1, visit2);
+			sort(visited2.begin(), visited2.end());
+
+			Logger().WriteInformation("Depth-First Search:");
+			for_each (visited.begin(), visited.end(), [&](unsigned int i){
+				Logger().WriteInformation("\t%d", i);
+			});
+
+			Logger().WriteInformation("\n");
+
+			Logger().WriteInformation("Depth-First Search 2:");
+			for_each (visited2.begin(), visited2.end(), [&](unsigned int i){
+				Logger().WriteInformation("\t%d", i);
+			});
+
+			Logger().WriteInformation("\n");
+
+			ASSERT1(visited.size() == 4);
+			ASSERT1(visited2.size() == 4);
+			ASSERT1(visited[0] == 1);
+			ASSERT1(visited2[0] == 1);
+			ASSERT1(visited[1] == 2);
+			ASSERT1(visited2[1] == 2);
+			ASSERT1(visited[2] == 4);
+			ASSERT1(visited2[2] == 4);
+			ASSERT1(visited[3] == 5);
+			ASSERT1(visited2[3] == 5);
+		};
+
+		Logger().WriteInformation("Directed Graph\n");
+		test(g);
+		Logger().WriteInformation("Directed ListGraph\n");
+		test(lg);
+		Logger().WriteInformation("Directed MatrixGraph\n");
+		test(mg);
+	});
+
 	Add("BFSTreeDirected", [&](){
 		Test::Graph<int, int> g;
 		Test::ListGraph<int, int> lg;
@@ -445,8 +557,8 @@ void GraphTest::Init(void)
 
 		function<void(Test::Graph<int, int> &)> test = [&](Test::Graph<int, int> & g){
 			CreateGraph(g);
-			Test::BreadthFirstSearchTree tree(1);
-			tree.Create<int, int>(g);
+			Test::GraphSearchTree tree(1);
+			tree.BreadthFirstSearch<int, int>(g);
 			tree.Print();
 		};
 
@@ -465,8 +577,28 @@ void GraphTest::Init(void)
 
 		function<void(Test::Graph<int, int> &)> test = [&](Test::Graph<int, int> & g){
 			CreateGraph(g);
-			Test::BreadthFirstSearchTree tree(5);
-			tree.Create<int, int>(g);
+			Test::GraphSearchTree tree(5);
+			tree.BreadthFirstSearch<int, int>(g);
+			tree.Print();
+		};
+
+		Logger().WriteInformation("UnDirected Graph\n");
+		test(g);
+		Logger().WriteInformation("UnDirected ListGraph\n");
+		test(lg);
+		Logger().WriteInformation("UnDirected MatrixGraph\n");
+		test(mg);
+	});
+
+	Add("DFSTreeDirected", [&](){
+		Test::Graph<int, int> g;
+		Test::ListGraph<int, int> lg;
+		Test::MatrixGraph<int, int> mg;
+
+		function<void(Test::Graph<int, int> &)> test = [&](Test::Graph<int, int> & g){
+			CreateGraph(g);
+			Test::GraphSearchTree tree(1);
+			tree.DepthFirstSearch<int, int>(g);
 			tree.Print();
 		};
 
@@ -475,6 +607,26 @@ void GraphTest::Init(void)
 		Logger().WriteInformation("Directed ListGraph\n");
 		test(lg);
 		Logger().WriteInformation("Directed MatrixGraph\n");
+		test(mg);
+	});
+
+	Add("DFSTreeUnDirected", [&](){
+		Test::Graph<int, int> g(false);
+		Test::ListGraph<int, int> lg(false);
+		Test::MatrixGraph<int, int> mg(false);
+
+		function<void(Test::Graph<int, int> &)> test = [&](Test::Graph<int, int> & g){
+			CreateGraph(g);
+			Test::GraphSearchTree tree(5);
+			tree.DepthFirstSearch<int, int>(g);
+			tree.Print();
+		};
+
+		Logger().WriteInformation("UnDirected Graph\n");
+		test(g);
+		Logger().WriteInformation("UnDirected ListGraph\n");
+		test(lg);
+		Logger().WriteInformation("UnDirected MatrixGraph\n");
 		test(mg);
 	});
 }

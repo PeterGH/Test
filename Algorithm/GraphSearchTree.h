@@ -8,7 +8,7 @@
 #include "MatrixGraph.h"
 using namespace std;
 namespace Test {
-	class BreadthFirstSearchTree {
+	class GraphSearchTree {
 	private:
 		class Node {
 		public:
@@ -29,18 +29,27 @@ namespace Test {
 		unsigned int rootId;
 
 	public:
-		__declspec(dllexport) BreadthFirstSearchTree(unsigned int id);
-		__declspec(dllexport) ~BreadthFirstSearchTree(void);
+		__declspec(dllexport) GraphSearchTree(unsigned int id);
+		__declspec(dllexport) ~GraphSearchTree(void);
 
 		__declspec(dllexport) void Visit(unsigned int parentId, unsigned int childId);
 
-		template<class VertexValueType, class EdgeValueType> void Create(Graph<VertexValueType, EdgeValueType> & g)
+		template<class VertexValueType, class EdgeValueType> void BreadthFirstSearch(Graph<VertexValueType, EdgeValueType> & g)
 		{
 			function<void(unsigned int, unsigned int)> v = [&](unsigned int p, unsigned int c){
 				Visit(p, c);
 			};
 
 			g.BreadthFirstSearch(this->rootId, v);
+		}
+
+		template<class VertexValueType, class EdgeValueType> void DepthFirstSearch(Graph<VertexValueType, EdgeValueType> & g)
+		{
+			function<void(unsigned int, unsigned int)> v = [&](unsigned int p, unsigned int c){
+				Visit(p, c);
+			};
+
+			g.DepthFirstSearch(this->rootId, v);
 		}
 
 		__declspec(dllexport) void Print(void);

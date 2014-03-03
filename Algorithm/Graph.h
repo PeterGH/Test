@@ -2,6 +2,7 @@
 #include <functional>
 #include <map>
 #include <set>
+#include <stack>
 #include <vector>
 #include "String.h"
 using namespace std;
@@ -175,8 +176,10 @@ namespace Test {
 			}
 		}
 
-		//	Starting at a vertex id, breadth-first search through the graph.
-		//  For each vertex call the provided function.
+		// BreadthFirstSearch can find the shortest path
+
+		// Starting at a vertex id, breadth-first search through the graph.
+		// For each vertex call the provided function.
 		void BreadthFirstSearch(unsigned int id, function<void(unsigned int)> & visit)
 		{
 			if (this->vertices.find(id) == this->vertices.end())
@@ -204,8 +207,8 @@ namespace Test {
 			}
 		}
 
-		//	Starting at a vertex id, breadth-first search through the graph.
-		//  For each vertex and its unvisited child, call the provided function.
+		// Starting at a vertex id, breadth-first search through the graph.
+		// For each vertex and its unvisited child, call the provided function.
 		virtual void BreadthFirstSearch(unsigned int id, function<void(unsigned int, unsigned int)> & visit)
 		{
 			if (this->vertices.find(id) == this->vertices.end())
@@ -233,6 +236,77 @@ namespace Test {
 						frontier.push_back(n);
 					}
 				});
+			}
+		}
+
+		// DepthFirstSearch cannot guarantee to find the shortest path
+
+		// Starting at a vertex id, depth-first search through the graph.
+		// For each vertex and its unvisited child, call the provided function.
+		virtual void DepthFirstSearchInternal(unsigned int id, function<void(unsigned int)> & visit, set<unsigned int> & visited)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			visit(id);
+			visited.insert(id);
+
+			vector<unsigned int> neighbors;
+			if (this->directed) OutNeighbors(id, neighbors);
+			else Neighbors(id, neighbors);
+
+			for_each (neighbors.begin(), neighbors.end(), [&](unsigned int n)->void{
+				if (visited.find(n) == visited.end()) {
+					DepthFirstSearchInternal(n, visit, visited);
+				}
+			});
+		}
+
+		virtual void DepthFirstSearch(unsigned int id, function<void(unsigned int)> & visit)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			set<unsigned int> visited;
+			DepthFirstSearchInternal(id, visit, visited);
+		}
+
+		// Starting at a vertex id, depth-first search through the graph.
+		// For each vertex and its unvisited child, call the provided function.
+		virtual void DepthFirstSearch(unsigned int id, function<void(unsigned int, unsigned int)> & visit)
+		{
+			if (this->vertices.find(id) == this->vertices.end())
+				throw invalid_argument(String::Format("Vertex id %d does not exist", id));
+
+			set<unsigned int> visited;
+			stack<unsigned int> path;
+			map<unsigned int, vector<unsigned int>> children;
+			map<unsigned int, vector<unsigned int>::iterator> next;
+			function<void(unsigned int)> initChildren = [&](unsigned int n){
+				vector<unsigned int> neighbors;
+				if (this->directed) OutNeighbors(n, neighbors);
+				else Neighbors(n, neighbors);
+				children[n] = neighbors;
+				next[n] = children[n].begin();
+			};
+
+			visit(id, id);
+			visited.insert(id);
+			path.push(id);
+			initChildren(id);
+
+			while (!path.empty()) {
+				unsigned int top = path.top();
+				vector<unsigned int>::iterator it = next[top];
+				if (next[top] != children[top].end()) next[top]++;
+				if (it == children[top].end()) {
+					path.pop();
+				} else if (visited.find(*it) == visited.end()) {
+					visit(top, *it);
+					visited.insert(*it);
+					path.push(*it);
+					initChildren(*it);
+				}
 			}
 		}
 

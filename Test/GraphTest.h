@@ -1,6 +1,6 @@
 #pragma once
 #include "..\Algorithm\Graph.h"
-#include "..\Algorithm\BreadthFirstSearchTree.h"
+#include "..\Algorithm\GraphSearchTree.h"
 #include "..\Algorithm\ListGraph.h"
 #include "..\Algorithm\MatrixGraph.h"
 #include "..\Algorithm\TestClass.h"

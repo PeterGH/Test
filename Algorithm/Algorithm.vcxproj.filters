@@ -150,7 +150,7 @@
     <ClInclude Include="MatrixGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BreadthFirstSearchTree.h">
+    <ClInclude Include="GraphSearchTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -218,7 +218,7 @@
     <ClCompile Include="CoinChange.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BreadthFirstSearchTree.cpp">
+    <ClCompile Include="GraphSearchTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
