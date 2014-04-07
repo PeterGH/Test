@@ -22,7 +22,7 @@ namespace Test {
 			// Not delete its children
 			~Node(void)
 			{
-				auto f = [](Node * p) { if (p != nullptr) { p = nullptr; } };
+				auto f = [](Node * & p) { if (p != nullptr) { p = nullptr; } };
 				f(this->left);
 				f(this->right);
 				f(this->parent);

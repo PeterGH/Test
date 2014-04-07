@@ -89,11 +89,13 @@
     <ClInclude Include="ColumnSort.h" />
     <ClInclude Include="CountingSort.h" />
     <ClInclude Include="AVLTree.h" />
+    <ClInclude Include="FiniteAutomation.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphSearchTree.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="HeapSort.h" />
     <ClInclude Include="InsertionSort.h" />
+    <ClInclude Include="KMP.h" />
     <ClInclude Include="Knapsack.h" />
     <ClInclude Include="ListGraph.h" />
     <ClInclude Include="Log.h" />
@@ -129,8 +131,10 @@
     <ClCompile Include="BreakString.cpp" />
     <ClCompile Include="CoinChange.cpp" />
     <ClCompile Include="CountingSort.cpp" />
+    <ClCompile Include="FiniteAutomation.cpp" />
     <ClCompile Include="GraphSearchTree.cpp" />
     <ClCompile Include="HeapSort.cpp" />
+    <ClCompile Include="KMP.cpp" />
     <ClCompile Include="Knapsack.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="LongestCommonSubsequence.cpp" />

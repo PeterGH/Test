@@ -33,7 +33,7 @@ namespace Test {
 			// Not delete its children
 			~Node(void)
 			{
-				auto f = [](Node * p) { if (p != nullptr) { p = nullptr; } };
+				auto f = [](Node * & p) { if (p != nullptr) { p = nullptr; } };
 				f(this->left);
 				f(this->right);
 				f(this->parent);
@@ -228,18 +228,26 @@ namespace Test {
 				int h = 0;
 				while (node != nullptr) {
 					if (prev == node->right) {
+						// h is the height of right
+						// Minus one to get the height of node
 						h--;
 						prev = node;
 						node = node->parent;
 					} else if (node->left != nullptr && prev != node->left) {
+						// h is the height of parent
+						// Plus one to get the height of node
 						h++;
 						if (h > max) max = h;
 						prev = node;
 						node = node->left;
 					} else {
 						if (prev == node->left) {
+							// h is the height of left
+							// Minus one to get the height of node
 							h--;
 						} else if (node->left == nullptr) {
+							// h is the height of parent
+							// Plus one to get the height of node
 							h++;
 							if (h > max) max = h;
 						}

@@ -282,9 +282,9 @@ namespace Test {
 						if (node == node->parent->right) {
 							//          (B)              (B)
 							//          / \             /   \
-							//        (R)       or    (R)   (B)
-							//        / \             / \   / \
-							//          (R)             (R)
+							//        (R)       or    (R)    (B)
+							//        / \             / \    / \
+							//          N(R)            N(R)
 							//          / \             / \
 							//
 							node = node->parent;
@@ -294,7 +294,7 @@ namespace Test {
 						//          / \             /   \
 						//        (R)       or    (R)   (B)
 						//        / \             / \   / \
-						//      (R)             (R)
+						//      N(R)           N(R)
 						//      / \             / \
 						//
 						node->parent->color = BLACK;
@@ -303,13 +303,13 @@ namespace Test {
 						//          / \             /   \
 						//        (B)       or    (B)   (B)
 						//        / \             / \   / \
-						//      (R)             (R)
+						//     N(R)            N(R)
 						//      / \             / \
 						//
 						RightRotate(node->parent->parent);
 						//          (B)              (B)
 						//          / \             /   \
-						//        (R) (R)   or    (R)   (R)
+						//       N(R) (R)   or   N(R)   (R)
 						//        / \ / \         / \   / \
 						//                                (B)
 						//                                / \
@@ -338,7 +338,7 @@ namespace Test {
 							//          / \             /   \
 							//            (R)    or   (B)   (R)
 							//            / \         / \   / \
-							//          (R)               (R)
+							//         N(R)               N(R)
 							//          / \               / \
 							//
 							node = node->parent;
@@ -348,7 +348,7 @@ namespace Test {
 						//          / \             /   \
 						//            (R)    or   (B)   (R)
 						//            / \         / \   / \
-						//              (R)               (R)
+						//              N(R)               N(R)
 						//              / \               / \
 						//
 						node->parent->color = BLACK;
@@ -357,13 +357,13 @@ namespace Test {
 						//          / \             /   \
 						//            (B)    or   (B)   (B)
 						//            / \         / \   / \
-						//              (R)               (R)
+						//              N(R)              N(R)
 						//              / \               / \
 						//
 						LeftRotate(node->parent->parent);
 						//          (B)              (B)
 						//          / \             /   \
-						//        (R) (R)    or   (R)   (R)
+						//        (R) N(R)    or   (R)  N(R)
 						//        / \ / \         / \   / \
 						//                      (B)
 						//                      / \

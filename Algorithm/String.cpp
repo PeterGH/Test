@@ -46,8 +46,7 @@ namespace Test {
 					// Have skipped some dups
 					// Move current non-dup char to the front.
 					input[++i] = input[j];
-				}
-				else {
+				} else {
 					// Have not skipped any dups.
 					// Hop i with j.
 					i++;

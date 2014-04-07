@@ -140,14 +140,12 @@ namespace Test {
 				// 0   ......... k
 				// 0   ......... i
 				return input[m];
-			}
-			else if (i < k) {
+			} else if (i < k) {
 				// low ............ m ...... high
 				// 0   ............ k
 				// 0   ...... i
 				return PartitionArrayByOrder(input, low, m - 1, i, transform);
-			}
-			else {
+			} else {
 				// low ...... m ............ high
 				// 0   ...... k
 				// 0   ............ i

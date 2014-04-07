@@ -91,6 +91,7 @@
     <ClInclude Include="CoinChangeTest.h" />
     <ClInclude Include="ColumnSortTest.h" />
     <ClInclude Include="CountingSortTest.h" />
+    <ClInclude Include="FiniteAutomationTest.h" />
     <ClInclude Include="GraphTest.h" />
     <ClInclude Include="HeapSortTest.h" />
     <ClInclude Include="HeapTest.h" />
@@ -136,6 +137,7 @@
     <ClCompile Include="CoinChangeTest.cpp" />
     <ClCompile Include="ColumnSortTest.cpp" />
     <ClCompile Include="CountingSortTest.cpp" />
+    <ClCompile Include="FiniteAutomationTest.cpp" />
     <ClCompile Include="GraphTest.cpp" />
     <ClCompile Include="HeapSortTest.cpp" />
     <ClCompile Include="HeapTest.cpp" />

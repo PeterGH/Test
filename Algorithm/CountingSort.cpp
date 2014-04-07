@@ -77,6 +77,7 @@ namespace Test {
 		for (int i = length - 1; i >= 0; i--) {
 			if (bits.Test(i)) continue;
 			while (true) {
+				// Use input[i] as a temporay place to store the next value to be placed.
 				int delta = input[i] - minValue;
 				int currentIndex = count[delta] - 1;
 				count[delta] --;

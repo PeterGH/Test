@@ -153,6 +153,12 @@
     <ClInclude Include="GraphSearchTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FiniteAutomation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KMP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">
@@ -219,6 +225,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GraphSearchTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FiniteAutomation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KMP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
