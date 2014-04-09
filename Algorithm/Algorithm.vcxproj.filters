@@ -159,6 +159,9 @@
     <ClInclude Include="KMP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NodeGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">
@@ -231,6 +234,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KMP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NodeGraph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

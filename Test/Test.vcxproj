@@ -104,6 +104,7 @@
     <ClInclude Include="MatrixGraphTest.h" />
     <ClInclude Include="MergeSortTest.h" />
     <ClInclude Include="MRIntegerTest.h" />
+    <ClInclude Include="NodeGraphTest.h" />
     <ClInclude Include="PalindromeTest.h" />
     <ClInclude Include="PartitionTest.h" />
     <ClInclude Include="PermutationTest.h" />
@@ -150,6 +151,7 @@
     <ClCompile Include="MatrixGraphTest.cpp" />
     <ClCompile Include="MergeSortTest.cpp" />
     <ClCompile Include="MRIntegerTest.cpp" />
+    <ClCompile Include="NodeGraphTest.cpp" />
     <ClCompile Include="PalindromeTest.cpp" />
     <ClCompile Include="PartitionTest.cpp" />
     <ClCompile Include="PermutationTest.cpp" />

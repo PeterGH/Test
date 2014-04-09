@@ -29,6 +29,7 @@
 #include "MatrixGraphTest.h"
 #include "MergeSortTest.h"
 #include "MRIntegerTest.h"
+#include "NodeGraphTest.h"
 #include "PalindromeTest.h"
 #include "PartitionTest.h"
 #include "PermutationTest.h"
@@ -95,6 +96,7 @@ int main(int argc, char * argv[])
 	suite.Add(new MatrixGraphTest(log));
 	suite.Add(new MergeSortTest(log));
 	suite.Add(new MRIntegerTest(log));
+	suite.Add(new NodeGraphTest(log));
 	suite.Add(new PalindromeTest(log));
 	suite.Add(new PartitionTest(log));
 	suite.Add(new PermutationTest(log));
