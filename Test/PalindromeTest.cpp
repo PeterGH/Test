@@ -69,4 +69,21 @@ void PalindromeTest::Init(void)
 		cout << endl;
 		ASSERT1(0 == t.compare(a));
 	});
+
+	Add("Number", [&](){
+		auto check = [&](unsigned int n, bool e){
+			bool r = Test::Palindrome::IsPalindrom(n);
+			Logger().WriteInformation("%d is %s palindrome\n", n, r ? "" : "not");
+			ASSERT1(r == e);
+		};
+
+		check(3, true);
+		check(33, true);
+		check(23, false);
+		check(232, true);
+		check(1231, false);
+		check(12344321, true);
+		check(123454321, true);
+		check(1234567, false);
+	});
 }

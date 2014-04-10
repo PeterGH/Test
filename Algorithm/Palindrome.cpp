@@ -171,4 +171,28 @@ namespace Test {
 			output.insert(k, 1, input[j]);
 		}
 	}
+
+	bool Palindrome::IsPalindrom(unsigned int number)
+	{
+		if (number < 10) return true;
+
+		unsigned int base = 1;
+		while ((number / base) >= 10) {
+			base *= 10;
+		}
+
+		// Compare the most significant digit (MSD) and the least significant digit (LSD)
+		while (number >= 10) {
+			if ((number / base) != (number % 10)) {
+				// MSD is different from LSD
+				return false;
+			}
+
+			// Peel off MSD and LSD
+			number = (number % base) / 10;
+			base /= 100;
+		}
+
+		return true;
+	}
 }

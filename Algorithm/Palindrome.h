@@ -13,6 +13,8 @@ namespace Test {
 		static void LongestSubsequenceByTable(string & input, string & output);
 		static void LengthArray(string & input, size_t length[]);	
 		static void LongestSubsequenceByArray(string & input, string & output);
+
+		static bool IsPalindrom(unsigned int number);
 	};
 }
 
