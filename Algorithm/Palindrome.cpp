@@ -125,6 +125,7 @@ namespace Test {
 		for (int k = 2; k < (int)input.length(); k ++) {
 			for (int i = input.length() - 1; i >= k; i --) {
 				if (input[i-k] == input[i]) {
+					// Here is a bug: length[i-1] refer to range input[i-k..i-1], but actually we need input[i-k+1..i-1]
 					length[i] = 2 + length[i-1];
 				} else {
 					length[i] = max(length[i-1], length[i]);
@@ -194,5 +195,98 @@ namespace Test {
 		}
 
 		return true;
+	}
+
+	// Manacher Algorithm
+	// Discussed at http://leetcode.com/2011/11/longest-palindromic-substring-part-ii.html
+	// Find the longest substring (contiguous characters) which is a palindrome
+	void Palindrome::LongestSubstring(string & input, string & output)
+	{
+		int length = 1 + 2 * input.size();
+		unique_ptr<int[]> p(new int[length]);
+
+		// #  b  #  a  #  b  #  c  #  b  #  a  #  b  #  c  #  b  #  a  #  c  #  c  #  b  #  a  #
+		// Original characters are at the odd positions
+		auto getChar = [&](int i) -> char {
+			if (i % 2 == 1) {
+				return input[i >> 1];
+			} else {
+				return '#';
+			}
+		};
+
+		// Given current index c and its palindrome length p[c],
+		// try to expand it as far as possible.
+		auto expand = [&](int c) -> int {
+			while (true) {
+				int m = c - p[c] - 1;
+				if (m < 0) break;
+				int n = c + p[c] + 1;
+				if (n >= length) break;
+				if (getChar(m) != getChar(n)) break;
+				p[c]++;
+			}
+
+			return p[c];
+		};
+
+		auto printi = [&](){
+			printf("\t");
+			for (int i = 0; i < length; i++) {
+				printf("  %c", getChar(i));
+			}
+			printf("\n");
+		};
+
+		auto printp = [&](int i){
+			printf("%d\t", i);
+			for (int j = 0; j <= i; j++) {
+				printf("  %d", p[j]);
+			}
+			printf("\n");
+		};
+
+		int maxLength = 0;
+		int maxIndex = 0;
+		p[0] = 0;
+		int c = 0;	// The center of current range
+		int r = 0;	// The right-most boundary of current range, i.e., c + p[c]
+		for (int i = 1; i < length; i++) {
+			if (i > r) {
+				p[i] = 0;
+			} else {
+				int j = 2 * c - i;
+				// p[i] should be the same of its mirror about the current center but also bounded by the current range
+				p[i] = std::min(p[j], r - i);
+			}
+
+			expand(i);
+			if (i + p[i] > r) {
+				c = i;
+				r = c + p[c];
+			}
+
+			if (p[i] > maxLength) {
+				maxLength = p[i];
+				maxIndex = i;
+			}
+
+			// printi();
+			// printp(i);
+		}
+
+		int i = maxIndex - maxLength + 1;
+		string::iterator b = output.begin();
+		int j = 0;
+		while (i < maxIndex) {
+			char c = getChar(i);
+			output.insert(b + j++, c);
+			output.insert(b + j, c);
+			i += 2;
+		}
+
+		if (i == maxIndex) {
+			output.insert(b + j, getChar(i));
+		}
 	}
 }

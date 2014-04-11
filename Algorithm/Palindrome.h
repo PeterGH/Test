@@ -15,6 +15,8 @@ namespace Test {
 		static void LongestSubsequenceByArray(string & input, string & output);
 
 		static bool IsPalindrom(unsigned int number);
+
+		static void LongestSubstring(string & input, string & output);
 	};
 }
 
