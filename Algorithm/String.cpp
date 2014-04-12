@@ -58,4 +58,43 @@ namespace Test {
 		// Now i equals to the new length.
 		return i;
 	}
+
+	// http://leetcode.com/2011/09/regular-expression-matching.html
+	bool String::IsMatch(char * input, char * pattern)
+	{
+		if (input == nullptr || pattern == nullptr) return false;
+
+		if (*input == '\0' && *pattern == '\0') return true;
+
+		if (*input == '\0' || *pattern == '\0') return false;
+
+		if (*pattern == '*') {
+			do { ++pattern; } while (*pattern == '*');
+			return IsMatch(input, pattern);
+		}
+
+		if (*input != *pattern && *pattern != '.') {
+			// input    a#######
+			// pattern  b####
+			if (*(pattern+1) != '*') return false;
+
+			// input    a#######
+			// pattern  b***####
+			return IsMatch(input, pattern + 2);
+		} else {
+			// input    a#######
+			// pattern  a####
+			//          .####
+			if (*(pattern+1) != '*') return IsMatch(++input, ++pattern);
+
+			// input    a#######
+			// pattern  a***###
+			//          .***###
+			while (*input == *pattern || (*pattern == '.' && *input != '\0')) {
+				if (IsMatch(input++, pattern+2)) return true;
+			}
+
+			return IsMatch(input, pattern+2);
+		}
+	}
 }

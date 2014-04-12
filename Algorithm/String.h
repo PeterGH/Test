@@ -85,6 +85,13 @@ namespace Test {
 		// Return the new length of string input with only unique characters.
 		__declspec(dllexport) static int RemoveDuplicateChars(char * input, int length);
 
+		// Pattern can include:
+		// '.'	Any single character
+		// '*'  Zero or more occurrences of previous character
+		// Any other characters
+		// Return true if the entire input string match the pattern.
+		__declspec(dllexport) static bool IsMatch(char * input, char * pattern);
+
 		template<class T, class C> static basic_string<C> Join(const T * input, int length, const C * separator)
 		{
 			basic_stringstream<C> ss;

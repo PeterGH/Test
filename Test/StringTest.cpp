@@ -56,4 +56,34 @@ void StringTest::Init(void)
 		Logger().WriteInformation("%S\n", o4.c_str());
 		ASSERT1(0 == wcscmp(L"0.1:1.2:2.3:3.4", o4.c_str()));
 	});
+
+	Add("IsMatch", [&](){
+		auto check = [&](char * s, char * p, bool e){
+			bool m = Test::String::IsMatch(s, p);
+			Logger().WriteInformation("%s %s %s\n", s, m ? "==" : "!=", p);
+			ASSERT1(m == e);
+		};
+
+		check("aa", "a", false);
+		check("aa", ".", false);
+		check("aa", "aa", true);
+		check("aa", "..", true);
+		check("aa", "*aa", true);
+		check("aaa", "aa", false);
+		check("aaa", "*aa", false);
+		check("aaa", "aa*", true);
+		check("aaa", "a*a", true);
+		check("aaa", "...", true);
+		check("aaa", ".*.", true);
+		check("aa", "a*", true);
+		check("aa", ".*", true);
+		check("ab", ".*", true);
+		check("ab", "..", true);
+		check("aab", "c*a*b", true);
+		check("aab", "c***a**b", true);
+		check("abbbc", "ab*c", true);
+		check("ac", "ab*c", true);
+		check("abbc", "ab*bbc", true);
+		check("abcbcd", "a.*c.*d", true);
+	});
 }
