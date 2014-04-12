@@ -90,6 +90,7 @@
     <ClInclude Include="CountingSort.h" />
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="FiniteAutomation.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphSearchTree.h" />
     <ClInclude Include="Heap.h" />
@@ -133,6 +134,7 @@
     <ClCompile Include="CoinChange.cpp" />
     <ClCompile Include="CountingSort.cpp" />
     <ClCompile Include="FiniteAutomation.cpp" />
+    <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="GraphSearchTree.cpp" />
     <ClCompile Include="HeapSort.cpp" />
     <ClCompile Include="KMP.cpp" />

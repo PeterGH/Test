@@ -1,6 +1,8 @@
 #pragma once
 
 #include <functional>
+#include <vector>
+#include "BinarySearch.h"
 #include "BitSet.h"
 #include "String.h"
 
@@ -17,6 +19,11 @@ namespace Test {
 		// Parameter sum is the summation of the returned subarray
 		// Parameters start and end are the start and end indices of the returned subarray
 		static void MaxSubArray(const int * input, int length, int & start, int & end, long & sum);
+
+		// An inversion is a pair (i, j) such that i < j and I[i] > I[j].
+		// Find an inversion such that j - i is maximized.
+		// Use parameter first to return value i and distance to return value j - i
+		static void MaxInversionDistance(const int * input, int length, int & first, int & distance);
 
 		// Find the indices of min and max elements.
 		// minIndex will be the index of the minimum value (first index if there are more than on minimum value).

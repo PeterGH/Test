@@ -54,4 +54,63 @@ namespace Test {
 			sum = input[max];
 		}
 	}
+
+	// http://leetcode.com/2011/05/a-distance-maximizing-problem.html
+	void Array::MaxInversionDistance(const int * input, int length, int & first, int & distance)
+	{
+		first = 0;
+		distance = 0;
+		if (input == nullptr || length <= 1) return;
+
+		// Array firstIndices to contain the indices of a increasing subsequence of input
+		// Each element of firstIndices is a candidate for the first index of maximum inversion
+		//       firstIndices[0]  <       firstIndices[1]  <       firstIndices[2]  < ...
+		// input[firstIndices[0]] < input[firstIndices[1]] < input[firstIndices[2]] < ...
+		unique_ptr<int[]> firstIndices(new int[length]);
+		int index = 0;
+		firstIndices[index] = 0;
+		// Ignore input[length - 1]
+		for (int i = 1; i < length - 1; i++) {
+			if (input[i] > input[firstIndices[index]]) {
+				index++;
+				firstIndices[index] = i;
+			}
+		}
+
+		int prev = INT_MAX;
+		// Ignore input[0]
+		for (int i = length - 1; i > 0; i--) {
+			if (input[i] >= prev) {
+				// if there is an inversion ending at i, then
+				// prev would extend it by one more position.
+				// So input[i] should be ignored.
+				continue;
+			}
+
+			prev = input[i];
+
+			while (i <= firstIndices[index]) index--;
+
+			int f =
+				BinarySearch::FindPositionToInsert<int,int>(
+				i,
+				firstIndices.get(),
+				index+1,
+				false,
+				[&](int i) -> int { return input[i]; });
+
+			if (f == index) {
+				// input[i] is equal or greater than all elements referenced by firstIndices
+				continue;
+			}
+
+			// firstIndices[f] < firstIndices[f + 1] < i
+			// input[firstIndices[f]] <= input[i] < input[firstIndices[f+1]]
+			int d = i - firstIndices[f + 1];
+			if (d > distance) {
+				distance = d;
+				first = firstIndices[f + 1];
+			}
+		}
+	}
 }

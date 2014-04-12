@@ -18,6 +18,13 @@ namespace Test {
 		template<class T> static int SearchRecursively(const T & element, const T * input, int low, int high, bool firstIndex = true);
 
 		// Assume array input[0..(length-1)] is already sorted and it can contain duplicate elements.
+		// Return -1 if transform(element) < transform(input[0])
+		// Return (length-1) if transform(input[length-1]) < transform(element) or transform(input[length-1]) = transform(element) and firstIndex is false
+		// Return i if transform(input[i]) < transform(element) <= transform(input[i+1]) and firstIndex is true
+		// Return i if transform(input[i]) <= transform(element) < transform(input[i+1]) and firstIndex is false
+		template<class T, class C> static int FindPositionToInsert(const T & element, const T * input, int length, bool firstIndex = true, function<C(T)> transform = [&](T v)->C{ return v;});
+
+		// Assume array input[0..(length-1)] is already sorted and it can contain duplicate elements.
 		// Return -1 if element < input[0]
 		// Return (length-1) if input[length-1] < e or input[length-1] = e and firstIndex is false
 		// Return i if input[i] < e <= input[i+1] and firstIndex is true
@@ -95,11 +102,12 @@ namespace Test {
 		}
 	}
 
-	template<class T> int BinarySearch::FindPositionToInsert(const T & element, const T * input, int length, bool firstIndex)
+	template<class T, class C> int BinarySearch::FindPositionToInsert(const T & element, const T * input, int length, bool firstIndex, function<C(T)> transform)
 	{
 		if (input == nullptr) throw invalid_argument("input is a nullptr");
 		if (length <= 0) throw invalid_argument(String::Format("length %d is invalid", length));
 
+		C v = transform(element);
 		int low = 0;
 		int high = length - 1;
 		// The loop ensures input[0..(low-1)] < e < input[(high+1)..(length-1)]
@@ -108,7 +116,7 @@ namespace Test {
 			// (2) If low = high - 1, then low = middle < high
 			// (3) If low = high, then low = middle = high
 			int middle = (low + high) >> 1;
-			if (element < input[middle]) {
+			if (v < transform(input[middle])) {
 				if (middle == low) {
 					// Case (2) or (3)
 					return low - 1;
@@ -116,7 +124,7 @@ namespace Test {
 					// Case (1)
 					high = middle - 1;
 				}
-			} else if (element > input[middle]) {
+			} else if (v > transform(input[middle])) {
 				if (middle == high) {
 					// Case (3)
 					return high;
@@ -127,13 +135,13 @@ namespace Test {
 			} else {
 				// The input array may contain duplicate elements.
 				if (firstIndex) {
-					while (middle > 0 && element == input[middle - 1]) {
+					while (middle > 0 && v == transform(input[middle - 1])) {
 						middle--;
 					}
 
 					middle--;
 				} else {
-					while (middle < length - 1 && element == input[middle + 1]) {
+					while (middle < length - 1 && v == transform(input[middle + 1])) {
 						middle++;
 					}
 				}
@@ -144,6 +152,11 @@ namespace Test {
 
 		// We should not hit this line.
 		throw runtime_error(String::Format("Cannot find insertion point. low = %d, high = %d", low, high));
+	}
+
+	template<class T> int BinarySearch::FindPositionToInsert(const T & element, const T * input, int length, bool firstIndex)
+	{
+		return FindPositionToInsert<T, T>(element, input, length, firstIndex, [&](T e)->T{return e;});
 	}
 
 	template<class T> T BinarySearch::FindMedian(const T * input, int length)

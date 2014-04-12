@@ -153,6 +153,9 @@
     <ClInclude Include="NodeGraphTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GeometryTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -288,6 +291,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NodeGraphTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

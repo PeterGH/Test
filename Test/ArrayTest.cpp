@@ -743,4 +743,94 @@ void ArrayTest::Init(void)
 		Test::Array::MaxSubArray(A8, L, l, r, sum);
 		check(L - 1, L - 1, 7);
 	});
+
+	Add("MaxInversionDistance", [&](){
+		auto check = [&](int A[], int l, int f, int d) {
+			for (int i = 0; i < l; i++) {
+				Logger().WriteInformation("\t%d", A[i]);
+			}
+			Logger().WriteInformation("\n");
+			int first;
+			int distance;
+			Test::Array::MaxInversionDistance(A, l, first, distance);
+			Logger().WriteInformation("\t%d(%d)\t%d(%d)\n\n", first, f, distance, d);
+			ASSERT1(first == f);
+			ASSERT1(distance == d);
+		};
+
+		int A0[] = { 1 };
+		check(A0, 1, 0, 0);
+
+		int A1[] = { 2, 3 };
+		check(A1, 2, 0, 0);
+
+		int A2[] = { 3, 2 };
+		check(A2, 2, 0, 1);
+
+		int A3[] = { 4, 4 };
+		check(A3, 2, 0, 0);
+
+		int A4[] = { 5, 6, 7 };
+		check(A4, 3, 0, 0);
+
+		int A5[] = { 5, 7, 6 };
+		check(A5, 3, 1, 1);
+
+		int A6[] = { 6, 5, 7 };
+		check(A6, 3, 0, 1);
+
+		int A7[] = { 6, 7, 5 };
+		check(A7, 3, 0, 2);
+
+		int A8[] = { 7, 5, 6 };
+		check(A8, 3, 0, 2);
+
+		int A9[] = { 7, 6, 5 };
+		check(A9, 3, 0, 2);
+
+		int A10[] = { 5, 7, 7 };
+		check(A10, 3, 0, 0);
+
+		int A11[] = { 7, 5, 7 };
+		check(A11, 3, 0, 1);
+
+		int A12[] = { 7, 7, 5 };
+		check(A12, 3, 0, 2);
+
+		int A14[] = { 7, 7, 7 };
+		check(A14, 3, 0, 0);
+
+		int A15[] = { 1, 2, 3, 4 };
+		check(A15, 4, 0, 0);
+
+		int A16[] = { 1, 3, 2, 4 };
+		check(A16, 4, 1, 1);
+
+		int A17[] = { 4, 3, 2, 1 };
+		check(A17, 4, 0, 3);
+
+		int A18[] = { 3, 4, 1, 2 };
+		check(A18, 4, 0, 3);
+
+		int A19[] = { 2, 4, 1, 3 };
+		check(A19, 4, 1, 2);
+
+		int A20[] = { 2, 1, 4, 3 };
+		check(A20, 4, 2, 1);
+
+		int A21[] = { 4, 2, 3, 1 };
+		check(A21, 4, 0, 3);
+
+		int A22[] = { 1, 2, 4, 3 };
+		check(A22, 4, 2, 1);
+
+		int A23[] = { 1, 3, 4, 2 };
+		check(A23, 4, 1, 2);
+
+		int A24[] = { 1, 4, 3, 2 };
+		check(A24, 4, 1, 2);
+
+		int A25[] = { 1, 4, 2, 3 };
+		check(A25, 4, 1, 2);
+	});
 }
