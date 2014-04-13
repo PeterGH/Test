@@ -565,4 +565,54 @@ void PartitionTest::Init(void)
 			}
 		}
 	});
+
+	Add("MinMaxPartitionSum", [&](){
+		auto check = [&](int * input, int length, int partitions, int expectedSum){
+			Logger().WriteInformation("\nInput:");
+			for (int i = 0; i < length; i++) {
+				Logger().WriteInformation(" %d", input[i]);
+			}
+			Logger().WriteInformation("\n%d partitions\n", partitions);
+
+			unique_ptr<int[]> indices(new int[partitions]);
+			int sum = Test::Partition::MinMaxPartitionSum<int>(input, length, indices.get(), partitions);
+
+			for (int j = 0; j < partitions; j++) {
+				int b = indices[j];
+				int e = j == partitions - 1 ? length - 1 : indices[j+1] - 1;
+				int s = 0;
+				for (int i = b; i <= e; i++) {
+					s += input[i];
+				}
+				Logger().WriteInformation("  %d = sum{A[%d..%d]} = ", s, b, e);
+				for (int i = b; i <= e; i++) {
+					Logger().WriteInformation("%s%d", i == b ? "" : " + ", input[i]);
+				}
+				Logger().WriteInformation("\n");
+			}
+
+			ASSERT1(sum == expectedSum);
+		};
+
+		int A1[] = { 100, 200, 300, 400, 500, 600, 700, 800, 900 };
+		check(A1, 9, 3, 1700);
+
+		int A2[] = { 100, 200, 300, 400, 500, 600, 700, 800, 900 };
+		check(A2, 9, 9, 900);
+
+		int A3[] = { 900, 800, 700, 600, 500, 400, 300, 200, 100 };
+		check(A3, 9, 3, 1700);
+
+		int A4[] = { 100, 100, 100, 100, 100, 100, 100, 100, 100 };
+		check(A4, 9, 3, 300);
+
+		int A5[] = { 100, 100, 100, 100, 100, 100, 100, 100, 100 };
+		check(A5, 9, 2, 500);
+
+		int A7[] = { 100, 100, 100, 100, 100, 100, 100, 100, 100 };
+		check(A7, 9, 9, 100);
+
+		int A6[] = { 100, 100, 100, 100, 100, 100, 100, 100, 100 };
+		check(A6, 9, 4, 300);
+	});
 }
