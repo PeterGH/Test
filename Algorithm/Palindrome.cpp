@@ -109,9 +109,13 @@ namespace Test {
 	// At step k, length[i] is the length of the longest palindrome subsequence from input[i-k] to input[i]
 	void Palindrome::LengthArray(string & input, size_t length[])
 	{
+		unique_ptr<size_t[]> len2(new size_t[input.length()]);
+		unique_ptr<size_t[]> len1(new size_t[input.length()]);
+
 		// Compute all length=1 substrings
 		for (int i = input.length() - 1; i >= 0; i --) {
 			length[i] = 1;
+			len2[i] = length[i];
 		}
 
 		// Compute all length=2 substrings
@@ -119,39 +123,42 @@ namespace Test {
 			if (input[i-1] == input[i]) {
 				length[i] = 2;
 			}
+			len1[i] = length[i];
 		}	
 
 		// Compute all length=(k+1) substrings
 		for (int k = 2; k < (int)input.length(); k ++) {
 			for (int i = input.length() - 1; i >= k; i --) {
 				if (input[i-k] == input[i]) {
-					// Here is a bug: length[i-1] refer to range input[i-k..i-1], but actually we need input[i-k+1..i-1]
-					length[i] = 2 + length[i-1];
+					length[i] = 2 + len2[i-1];
 				} else {
-					length[i] = max(length[i-1], length[i]);
+					length[i] = max(len1[i-1], len1[i]);
 				}
 			}
+
+			memcpy(len2.get(), len1.get(), input.length() * sizeof(size_t));
+			memcpy(len1.get(), length, input.length() * sizeof(size_t));
 		}
 	}
 
 	void Palindrome::LongestSubsequenceByArray(string & input, string & output)
 	{
-		unique_ptr<size_t> length(new size_t[input.length()]);
+		unique_ptr<size_t[]> length(new size_t[input.length()]);
 		LengthArray(input, length.get());
 
-		size_t i = 0;
-		size_t j = input.length() - 1;
+		int i = 0;
+		int j = (int)input.length() - 1;
 
-		if (length.get()[j] == 1) {
+		if (length[j] == 1) {
 			// no Parlindrome found, return the last char
 			output.append(&input[j], 1);
 			return;
 		}
 
-		size_t k = 0;
+		int k = 0;
 
-		while ((j-i) > 1) {
-			while (length.get()[j-1] == length.get()[j]) {
+		while ((j-i+1) > std::max((int)length[j], 2)) {
+			while (length[j-1] == length[j]) {
 				j --;
 			}
 			
@@ -166,10 +173,12 @@ namespace Test {
 			i ++;
 		}
 
-		output.insert(k, 1, input[j]);
-		if (i+1 == j && input[i] == input[j]) {
-			// The palindrome is of form xxxccxxxx
+		if (j == i + 1 && input[i] != input[j]) {
 			output.insert(k, 1, input[j]);
+		} else {
+			for (int p = j; p >= i; p--) {
+				output.insert(k, 1, input[p]);
+			}
 		}
 	}
 

@@ -87,7 +87,7 @@ void PalindromeTest::Init(void)
 		check(1234567, false);
 	});
 
-	Add("Substring", [&](){
+	Add("Substring1", [&](){
 		string i = "babcbabcbaccba";
 		string o;
 		Logger().WriteInformation("%s\n", i.c_str());

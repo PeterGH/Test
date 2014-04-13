@@ -232,14 +232,16 @@ namespace Test {
 		}
 
 		// +---------------------------------------+  
-		// 0               m m+1                  s-1
+		// 0             m-1 m m+1                s-1
 		// +-----------------------------------------------+
-		// 0                n n+1                         l-1
+		// 0             n-1 n n+1                        l-1
 		//
 		// m + n = medianIndex - 1
-		// Median = S[m] if L[n] < S[m] <= L[n+1]
-		//          L[n] if S[m] < L[n] <= S[m+1]
-		//          S[m] if S[m] == L[n]
+		// Median = S[m] if L[n] < S[m] <= L[n+1], i.e. S[m] is the lower median and L[n+1] is the higher median
+		//          L[n] if S[m] < L[n] <= S[m+1], i.e. L[m] is the lower median and S[n+1] is the higher median
+		//          S[m] if S[m] == L[n], i.e. S[m] or L[n] is the lower median and min(S[m+1], L[n+1]) is the higher median
+		//          max(S[m-1], L[n+1]) if S[m] > L[n+1]
+		//          max(S[m+1], L[n-1]) if L[n] > S[m+1]
 
 		int low = 0;
 		int high = shortLength - 1;
@@ -259,8 +261,8 @@ namespace Test {
 					} else {
 						// Case (3)
 						// s[m] > l[n] and s[m] > l[n+1]
-						// Compare s[m-1] and l[n+1]
-						if (m - 1 >= 0 || shortArray[m - 1] > longArray[n + 1])
+						// Compare s[m-1] and l[n+1] as one of them is the median
+						if (m - 1 >= 0 && shortArray[m - 1] > longArray[n + 1])
 							return shortArray[m - 1];
 						else return longArray[n + 1];
 					}

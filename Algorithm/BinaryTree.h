@@ -41,6 +41,7 @@ namespace Test {
 
 			T & Content() { return this->content; }
 
+			// Node does not need to have a pointer to its parent
 			static void PreOrderWalk(Node * node, function<void(Node *)> f)
 			{
 				if (node == nullptr || f == nullptr) return;
@@ -53,6 +54,7 @@ namespace Test {
 			void PreOrderWalk(function<void(Node *)> f) { PreOrderWalk(this, f); }
 
 			// Non-recursive with stack
+			// Node does not need to have a pointer to its parent
 			static void PreOrderWalk2(Node * node, function<void(Node *)> f)
 			{
 				if (node == nullptr || f == nullptr) return;
@@ -70,6 +72,7 @@ namespace Test {
 			}
 
 			// Non-recursive without stack
+			// Node needs to have a pointer to its parent
 			static void PreOrderWalk3(Node * node, function<void(Node *)> f)
 			{
 				if (node == nullptr || f == nullptr) return;
@@ -97,7 +100,24 @@ namespace Test {
 				}
 			}
 
+			// Non-recursive with stack
+			// Node does not need to have a pointer to its parent
+			static void PreOrderWalk4(Node * node, function<void(Node *)> f)
+			{
+				if (node == nullptr || f == nullptr) return;
+				stack<Node *> path;
+				path.push(node);
+				while (!path.empty()) {
+					Node * top = path.top();
+					path.pop();
+					f(top);
+					if (top->right != nullptr) path.push(top->right);
+					if (top->left != nullptr) path.push(top->left);
+				}
+			}
+
 			// Recursive
+			// Node does not need to have a pointer to its parent
 			static void InOrderWalk(Node * node, function<void(Node *)> f)
 			{
 				if (node == nullptr || f == nullptr) return;
@@ -109,6 +129,7 @@ namespace Test {
 			void InOrderWalk(function<void(Node *)> f) { InOrderWalk(this, f); }
 
 			// Non-recursive with stack
+			// Node does not need to have a pointer to its parent
 			static void InOrderWalk2(Node * node, function<void(Node *)> f)
 			{
 				if (node == nullptr || f == nullptr) return;
@@ -127,6 +148,7 @@ namespace Test {
 			}
 
 			// Non-recursive without stack
+			// Node needs to have a pointer to its parent
 			static void InOrderWalk3(Node * node, function<void(Node *)> f)
 			{
 				if (node == nullptr || f == nullptr) return;
@@ -150,7 +172,33 @@ namespace Test {
 				}
 			}
 
+			// Non-recursive with stack
+			// Node does not need to have a pointer to its parent
+			static void InOrderWalk4(Node * node, function<void(Node *)> f)
+			{
+				if (node == nullptr || f == nullptr) return;
+				stack<Node *> path;
+				path.push(node);
+				Node * prev = nullptr;
+				while (!path.empty()) {
+					Node * top = path.top();
+					if (prev == top->right) {
+						prev = top;
+						path.pop();
+					} else if (top->left != nullptr && prev != top->left) {
+						prev = top;
+						path.push(top->left);
+					} else {
+						f(top);
+						prev = top;
+						if (top->right != nullptr) path.push(top->right);
+						else path.pop();
+					}
+				}
+			}
+
 			// Recursive
+			// Node does not need to have a pointer to its parent
 			static void PostOrderWalk(Node * node, function<void(Node *)> f)
 			{
 				if (node == nullptr || f == nullptr) return;
@@ -162,6 +210,7 @@ namespace Test {
 			void PostOrderWalk(function<void(Node *)> f) { PostOrderWalk(this, f); }
 
 			// Non-recursive with stack
+			// Node does not need to have a pointer to its parent
 			static void PostOrderWalk2(Node * node, function<void(Node *)> f)
 			{
 				if (node == nullptr || f == nullptr) return;
@@ -185,6 +234,7 @@ namespace Test {
 			}
 
 			// Non-recursive without stack
+			// Node needs to have a pointer to its parent
 			static void PostOrderWalk3(Node * node, function<void(Node *)> f)
 			{
 				if (node == nullptr || f == nullptr) return;
@@ -204,6 +254,33 @@ namespace Test {
 						} else {
 							f(node);
 							node = node->parent;
+						}
+					}
+				}
+			}
+
+			// Non-recursive with stack
+			static void PostOrderWalk4(Node * node, function<void(Node *)> f)
+			{
+				if (node == nullptr || f == nullptr) return;
+				stack<Node *> path;
+				path.push(node);
+				Node * prev = node;
+				while (!path.empty()) {
+					Node * top = path.top();
+					if (prev == top->right) {
+						f(top);
+						prev = top;
+						path.pop();
+					} else if (top->left != nullptr && prev != top->left) {
+						prev = top;
+						path.push(top->left);
+					} else {
+						prev = top;
+						if (top->right != nullptr) path.push(top->right);
+						else {
+							f(top);
+							path.pop();
 						}
 					}
 				}
@@ -345,14 +422,17 @@ namespace Test {
 		void PreOrderWalk(function<void(T)> f);
 		void PreOrderWalk2(function<void(T)> f);
 		void PreOrderWalk3(function<void(T)> f);
+		void PreOrderWalk4(function<void(T)> f);
 
 		void InOrderWalk(function<void(T)> f);
 		void InOrderWalk2(function<void(T)> f);
 		void InOrderWalk3(function<void(T)> f);
+		void InOrderWalk4(function<void(T)> f);
 
 		void PostOrderWalk(function<void(T)> f);
 		void PostOrderWalk2(function<void(T)> f);
 		void PostOrderWalk3(function<void(T)> f);
+		void PostOrderWalk4(function<void(T)> f);
 
 		// Get the height of tree
 		int Height(void);
@@ -467,6 +547,14 @@ namespace Test {
 		}
 	}
 
+	template<class T> void BinaryTree<T>::PreOrderWalk4(function<void(T)> f)
+	{
+		if (this->root != nullptr) {
+			auto fNode = [=](Node * x){ f(x->Content()); };
+			Node::PreOrderWalk4(this->root, fNode);
+		}
+	}
+
 	template<class T> void BinaryTree<T>::InOrderWalk(function<void(T)> f)
 	{
 		if (this->root != nullptr) {
@@ -491,6 +579,14 @@ namespace Test {
 		}
 	}
 
+	template<class T> void BinaryTree<T>::InOrderWalk4(function<void(T)> f)
+	{
+		if (this->root != nullptr) {
+			auto fNode = [=](Node * x){ f(x->Content()); };
+			Node::InOrderWalk4(this->root, fNode);
+		}
+	}
+
 	template<class T> void BinaryTree<T>::PostOrderWalk(function<void(T)> f)
 	{
 		if (this->root != nullptr) {
@@ -512,6 +608,14 @@ namespace Test {
 		if (this->root != nullptr) {
 			auto fNode = [=](Node * x){ f(x->Content()); };
 			Node::PostOrderWalk3(this->root, fNode);
+		}
+	}
+
+	template<class T> void BinaryTree<T>::PostOrderWalk4(function<void(T)> f)
+	{
+		if (this->root != nullptr) {
+			auto fNode = [=](Node * x){ f(x->Content()); };
+			Node::PostOrderWalk4(this->root, fNode);
 		}
 	}
 
