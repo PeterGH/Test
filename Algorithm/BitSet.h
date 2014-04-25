@@ -52,16 +52,19 @@ namespace Test {
 		// Flip one bit position
 		__declspec(dllexport) void Flip(size_t position);
 
+		// Logical shift to the left with a distance
+		__declspec(dllexport) void LeftShift(size_t distance);
+
 		// Reset all bits to zero
 		__declspec(dllexport) void Reset(void);
 
 		// Reset one bit position to zero
 		__declspec(dllexport) void Reset(size_t position);
 
-		// Set all bits to zero
+		// Set all bits to one
 		__declspec(dllexport) void Set(void);
 
-		// Set one bit position to zero
+		// Set one bit position to one
 		__declspec(dllexport) void Set(size_t position);
 
 		// Test if one bit position is set

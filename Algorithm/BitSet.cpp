@@ -5,7 +5,15 @@ namespace Test {
 	ostream & operator<<(ostream & os, const BitSet & bitset)
 	{
 		if (nullptr != bitset._ints) {
-			for (int i = bitset._lenInt - 1; i >= 0; i--) {
+			bool skip = true;
+			int y = bitset._lenBit % bitset.IntBits;
+			for (int j = 28; j >= 0; j -= 4) {
+				unsigned int c = 0xF & (bitset._ints[bitset._lenInt - 1] >> j);
+				if (skip && y > 0 && j > y && c == 0) continue;
+				skip = false;
+				os << hex << c;
+			}
+			for (int i = bitset._lenInt - 2; i >= 0; i--) {
 				for (int j = 28; j >= 0; j -= 4) {
 					os << hex << (0xF & (bitset._ints[i] >> j));
 				}
@@ -18,7 +26,15 @@ namespace Test {
 	Log & operator<<(Log & log, const BitSet & bitset)
 	{
 		if (nullptr != bitset._ints) {
-			for (int i = bitset._lenInt - 1; i >= 0; i--) {
+			bool skip = true;
+			int y = bitset._lenBit % bitset.IntBits;
+			for (int j = 28; j >= 0; j -= 4) {
+				unsigned int c = 0xF & (bitset._ints[bitset._lenInt - 1] >> j);
+				if (skip && y > 0 && j > y && c == 0) continue;
+				skip = false;
+				log.WriteInformation("%X", c);
+			}
+			for (int i = bitset._lenInt - 2; i >= 0; i--) {
 				for (int j = 28; j >= 0; j -= 4) {
 					log.WriteInformation("%X", (0xF & (bitset._ints[i] >> j)));
 				}
@@ -35,7 +51,7 @@ namespace Test {
 	// position = x*n + y
 	void BitSet::Position(int position, int * x, int * y) const
 	{
-		if (position < 0 || position >= _lenBit) throw invalid_argument(String::Format("Invalid bit position [%d]", position));
+		if (position < 0 || position >= _lenBit) throw invalid_argument(String::Format("Invalid bit position [%d] (not in [0, %d])", position, _lenBit - 1));
 		*x = position / IntBits;
 		*y = position % IntBits;
 	}
@@ -131,6 +147,40 @@ namespace Test {
 		int x, y;
 		Position(position, &x, &y);
 		_ints[x] ^= 0x1 << y;
+	}
+
+	void BitSet::LeftShift(size_t distance)
+	{
+		if (distance == 0) return;
+
+		int x, y;
+		Position(distance, &x, &y);
+
+		if (y == 0) {
+			// +----+----+----+----+----+----+----+----+----+----+
+			// 0    1         x-1  x         L-x            L-1
+			// |<------- x ------->|         |<------- x ------->|
+			for (int i = _lenInt - 1; i >= x; i--) {
+				_ints[i] = _ints[i-x];
+			}
+		} else {
+			// +--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+
+			// 0        1                 x                                   L-x               L-1
+			// |<----------- x ---------->|<-y->|                       |<-y->|<----------- x ---------->|
+			unsigned int mask = (0x1 << y) - 1;
+			for (int i = _lenInt - 1; i > x; i--) {
+				_ints[i] = ((_ints[i-x] << y) & ~mask) + ((_ints[i-x-1] >> (IntBits - y)) & mask);
+			}
+			_ints[x] = (_ints[0] << y) & ~mask;
+		}
+
+		if (x > 0) {
+			memset(_ints, 0, x * sizeof(int));
+		}
+
+		// Reset the bits out of range
+		int z = _lenBit % IntBits;
+		if (z > 0) _ints[_lenInt - 1] &= (0x1 << z) - 1;
 	}
 
 	void BitSet::Reset(void)
