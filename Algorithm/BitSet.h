@@ -29,6 +29,9 @@ namespace Test {
 		// Int array storing the managed bits
 		int * _ints;
 
+		// Logical shift to the left with a distance
+		void LeftShiftInternal(size_t distance);
+
 		// Given a zero-based bit position, calculate the index x of integer and the index y of bit in the integer.
 		void Position(int position, int * x, int * y) const;
 	public:
@@ -60,6 +63,12 @@ namespace Test {
 
 		// Reset one bit position to zero
 		__declspec(dllexport) void Reset(size_t position);
+
+		// Reverse bits of an unsigned integer
+		__declspec(dllexport) static void Reverse(unsigned int & bits);
+
+		// Reverse bits
+		__declspec(dllexport) void Reverse(void);
 
 		// Set all bits to one
 		__declspec(dllexport) void Set(void);

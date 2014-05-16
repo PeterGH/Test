@@ -549,4 +549,297 @@ void BitSetTest::Init(void)
 			}
 		}
 	});
+
+	Add("Reverse", [&](){
+		auto check = [&](unsigned int n, unsigned int e){
+			Test::BitSet::Reverse(n);
+			ASSERT1(e == n);
+		};
+
+		check(1, 0x80000000);
+		check(2, 0x40000000);
+		check(4, 0x20000000);
+		check(8, 0x10000000);
+		check(16, 0x08000000);
+		check(256, 0x00800000);
+		check(0x00010000, 0x00008000);
+		check(0x80000000, 1);
+		check(0x40000000, 2);
+		check(0x20000000, 4);
+		check(0x10000000, 8);
+		check(0x08000000, 16);
+		check(0x00800000, 256);
+		check(0x00008000, 0x00010000);
+	});
+
+	Add("Reverse2", [&](){
+		{
+			Logger().WriteInformation("\n");
+			Test::BitSet m(1);
+			m.Set();
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+		}
+		{
+			Logger().WriteInformation("\n");
+			Test::BitSet m(2);
+			m.Set(0);
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+			ASSERT1(!m.Test(1));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(!m.Test(0));
+			ASSERT1(m.Test(1));
+
+			m.Set(0);
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+			ASSERT1(m.Test(1));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+			ASSERT1(m.Test(1));
+		}
+		{
+			Logger().WriteInformation("\n");
+			Test::BitSet m(3);
+			m.Set(0);
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+			ASSERT1(!m.Test(1));
+			ASSERT1(!m.Test(2));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(!m.Test(0));
+			ASSERT1(!m.Test(1));
+			ASSERT1(m.Test(2));
+
+			m.Set(1);
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(!m.Test(0));
+			ASSERT1(m.Test(1));
+			ASSERT1(m.Test(2));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+			ASSERT1(m.Test(1));
+			ASSERT1(!m.Test(2));
+
+			m.Set(2);
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+			ASSERT1(m.Test(1));
+			ASSERT1(m.Test(2));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+			ASSERT1(m.Test(1));
+			ASSERT1(m.Test(2));
+		}
+		{
+			Logger().WriteInformation("\n");
+			Test::BitSet m(4);
+			m.Set(0);
+			m.Set(2);
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+			ASSERT1(!m.Test(1));
+			ASSERT1(m.Test(2));
+			ASSERT1(!m.Test(3));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(!m.Test(0));
+			ASSERT1(m.Test(1));
+			ASSERT1(!m.Test(2));
+			ASSERT1(m.Test(3));
+		}
+		{
+			Logger().WriteInformation("\n");
+			Test::BitSet m(5);
+			m.Set(0);
+			m.Set(2);
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+			ASSERT1(!m.Test(1));
+			ASSERT1(m.Test(2));
+			ASSERT1(!m.Test(3));
+			ASSERT1(!m.Test(4));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(!m.Test(0));
+			ASSERT1(!m.Test(1));
+			ASSERT1(m.Test(2));
+			ASSERT1(!m.Test(3));
+			ASSERT1(m.Test(4));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+			ASSERT1(!m.Test(1));
+			ASSERT1(m.Test(2));
+			ASSERT1(!m.Test(3));
+			ASSERT1(!m.Test(4));
+		}
+		{
+			Logger().WriteInformation("\n");
+			Test::BitSet m(6);
+			m.Set(3);
+			m.Set(5);
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(!m.Test(0));
+			ASSERT1(!m.Test(1));
+			ASSERT1(!m.Test(2));
+			ASSERT1(m.Test(3));
+			ASSERT1(!m.Test(4));
+			ASSERT1(m.Test(5));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			ASSERT1(m.Test(0));
+			ASSERT1(!m.Test(1));
+			ASSERT1(m.Test(2));
+			ASSERT1(!m.Test(3));
+			ASSERT1(!m.Test(4));
+			ASSERT1(!m.Test(5));
+		}
+		{
+			Logger().WriteInformation("\n");
+			Test::BitSet m(32);
+			m.Set(31);
+			(Logger() << m).WriteInformation("\n");
+			for (int i = 0; i < 31; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(31));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			for (int i = 1; i < 32; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(0));
+		}
+		{
+			Logger().WriteInformation("\n");
+			Test::BitSet m(33);
+			m.Set(31);
+			m.Set(32);
+			(Logger() << m).WriteInformation("\n");
+			for (int i = 0; i < 31; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(31));
+			ASSERT1(m.Test(32));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			for (int i = 2; i < 32; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(0));
+			ASSERT1(m.Test(1));
+		}
+		{
+			Logger().WriteInformation("\n");
+			Test::BitSet m(64);
+			m.Set(31);
+			m.Set(63);
+			(Logger() << m).WriteInformation("\n");
+			for (int i = 0; i < 31; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(31));
+			for (int i = 32; i < 63; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(63));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			for (int i = 1; i < 32; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(0));
+			for (int i = 33; i < 64; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(32));
+		}
+		{
+			Logger().WriteInformation("\n");
+			Test::BitSet m(65);
+			m.Set(31);
+			m.Set(63);
+			m.Set(64);
+			(Logger() << m).WriteInformation("\n");
+			for (int i = 0; i < 31; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(31));
+			for (int i = 32; i < 63; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(63));
+			ASSERT1(m.Test(64));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			for (int i = 2; i < 33; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(0));
+			ASSERT1(m.Test(1));
+			for (int i = 34; i < 65; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(33));
+		}
+		{
+			Logger().WriteInformation("\n");
+			Test::BitSet m(96);
+			m.Set(31);
+			m.Set(63);
+			m.Set(95);
+			(Logger() << m).WriteInformation("\n");
+			for (int i = 0; i < 31; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(31));
+			for (int i = 32; i < 63; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(63));
+			for (int i = 64; i < 95; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(95));
+
+			m.Reverse();
+			(Logger() << m).WriteInformation("\n");
+			for (int i = 1; i < 32; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(0));
+			for (int i = 33; i < 64; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(32));
+			for (int i = 65; i < 96; i++) {
+				ASSERT1(!m.Test(i));
+			}
+			ASSERT1(m.Test(64));
+		}
+	});
 }

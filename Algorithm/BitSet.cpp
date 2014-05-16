@@ -9,7 +9,7 @@ namespace Test {
 			int y = bitset._lenBit % bitset.IntBits;
 			for (int j = 28; j >= 0; j -= 4) {
 				unsigned int c = 0xF & (bitset._ints[bitset._lenInt - 1] >> j);
-				if (skip && y > 0 && j > y && c == 0) continue;
+				if (skip && y > 0 && j >= y && c == 0) continue;
 				skip = false;
 				os << hex << c;
 			}
@@ -30,7 +30,7 @@ namespace Test {
 			int y = bitset._lenBit % bitset.IntBits;
 			for (int j = 28; j >= 0; j -= 4) {
 				unsigned int c = 0xF & (bitset._ints[bitset._lenInt - 1] >> j);
-				if (skip && y > 0 && j > y && c == 0) continue;
+				if (skip && y > 0 && j >= y && c == 0) continue;
 				skip = false;
 				log.WriteInformation("%X", c);
 			}
@@ -149,12 +149,13 @@ namespace Test {
 		_ints[x] ^= 0x1 << y;
 	}
 
-	void BitSet::LeftShift(size_t distance)
+	void BitSet::LeftShiftInternal(size_t distance)
 	{
 		if (distance == 0) return;
 
 		int x, y;
-		Position(distance, &x, &y);
+		x = distance / IntBits;
+		y = distance % IntBits;
 
 		if (y == 0) {
 			// +----+----+----+----+----+----+----+----+----+----+
@@ -177,7 +178,11 @@ namespace Test {
 		if (x > 0) {
 			memset(_ints, 0, x * sizeof(int));
 		}
+	}
 
+	void BitSet::LeftShift(size_t distance)
+	{
+		LeftShiftInternal(distance);
 		// Reset the bits out of range
 		int z = _lenBit % IntBits;
 		if (z > 0) _ints[_lenInt - 1] &= (0x1 << z) - 1;
@@ -193,6 +198,41 @@ namespace Test {
 		int x, y;
 		Position(position, &x, &y);
 		_ints[x] &= ~(0x1 << y);
+	}
+
+	void BitSet::Reverse(unsigned int & bits)
+	{
+		bits = ((bits & 0x55555555) << 1) | ((bits & 0xAAAAAAAA) >> 1);
+		bits = ((bits & 0x33333333) << 2) | ((bits & 0xCCCCCCCC) >> 2);
+		bits = ((bits & 0x0F0F0F0F) << 4) | ((bits & 0xF0F0F0F0) >> 4);
+		bits = ((bits & 0x00FF00FF) << 8) | ((bits & 0xFF00FF00) >> 8);
+		bits = ((bits & 0x0000FFFF) << 16) | ((bits & 0xFFFF0000) >> 16);
+	}
+
+	void BitSet::Reverse(void)
+	{
+		size_t d = _lenInt * IntBits - _lenBit;
+		// 0YXXXXXXX
+		// YXXXXXXX0
+		LeftShiftInternal(d);
+		int i = 0;
+		int j = _lenInt - 1;
+		while (j > i) {
+			unsigned int u = _ints[i];
+			unsigned int v = _ints[j];
+			Reverse(u);
+			Reverse(v);
+			_ints[i] = v;
+			_ints[j] = u;
+			i++;
+			j--;
+		}
+
+		if (j == i) {
+			unsigned int t = _ints[i];
+			Reverse(t);
+			_ints[i] = t;
+		}
 	}
 
 	void BitSet::Set(void)
