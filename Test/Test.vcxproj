@@ -82,6 +82,7 @@
     <ClInclude Include="Array2DTest.h" />
     <ClInclude Include="ArrayTest.h" />
     <ClInclude Include="AVLTreeTest.h" />
+    <ClInclude Include="BinaryIteratorTest.h" />
     <ClInclude Include="BinaryNodeTest.h" />
     <ClInclude Include="BinarySearchTest.h" />
     <ClInclude Include="BinarySearchTreeTest.h" />
@@ -132,6 +133,7 @@
     <ClCompile Include="Array2DTest.cpp" />
     <ClCompile Include="ArrayTest.cpp" />
     <ClCompile Include="AVLTreeTest.cpp" />
+    <ClCompile Include="BinaryIteratorTest.cpp" />
     <ClCompile Include="BinaryNodeTest.cpp" />
     <ClCompile Include="BinarySearchTest.cpp" />
     <ClCompile Include="BinarySearchTreeTest.cpp" />

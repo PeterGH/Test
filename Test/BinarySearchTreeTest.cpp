@@ -98,6 +98,7 @@ void BinarySearchTreeTest::Init(void)
 			vector<int> v2;
 			vector<int> v3;
 			vector<int> v4;
+			vector<int> v5;
 
 			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function<void(int)>{
 				function<void(int)> w = [&](int n){
@@ -112,15 +113,21 @@ void BinarySearchTreeTest::Init(void)
 			tree.PreOrderWalkWithStack2(f(v3));
 			tree.PreOrderWalkWithOutStack(f(v4));
 
+			for (Test::PreOrderBinaryIterator<int, Test::BinaryNodeWithParent> it = tree.PreOrderBegin(); it != tree.PreOrderEnd(); it++) {
+				v5.push_back(*it);
+			}
+
 			ASSERT2(v1.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v1.size()));
 			ASSERT2(v2.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v2.size()));
 			ASSERT2(v3.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v3.size()));
 			ASSERT2(v4.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v4.size()));
+			ASSERT2(v5.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v5.size()));
 
 			for (int j = 0; j < count; j++) {
 				ASSERT1(v1[j] == v2[j]);
 				ASSERT1(v1[j] == v3[j]);
 				ASSERT1(v1[j] == v4[j]);
+				ASSERT1(v1[j] == v5[j]);
 			}
 		}
 	});
@@ -141,6 +148,7 @@ void BinarySearchTreeTest::Init(void)
 			vector<int> v2;
 			vector<int> v3;
 			vector<int> v4;
+			vector<int> v5;
 
 			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function<void(int)>{
 				function<void(int)> w = [&](int n){
@@ -155,15 +163,21 @@ void BinarySearchTreeTest::Init(void)
 			tree.InOrderWalkWithStack2(f(v3));
 			tree.InOrderWalkWithOutStack(f(v4));
 
+			for (Test::InOrderBinaryIterator<int, Test::BinaryNodeWithParent> it = tree.InOrderBegin(); it != tree.InOrderEnd(); it++) {
+				v5.push_back(*it);
+			}
+
 			ASSERT2(v1.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v1.size()));
 			ASSERT2(v2.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v2.size()));
 			ASSERT2(v3.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v3.size()));
 			ASSERT2(v4.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v4.size()));
+			ASSERT2(v5.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v5.size()));
 
 			for (int j = 0; j < count; j++) {
 				ASSERT1(v1[j] == v2[j]);
 				ASSERT1(v1[j] == v3[j]);
 				ASSERT1(v1[j] == v4[j]);
+				ASSERT1(v1[j] == v5[j]);
 			}
 		}
 	});
@@ -184,6 +198,7 @@ void BinarySearchTreeTest::Init(void)
 			vector<int> v2;
 			vector<int> v3;
 			vector<int> v4;
+			vector<int> v5;
 
 			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function<void(int)>{
 				function<void(int)> w = [&](int n){
@@ -198,15 +213,21 @@ void BinarySearchTreeTest::Init(void)
 			tree.PostOrderWalkWithStack2(f(v3));
 			tree.PostOrderWalkWithOutStack(f(v4));
 
+			for (Test::PostOrderBinaryIterator<int, Test::BinaryNodeWithParent> it = tree.PostOrderBegin(); it != tree.PostOrderEnd(); it++) {
+				v5.push_back(*it);
+			}
+
 			ASSERT2(v1.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v1.size()));
 			ASSERT2(v2.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v2.size()));
 			ASSERT2(v3.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v3.size()));
 			ASSERT2(v4.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v4.size()));
+			ASSERT2(v5.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v5.size()));
 
 			for (int j = 0; j < count; j++) {
 				ASSERT1(v1[j] == v2[j]);
 				ASSERT1(v1[j] == v3[j]);
 				ASSERT1(v1[j] == v4[j]);
+				ASSERT1(v1[j] == v5[j]);
 			}
 		}
 	});

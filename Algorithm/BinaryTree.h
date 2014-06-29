@@ -1,5 +1,9 @@
 #pragma once
 #include <functional>
+#include "BinaryIterator.h"
+#include "PreOrderBinaryIterator.h"
+#include "InOrderBinaryIterator.h"
+#include "PostOrderBinaryIterator.h"
 using namespace std;
 
 namespace Test {
@@ -94,5 +98,14 @@ namespace Test {
 		{
 			if (this->root != nullptr) this->root->Print();
 		}
+
+		PreOrderBinaryIterator<T, N> PreOrderBegin() const { return PreOrderBinaryIterator<T, N>(this->root); }
+		PreOrderBinaryIterator<T, N> PreOrderEnd() const { return PreOrderBinaryIterator<T, N>(); }
+
+		InOrderBinaryIterator<T, N> InOrderBegin() const { return InOrderBinaryIterator<T, N>(this->root); }
+		InOrderBinaryIterator<T, N> InOrderEnd() const { return InOrderBinaryIterator<T, N>(); }
+
+		PostOrderBinaryIterator<T, N> PostOrderBegin() const { return PostOrderBinaryIterator<T, N>(this->root); }
+		PostOrderBinaryIterator<T, N> PostOrderEnd() const { return PostOrderBinaryIterator<T, N>(); }
 	};
 }
