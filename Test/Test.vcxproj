@@ -82,6 +82,7 @@
     <ClInclude Include="Array2DTest.h" />
     <ClInclude Include="ArrayTest.h" />
     <ClInclude Include="AVLTreeTest.h" />
+    <ClInclude Include="BinaryNodeTest.h" />
     <ClInclude Include="BinarySearchTest.h" />
     <ClInclude Include="BinarySearchTreeTest.h" />
     <ClInclude Include="BinaryTreeTest.h" />
@@ -91,6 +92,7 @@
     <ClInclude Include="CoinChangeTest.h" />
     <ClInclude Include="ColumnSortTest.h" />
     <ClInclude Include="CountingSortTest.h" />
+    <ClInclude Include="DestructorTest.h" />
     <ClInclude Include="FiniteAutomationTest.h" />
     <ClInclude Include="GeometryTest.h" />
     <ClInclude Include="GraphTest.h" />
@@ -130,6 +132,7 @@
     <ClCompile Include="Array2DTest.cpp" />
     <ClCompile Include="ArrayTest.cpp" />
     <ClCompile Include="AVLTreeTest.cpp" />
+    <ClCompile Include="BinaryNodeTest.cpp" />
     <ClCompile Include="BinarySearchTest.cpp" />
     <ClCompile Include="BinarySearchTreeTest.cpp" />
     <ClCompile Include="BinaryTreeTest.cpp" />
@@ -139,6 +142,7 @@
     <ClCompile Include="CoinChangeTest.cpp" />
     <ClCompile Include="ColumnSortTest.cpp" />
     <ClCompile Include="CountingSortTest.cpp" />
+    <ClCompile Include="DestructorTest.cpp" />
     <ClCompile Include="FiniteAutomationTest.cpp" />
     <ClCompile Include="GeometryTest.cpp" />
     <ClCompile Include="GraphTest.cpp" />

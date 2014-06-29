@@ -37,19 +37,40 @@ void BinarySearchTreeTest::Init(void)
 		cout << "PreOrder:";
 		tree.PreOrderWalk(p);
 		cout << endl;
+		cout << "PreOrderWithStack:";
+		tree.PreOrderWalkWithStack(p);
+		cout << endl;
+		cout << "PreOrderWithStack2:";
+		tree.PreOrderWalkWithStack2(p);
+		cout << endl;
+		cout << "PreOrderWithOutStack:";
+		tree.PreOrderWalkWithOutStack(p);
+		cout << endl;
 
 		cout << "InOrder: ";
 		tree.InOrderWalk(p);
 		cout << endl;
-		cout << "InOrder: ";
-		tree.InOrderWalk2(p);
+		cout << "InOrderWithStack: ";
+		tree.InOrderWalkWithStack(p);
 		cout << endl;
-		cout << "InOrder: ";
-		tree.InOrderWalk3(p);
+		cout << "InOrderWithStack2: ";
+		tree.InOrderWalkWithStack2(p);
+		cout << endl;
+		cout << "InOrderWithOutStack: ";
+		tree.InOrderWalkWithOutStack(p);
 		cout << endl;
 
 		cout << "PostOrder: ";
 		tree.PostOrderWalk(p);
+		cout << endl;
+		cout << "PostOrderWithStack: ";
+		tree.PostOrderWalkWithStack(p);
+		cout << endl;
+		cout << "PostOrderWithStack2: ";
+		tree.PostOrderWalkWithStack2(p);
+		cout << endl;
+		cout << "PostOrderWithOutStack: ";
+		tree.PostOrderWalkWithOutStack(p);
 		cout << endl;
 
 		int v = tree.Successor(34);
@@ -87,9 +108,9 @@ void BinarySearchTreeTest::Init(void)
 			};
 
 			tree.PreOrderWalk(f(v1));
-			tree.PreOrderWalk2(f(v2));
-			tree.PreOrderWalk3(f(v3));
-			tree.PreOrderWalk4(f(v4));
+			tree.PreOrderWalkWithStack(f(v2));
+			tree.PreOrderWalkWithStack2(f(v3));
+			tree.PreOrderWalkWithOutStack(f(v4));
 
 			ASSERT2(v1.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v1.size()));
 			ASSERT2(v2.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v2.size()));
@@ -130,9 +151,9 @@ void BinarySearchTreeTest::Init(void)
 			};
 
 			tree.InOrderWalk(f(v1));
-			tree.InOrderWalk2(f(v2));
-			tree.InOrderWalk3(f(v3));
-			tree.InOrderWalk4(f(v4));
+			tree.InOrderWalkWithStack(f(v2));
+			tree.InOrderWalkWithStack2(f(v3));
+			tree.InOrderWalkWithOutStack(f(v4));
 
 			ASSERT2(v1.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v1.size()));
 			ASSERT2(v2.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v2.size()));
@@ -173,9 +194,9 @@ void BinarySearchTreeTest::Init(void)
 			};
 
 			tree.PostOrderWalk(f(v1));
-			tree.PostOrderWalk2(f(v2));
-			tree.PostOrderWalk3(f(v3));
-			tree.PostOrderWalk4(f(v4));
+			tree.PostOrderWalkWithStack(f(v2));
+			tree.PostOrderWalkWithStack2(f(v3));
+			tree.PostOrderWalkWithOutStack(f(v4));
 
 			ASSERT2(v1.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v1.size()));
 			ASSERT2(v2.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v2.size()));
@@ -277,9 +298,7 @@ void BinarySearchTreeTest::Init(void)
 			}
 
 			int h = tree.Height();
-			int h2 = tree.Height2();
-			cout << "Run " << i << ", " << count << " elements, height " << h << " " << h2 << endl;
-			ASSERT1(h == h2);
+			cout << "Run " << i << ", " << count << " elements, height " << h << endl;
 		}
 	});
 }

@@ -7,6 +7,7 @@
 #include "ArrayTest.h"
 #include "Array2DTest.h"
 #include "AVLTreeTest.h"
+#include "BinaryNodeTest.h"
 #include "BinarySearchTest.h"
 #include "BinarySearchTreeTest.h"
 #include "BinaryTreeTest.h"
@@ -16,6 +17,7 @@
 #include "CoinChangeTest.h"
 #include "ColumnSortTest.h"
 #include "CountingSortTest.h"
+#include "DestructorTest.h"
 #include "FiniteAutomationTest.h"
 #include "GraphTest.h"
 #include "GeometryTest.h"
@@ -75,6 +77,7 @@ int main(int argc, char * argv[])
 	suite.Add(new ArrayTest(log));
 	suite.Add(new Array2DTest(log));
 	suite.Add(new AVLTreeTest(log));
+	suite.Add(new BinaryNodeTest(log));
 	suite.Add(new BinarySearchTest(log));
 	suite.Add(new BinarySearchTreeTest(log));
 	suite.Add(new BinaryTreeTest(log));
@@ -84,6 +87,7 @@ int main(int argc, char * argv[])
 	suite.Add(new CoinChangeTest(log));
 	suite.Add(new ColumnSortTest(log));
 	suite.Add(new CountingSortTest(log));
+	suite.Add(new DestructorTest(log));
 	suite.Add(new FiniteAutomationTest(log));
 	suite.Add(new GraphTest(log));
 	suite.Add(new GeometryTest(log));

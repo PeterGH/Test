@@ -79,6 +79,8 @@
     <ClInclude Include="Argument.h" />
     <ClInclude Include="Array.h" />
     <ClInclude Include="Array2D.h" />
+    <ClInclude Include="BinaryNode.h" />
+    <ClInclude Include="BinaryNodeWithParent.h" />
     <ClInclude Include="BinarySearch.h" />
     <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="BinaryTree.h" />
@@ -87,6 +89,7 @@
     <ClInclude Include="CircularSingleLinkList.h" />
     <ClInclude Include="CoinChange.h" />
     <ClInclude Include="ColumnSort.h" />
+    <ClInclude Include="CompleteBinaryTree.h" />
     <ClInclude Include="CountingSort.h" />
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="FiniteAutomation.h" />

@@ -96,9 +96,6 @@
     <ClInclude Include="BinaryTreeTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BinarySearchTreeTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RedBlackTreeTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -154,6 +151,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GeometryTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BinaryNodeTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DestructorTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BinarySearchTreeTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -236,9 +242,6 @@
     <ClCompile Include="BinaryTreeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BinarySearchTreeTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RedBlackTreeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -294,6 +297,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GeometryTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BinaryNodeTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DestructorTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BinarySearchTreeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
