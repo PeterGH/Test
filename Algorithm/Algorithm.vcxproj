@@ -79,6 +79,7 @@
     <ClInclude Include="Argument.h" />
     <ClInclude Include="Array.h" />
     <ClInclude Include="Array2D.h" />
+    <ClInclude Include="BinaryIterator.h" />
     <ClInclude Include="BinaryNode.h" />
     <ClInclude Include="BinaryNodeWithParent.h" />
     <ClInclude Include="BinarySearch.h" />
@@ -98,6 +99,7 @@
     <ClInclude Include="GraphSearchTree.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="HeapSort.h" />
+    <ClInclude Include="InOrderBinaryIterator.h" />
     <ClInclude Include="InsertionSort.h" />
     <ClInclude Include="KMP.h" />
     <ClInclude Include="Knapsack.h" />
@@ -113,6 +115,8 @@
     <ClInclude Include="Palindrome.h" />
     <ClInclude Include="Partition.h" />
     <ClInclude Include="Permutation.h" />
+    <ClInclude Include="PostOrderBinaryIterator.h" />
+    <ClInclude Include="PreOrderBinaryIterator.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="QuickSort.h" />
     <ClInclude Include="RadixSort.h" />

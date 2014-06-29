@@ -7,6 +7,7 @@
 #include "ArrayTest.h"
 #include "Array2DTest.h"
 #include "AVLTreeTest.h"
+#include "BinaryIteratorTest.h"
 #include "BinaryNodeTest.h"
 #include "BinarySearchTest.h"
 #include "BinarySearchTreeTest.h"
@@ -77,6 +78,7 @@ int main(int argc, char * argv[])
 	suite.Add(new ArrayTest(log));
 	suite.Add(new Array2DTest(log));
 	suite.Add(new AVLTreeTest(log));
+	suite.Add(new BinaryIteratorTest(log));
 	suite.Add(new BinaryNodeTest(log));
 	suite.Add(new BinarySearchTest(log));
 	suite.Add(new BinarySearchTreeTest(log));

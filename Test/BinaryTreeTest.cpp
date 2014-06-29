@@ -10,16 +10,58 @@ void BinaryTreeTest::Init(void)
 		}
 
 		tree.Print();
+
+		Logger().WriteInformation("PreOrder iteration:\n");
+		for (Test::PreOrderBinaryIterator<int, Test::BinaryNode> it = tree.PreOrderBegin(); it != tree.PreOrderEnd(); it++) {
+			Logger().WriteInformation(" %d", *it);
+		}
+
+		Logger().WriteInformation("\n");
+
+		Logger().WriteInformation("InOrder iteration:\n");
+		for (Test::InOrderBinaryIterator<int, Test::BinaryNode> it = tree.InOrderBegin(); it != tree.InOrderEnd(); it++) {
+			Logger().WriteInformation(" %d", *it);
+		}
+
+		Logger().WriteInformation("\n");
+
+		Logger().WriteInformation("PostOrder iteration:\n");
+		for (Test::PostOrderBinaryIterator<int, Test::BinaryNode> it = tree.PostOrderBegin(); it != tree.PostOrderEnd(); it++) {
+			Logger().WriteInformation(" %d", *it);
+		}
+
+		Logger().WriteInformation("\n");
 	});
 
 	Add("BinaryNodeWithParentInsert", [&](){
-		Test::CompleteBinaryTree<int, Test::BinaryNode> tree;
+		Test::CompleteBinaryTree<int, Test::BinaryNodeWithParent> tree;
 
 		for (int i = 0; i < 20; i++) {
 			tree.Insert(i);
 		}
 
 		tree.Print();
+
+		Logger().WriteInformation("PreOrder iteration:\n");
+		for (Test::PreOrderBinaryIterator<int, Test::BinaryNodeWithParent> it = tree.PreOrderBegin(); it != tree.PreOrderEnd(); it++) {
+			Logger().WriteInformation(" %d", *it);
+		}
+
+		Logger().WriteInformation("\n");
+
+		Logger().WriteInformation("InOrder iteration:\n");
+		for (Test::InOrderBinaryIterator<int, Test::BinaryNodeWithParent> it = tree.InOrderBegin(); it != tree.InOrderEnd(); it++) {
+			Logger().WriteInformation(" %d", *it);
+		}
+
+		Logger().WriteInformation("\n");
+
+		Logger().WriteInformation("PostOrder iteration:\n");
+		for (Test::PostOrderBinaryIterator<int, Test::BinaryNodeWithParent> it = tree.PostOrderBegin(); it != tree.PostOrderEnd(); it++) {
+			Logger().WriteInformation(" %d", *it);
+		}
+
+		Logger().WriteInformation("\n");
 	});
 
 	Add("BinaryNodeHeight", [&](){
