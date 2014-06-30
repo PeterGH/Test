@@ -1,6 +1,9 @@
 #pragma once
 #include "BinaryNodeWithParent.h"
 #include "BinaryTree.h"
+#include "PreOrderBinaryIteratorWithOutStack.h"
+#include "InOrderBinaryIteratorWithOutStack.h"
+#include "PostOrderBinaryIteratorWithOutStack.h"
 
 namespace Test {
 	template<class T> class BinarySearchTree : public BinaryTree<T, BinaryNodeWithParent> {
@@ -367,5 +370,14 @@ namespace Test {
 		{
 			return Verify(this->root);
 		}
+
+		PreOrderBinaryIteratorWithOutStack<T> PreOrderWithOutStackBegin() const { return PreOrderBinaryIteratorWithOutStack<T>(this->root); }
+		PreOrderBinaryIteratorWithOutStack<T> PreOrderWithOutStackEnd() const { return PreOrderBinaryIteratorWithOutStack<T>(); }
+
+		InOrderBinaryIteratorWithOutStack<T> InOrderWithOutStackBegin() const { return InOrderBinaryIteratorWithOutStack<T>(this->root); }
+		InOrderBinaryIteratorWithOutStack<T> InOrderWithOutStackEnd() const { return InOrderBinaryIteratorWithOutStack<T>(); }
+
+		PostOrderBinaryIteratorWithOutStack<T> PostOrderWithOutStackBegin() const { return PostOrderBinaryIteratorWithOutStack<T>(this->root); }
+		PostOrderBinaryIteratorWithOutStack<T> PostOrderWithOutStackEnd() const { return PostOrderBinaryIteratorWithOutStack<T>(); }
 	};
 }
