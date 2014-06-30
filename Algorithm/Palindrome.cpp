@@ -226,6 +226,7 @@ namespace Test {
 
 		// Given current index c and its palindrome length p[c],
 		// try to expand it as far as possible.
+		// p[c] is updated.
 		auto expand = [&](int c) -> int {
 			while (true) {
 				int m = c - p[c] - 1;
@@ -261,23 +262,29 @@ namespace Test {
 		int c = 0;	// The center of current range
 		int r = 0;	// The right-most boundary of current range, i.e., c + p[c]
 		for (int i = 1; i < length; i++) {
-			if (i > r) {
-				p[i] = 0;
+			// p[i] should be the same of its mirror about the current center but also bounded by the current range
+			int j = 2 * c - i;
+			if (i < r && p[j] < r - i) {
+				// p[i] does not exceed the right-most boundary
+				p[i] = p[j];
 			} else {
-				int j = 2 * c - i;
-				// p[i] should be the same of its mirror about the current center but also bounded by the current range
-				p[i] = std::min(p[j], r - i);
-			}
+				// p[i] exceeds the right-most boundary
+				p[i] = i >= r ? 0 : r - i;
 
-			expand(i);
-			if (i + p[i] > r) {
-				c = i;
-				r = c + p[c];
-			}
+				// Expand as much as possible
+				expand(i);
 
-			if (p[i] > maxLength) {
-				maxLength = p[i];
-				maxIndex = i;
+				// Update range
+				if (i + p[i] > r) {
+					c = i;
+					r = c + p[c];
+				}
+
+				// Update maximum
+				if (p[i] > maxLength) {
+					maxLength = p[i];
+					maxIndex = i;
+				}
 			}
 
 			// printi();
