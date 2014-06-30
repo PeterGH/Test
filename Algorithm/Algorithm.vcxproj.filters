@@ -186,6 +186,15 @@
     <ClInclude Include="PostOrderBinaryIterator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PreOrderBinaryIteratorWithOutStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InOrderBinaryIteratorWithOutStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PostOrderBinaryIteratorWithOutStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">

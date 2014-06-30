@@ -100,6 +100,7 @@
     <ClInclude Include="Heap.h" />
     <ClInclude Include="HeapSort.h" />
     <ClInclude Include="InOrderBinaryIterator.h" />
+    <ClInclude Include="InOrderBinaryIteratorWithOutStack.h" />
     <ClInclude Include="InsertionSort.h" />
     <ClInclude Include="KMP.h" />
     <ClInclude Include="Knapsack.h" />
@@ -116,7 +117,9 @@
     <ClInclude Include="Partition.h" />
     <ClInclude Include="Permutation.h" />
     <ClInclude Include="PostOrderBinaryIterator.h" />
+    <ClInclude Include="PostOrderBinaryIteratorWithOutStack.h" />
     <ClInclude Include="PreOrderBinaryIterator.h" />
+    <ClInclude Include="PreOrderBinaryIteratorWithOutStack.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="QuickSort.h" />
     <ClInclude Include="RadixSort.h" />
