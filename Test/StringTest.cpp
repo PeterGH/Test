@@ -60,8 +60,11 @@ void StringTest::Init(void)
 	Add("IsMatch", [&](){
 		auto check = [&](char * s, char * p, bool e){
 			bool m = Test::String::IsMatch(s, p);
-			Logger().WriteInformation("%s %s %s\n", s, m ? "==" : "!=", p);
+			bool m2 = Test::String::IsMatch2(s, p);
+			Logger().WriteInformation("IsMatch:\t%s %s %s\n", s, m ? "==" : "!=", p);
+			Logger().WriteInformation("IsMatch2:\t%s %s %s\n", s, m2 ? "==" : "!=", p);
 			ASSERT1(m == e);
+			ASSERT1(m2 == e);
 		};
 
 		check("aa", "a", false);
@@ -72,6 +75,7 @@ void StringTest::Init(void)
 		check("aaa", "aa", false);
 		check("aaa", "*aa", false);
 		check("aaa", "aa*", true);
+		check("aaa", "aa**", true);
 		check("aaa", "a*a", true);
 		check("aaa", "...", true);
 		check("aaa", ".*.", true);

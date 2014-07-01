@@ -64,14 +64,11 @@ namespace Test {
 	{
 		if (input == nullptr || pattern == nullptr) return false;
 
+		while (*pattern == '*') pattern++;
+
 		if (*input == '\0' && *pattern == '\0') return true;
 
 		if (*input == '\0' || *pattern == '\0') return false;
-
-		if (*pattern == '*') {
-			do { ++pattern; } while (*pattern == '*');
-			return IsMatch(input, pattern);
-		}
 
 		if (*input != *pattern && *pattern != '.') {
 			// input    a#######
@@ -96,5 +93,67 @@ namespace Test {
 
 			return IsMatch(input, pattern+2);
 		}
+	}
+
+	bool String::IsMatch2(char * input, char * pattern)
+	{
+		if (input == nullptr || pattern == nullptr) return false;
+
+		while (*pattern == '*') {
+			// Ignore leading '*'
+			pattern++;
+		}
+
+		while ((*input == *pattern || *pattern == '.') && *input != '\0' && *pattern != '\0' && *(pattern+1) != '*') {
+			// input    a#######
+			// pattern  a####
+			//          .####
+			input++;
+			pattern++;
+		}
+
+		if (*input == '\0' && *pattern == '\0') {
+			// input and pattern match
+			return true;
+		}
+
+		if (*pattern == '\0') {
+			// input has more characters unmatched
+			return false;
+		}
+
+		if (*input == '\0') {
+			// pattern has more characters. Need to check if they are '*'
+			while (*pattern == '*') pattern++;
+			if (*pattern != '\0') return false;
+			else return true;
+		}
+
+		if (*(pattern+1) != '*') {
+			// input    a#######
+			// pattern  b####
+			return false;
+		}
+
+		// Now *(pattern+1) == '*'
+
+		if (*input != *pattern && *pattern != '.') {
+			// input    a#######
+			// pattern  b*###
+			return IsMatch2(input, pattern+2);
+		}
+
+		// input    a#######
+		// pattern  a*###
+		//          .*###
+		while (*input != '\0' && (*input == *pattern || *pattern == '.')) {
+			if (IsMatch2(input, pattern+2)) return true;
+			input++;
+		}
+
+		// input	'\0'
+		// input    b#######
+		// pattern  a*###
+		return IsMatch2(input, pattern+2);
 	}
 }

@@ -91,6 +91,7 @@ namespace Test {
 		// Any other characters
 		// Return true if the entire input string match the pattern.
 		__declspec(dllexport) static bool IsMatch(char * input, char * pattern);
+		__declspec(dllexport) static bool IsMatch2(char * input, char * pattern);
 
 		template<class T, class C> static basic_string<C> Join(const T * input, int length, const C * separator)
 		{
