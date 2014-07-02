@@ -12,6 +12,14 @@ namespace Test {
 	protected:
 		N<T> * root;
 
+		static N<T> * Search(N<T> * node, const T & content)
+		{
+			if (node == nullptr || node->content == content) return node;
+			N<T> * left = Search((N<T> *)node->left, content);
+			if (left != nullptr) return left;
+			else return Search((N<T> *)node->right, content);
+		}
+
 	public:
 		BinaryTree(void) : root(nullptr) {}
 
@@ -24,6 +32,11 @@ namespace Test {
 		}
 
 		virtual void Insert(T & content) {}
+
+		virtual N<T> * Search(const T & content)
+		{
+			return Search(this->root, content);
+		}
 
 		void PreOrderWalk(function<void(T)> f)
 		{

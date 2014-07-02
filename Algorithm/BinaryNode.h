@@ -219,7 +219,36 @@ namespace Test {
 		}
 
 		virtual int Height(void) { return Height(this); }
-				
+
+		static BinaryNode * LowestCommonAncestor(BinaryNode * node, BinaryNode * first, BinaryNode * second)
+		{
+			if (node == nullptr || first == nullptr || second == nullptr) return nullptr;
+			if (node == first || node == second) return node;
+
+			auto hits = [=](BinaryNode * n, BinaryNode * f, BinaryNode * s) -> int {
+				if (n == nullptr) return 0;
+				int h = hits(n->left, f, s) + hits(n->right, f, s);
+				if (n == f || n == s) return 1 + h;
+				else return h;
+			};
+
+			int h = hits(node->left, first, second);
+			if (h == 1) return node;
+			else if (h == 2) return LowestCommonAncestor(node->left, first, second);
+			else return LowestCommonAncestor(node->right, first, second);
+		}
+
+		static BinaryNode * LowestCommonAncestor2(BinaryNode * node, BinaryNode * first, BinaryNode * second)
+		{
+			if (node == nullptr || first == nullptr || second == nullptr) return nullptr;
+			if (node == first || node == second) return node;
+			BinaryNode * left = LowestCommonAncestor2(node->left, first, second);
+			BinaryNode * right = LowestCommonAncestor2(node->right, first, second);
+			if (left != nullptr && right != nullptr) return node;
+			if (left != nullptr) return left;
+			else return right;
+		}
+
 		static stringstream & ToString(stringstream & ss, BinaryNode * node, int x, vector<int> & y)
 		{
 			if (node == nullptr) return ss;

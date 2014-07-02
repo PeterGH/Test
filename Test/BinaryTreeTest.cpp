@@ -11,6 +11,12 @@ void BinaryTreeTest::Init(void)
 
 		tree.Print();
 
+		int v;
+		for (int i = 0; i < 20; i++) {
+			v = tree.Search(i)->content;
+			ASSERT1(v == i);
+		}
+
 		Logger().WriteInformation("PreOrder iteration:\n");
 		for (Test::PreOrderBinaryIterator<int, Test::BinaryNode> it = tree.PreOrderBegin(); it != tree.PreOrderEnd(); it++) {
 			Logger().WriteInformation(" %d", *it);
@@ -41,6 +47,12 @@ void BinaryTreeTest::Init(void)
 		}
 
 		tree.Print();
+
+		int v;
+		for (int i = 0; i < 20; i++) {
+			v = tree.Search(i)->content;
+			ASSERT1(v == i);
+		}
 
 		Logger().WriteInformation("PreOrder iteration:\n");
 		for (Test::PreOrderBinaryIterator<int, Test::BinaryNodeWithParent> it = tree.PreOrderBegin(); it != tree.PreOrderEnd(); it++) {

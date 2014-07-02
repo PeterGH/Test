@@ -110,6 +110,18 @@ void BinarySearchTreeTest::Init(void)
 		v = tree.Predecessor(42);
 		cout << "Predecessor of 42: " << v << endl;
 		ASSERT1(v == 35);
+
+		v = tree.Search(3)->content;
+		ASSERT1(v == 3);
+
+		v = tree.Search(42)->content;
+		ASSERT1(v == 42);
+
+		v = tree.Search(8)->content;
+		ASSERT1(v == 8);
+
+		Test::BinaryNodeWithParent<int> * pn = tree.Search(0);
+		ASSERT1(pn == nullptr);
 	});
 
 	Add("PreOrder", [&](){

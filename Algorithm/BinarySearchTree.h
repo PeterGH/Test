@@ -41,14 +41,14 @@ namespace Test {
 			return Insert(node, newNode);
 		}
 
-		static BinaryNodeWithParent<T> * SearchRecursively(BinaryNodeWithParent<T> * node, T & content)
+		static BinaryNodeWithParent<T> * SearchRecursively(BinaryNodeWithParent<T> * node, const T & content)
 		{
 			if (node == nullptr || node->content == content) return node;
-			if (content < node->content) return Search(node->left, content);
-			else return Search(node->right, content);
+			if (content < node->content) return SearchRecursively((BinaryNodeWithParent<T> *)node->left, content);
+			else return SearchRecursively((BinaryNodeWithParent<T> *)node->right, content);
 		}
 
-		static BinaryNodeWithParent<T> * SearchIteratively(BinaryNodeWithParent<T> * node, T & content)
+		static BinaryNodeWithParent<T> * SearchIteratively(BinaryNodeWithParent<T> * node, const T & content)
 		{
 			if (node == nullptr || node->content == content) return node;
 			while (node != nullptr && content != node->content) {
@@ -321,6 +321,11 @@ namespace Test {
 			} else {
 				Insert(this->root, content);
 			}
+		}
+
+		BinaryNodeWithParent<T> * Search(const T & content)
+		{
+			return SearchRecursively((BinaryNodeWithParent<T> *)this->root, content);
 		}
 
 		T & Min(void)
