@@ -61,6 +61,61 @@ namespace Test {
 			return node;
 		}
 
+		static BinaryNodeWithParent<T> * LowestCommonAncestor(BinaryNodeWithParent<T> * first, BinaryNodeWithParent<T> * second)
+		{
+			if (first == nullptr || second == nullptr) return nullptr;
+
+			set<BinaryNodeWithParent<T> *> visited;
+			pair<set<BinaryNodeWithParent<T>*>::iterator, bool> result;
+
+			auto checkAndMoveUp = [&](BinaryNodeWithParent<T> ** p) -> bool {
+				if (*p != nullptr) {
+					result = visited.insert(*p);
+					if (!result.second) {
+						// Insert failed because the same element already exists
+						return true;
+					}
+					*p = (*p)->parent;
+				}
+				return false;
+			};
+
+			while (first != nullptr || second != nullptr) {
+				if (checkAndMoveUp(&first)) {
+					return first;
+				}
+
+				if (checkAndMoveUp(&second)) {
+					return second;
+				}
+			}
+
+			return nullptr;
+		}
+
+		static BinaryNodeWithParent<T> * LowestCommonAncestor2(BinaryNodeWithParent<T> * first, BinaryNodeWithParent<T> * second)
+		{
+			if (first == nullptr || second == nullptr) return nullptr;
+
+			int df = first->Depth();
+			int ds = second->Depth();
+
+			int dd = df > ds ? df - ds : ds - df;
+			BinaryNodeWithParent<T> * h = df < ds ? first : second;
+			BinaryNodeWithParent<T> * l = df < ds ? second : first;
+			for (int i = 0; i < dd; i++) {
+				l = l->parent;
+			}
+
+			while (h != nullptr && l != nullptr) {
+				if (h == l) return h;
+				h = h->parent;
+				l = l->parent;
+			}
+
+			return nullptr;
+		}
+
 		static BinaryNodeWithParent<T> * Min(BinaryNodeWithParent<T> * node)
 		{
 			if (node == nullptr) return node;
@@ -326,6 +381,28 @@ namespace Test {
 		BinaryNodeWithParent<T> * Search(const T & content)
 		{
 			return SearchRecursively((BinaryNodeWithParent<T> *)this->root, content);
+		}
+
+		virtual const T & LowestCommonAncestor(const T & first, const T & second)
+		{
+			BinaryNodeWithParent<T> * firstNode = this->Search(first);
+			BinaryNodeWithParent<T> * secondNode = this->Search(second);
+			BinaryNodeWithParent<T> * node = LowestCommonAncestor(firstNode, secondNode);
+			if (node == nullptr) {
+				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
+			}
+			return node->content;
+		}
+
+		virtual const T & LowestCommonAncestor2(const T & first, const T & second)
+		{
+			BinaryNodeWithParent<T> * firstNode = this->Search(first);
+			BinaryNodeWithParent<T> * secondNode = this->Search(second);
+			BinaryNodeWithParent<T> * node = LowestCommonAncestor2(firstNode, secondNode);
+			if (node == nullptr) {
+				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
+			}
+			return node->content;
 		}
 
 		T & Min(void)

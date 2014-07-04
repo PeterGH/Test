@@ -20,6 +20,35 @@ namespace Test {
 			else return Search((N<T> *)node->right, content);
 		}
 
+		static N<T> * LowestCommonAncestor(N<T> * node, N<T> * first, N<T> * second)
+		{
+			if (node == nullptr || first == nullptr || second == nullptr) return nullptr;
+			if (node == first || node == second) return node;
+
+			function<int(N<T> *, N<T> *, N<T> *)> hits = [&](N<T> * n, N<T> * f, N<T> * s) -> int {
+				if (n == nullptr) return 0;
+				int h = hits((N<T> *)n->left, f, s) + hits((N<T> *)n->right, f, s);
+				if (n == f || n == s) return 1 + h;
+				else return h;
+			};
+
+			int h = hits((N<T> *)node->left, first, second);
+			if (h == 1) return node;
+			else if (h == 2) return LowestCommonAncestor((N<T> *)node->left, first, second);
+			else return LowestCommonAncestor((N<T> *)node->right, first, second);
+		}
+
+		static N<T> * LowestCommonAncestor2(N<T> * node, N<T> * first, N<T> * second)
+		{
+			if (node == nullptr || first == nullptr || second == nullptr) return nullptr;
+			if (node == first || node == second) return node;
+			N<T> * left = LowestCommonAncestor2((N<T> *)node->left, first, second);
+			N<T> * right = LowestCommonAncestor2((N<T> *)node->right, first, second);
+			if (left != nullptr && right != nullptr) return node;
+			if (left != nullptr) return left;
+			else return right;
+		}
+
 	public:
 		BinaryTree(void) : root(nullptr) {}
 
@@ -36,6 +65,28 @@ namespace Test {
 		virtual N<T> * Search(const T & content)
 		{
 			return Search(this->root, content);
+		}
+
+		virtual const T & LowestCommonAncestor(const T & first, const T & second)
+		{
+			N<T> * firstNode = this->Search(first);
+			N<T> * secondNode = this->Search(second);
+			N<T> * node = LowestCommonAncestor(this->root, firstNode, secondNode);
+			if (node == nullptr) {
+				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
+			}
+			return node->content;
+		}
+
+		virtual const T & LowestCommonAncestor2(const T & first, const T & second)
+		{
+			N<T> * firstNode = this->Search(first);
+			N<T> * secondNode = this->Search(second);
+			N<T> * node = LowestCommonAncestor2(this->root, firstNode, secondNode);
+			if (node == nullptr) {
+				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
+			}
+			return node->content;
 		}
 
 		void PreOrderWalk(function<void(T)> f)

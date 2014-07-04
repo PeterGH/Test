@@ -1,6 +1,7 @@
 #pragma once
 #include "BinaryNode.h"
-
+#include <set>
+using namespace std;
 namespace Test {
 	template<class T> class BinaryNodeWithParent : public BinaryNode<T> {
 	public:
@@ -97,6 +98,7 @@ namespace Test {
 
 		void PostOrderWalkWithOutStack(function<void(T)> f) { PostOrderWalkWithOutStack(this, f); }
 
+		// Count height of tree rooted at node
 		// Non-recursive
 		static int Height2(BinaryNodeWithParent * node)
 		{
@@ -145,5 +147,18 @@ namespace Test {
 		}
 
 		int Height(void) { return Height2(this); }
+
+		// Count the distance of node from the root
+		static int Depth(BinaryNodeWithParent * node)
+		{
+			int d = 0;
+			while (node != nullptr) {
+				d++;
+				node = node->parent;
+			}
+			return d;
+		}
+
+		int Depth(void) { return Depth(this); }
 	};
 }

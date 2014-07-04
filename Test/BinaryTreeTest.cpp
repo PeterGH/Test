@@ -37,6 +37,11 @@ void BinaryTreeTest::Init(void)
 		}
 
 		Logger().WriteInformation("\n");
+
+		int a = tree.LowestCommonAncestor(10, 15);
+		Logger().WriteInformation("10 and 15 lowest common ancestor is %d\n", a);
+		int b = tree.LowestCommonAncestor2(10, 15);
+		Logger().WriteInformation("10 and 15 lowest common ancestor is %d\n", b);
 	});
 
 	Add("BinaryNodeWithParentInsert", [&](){
@@ -74,6 +79,11 @@ void BinaryTreeTest::Init(void)
 		}
 
 		Logger().WriteInformation("\n");
+
+		int a = tree.LowestCommonAncestor(10, 15);
+		Logger().WriteInformation("10 and 15 lowest common ancestor is %d\n", a);
+		int b = tree.LowestCommonAncestor2(10, 15);
+		Logger().WriteInformation("10 and 15 lowest common ancestor is %d\n", b);
 	});
 
 	Add("BinaryNodeHeight", [&](){
@@ -106,6 +116,44 @@ void BinaryTreeTest::Init(void)
 		}
 
 		tree.Print();
+	});
+
+	Add("BinaryNodeLCA", [&](){
+		Test::CompleteBinaryTree<int, Test::BinaryNode> tree;
+
+		for (int i = 0; i < 20; i++) {
+			tree.Insert(i);
+		}
+
+		tree.Print();
+
+		for (int i = 0; i < 19; i++) {
+			for (int j = i+1; j < 20; j++) {
+				int a = tree.LowestCommonAncestor(i, j);
+				int b = tree.LowestCommonAncestor2(i, j);
+				Logger().WriteInformation("%d and %d lowest common ancestor is (%d, %d)\n", i, j, a, b);
+				ASSERT1(a == b);
+			}
+		}
+	});
+
+	Add("BinaryNodeWithParentLCA", [&](){
+		Test::CompleteBinaryTree<int, Test::BinaryNodeWithParent> tree;
+
+		for (int i = 0; i < 20; i++) {
+			tree.Insert(i);
+		}
+
+		tree.Print();
+
+		for (int i = 0; i < 19; i++) {
+			for (int j = i+1; j < 20; j++) {
+				int a = tree.LowestCommonAncestor(i, j);
+				int b = tree.LowestCommonAncestor2(i, j);
+				Logger().WriteInformation("%d and %d lowest common ancestor is (%d, %d)\n", i, j, a, b);
+				ASSERT1(a == b);
+			}
+		}
 	});
 
 	Add("PreOrder", [&](){

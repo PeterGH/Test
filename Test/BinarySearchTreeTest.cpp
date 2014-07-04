@@ -124,6 +124,28 @@ void BinarySearchTreeTest::Init(void)
 		ASSERT1(pn == nullptr);
 	});
 
+	Add("LCA", [&](){
+		Test::BinarySearchTree<int> tree;
+		vector<int> inserted;
+		int count = 1 + Test::Random::Next();
+		for (int j = 0; j < count; j++) {
+			int v = Test::Random::Next();
+			tree.Insert(v);
+			inserted.push_back(v);
+		}
+
+		tree.Print();
+
+		for (int i = 0; i < count-1; i++) {
+			for (int j = i+1; j < count; j++) {
+				int a = tree.LowestCommonAncestor(inserted[i], inserted[j]);
+				int b = tree.LowestCommonAncestor2(inserted[i], inserted[j]);
+				Logger().WriteInformation("(%d, %d): %d and %d lowest common ancestor is (%d, %d)\n", i, j, inserted[i], inserted[j], a, b);
+				ASSERT1(a == b);
+			}
+		}
+	});
+
 	Add("PreOrder", [&](){
 		for (int i = 0; i < 100; i++) {
 			Test::BinarySearchTree<int> tree;
