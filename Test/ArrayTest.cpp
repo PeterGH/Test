@@ -750,12 +750,16 @@ void ArrayTest::Init(void)
 				Logger().WriteInformation("\t%d", A[i]);
 			}
 			Logger().WriteInformation("\n");
-			int first;
-			int distance;
+			int first, first2;
+			int distance, distance2;
 			Test::Array::MaxInversionDistance(A, l, first, distance);
+			Test::Array::MaxInversionDistance2(A, l, first2, distance2);
 			Logger().WriteInformation("\t%d(%d)\t%d(%d)\n\n", first, f, distance, d);
+			Logger().WriteInformation("\t%d(%d)\t%d(%d)\n\n", first2, f, distance2, d);
 			ASSERT1(first == f);
 			ASSERT1(distance == d);
+			ASSERT1(first2 == f);
+			ASSERT1(distance2 == d);
 		};
 
 		int A0[] = { 1 };

@@ -140,8 +140,10 @@ void BinarySearchTreeTest::Init(void)
 			for (int j = i+1; j < count; j++) {
 				int a = tree.LowestCommonAncestor(inserted[i], inserted[j]);
 				int b = tree.LowestCommonAncestor2(inserted[i], inserted[j]);
-				Logger().WriteInformation("(%d, %d): %d and %d lowest common ancestor is (%d, %d)\n", i, j, inserted[i], inserted[j], a, b);
+				int c = tree.LowestCommonAncestor3(inserted[i], inserted[j]);
+				Logger().WriteInformation("(%d, %d): %d and %d lowest common ancestor is (%d, %d, %d)\n", i, j, inserted[i], inserted[j], a, b, c);
 				ASSERT1(a == b);
+				ASSERT1(a == c);
 			}
 		}
 	});

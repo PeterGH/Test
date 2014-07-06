@@ -24,6 +24,7 @@ namespace Test {
 		// Find an inversion such that j - i is maximized.
 		// Use parameter first to return value i and distance to return value j - i
 		static void MaxInversionDistance(const int * input, int length, int & first, int & distance);
+		static void MaxInversionDistance2(const int * input, int length, int & first, int & distance);
 
 		// Find the indices of min and max elements.
 		// minIndex will be the index of the minimum value (first index if there are more than on minimum value).

@@ -116,6 +116,22 @@ namespace Test {
 			return nullptr;
 		}
 
+		static BinaryNodeWithParent<T> * LowestCommonAncestor3(BinaryNodeWithParent<T> * node, const T & first, const T & second)
+		{
+			if (node == nullptr) return nullptr;
+
+			while (node != nullptr) {
+				if (node->content > std::max(first, second))
+					node = (BinaryNodeWithParent<T> *)node->left;
+				else if (node->content < std::min(first, second))
+					node = (BinaryNodeWithParent<T> *)node->right;
+				else
+					break;
+			}
+
+			return node;
+		}
+
 		static BinaryNodeWithParent<T> * Min(BinaryNodeWithParent<T> * node)
 		{
 			if (node == nullptr) return node;
@@ -399,6 +415,15 @@ namespace Test {
 			BinaryNodeWithParent<T> * firstNode = this->Search(first);
 			BinaryNodeWithParent<T> * secondNode = this->Search(second);
 			BinaryNodeWithParent<T> * node = LowestCommonAncestor2(firstNode, secondNode);
+			if (node == nullptr) {
+				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
+			}
+			return node->content;
+		}
+
+		virtual const T & LowestCommonAncestor3(const T & first, const T & second)
+		{
+			BinaryNodeWithParent<T> * node = LowestCommonAncestor3(this->root, first, second);
 			if (node == nullptr) {
 				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
 			}

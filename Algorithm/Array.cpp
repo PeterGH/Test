@@ -55,7 +55,11 @@ namespace Test {
 		}
 	}
 
-	// http://leetcode.com/2011/05/a-distance-maximizing-problem.html
+	// An inversion is a pair (i, j) such that i < j and I[i] > I[j].
+	// Find an inversion such that j - i is maximized.
+	// Use parameter first to return value i and distance to return value j - i
+	// This is the same as http://leetcode.com/2011/05/a-distance-maximizing-problem.html
+	// with only difference is to find an inversion.
 	void Array::MaxInversionDistance(const int * input, int length, int & first, int & distance)
 	{
 		first = 0;
@@ -110,6 +114,69 @@ namespace Test {
 			if (d > distance) {
 				distance = d;
 				first = firstIndices[f + 1];
+			}
+		}
+	}
+
+	// An inversion is a pair (i, j) such that i < j and I[i] > I[j].
+	// Find an inversion such that j - i is maximized.
+	// Use parameter first to return value i and distance to return value j - i
+	// This is the same as http://leetcode.com/2011/05/a-distance-maximizing-problem.html
+	// with only difference is to find an inversion.
+	void Array::MaxInversionDistance2(const int * input, int length, int & first, int & distance)
+	{
+		first = 0;
+		distance = 0;
+		if (input == nullptr || length <= 1) return;
+
+		// Array firstIndices to contain the indices of a increasing subsequence of input
+		// Each element of firstIndices is a candidate for the first index of maximum inversion
+		//       firstIndices[0]  <       firstIndices[1]  <       firstIndices[2]  < ...
+		// input[firstIndices[0]] < input[firstIndices[1]] < input[firstIndices[2]] < ...
+		unique_ptr<int[]> firstIndices(new int[length]);
+		int index = 0;
+		firstIndices[index] = 0;
+		// Ignore input[length - 1]
+		for (int i = 1; i < length - 1; i++) {
+			if (input[i] > input[firstIndices[index]]) {
+				index++;
+				firstIndices[index] = i;
+			}
+		}
+
+		int prev = INT_MAX;
+		// Ignore input[0]
+		for (int i = length - 1; i > 0; i--) {
+			if (input[i] >= prev) {
+				// if there is an inversion ending at i, then
+				// prev would extend it by one more position.
+				// So input[i] should be ignored.
+				continue;
+			}
+
+			prev = input[i];
+
+			while (i <= firstIndices[index]) index--;
+
+			if (prev >= input[firstIndices[index]]) {
+				// prev is greater than all possible first indices
+				continue;
+			}
+
+			while (index > 0 && input[firstIndices[index-1]] > prev) {
+				index--;
+			}
+
+			// Now firstIndices[index] is the first element greater than input[i]
+			int d = i - firstIndices[index];
+			if (d > distance) {
+				first = firstIndices[index];
+				distance = i - first;
+			}
+
+			if (index == 0) {
+				// All elements of firstIndices are examined
+				break;
 			}
 		}
 	}
