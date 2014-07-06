@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bitset>
+#include <map>
 #include <sstream>
 #include <stdarg.h>
 #include <string>
@@ -92,6 +93,8 @@ namespace Test {
 		// Return true if the entire input string match the pattern.
 		__declspec(dllexport) static bool IsMatch(char * input, char * pattern);
 		__declspec(dllexport) static bool IsMatch2(char * input, char * pattern);
+
+		__declspec(dllexport) static void LongestSubStringWithUniqueChars(const string & input, int & index, int & length);
 
 		template<class T, class C> static basic_string<C> Join(const T * input, int length, const C * separator)
 		{

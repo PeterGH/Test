@@ -90,4 +90,43 @@ void StringTest::Init(void)
 		check("abbc", "ab*bbc", true);
 		check("abcbcd", "a.*c.*d", true);
 	});
+
+	Add("LongestSubStringWithUniqueChars", [&](){
+		auto check = [&](char * s, int i, int l) {
+			string ss(s);
+			int ai;
+			int al;
+			Test::String::LongestSubStringWithUniqueChars(ss, ai, al);
+			Logger().WriteInformation(
+				"%s, (%d%s%d, %d%s%d), %s\n",
+				ss.c_str(),
+				ai,
+				ai == i ? "==" : "!=",
+				i,
+				al,
+				al == l ? "==" : "!=",
+				l,
+				ss.substr(ai, al).c_str());
+			ASSERT1(ai == i);
+			ASSERT1(al == l);
+		};
+
+		check("a", 0, 1);
+		check("aa", 0, 1);
+		check("ab", 0, 2);
+		check("aaa", 0, 1);
+		check("aba", 0, 2);
+		check("aab", 1, 2);
+		check("abc", 0, 3);
+		check("abab", 0, 2);
+		check("abba", 0, 2);
+		check("abca", 0, 3);
+		check("aabc", 1, 3);
+		check("abac", 1, 3);
+		check("abcd", 0, 4);
+		check("abcabc", 0, 3);
+		check("abcad", 1, 4);
+		check("aaabcd", 2, 4);
+		check("abcabcbb", 0, 3);
+	});
 }

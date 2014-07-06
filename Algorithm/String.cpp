@@ -156,4 +156,39 @@ namespace Test {
 		// pattern  a*###
 		return IsMatch2(input, pattern+2);
 	}
+
+	void String::LongestSubStringWithUniqueChars(const string & input, int & index, int & length)
+	{
+		index = 0;
+		length = 0;
+
+		bitset<256> visited;
+		int i = 0;
+		int j = 0;
+
+		while (j < input.length()) {
+			if (visited[input[j]] == true) {
+				if (j - i > length) {
+					index = i;
+					length = j - i;
+				}
+
+				while (input[i] != input[j]) {
+					visited[input[i]] = false;
+					i++;
+				}
+
+				i++;
+			} else {
+				visited[input[j]] = true;
+			}
+
+			j++;
+		}
+
+		if (j - i > length) {
+			index = i;
+			length = j - i;
+		}
+	}
 }
