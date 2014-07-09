@@ -314,4 +314,106 @@ void BinaryTreeTest::Init(void)
 			}
 		}
 	});
+
+	Add("BuildTreePreOrderInOrder", [&](){
+		Test::CompleteBinaryTree<int, Test::BinaryNode> tree;
+		Test::CompleteBinaryTree<int, Test::BinaryNodeWithParent> tree2;
+		int count = 1 + Test::Random::Next();
+		for (int i = 0; i < count; i++) {
+			tree.Insert(i);
+			tree2.Insert(i);
+		}
+
+		tree.Print();
+		tree2.Print();
+
+		unique_ptr<int[]> preOrder(new int[count]);
+		unique_ptr<int[]> inOrder(new int[count]);
+
+		function<function<void(int)>(unique_ptr<int[]> &, int &)> f = [&](unique_ptr<int[]> & v, int & k)->function<void(int)>{
+			function<void(int)> w = [&](int n){
+				v[k++] = n;
+			};
+
+			return w;
+		};
+
+		int i = 0;
+		int j = 0;
+		tree.PreOrderWalk(f(preOrder, i));
+		tree.InOrderWalk(f(inOrder, j));
+
+		Logger().WriteInformation("PreOrder:\n");
+		for (int i = 0; i < count; i++) {
+			Logger().WriteInformation("  %d", preOrder[i]);
+		}
+		Logger().WriteInformation("\n");
+
+		Logger().WriteInformation("InOrder:\n");
+		for (int i = 0; i < count; i++) {
+			Logger().WriteInformation("  %d", inOrder[i]);
+		}
+		Logger().WriteInformation("\n");
+
+		Test::CompleteBinaryTree<int, Test::BinaryNode> tree3;
+		tree3.BuildTreePreOrderInOrder(preOrder.get(), count, inOrder.get(), count);
+		tree3.Print();
+		ASSERT1(tree == tree3);
+
+		Test::CompleteBinaryTree<int, Test::BinaryNodeWithParent> tree4;
+		tree4.BuildTreePreOrderInOrder(preOrder.get(), count, inOrder.get(), count);
+		tree4.Print();
+		ASSERT1(tree2 == tree4);
+	});
+
+	Add("BuildTreeInOrderPostOrder", [&](){
+		Test::CompleteBinaryTree<int, Test::BinaryNode> tree;
+		Test::CompleteBinaryTree<int, Test::BinaryNodeWithParent> tree2;
+		int count = 1 + Test::Random::Next();
+		for (int i = 0; i < count; i++) {
+			tree.Insert(i);
+			tree2.Insert(i);
+		}
+
+		tree.Print();
+		tree2.Print();
+
+		unique_ptr<int[]> inOrder(new int[count]);
+		unique_ptr<int[]> postOrder(new int[count]);
+
+		function<function<void(int)>(unique_ptr<int[]> &, int &)> f = [&](unique_ptr<int[]> & v, int & k)->function<void(int)>{
+			function<void(int)> w = [&](int n){
+				v[k++] = n;
+			};
+
+			return w;
+		};
+
+		int i = 0;
+		int j = 0;
+		tree.InOrderWalk(f(inOrder, i));
+		tree.PostOrderWalk(f(postOrder, j));
+
+		Logger().WriteInformation("InOrder:\n");
+		for (int i = 0; i < count; i++) {
+			Logger().WriteInformation("  %d", inOrder[i]);
+		}
+		Logger().WriteInformation("\n");
+
+		Logger().WriteInformation("PostOrder:\n");
+		for (int i = 0; i < count; i++) {
+			Logger().WriteInformation("  %d", postOrder[i]);
+		}
+		Logger().WriteInformation("\n");
+
+		Test::CompleteBinaryTree<int, Test::BinaryNode> tree3;
+		tree3.BuildTreeInOrderPostOrder(inOrder.get(), count, postOrder.get(), count);
+		tree3.Print();
+		ASSERT1(tree == tree3);
+
+		Test::CompleteBinaryTree<int, Test::BinaryNodeWithParent> tree4;
+		tree4.BuildTreeInOrderPostOrder(inOrder.get(), count, postOrder.get(), count);
+		tree4.Print();
+		ASSERT1(tree2 == tree4);
+	});
 }

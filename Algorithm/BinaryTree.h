@@ -49,6 +49,66 @@ namespace Test {
 			else return right;
 		}
 
+		static N<T> * BuildTreePreOrderInOrderInternal(T * preOrder, int preLength, T * inOrder, int inLength)
+		{
+			if (inOrder == nullptr || preOrder == nullptr || inLength <= 0 || preLength <= 0 || inLength != preLength) return nullptr;
+
+			T value = preOrder[0];
+
+			int index = -1;
+			for (int i = 0; i < inLength; i++) {
+				if (inOrder[i] == value) {
+					index = i;
+					break;
+				}
+			}
+
+			if (index == -1) return nullptr;
+
+			N<T> * node = new N<T>(value);
+
+			node->left = BuildTreePreOrderInOrderInternal(preOrder+1, index, inOrder, index);
+			node->right = BuildTreePreOrderInOrderInternal(preOrder+index+1, preLength-1-index, inOrder+index+1, inLength-1-index);
+
+			return node;
+		}
+
+		static N<T> * BuildTreeInOrderPostOrderInternal(T * inOrder, int inLength, T * postOrder, int postLength)
+		{
+			if (inOrder == nullptr || postOrder == nullptr || inLength <= 0 || postLength <= 0 || inLength != postLength) return nullptr;
+
+			T value = postOrder[postLength-1];
+
+			int index = -1;
+			for (int i = 0; i < inLength; i++) {
+				if (inOrder[i] == value) {
+					index = i;
+					break;
+				}
+			}
+
+			if (index == -1) return nullptr;
+
+			N<T> * node = new N<T>(value);
+
+			node->left = BuildTreeInOrderPostOrderInternal(inOrder, index, postOrder, index);
+			node->right = BuildTreeInOrderPostOrderInternal(inOrder+index+1, inLength-1-index, postOrder+index, postLength-1-index);
+
+			return node;
+		}
+
+		static int Compare(N<T> * first, N<T> * second)
+		{
+			if (first == nullptr && second == nullptr) return 0;
+			if (first == nullptr && second != nullptr) return -1;
+			if (first != nullptr && second == nullptr) return 1;
+			if (first->content < second->content) return -1;
+			if (first->content > second->content) return 1;
+			int v = Compare((N<T> *)first->left, (N<T> *)second->left);
+			if (v == 0) return Compare((N<T> *)first->right, (N<T> *)second->right);
+			return v;
+		}
+
 	public:
 		BinaryTree(void) : root(nullptr) {}
 
@@ -171,5 +231,27 @@ namespace Test {
 
 		PostOrderBinaryIterator<T, N> PostOrderBegin() const { return PostOrderBinaryIterator<T, N>(this->root); }
 		PostOrderBinaryIterator<T, N> PostOrderEnd() const { return PostOrderBinaryIterator<T, N>(); }
+
+		void BuildTreePreOrderInOrder(T * preOrder, int preLength, T * inOrder, int inLength)
+		{
+			if (this->root != nullptr) {
+				delete this->root;
+				this->root = nullptr;
+			}
+
+			this->root = BuildTreePreOrderInOrderInternal(preOrder, preLength, inOrder, inLength);
+		}
+
+		void BuildTreeInOrderPostOrder(T * inOrder, int inLength, T * postOrder, int postLength)
+		{
+			if (this->root != nullptr) {
+				delete this->root;
+				this->root = nullptr;
+			}
+
+			this->root = BuildTreeInOrderPostOrderInternal(inOrder, inLength, postOrder, postLength);
+		}
+
+		bool operator==(const BinaryTree & other) const { return Compare(this->root, other.root) == 0; }
 	};
 }

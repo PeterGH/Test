@@ -409,4 +409,106 @@ void BinarySearchTreeTest::Init(void)
 			cout << "Run " << i << ", " << count << " elements, height " << h << endl;
 		}
 	});
+
+	Add("BuildTreePreOrderInOrder", [&](){
+		Test::BinarySearchTree<int> tree;
+		set<int> values;
+		int count = 1 + Test::Random::Next();
+		for (int i = 0; i < count; i++) {
+			int v = Test::Random::Next();
+			if (values.find(v) == values.end()) {
+				tree.Insert(v);
+				values.insert(v);
+			}
+		}
+
+		count = values.size();
+
+		tree.Print();
+
+		unique_ptr<int[]> preOrder(new int[count]);
+		unique_ptr<int[]> inOrder(new int[count]);
+
+		function<function<void(int)>(unique_ptr<int[]> &, int &)> f = [&](unique_ptr<int[]> & v, int & k)->function<void(int)>{
+			function<void(int)> w = [&](int n){
+				v[k++] = n;
+			};
+
+			return w;
+		};
+
+		int i = 0;
+		int j = 0;
+		tree.PreOrderWalk(f(preOrder, i));
+		tree.InOrderWalk(f(inOrder, j));
+
+		Logger().WriteInformation("PreOrder:\n");
+		for (int i = 0; i < count; i++) {
+			Logger().WriteInformation("  %d", preOrder[i]);
+		}
+		Logger().WriteInformation("\n");
+
+		Logger().WriteInformation("InOrder:\n");
+		for (int i = 0; i < count; i++) {
+			Logger().WriteInformation("  %d", inOrder[i]);
+		}
+		Logger().WriteInformation("\n");
+
+		Test::BinarySearchTree<int> tree2;
+		tree2.BuildTreePreOrderInOrder(preOrder.get(), count, inOrder.get(), count);
+		tree2.Print();
+		ASSERT1(true == tree2.Verify());
+		ASSERT1(tree == tree2);
+	});
+
+	Add("BuildTreeInOrderPostOrder", [&](){
+		Test::BinarySearchTree<int> tree;
+		set<int> values;
+		int count = 1 + Test::Random::Next();
+		for (int i = 0; i < count; i++) {
+			int v = Test::Random::Next();
+			if (values.find(v) == values.end()) {
+				tree.Insert(v);
+				values.insert(v);
+			}
+		}
+
+		count = values.size();
+
+		tree.Print();
+
+		unique_ptr<int[]> inOrder(new int[count]);
+		unique_ptr<int[]> postOrder(new int[count]);
+
+		function<function<void(int)>(unique_ptr<int[]> &, int &)> f = [&](unique_ptr<int[]> & v, int & k)->function<void(int)>{
+			function<void(int)> w = [&](int n){
+				v[k++] = n;
+			};
+
+			return w;
+		};
+
+		int i = 0;
+		int j = 0;
+		tree.InOrderWalk(f(inOrder, i));
+		tree.PostOrderWalk(f(postOrder, j));
+
+		Logger().WriteInformation("InOrder:\n");
+		for (int i = 0; i < count; i++) {
+			Logger().WriteInformation("  %d", inOrder[i]);
+		}
+		Logger().WriteInformation("\n");
+
+		Logger().WriteInformation("PostOrder:\n");
+		for (int i = 0; i < count; i++) {
+			Logger().WriteInformation("  %d", postOrder[i]);
+		}
+		Logger().WriteInformation("\n");
+
+		Test::BinarySearchTree<int> tree2;
+		tree2.BuildTreeInOrderPostOrder(inOrder.get(), count, postOrder.get(), count);
+		tree2.Print();
+		ASSERT1(true == tree2.Verify());
+		ASSERT1(tree == tree2);
+	});
 }
