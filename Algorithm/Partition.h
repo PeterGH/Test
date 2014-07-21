@@ -73,6 +73,7 @@ namespace Test {
 		// Divide input into K partitions such that the maximum sum over each partition is minimized.
 		// The elements of input should not be moved, and partitions should not overlap.
 		template<class T> static T MinMaxPartitionSum(const T * input, int length, int * indices, int partitions);
+		template<class T> static T MinMaxPartitionSum2(const T * input, int length, int * indices, int partitions);
 	};
 
 	template<class T, class C> int Partition::PartitionArrayByValue(T * input, int low, int high, const T & value, function<C(T)> transform)
@@ -315,7 +316,9 @@ namespace Test {
 		S(0, 0) = input[0];
 		I(0, 0) = 0;
 		for (int i = 1; i < length; i++) {
+			// input[0..i] assigned to partition[0]
 			S(i, 0) = S(i-1, 0) + input[i];
+			// partition[0] starts at index 0
 			I(i, 0) = 0;
 		}
 
@@ -346,7 +349,7 @@ namespace Test {
 						// For some k1 < k2, the following two values may be the same
 						//   max{S(k1, j-1), I_(k1+1) + ... + I_i}
 	                    //   max{S(k2, j-1), I_(k2+1) + ... + I_i}
-						// We want to partition at k2+1 instead of k1+1 so that the last partion would not necessarily take too few load	
+						// We want to partition at k1+1 instead of k2+1 so that the last partion would not necessarily take too few load
 					}
 				}
 			}
@@ -362,5 +365,102 @@ namespace Test {
 		}
 
 		return S(length - 1, partitions - 1);
+	}
+
+	// This implementation has some problem getting wrong indices even though the return value can be correct.
+	template<class T> T Partition::MinMaxPartitionSum2(const T * input, int length, int * indices, int partitions)
+	{
+		if (input == nullptr) throw invalid_argument("input is nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is less than or equal to zero", length));
+		if (indices == nullptr) throw invalid_argument("indices is nullptr");
+		if (partitions > length) throw invalid_argument(String::Format("length %d is less than partitions %d", length, partitions));
+
+		T min = input[0];
+		T max = input[0];
+		T sum = 0;
+		for (int i = 0; i < length; i++) {
+			sum += input[i];
+			if (input[i] > max) {
+				max = input[i];
+			}
+			if (input[i] < min) {
+				min = input[i];
+			}
+		}
+
+		if (partitions == length) {
+			// One input item per partition
+			for (int i = 0; i < partitions; i++) {
+				indices[i] = i;
+			}
+			// The cost is the maximum of input items
+			return max;
+		}
+
+		T cost = min;
+
+		// Calculate partitions
+		// Update indices and cost accordingly
+		auto GetPartitions = [&](T m) -> int {
+			// temporary sum per partition
+			T s = 0;
+			// maximum sum
+			T c = 0;
+			indices[0] = 0;
+			int j = 1;
+			for (int i = 0; i < length; i++) {
+				s += input[i];
+				if (s >= m && i != length - 1) {
+					if (j < partitions) {
+						indices[j] = i;
+					}
+					j++;
+					s -= input[i];
+					if (s > c) {
+						c = s;
+					}
+					s = input[i];
+				}
+			}
+
+			if (s > c) {
+				c = s;
+			}
+
+			cost = c;
+			return j;
+		};
+
+		T low = max;
+		T high = sum;
+
+		int lowPartitions = GetPartitions(low);
+
+		if (lowPartitions < partitions) {
+			low = min;
+			high = max;
+		}
+
+		while (low < high) {
+			T mid = (low + high) >> 1;
+			int midPartions = GetPartitions(mid);
+			cout << low << ", " << mid << ", " << high << ", " << midPartions << ", " << cost << endl;
+
+			if (midPartions > partitions) {
+				low = mid + 1;
+			} else if (midPartions < partitions) {
+				high = mid - 1;
+			} else {
+				// low = (low + mid) >> 1;
+				// high = (mid + high) >> 1;
+				return cost;
+			}
+		}
+
+		if (low == high) {
+			GetPartitions(low);
+		}
+
+		return cost;
 	}
 }

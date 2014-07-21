@@ -575,23 +575,35 @@ void PartitionTest::Init(void)
 			Logger().WriteInformation("\n%d partitions\n", partitions);
 
 			unique_ptr<int[]> indices(new int[partitions]);
+			unique_ptr<int[]> indices2(new int[partitions]);
 			int sum = Test::Partition::MinMaxPartitionSum<int>(input, length, indices.get(), partitions);
+			int sum2 = Test::Partition::MinMaxPartitionSum2<int>(input, length, indices2.get(), partitions);
 
-			for (int j = 0; j < partitions; j++) {
-				int b = indices[j];
-				int e = j == partitions - 1 ? length - 1 : indices[j+1] - 1;
-				int s = 0;
-				for (int i = b; i <= e; i++) {
-					s += input[i];
+			auto print = [&](unique_ptr<int[]> & indicesArray) {
+				for (int j = 0; j < partitions; j++) {
+					int b = indicesArray[j];
+					int e = j == partitions - 1 ? length - 1 : indicesArray[j+1] - 1;
+					int s = 0;
+					for (int i = b; i <= e; i++) {
+						s += input[i];
+					}
+					Logger().WriteInformation("  %d = sum{A[%d..%d]} = ", s, b, e);
+					for (int i = b; i <= e; i++) {
+						Logger().WriteInformation("%s%d", i == b ? "" : " + ", input[i]);
+					}
+					Logger().WriteInformation("\n");
 				}
-				Logger().WriteInformation("  %d = sum{A[%d..%d]} = ", s, b, e);
-				for (int i = b; i <= e; i++) {
-					Logger().WriteInformation("%s%d", i == b ? "" : " + ", input[i]);
-				}
-				Logger().WriteInformation("\n");
-			}
+			};
 
+			Logger().WriteInformation("\nSolution using dynamic programming: %d\n", sum);
+			print(indices);
+			Logger().WriteInformation("\nSolution using binary search: %d\n", sum2);
+			print(indices2);
 			ASSERT1(sum == expectedSum);
+			ASSERT1(sum2 == expectedSum);
+			for (int i = 0; i < partitions; i++) {
+				ASSERT1(indices[i] == indices2[i]);
+			}
 		};
 
 		int A1[] = { 100, 200, 300, 400, 500, 600, 700, 800, 900 };
@@ -609,10 +621,13 @@ void PartitionTest::Init(void)
 		int A5[] = { 100, 100, 100, 100, 100, 100, 100, 100, 100 };
 		check(A5, 9, 2, 500);
 
-		int A7[] = { 100, 100, 100, 100, 100, 100, 100, 100, 100 };
-		check(A7, 9, 9, 100);
-
 		int A6[] = { 100, 100, 100, 100, 100, 100, 100, 100, 100 };
-		check(A6, 9, 4, 300);
+		check(A6, 9, 9, 100);
+
+		int A7[] = { 100, 100, 100, 100, 100, 100, 100, 100, 100 };
+		check(A7, 9, 4, 300);
+
+		int A8[] = { 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100 };
+		check(A8, 12, 5, 300);
 	});
 }
