@@ -91,6 +91,7 @@
     <ClInclude Include="BreakStringTest.h" />
     <ClInclude Include="CircularSingleLinkListTest.h" />
     <ClInclude Include="CoinChangeTest.h" />
+    <ClInclude Include="CoinSelectTest.h" />
     <ClInclude Include="ColumnSortTest.h" />
     <ClInclude Include="CountingSortTest.h" />
     <ClInclude Include="DestructorTest.h" />
@@ -142,6 +143,7 @@
     <ClCompile Include="BreakStringTest.cpp" />
     <ClCompile Include="CircularSingleLinkListTest.cpp" />
     <ClCompile Include="CoinChangeTest.cpp" />
+    <ClCompile Include="CoinSelectTest.cpp" />
     <ClCompile Include="ColumnSortTest.cpp" />
     <ClCompile Include="CountingSortTest.cpp" />
     <ClCompile Include="DestructorTest.cpp" />

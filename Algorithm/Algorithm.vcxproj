@@ -89,6 +89,7 @@
     <ClInclude Include="BreakString.h" />
     <ClInclude Include="CircularSingleLinkList.h" />
     <ClInclude Include="CoinChange.h" />
+    <ClInclude Include="CoinSelect.h" />
     <ClInclude Include="ColumnSort.h" />
     <ClInclude Include="CompleteBinaryTree.h" />
     <ClInclude Include="CountingSort.h" />
@@ -142,6 +143,7 @@
     <ClCompile Include="BitSet.cpp" />
     <ClCompile Include="BreakString.cpp" />
     <ClCompile Include="CoinChange.cpp" />
+    <ClCompile Include="CoinSelect.cpp" />
     <ClCompile Include="CountingSort.cpp" />
     <ClCompile Include="FiniteAutomation.cpp" />
     <ClCompile Include="Geometry.cpp" />

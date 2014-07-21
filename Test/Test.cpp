@@ -16,6 +16,7 @@
 #include "BreakStringTest.h"
 #include "CircularSingleLinkListTest.h"
 #include "CoinChangeTest.h"
+#include "CoinSelectTest.h"
 #include "ColumnSortTest.h"
 #include "CountingSortTest.h"
 #include "DestructorTest.h"
@@ -87,6 +88,7 @@ int main(int argc, char * argv[])
 	suite.Add(new BreakStringTest(log));
 	suite.Add(new CircularSingleLinkListTest(log));
 	suite.Add(new CoinChangeTest(log));
+	suite.Add(new CoinSelectTest(log));
 	suite.Add(new ColumnSortTest(log));
 	suite.Add(new CountingSortTest(log));
 	suite.Add(new DestructorTest(log));
