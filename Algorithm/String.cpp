@@ -166,7 +166,7 @@ namespace Test {
 		int i = 0;
 		int j = 0;
 
-		while (j < input.length()) {
+		while ((unsigned int)j < input.length()) {
 			if (visited[input[j]] == true) {
 				if (j - i > length) {
 					index = i;

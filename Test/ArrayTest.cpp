@@ -837,4 +837,186 @@ void ArrayTest::Init(void)
 		int A25[] = { 1, 4, 2, 3 };
 		check(A25, 4, 1, 2);
 	});
+
+	Add("MaxSlidingWindow", [&](){
+		auto printArray = [&](int A[], int l){
+			Logger().WriteInformation("Input:    ");
+			for (int i = 0; i < l; i++) {
+				Logger().WriteInformation("  %d", A[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+
+		auto printVector = [&](vector<int> & v, int w){
+			for (int i = 0; i < w - 1; i++) {
+				Logger().WriteInformation("   ");
+			}
+
+			for_each(v.begin(), v.end(), [&](int i){
+				Logger().WriteInformation("  %d", i);
+			});
+			Logger().WriteInformation("\n");
+		};
+
+		auto checkWindow = [&](int A[], int l, int w) {
+			vector<int> output;
+			vector<int> output2;
+			Test::Array::MaxSlidingWindow(A, l, w, output);
+			Test::Array::MaxSlidingWindow2(A, l, w, output2);
+			// Logger().WriteInformation("Output1:  ");
+			// printVector(output, w);
+			// Logger().WriteInformation("Output2:  ");
+			// printVector(output2, w);
+
+			ASSERT1(output.size() == output2.size());
+			for (unsigned int i = 0; i < output.size(); i++) {
+				ASSERT1(output[i] == output2[i]);
+			}
+		};
+
+		auto check = [&](int A[], int l) {
+			Logger().WriteInformation("\n");
+			printArray(A, l);
+
+			for (int w = 1; w <= l; w++) {
+				Logger().WriteInformation("Window:     %d\n", w);
+				checkWindow(A, l, w);
+			}
+		};
+
+		int A0[] = { 1 };
+		check(A0, 1);
+
+		int A1[] = { 1, 2 };
+		check(A1, 2);
+
+		int A2[] = { 2, 1 };
+		check(A2, 2);
+
+		int A3[] = { 2, 2 };
+		check(A3, 2);
+
+		int A4[] = { 1, 2, 3 };
+		check(A4, 3);
+
+		int A5[] = { 3, 1, 2 };
+		check(A5, 3);
+
+		int A6[] = { 2, 3, 1 };
+		check(A6, 3);
+
+		int A7[] = { 1, 3, 2 };
+		check(A7, 3);
+
+		int A8[] = { 2, 1, 3 };
+		check(A8, 3);
+
+		int A9[] = { 3, 2, 1 };
+		check(A9, 3);
+
+		int A10[] = { 1, 2, 2 };
+		check(A10, 3);
+
+		int A11[] = { 2, 1, 2 };
+		check(A11, 3);
+
+		int A12[] = { 2, 2, 1 };
+		check(A12, 3);
+
+		int A13[] = { 2, 2, 2 };
+		check(A13, 3);
+
+		int A14[] = { 1, 2, 3, 4 };
+		check(A14, 4);
+
+		int A15[] = { 4, 1, 2, 3 };
+		check(A15, 4);
+
+		int A16[] = { 3, 4, 1, 2 };
+		check(A16, 4);
+
+		int A17[] = { 2, 3, 4, 1 };
+		check(A17, 4);
+
+		int A18[] = { 2, 1, 3, 4 };
+		check(A18, 4);
+
+		int A19[] = { 4, 2, 1, 3 };
+		check(A19, 4);
+
+		int A20[] = { 3, 4, 2, 1 };
+		check(A20, 4);
+
+		int A21[] = { 1, 3, 4, 2 };
+		check(A21, 4);
+
+		int A22[] = { 3, 2, 1, 4 };
+		check(A22, 4);
+
+		int A23[] = { 4, 3, 2, 1 };
+		check(A23, 4);
+
+		int A24[] = { 1, 4, 3, 2 };
+		check(A24, 4);
+
+		int A25[] = { 2, 1, 4, 3 };
+		check(A25, 4);
+
+		int A26[] = { 4, 2, 3, 1 };
+		check(A26, 4);
+
+		int A27[] = { 1, 4, 2, 3 };
+		check(A27, 4);
+
+		int A28[] = { 3, 1, 4, 2 };
+		check(A28, 4);
+
+		int A29[] = { 2, 3, 1, 4 };
+		check(A29, 4);
+
+		int A30[] = { 1, 3, 2, 4 };
+		check(A30, 4);
+
+		int A31[] = { 4, 1, 3, 2 };
+		check(A31, 4);
+
+		int A32[] = { 2, 4, 1, 3 };
+		check(A32, 4);
+
+		int A33[] = { 3, 2, 4, 1 };
+		check(A33, 4);
+
+		int A34[] = { 1, 2, 4, 3 };
+		check(A34, 4);
+
+		int A35[] = { 3, 1, 2, 4 };
+		check(A35, 4);
+
+		int A36[] = { 4, 3, 1, 2 };
+		check(A36, 4);
+
+		int A37[] = { 2, 4, 3, 1 };
+		check(A37, 4);
+
+		for (int i = 0; i < 100; i++) {
+			int length = 1 + Test::Random::Next(100);
+
+			unique_ptr<int[]> input(new int[length]);
+			for (int j = 0; j < length; j++) {
+				input[j] = Test::Random::Next();
+			}
+
+			int w = 1;
+			do {
+				Logger().WriteInformation("Run %d: %d window over %d elements\n", i, w, length);
+				checkWindow(input.get(), length, w);
+
+				if (w >= length - 10 && w < length) {
+					w = length;
+				} else {
+					w += (1 + Test::Random::Next(9));
+				}
+			} while (w <= length);
+		}
+	});
 }

@@ -1,6 +1,7 @@
 #pragma once
-
+#include <deque>
 #include <functional>
+#include <queue>
 #include <vector>
 #include "BinarySearch.h"
 #include "BitSet.h"
@@ -25,6 +26,10 @@ namespace Test {
 		// Use parameter first to return value i and distance to return value j - i
 		static void MaxInversionDistance(const int * input, int length, int & first, int & distance);
 		static void MaxInversionDistance2(const int * input, int length, int & first, int & distance);
+
+		// Slide a window across an input, output the maximum on every move.
+		static void MaxSlidingWindow(const int * input, int length, int window, vector<int> & output);
+		static void MaxSlidingWindow2(const int * input, int length, int window, vector<int> & output);
 
 		// Find the indices of min and max elements.
 		// minIndex will be the index of the minimum value (first index if there are more than on minimum value).

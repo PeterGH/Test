@@ -1,6 +1,7 @@
 #pragma once
 
 #include "..\Algorithm\Array.h"
+#include "..\Algorithm\Random.h"
 #include "..\Algorithm\TestClass.h"
 
 class ArrayTest : public Test::TestClass {
