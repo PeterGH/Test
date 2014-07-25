@@ -111,6 +111,7 @@
     <ClInclude Include="LongestIncreasingSubsequence.h" />
     <ClInclude Include="MatrixChain.h" />
     <ClInclude Include="MatrixGraph.h" />
+    <ClInclude Include="Maze.h" />
     <ClInclude Include="MergeSort.h" />
     <ClInclude Include="MRInteger.h" />
     <ClInclude Include="NodeGraph.h" />
@@ -155,6 +156,7 @@
     <ClCompile Include="LongestCommonSubsequence.cpp" />
     <ClCompile Include="LongestIncreasingSubsequence.cpp" />
     <ClCompile Include="MatrixChain.cpp" />
+    <ClCompile Include="Maze.cpp" />
     <ClCompile Include="MRInteger.cpp" />
     <ClCompile Include="NodeGraph.cpp" />
     <ClCompile Include="Palindrome.cpp" />

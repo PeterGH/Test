@@ -168,6 +168,9 @@
     <ClInclude Include="CoinSelectTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MazeTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -318,6 +321,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CoinSelectTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
