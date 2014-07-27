@@ -17,7 +17,7 @@ namespace Test {
 			}
 		}
 
-		function<int(int,int)> countPaths = [&](int i, int j) -> int {
+		function<double(int,int)> countPaths = [&](int i, int j) -> double {
 			if (i >= rows || j >= cols) {
 				return 0;
 			} else if (i == rows - 1 && j == cols - 1) {

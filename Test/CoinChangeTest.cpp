@@ -36,4 +36,32 @@ void CoinChangeTest::Init(void)
 			}
 		}
 	});
+
+	Add("AllSolutions", [&](){
+		auto check = [&](unsigned int sum, vector<unsigned int> & denoms, unsigned int count) {
+			vector<map<unsigned int, unsigned int>> solutions;
+			Test::CoinChange::ComputeAllSolutions(sum, denoms, solutions);
+			Logger().WriteInformation("Sum %d numbers:", sum);
+			for_each (denoms.begin(), denoms.end(), [&](unsigned int d){
+				Logger().WriteInformation("  %d", d);
+			});
+			Logger().WriteInformation("\n");
+			for_each (solutions.begin(), solutions.end(), [&](map<unsigned int, unsigned int> & m){
+				Logger().WriteInformation("  %d = ", sum);
+				int i = 0;
+				for_each (m.begin(), m.end(), [&](pair<unsigned int, unsigned int> p) {
+					if (i != 0) {
+						Logger().WriteInformation(" + ");
+					}
+					Logger().WriteInformation("%d x %d", p.second, p.first);
+					i++;
+				});
+				Logger().WriteInformation("\n");
+			});
+			ASSERT1(solutions.size() == count);
+		};
+
+		vector<unsigned int> denoms { 2, 3, 6, 7 };
+		check(7, denoms, 2);
+	});
 }
