@@ -13,5 +13,6 @@ namespace Test {
 		static void ComputeSolution(unsigned int amount, vector<unsigned int> & denominations, map<unsigned int, unsigned int> & changes);
 		static unsigned int GreedySolution(unsigned int amount, vector<unsigned int> & denominations, map<unsigned int, unsigned int> & changes);
 		static void ComputeAllSolutions(unsigned int amount, vector<unsigned int> & denominations, vector<map<unsigned int, unsigned int>> & changes);
+		static void ComputeSubSetSolutions(unsigned int amount, vector<unsigned int> & denominations, vector<map<unsigned int, unsigned int>> & changes);
 	};
 }

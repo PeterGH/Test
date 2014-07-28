@@ -57,6 +57,11 @@ namespace Test {
 		// Return the indices using a vector
 		// The elements of input will be rearranged so the indices returned are not the original ones
 		template<class T> static void FindPairsBySum2(T * input, int length, const T sum, vector<pair<int, int>> & indices);
+
+		// Find the first common element of two sorted arrays
+		// Return a pair of indices of found element. If not found, then return a pair (-1, -1)
+		template<class T> static pair<int, int> FindIntersection(const T * input1, int length1, const T * input2, int length2);
+		template<class T> static pair<int, int> FindIntersection2(const T * input1, int length1, const T * input2, int length2);
 	};
 
 	template<class T> int BinarySearch::Search(const T & element, const T * input, int length, bool firstIndex)
@@ -604,5 +609,67 @@ namespace Test {
 				j++;
 			} while (j < length && input[j] == v);
 		}
+	}
+
+	// http://leetcode.com/2010/03/here-is-phone-screening-question-from.html
+	template<class T> pair<int, int> BinarySearch::FindIntersection(const T * input1, int length1, const T * input2, int length2)
+	{
+		if (input1 == nullptr) throw invalid_argument("input1 is a nullptr");
+		if (length1 <= 0) throw invalid_argument(String::Format("length1 %d is invalid", length1));
+		if (input2 == nullptr) throw invalid_argument("input2 is a nullptr");
+		if (length2 <= 0) throw invalid_argument(String::Format("length2 %d is invalid", length2));
+
+		const T * shortArray;
+		int shortLength;
+		const T * longArray;
+		int longLength;
+
+		if (length1 <= length2) {
+			shortLength = length1;
+			shortArray = input1;
+			longLength = length2;
+			longArray = input2;
+		} else {
+			shortLength = length2;
+			shortArray = input2;
+			longLength = length1;
+			longArray = input1;
+		}
+
+		for (int i = 0; i < shortLength; i++) {
+			int j = Search(shortArray[i], longArray, longLength);
+			if (j != -1) {
+				if (shortArray == input1) {
+					return make_pair(i, j);
+				} else {
+					return make_pair(j, i);
+				}
+			}
+		}
+
+		return make_pair(-1, -1);
+	}
+
+	// http://leetcode.com/2010/03/here-is-phone-screening-question-from.html
+	template<class T> pair<int, int> BinarySearch::FindIntersection2(const T * input1, int length1, const T * input2, int length2)
+	{
+		if (input1 == nullptr) throw invalid_argument("input1 is a nullptr");
+		if (length1 <= 0) throw invalid_argument(String::Format("length1 %d is invalid", length1));
+		if (input2 == nullptr) throw invalid_argument("input2 is a nullptr");
+		if (length2 <= 0) throw invalid_argument(String::Format("length2 %d is invalid", length2));
+
+		int i = 0;
+		int j = 0;
+		while (i < length1 && j < length2) {
+			if (input1[i] < input2[j]) {
+				i++;
+			} else if (input1[i] > input2[j]) {
+				j++;
+			} else {
+				return make_pair(i, j);
+			}
+		}
+
+		return make_pair(-1, -1);
 	}
 }

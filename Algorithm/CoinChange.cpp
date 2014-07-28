@@ -97,4 +97,35 @@ namespace Test {
 		map<unsigned int, unsigned int> s;
 		compute(amount, denominations.front(), s);
 	}
+
+	// http://leetcode.com/2010/09/print-all-combinations-of-number-as-sum.html
+	// Compute all sub sets of changes sum up to a given ammount. Duplication of a change is disallowed.
+	void CoinChange::ComputeSubSetSolutions(unsigned int amount, vector<unsigned int> & denominations, vector<map<unsigned int, unsigned int>> & changes)
+	{
+		sort(denominations.begin(), denominations.end());
+
+		function<void(int, unsigned int, map<unsigned int, unsigned int>)> compute = [&](int sum, unsigned int minD, map<unsigned int, unsigned int> & s){
+			for_each (denominations.begin(), denominations.end(), [&](unsigned int d){
+				if (d >= minD && sum >= (int)d) {
+					// Since denominations is already sorted, we can use
+					// minD as a gate to avoid to recompute solutions with smaller denoms.
+					map<unsigned int, unsigned int> copy(s);
+					if (copy.find(d) == copy.end()) {
+						copy[d] = 1;
+					} else {
+						copy[d]++;
+					}
+
+					if (sum == d) {
+						changes.push_back(copy);
+					} else {
+						compute(sum - d, d+1, copy);
+					}
+				}
+			});
+		};
+
+		map<unsigned int, unsigned int> s;
+		compute(amount, denominations.front(), s);
+	}
 }
