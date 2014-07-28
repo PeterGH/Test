@@ -128,7 +128,7 @@ void BinaryTreeTest::Init(void)
 		tree.Print();
 
 		for (int i = 0; i < 19; i++) {
-			for (int j = i+1; j < 20; j++) {
+			for (int j = i + 1; j < 20; j++) {
 				int a = tree.LowestCommonAncestor(i, j);
 				int b = tree.LowestCommonAncestor2(i, j);
 				Logger().WriteInformation("%d and %d lowest common ancestor is (%d, %d)\n", i, j, a, b);
@@ -147,7 +147,7 @@ void BinaryTreeTest::Init(void)
 		tree.Print();
 
 		for (int i = 0; i < 19; i++) {
-			for (int j = i+1; j < 20; j++) {
+			for (int j = i + 1; j < 20; j++) {
 				int a = tree.LowestCommonAncestor(i, j);
 				int b = tree.LowestCommonAncestor2(i, j);
 				Logger().WriteInformation("%d and %d lowest common ancestor is (%d, %d)\n", i, j, a, b);
@@ -177,7 +177,7 @@ void BinaryTreeTest::Init(void)
 			vector<int> v5;
 			vector<int> v6;
 
-			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function<void(int)>{
+			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
 				function<void(int)> w = [&](int n){
 					v.push_back(n);
 				};
@@ -230,7 +230,7 @@ void BinaryTreeTest::Init(void)
 			vector<int> v5;
 			vector<int> v6;
 
-			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function<void(int)>{
+			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
 				function<void(int)> w = [&](int n){
 					v.push_back(n);
 				};
@@ -283,7 +283,7 @@ void BinaryTreeTest::Init(void)
 			vector<int> v5;
 			vector<int> v6;
 
-			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function<void(int)>{
+			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
 				function<void(int)> w = [&](int n){
 					v.push_back(n);
 				};
@@ -330,7 +330,7 @@ void BinaryTreeTest::Init(void)
 		unique_ptr<int[]> preOrder(new int[count]);
 		unique_ptr<int[]> inOrder(new int[count]);
 
-		function<function<void(int)>(unique_ptr<int[]> &, int &)> f = [&](unique_ptr<int[]> & v, int & k)->function<void(int)>{
+		function<function<void(int)>(unique_ptr<int[]> &, int &)> f = [&](unique_ptr<int[]> & v, int & k)->function < void(int) > {
 			function<void(int)> w = [&](int n){
 				v[k++] = n;
 			};
@@ -381,7 +381,7 @@ void BinaryTreeTest::Init(void)
 		unique_ptr<int[]> inOrder(new int[count]);
 		unique_ptr<int[]> postOrder(new int[count]);
 
-		function<function<void(int)>(unique_ptr<int[]> &, int &)> f = [&](unique_ptr<int[]> & v, int & k)->function<void(int)>{
+		function<function<void(int)>(unique_ptr<int[]> &, int &)> f = [&](unique_ptr<int[]> & v, int & k)->function < void(int) > {
 			function<void(int)> w = [&](int n){
 				v[k++] = n;
 			};
@@ -415,5 +415,72 @@ void BinaryTreeTest::Init(void)
 		tree4.BuildTreeInOrderPostOrder(inOrder.get(), count, postOrder.get(), count);
 		tree4.Print();
 		ASSERT1(tree2 == tree4);
+	});
+
+	Add("ToDoubleLinkList", [&](){
+		auto check = [&](int count) {
+			Test::CompleteBinaryTree<int, Test::BinaryNode> tree;
+			Test::CompleteBinaryTree<int, Test::BinaryNodeWithParent> tree2;
+			for (int i = 0; i < count; i++) {
+				tree.Insert(i);
+				tree2.Insert(i);
+			}
+
+			tree.Print();
+			tree2.Print();
+
+			Test::BinaryNode<int> * head;
+			Test::BinaryNode<int> * tail;
+			Test::BinaryNodeWithParent<int> * head2;
+			Test::BinaryNodeWithParent<int> * tail2;
+			tree.ToDoubleLinkList(head, tail);
+			tree2.ToDoubleLinkList(head2, tail2);
+
+			auto print = [&](Test::BinaryNode<int> * head, Test::BinaryNode<int> * tail) -> int {
+				if (head == nullptr || tail == nullptr) return 0;
+				int c = 0;
+				Logger().WriteInformation("head");
+				do {
+					Logger().WriteInformation(" <=> %d", head->content);
+					c++;
+					head = head->right;
+				} while (head != nullptr);
+				Logger().WriteInformation(" <=> tail\n");
+				return c;
+			};
+
+			int c = print(head, tail);
+			int c2 = print(head2, tail2);
+			ASSERT1(c == count);
+			ASSERT1(c2 == count);
+
+			if (c > 0 && c2 > 0) {
+				Test::BinaryNode<int> * p = head;
+				Test::BinaryNodeWithParent<int> * p2 = head2;
+				do {
+					ASSERT1(p->content == p2->content);
+					p = p->right;
+					p2 = (Test::BinaryNodeWithParent<int> *)p2->right;
+				} while (p != nullptr && p2 != nullptr);
+
+				do {
+					p = head;
+					p2 = head2;
+					head = head->right;
+					head2 = (Test::BinaryNodeWithParent<int> *)head2->right;
+					delete p;
+					delete p2;
+				} while (head != nullptr && head2 != nullptr);
+			}
+		};
+
+		for (int i = 1; i <= 10; i++) {
+			check(i);
+		}
+
+		for (int i = 1; i <= 100; i++) {
+			int count = 1 + Test::Random::Next();
+			check(count);
+		}
 	});
 }

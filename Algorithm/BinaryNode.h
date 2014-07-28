@@ -23,21 +23,32 @@ namespace Test {
 
 		virtual ~BinaryNode(void)
 		{
-			if (this->left != nullptr)
-			{
-				delete this->left;
-				this->left = nullptr;
-			}
-
-			if (this->right != nullptr)
-			{
-				delete this->right;
-				this->right = nullptr;
-			}
-
+			this->left = nullptr;
+			this->right = nullptr;
 #if DEBUG
 			cout << "Deleting " << this->content << endl;
 #endif
+		}
+
+		// Delete a rooted binary tree
+		static void DeleteTree(BinaryNode * node)
+		{
+			if (node == nullptr) return;
+			if (node->left != nullptr) {
+				DeleteTree(node->left);
+				delete node->left;
+				node->left = nullptr;
+			}
+			if (node->right != nullptr) {
+				DeleteTree(node->right);
+				delete node->right;
+				node->right = nullptr;
+			}
+		}
+
+		void DeleteTree(void)
+		{
+			DeleteTree(this);
 		}
 
 		// Recursive

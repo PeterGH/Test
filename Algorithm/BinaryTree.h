@@ -115,6 +115,7 @@ namespace Test {
 		virtual ~BinaryTree(void)
 		{
 			if (this->root != nullptr) {
+				this->root->DeleteTree();
 				delete this->root;
 				this->root = nullptr;
 			}
@@ -253,5 +254,53 @@ namespace Test {
 		}
 
 		bool operator==(const BinaryTree & other) const { return Compare(this->root, other.root) == 0; }
+
+		// http://leetcode.com/2010/11/convert-binary-search-tree-bst-to.html
+		// Flatten a binary tree into a doubly-link-list.
+		// Return head and tail, head->left = nullptr, tail->right = nullptr,
+		// i.e., the list is not circular.
+		N<T> * ToDoubleLinkList(N<T> * & head, N<T> * & tail)
+		{
+			function<void(N<T> *, N<T> * &, N<T> * &)> convert = [&](N<T> * node, N<T> * & min, N<T> * & max) {
+				min = nullptr;
+				max = nullptr;
+				if (node == nullptr) return;
+
+				N<T> * leftMin = nullptr;
+				N<T> * leftMax = nullptr;
+				convert((N<T> *)node->left, leftMin, leftMax);
+
+				N<T> * rightMin = nullptr;
+				N<T> * rightMax = nullptr;
+				convert((N<T> *)node->right, rightMin, rightMax);
+
+				if (leftMax == nullptr) {
+					leftMin = node;
+					leftMax = node;
+				} else {
+					leftMax->right = node;
+					node->left = leftMax;
+				}
+
+				if (rightMin == nullptr) {
+					rightMin = node;
+					rightMax = node;
+				} else {
+					rightMin->left = node;
+					node->right = rightMin;
+				}
+
+				min = leftMin;
+				max = rightMax;
+			};
+
+			head = nullptr;
+			tail = nullptr;
+			convert(this->root, head, tail);
+
+			this->root = nullptr;
+
+			return head;
+		}
 	};
 }

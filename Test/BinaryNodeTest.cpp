@@ -10,6 +10,7 @@ void BinaryNodeTest::Init(void)
 			cout << node->left->content << endl;
 			cout << node->right->content << endl;
 			cout << node->content << endl;
+			node->DeleteTree();
 			delete node;
 		}
 		{
@@ -19,6 +20,7 @@ void BinaryNodeTest::Init(void)
 			cout << node->left->content << endl;
 			cout << node->right->content << endl;
 			cout << node->content << endl;
+			node->DeleteTree();
 			delete node;
 		}
 	});

@@ -11,7 +11,8 @@ namespace Test {
 
 		virtual ~BinaryNodeWithParent(void)
 		{
-			BinaryNode::~BinaryNode();
+			// Base destructor is called implicitly
+			// BinaryNode::~BinaryNode();
 			this->parent = nullptr;
 		}
 

@@ -511,4 +511,64 @@ void BinarySearchTreeTest::Init(void)
 		ASSERT1(true == tree2.Verify());
 		ASSERT1(tree == tree2);
 	});
+
+	Add("ToDoubleLinkList", [&](){
+		auto check = [&](int count) {
+			vector<int> items;
+			Test::BinarySearchTree<int> tree;
+			for (int i = 0; i < count; i++) {
+				int e = Test::Random::Next();
+				items.push_back(e);
+				tree.Insert(e);
+			}
+
+			tree.Print();
+
+			Test::BinaryNodeWithParent<int> * head;
+			Test::BinaryNodeWithParent<int> * tail;
+			tree.ToDoubleLinkList(head, tail);
+
+			auto print = [&](Test::BinaryNode<int> * head, Test::BinaryNode<int> * tail) -> int {
+				if (head == nullptr || tail == nullptr) return 0;
+				int c = 0;
+				Logger().WriteInformation("head");
+				do {
+					Logger().WriteInformation(" <=> %d", head->content);
+					c++;
+					head = head->right;
+				} while (head != nullptr);
+				Logger().WriteInformation(" <=> tail\n");
+				return c;
+			};
+
+			int c = print(head, tail);
+			ASSERT1(c == count);
+
+			if (c > 0) {
+				sort(items.begin(), items.end());
+				vector<int>::iterator it = items.begin();
+				Test::BinaryNodeWithParent<int> * p = head;
+				do {
+					ASSERT1(*it == p->content);
+					it++;
+					p = (Test::BinaryNodeWithParent<int> *)p->right;
+				} while (it != items.end() && p != nullptr);
+
+				do {
+					p = head;
+					head = (Test::BinaryNodeWithParent<int> *)head->right;
+					delete p;
+				} while (head != nullptr);
+			}
+		};
+
+		for (int i = 1; i <= 10; i++) {
+			check(i);
+		}
+
+		for (int i = 1; i <= 100; i++) {
+			int count = 1 + Test::Random::Next();
+			check(count);
+		}
+	});
 }
