@@ -1,10 +1,12 @@
 #pragma once
 #include <functional>
+#include <ppl.h>
 #include "BinaryIterator.h"
 #include "InOrderBinaryIterator.h"
 #include "Node1.h"
 #include "PostOrderBinaryIterator.h"
 #include "PreOrderBinaryIterator.h"
+using namespace concurrency;
 using namespace std;
 
 namespace Test {
@@ -323,7 +325,7 @@ namespace Test {
 				}
 
 				Node1<T> * first = head;
-				Node1<T> * second = head;
+				Node1<T> * second = head->Next();
 				while (second->Next() != nullptr && second->Next()->Next() != nullptr) {
 					first = first->Next();
 					second = second->Next();
@@ -336,14 +338,51 @@ namespace Test {
 				node->Next() = nullptr;
 
 				N<T> * tree = new N<T>(node->Value());
-				tree->left = convert(head);
-				tree->right = convert(first);
+
+				parallel_invoke(
+					[&convert, &tree, head] { tree->left = convert(head); },
+					[&convert, &tree, first] { tree->right = convert(first); });
+
 				delete node;
 
 				return tree;
 			};
 
 			this->root = convert(list);
+		}
+
+		void FromSingleLinkList2(Node1<T> * list)
+		{
+			if (list == nullptr) return;
+
+			function<N<T> * (Node1<T> * &, int, int)> convert = [&](Node1<T> * & head, int begin, int end) -> N<T> * {
+				if (head == nullptr || begin > end) return nullptr;
+
+				// Choose the median one if there are odd numbers in [begin, end]
+				// Choose the upper median if there are even numbers in [begin, end]
+				int middle = begin + ((1 + end - begin) >> 1);
+
+				N<T> * left = convert(head, begin, middle - 1);
+				N<T> * node = new N<T>(head->Value());
+				node->left = left;
+
+				Node1<T> * p = head;
+				head = head->Next();
+				delete p;
+
+				node->right = convert(head, middle + 1, end);
+
+				return node;
+			};
+
+			Node1<T> * p = list;
+			int i = 0;
+			while (p != nullptr) {
+				p = p->Next();
+				i++;
+			}
+
+			this->root = convert(list, 0, i-1);
 		}
 	};
 }

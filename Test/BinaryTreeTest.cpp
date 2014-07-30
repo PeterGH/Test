@@ -485,17 +485,30 @@ void BinaryTreeTest::Init(void)
 	});
 
 	Add("FromSingleLinkList", [&](){
-		auto check = [&](int count) {
-			Test::Node1<int> * list = new Test::Node1<int>(0);
+		auto initList = [&](Test::Node1<int> * & list, int count) {
+			list = new Test::Node1<int>(0);
 			Test::Node1<int> * p = list;
 			for (int i = 1; i < count; i++) {
 				p->Next() = new Test::Node1<int>(i);
 				p = p->Next();
 			}
+		};
+
+		auto check = [&](int count) {
+			Logger().WriteInformation("Create a binary tree from a list of %d nodes:\n", count);
+			Test::Node1<int> * list;
+			Test::Node1<int> * list2;
+			initList(list, count);
+			initList(list2, count);
 
 			Test::BinaryTree<int, Test::BinaryNode> tree;
 			tree.FromSingleLinkList(list);
 			tree.Print();
+			Test::BinaryTree<int, Test::BinaryNode> tree2;
+			tree2.FromSingleLinkList2(list2);
+			tree2.Print();
+
+			ASSERT1(tree == tree2);
 		};
 
 		check(1);
