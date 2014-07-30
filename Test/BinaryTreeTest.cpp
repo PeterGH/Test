@@ -483,4 +483,36 @@ void BinaryTreeTest::Init(void)
 			check(count);
 		}
 	});
+
+	Add("FromSingleLinkList", [&](){
+		auto check = [&](int count) {
+			Test::Node1<int> * list = new Test::Node1<int>(0);
+			Test::Node1<int> * p = list;
+			for (int i = 1; i < count; i++) {
+				p->Next() = new Test::Node1<int>(i);
+				p = p->Next();
+			}
+
+			Test::BinaryTree<int, Test::BinaryNode> tree;
+			tree.FromSingleLinkList(list);
+			tree.Print();
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
 }

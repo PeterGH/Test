@@ -1,9 +1,10 @@
 #pragma once
 #include <functional>
 #include "BinaryIterator.h"
-#include "PreOrderBinaryIterator.h"
 #include "InOrderBinaryIterator.h"
+#include "Node1.h"
 #include "PostOrderBinaryIterator.h"
+#include "PreOrderBinaryIterator.h"
 using namespace std;
 
 namespace Test {
@@ -112,13 +113,18 @@ namespace Test {
 	public:
 		BinaryTree(void) : root(nullptr) {}
 
-		virtual ~BinaryTree(void)
+		void DeleteTree(void)
 		{
 			if (this->root != nullptr) {
 				this->root->DeleteTree();
 				delete this->root;
 				this->root = nullptr;
 			}
+		}
+
+		virtual ~BinaryTree(void)
+		{
+			this->DeleteTree();
 		}
 
 		virtual void Insert(T & content) {}
@@ -301,6 +307,43 @@ namespace Test {
 			this->root = nullptr;
 
 			return head;
+		}
+
+		void FromSingleLinkList(Node1<T> * list)
+		{
+			if (list == nullptr) return;
+
+			function<N<T> * (Node1<T> *)> convert = [&](Node1<T> * head) -> N<T> * {
+				if (head == nullptr) return nullptr;
+
+				if (head->Next() == nullptr) {
+					N<T> * tree = new N<T>(head->Value());
+					delete head;
+					return tree;
+				}
+
+				Node1<T> * first = head;
+				Node1<T> * second = head;
+				while (second->Next() != nullptr && second->Next()->Next() != nullptr) {
+					first = first->Next();
+					second = second->Next();
+					second = second->Next();
+				}
+
+				Node1<T> * node = first->Next();
+				first->Next() = nullptr;
+				first = node->Next();
+				node->Next() = nullptr;
+
+				N<T> * tree = new N<T>(node->Value());
+				tree->left = convert(head);
+				tree->right = convert(first);
+				delete node;
+
+				return tree;
+			};
+
+			this->root = convert(list);
 		}
 	};
 }
