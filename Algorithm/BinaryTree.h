@@ -53,36 +53,6 @@ namespace Test {
 			else return right;
 		}
 
-		static N<T> * Min(N<T> * node)
-		{
-			if (node == nullptr) return node;
-			N<T> * left = Min((N<T> *)node->left);
-			N<T> * right = Min((N<T> *)node->right);
-			N<T> * min = node;
-			if (left != nullptr && left->content < min->content) {
-				min = left;
-			}
-			if (right != nullptr && right->content < min->content) {
-				min = right;
-			}
-			return min;
-		}
-
-		static N<T> * Max(N<T> * node)
-		{
-			if (node == nullptr) return node;
-			N<T> * left = Max((N<T> *)node->left);
-			N<T> * right = Max((N<T> *)node->right);
-			N<T> * max = node;
-			if (left != nullptr && left->content > max->content) {
-				max = left;
-			}
-			if (right != nullptr && right->content > max->content) {
-				max = right;
-			}
-			return max;
-		}
-
 		static N<T> * BuildTreePreOrderInOrderInternal(T * preOrder, int preLength, T * inOrder, int inLength)
 		{
 			if (inOrder == nullptr || preOrder == nullptr || inLength <= 0 || preLength <= 0 || inLength != preLength) return nullptr;
@@ -160,7 +130,7 @@ namespace Test {
 			this->DeleteTree();
 		}
 
-		const N<T> * Root(void) { return this->root; }
+		N<T> * Root(void) { return this->root; }
 
 		N<T> * Root(N<T> * other)
 		{
@@ -223,6 +193,36 @@ namespace Test {
 				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
 			}
 			return node->content;
+		}
+
+		static N<T> * Min(N<T> * node)
+		{
+			if (node == nullptr) return node;
+			N<T> * left = Min((N<T> *)node->left);
+			N<T> * right = Min((N<T> *)node->right);
+			N<T> * min = node;
+			if (left != nullptr && left->content < min->content) {
+				min = left;
+			}
+			if (right != nullptr && right->content < min->content) {
+				min = right;
+			}
+			return min;
+		}
+
+		static N<T> * Max(N<T> * node)
+		{
+			if (node == nullptr) return node;
+			N<T> * left = Max((N<T> *)node->left);
+			N<T> * right = Max((N<T> *)node->right);
+			N<T> * max = node;
+			if (left != nullptr && left->content > max->content) {
+				max = left;
+			}
+			if (right != nullptr && right->content > max->content) {
+				max = right;
+			}
+			return max;
 		}
 
 		virtual T & Min(void)

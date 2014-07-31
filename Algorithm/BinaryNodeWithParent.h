@@ -162,7 +162,7 @@ namespace Test {
 
 		int Depth(void) { return Depth(this); }
 
-		static BinaryNodeWithParent * Clone(BinaryNodeWithParent * node)
+		static BinaryNodeWithParent * Clone(BinaryNode * node)
 		{
 			if (node == nullptr) return nullptr;
 			BinaryNodeWithParent * newNode = new BinaryNodeWithParent(node->content);

@@ -136,8 +136,8 @@ void BinarySearchTreeTest::Init(void)
 
 		tree.Print();
 
-		for (int i = 0; i < count-1; i++) {
-			for (int j = i+1; j < count; j++) {
+		for (int i = 0; i < count - 1; i++) {
+			for (int j = i + 1; j < count; j++) {
 				int a = tree.LowestCommonAncestor(inserted[i], inserted[j]);
 				int b = tree.LowestCommonAncestor2(inserted[i], inserted[j]);
 				int c = tree.LowestCommonAncestor3(inserted[i], inserted[j]);
@@ -152,7 +152,7 @@ void BinarySearchTreeTest::Init(void)
 		for (int i = 0; i < 100; i++) {
 			Test::BinarySearchTree<int> tree;
 			int count = 1 + Test::Random::Next();
-			
+
 			for (int j = 0; j < count; j++) {
 				int v = Test::Random::Next();
 				tree.Insert(v);
@@ -167,7 +167,7 @@ void BinarySearchTreeTest::Init(void)
 			vector<int> v5;
 			vector<int> v6;
 
-			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function<void(int)>{
+			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
 				function<void(int)> w = [&](int n){
 					v.push_back(n);
 				};
@@ -209,7 +209,7 @@ void BinarySearchTreeTest::Init(void)
 		for (int i = 0; i < 100; i++) {
 			Test::BinarySearchTree<int> tree;
 			int count = 1 + Test::Random::Next();
-			
+
 			for (int j = 0; j < count; j++) {
 				int v = Test::Random::Next();
 				tree.Insert(v);
@@ -224,7 +224,7 @@ void BinarySearchTreeTest::Init(void)
 			vector<int> v5;
 			vector<int> v6;
 
-			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function<void(int)>{
+			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
 				function<void(int)> w = [&](int n){
 					v.push_back(n);
 				};
@@ -281,7 +281,7 @@ void BinarySearchTreeTest::Init(void)
 			vector<int> v5;
 			vector<int> v6;
 
-			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function<void(int)>{
+			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
 				function<void(int)> w = [&](int n){
 					v.push_back(n);
 				};
@@ -410,6 +410,42 @@ void BinarySearchTreeTest::Init(void)
 		}
 	});
 
+	Add("Verify", [&](){
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(80);
+			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(70);
+			Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(100);
+			n1->left = n2;
+			n2->right = n3;
+			Test::BinaryTree<int, Test::BinaryNode> tree;
+			tree.Root(n1);
+			tree.Print();
+			ASSERT1(Test::BinarySearchTree<int>::Verify(n1) == false);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(80);
+			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(80);
+			Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(70);
+			n1->left = n2;
+			n2->right = n3;
+			Test::BinaryTree<int, Test::BinaryNode> tree;
+			tree.Root(n1);
+			tree.Print();
+			ASSERT1(Test::BinarySearchTree<int>::Verify(n1) == false);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(80);
+			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(80);
+			Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(70);
+			n1->left = n3;
+			n1->right = n2;
+			Test::BinaryTree<int, Test::BinaryNode> tree;
+			tree.Root(n1);
+			tree.Print();
+			ASSERT1(Test::BinarySearchTree<int>::Verify(n1) == true);
+		}
+	});
+
 	Add("BuildTreePreOrderInOrder", [&](){
 		Test::BinarySearchTree<int> tree;
 		set<int> values;
@@ -429,7 +465,7 @@ void BinarySearchTreeTest::Init(void)
 		unique_ptr<int[]> preOrder(new int[count]);
 		unique_ptr<int[]> inOrder(new int[count]);
 
-		function<function<void(int)>(unique_ptr<int[]> &, int &)> f = [&](unique_ptr<int[]> & v, int & k)->function<void(int)>{
+		function<function<void(int)>(unique_ptr<int[]> &, int &)> f = [&](unique_ptr<int[]> & v, int & k)->function < void(int) > {
 			function<void(int)> w = [&](int n){
 				v[k++] = n;
 			};
@@ -480,7 +516,7 @@ void BinarySearchTreeTest::Init(void)
 		unique_ptr<int[]> inOrder(new int[count]);
 		unique_ptr<int[]> postOrder(new int[count]);
 
-		function<function<void(int)>(unique_ptr<int[]> &, int &)> f = [&](unique_ptr<int[]> & v, int & k)->function<void(int)>{
+		function<function<void(int)>(unique_ptr<int[]> &, int &)> f = [&](unique_ptr<int[]> & v, int & k)->function < void(int) > {
 			function<void(int)> w = [&](int n){
 				v[k++] = n;
 			};
@@ -724,6 +760,158 @@ void BinarySearchTreeTest::Init(void)
 			ASSERT1(tree == searchTree);
 			ASSERT1(tree == searchTree2);
 			ASSERT1(tree == searchTree3);
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
+
+	Add("MaxSubTreeFromBinaryTree1", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Search a max binary search sub tree from a binary tree of %d nodes:\n", count);
+
+			Test::BinaryTree<int, Test::BinaryNode> tree;
+			for (int i = 0; i < count; i++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			Test::BinarySearchTree<int> searchTree;
+			Test::BinarySearchTree<int> searchTree2;
+			searchTree.MaxSubTreeFromBinaryTree(&tree);
+			searchTree2.MaxSubTreeFromBinaryTree2(&tree);
+			tree.Print();
+			searchTree.Print();
+			searchTree2.Print();
+			ASSERT1(searchTree.Verify());
+			ASSERT1(searchTree2.Verify());
+			ASSERT1(searchTree == searchTree2);
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
+
+	Add("MaxSubTreeFromBinaryTree2", [&](){
+		Logger().WriteInformation("Search a max binary search sub tree from a binary tree:\n");
+		Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(80);
+		Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(70);
+		Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(100);
+		Test::BinaryNode<int> * n4 = new Test::BinaryNode<int>(90);
+		Test::BinaryNode<int> * n5 = new Test::BinaryNode<int>(60);
+		Test::BinaryNode<int> * n6 = new Test::BinaryNode<int>(85);
+		Test::BinaryNode<int> * n7 = new Test::BinaryNode<int>(75);
+		n1->left = n2;
+		n1->right = n3;
+		n3->left = n4;
+		n4->left = n5;
+		n5->right = n6;
+		n2->right = n7;
+
+		Test::BinaryTree<int, Test::BinaryNode> tree;
+		tree.Root(n1);
+
+		Test::BinarySearchTree<int> searchTree;
+		Test::BinarySearchTree<int> searchTree2;
+		searchTree.MaxSubTreeFromBinaryTree(&tree);
+		searchTree2.MaxSubTreeFromBinaryTree2(&tree);
+		tree.Print();
+		searchTree.Print();
+		searchTree2.Print();
+		ASSERT1(searchTree.Verify());
+		ASSERT1(searchTree2.Verify());
+		ASSERT1(searchTree == searchTree2);
+	});
+
+	Add("MaxSubTreeFromCompleteBinaryTree", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Search a max binary search sub tree from a complete binary tree of %d nodes:\n", count);
+
+			Test::CompleteBinaryTree<int, Test::BinaryNode> tree;
+			for (int i = 0; i < count; i++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			Test::BinarySearchTree<int> searchTree;
+			Test::BinarySearchTree<int> searchTree2;
+			searchTree.MaxSubTreeFromBinaryTree(&tree);
+			searchTree2.MaxSubTreeFromBinaryTree2(&tree);
+			tree.Print();
+			searchTree.Print();
+			searchTree2.Print();
+			ASSERT1(searchTree.Verify());
+			ASSERT1(searchTree2.Verify());
+			ASSERT1(searchTree == searchTree2);
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
+
+	Add("MaxSubTreeFromBinarySearchTree", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Search a max binary search sub tree from a binary search tree of %d nodes:\n", count);
+
+			Test::BinarySearchTree<int> tree;
+			for (int i = 0; i < count; i++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			Test::BinarySearchTree<int> searchTree;
+			Test::BinarySearchTree<int> searchTree2;
+			searchTree.MaxSubTreeFromBinaryTree((Test::BinaryTree<int, Test::BinaryNode> *)&tree);
+			searchTree2.MaxSubTreeFromBinaryTree2((Test::BinaryTree<int, Test::BinaryNode> *)&tree);
+			tree.Print();
+			searchTree.Print();
+			searchTree2.Print();
+			ASSERT1(searchTree.Verify());
+			ASSERT1(searchTree2.Verify());
+			ASSERT1(tree == searchTree);
+			ASSERT1(tree == searchTree2);
 		};
 
 		check(1);
