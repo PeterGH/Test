@@ -1,10 +1,14 @@
 #pragma once
+#include <functional>
+#ifdef DEBUG
+#include <iostream>
+#endif
 #include "BinaryNodeWithParent.h"
 #include "BinaryTree.h"
 #include "PreOrderBinaryIteratorWithOutStack.h"
 #include "InOrderBinaryIteratorWithOutStack.h"
 #include "PostOrderBinaryIteratorWithOutStack.h"
-
+using namespace std;
 namespace Test {
 	template<class T> class BinarySearchTree : public BinaryTree<T, BinaryNodeWithParent> {
 	private:
@@ -486,5 +490,414 @@ namespace Test {
 
 		PostOrderBinaryIteratorWithOutStack<T> PostOrderWithOutStackBegin() const { return PostOrderBinaryIteratorWithOutStack<T>(this->root); }
 		PostOrderBinaryIteratorWithOutStack<T> PostOrderWithOutStackEnd() const { return PostOrderBinaryIteratorWithOutStack<T>(); }
+
+		// http://leetcode.com/2010/11/largest-binary-search-tree-bst-in_22.html
+		void MaxTreeFromBinaryTree(BinaryTree<T, BinaryNode> * binaryTree)
+		{
+			function<void(BinaryNodeWithParent<T> * &)> deleteTree = [&](BinaryNodeWithParent<T> * & node) {
+				node->DeleteTree();
+				delete node;
+			};
+
+			function<BinaryNodeWithParent<T> * (BinaryNodeWithParent<T> *, T)>
+			firstNodeLessThanOrEqual = [&](BinaryNodeWithParent<T> * n, T v) -> BinaryNodeWithParent<T> * {
+				BinaryNodeWithParent<T> * p = n;
+				while (p != nullptr) {
+					if (p->content <= v) return p;
+					if (p->left != nullptr) p = (BinaryNodeWithParent<T> *)p->left;
+					else p = (BinaryNodeWithParent<T> *)p->right;
+				}
+				return p;
+			};
+
+			function<BinaryNodeWithParent<T> * (BinaryNodeWithParent<T> *, T)>
+			firstNodeGreaterThan = [&](BinaryNodeWithParent<T> * n, T v) -> BinaryNodeWithParent<T> * {
+				BinaryNodeWithParent<T> * p = n;
+				while (p != nullptr) {
+					if (p->content > v) return p;
+					if (p->right != nullptr) p = (BinaryNodeWithParent<T> *)p->right;
+					else p = (BinaryNodeWithParent<T> *)p->left;
+				}
+				return p;
+			};
+
+			function<void(BinaryNodeWithParent<T> * &, int &, BinaryNodeWithParent<T> *, int)>
+			mergeLeft = [&](BinaryNodeWithParent<T> * & node, int & count, BinaryNodeWithParent<T> * left, int leftCount) {
+				BinaryNodeWithParent<T> * clone = left->Clone();
+				BinaryNodeWithParent<T> * invalid = firstNodeGreaterThan(clone, node->content);
+				int invalidSize = invalid == nullptr ? 0 : invalid->Size();
+				node->left = clone;
+				clone->parent = node;
+				count += (leftCount - invalidSize);
+				if (invalid != nullptr) {
+					BinaryNodeWithParent<T> * p = invalid->parent;
+					p->right = nullptr;
+					deleteTree(invalid);
+				}
+			};
+
+			function<void(BinaryNodeWithParent<T> * &, int &, BinaryNodeWithParent<T> *, int)>
+			mergeRight = [&](BinaryNodeWithParent<T> * & node, int & count, BinaryNodeWithParent<T> * right, int rightCount) {
+				BinaryNodeWithParent<T> * clone = right->Clone();
+				BinaryNodeWithParent<T> * invalid = firstNodeLessThanOrEqual(clone, node->content);
+				int invalidSize = invalid == nullptr ? 0 : invalid->Size();
+				node->right = clone;
+				clone->parent = node;
+				count += (rightCount - invalidSize);
+				if (invalid != nullptr) {
+					BinaryNodeWithParent<T> * p = invalid->parent;
+					p->left = nullptr;
+					deleteTree(invalid);
+				}
+			};
+
+			function<void(const BinaryNode<T> *, BinaryNodeWithParent<T> * &, int &, BinaryNodeWithParent<T> * &, int &)>
+			search = [&](
+				const BinaryNode<T> * node,          // current node from input binary tree
+				BinaryNodeWithParent<T> * & current, // root of current search tree
+				int & currentCount,                  // node count of current search tree
+				BinaryNodeWithParent<T> * & last,    // root of last max search tree. can be current or different.
+				int & lastCount                      // node count of last max search tree.
+				)
+			{
+				if (node == nullptr) {
+					current = nullptr;
+					currentCount = 0;
+					last = nullptr;
+					lastCount = 0;
+					return;
+				}
+
+				BinaryNodeWithParent<T> * left;
+				int leftCount;
+				BinaryNodeWithParent<T> * leftLast;
+				int leftLastCount;
+				search(node->left, left, leftCount, leftLast, leftLastCount);
+
+				BinaryNodeWithParent<T> * right;
+				int rightCount;
+				BinaryNodeWithParent<T> * rightLast;
+				int rightLastCount;
+				search(node->right, right, rightCount, rightLast, rightLastCount);
+
+				current = new BinaryNodeWithParent<T>(node->content);
+				currentCount = 1;
+
+				if (left != nullptr && left->content <= current->content) {
+					mergeLeft(current, currentCount, left, leftCount);
+				}
+
+				if (right != nullptr && right->content > current->content) {
+					mergeRight(current, currentCount, right, rightCount);
+				}
+
+				if (leftLastCount >= rightLastCount) {
+					last = leftLast;
+					lastCount = leftLastCount;
+				} else {
+					last = rightLast;
+					lastCount = rightLastCount;
+				}
+
+				if (currentCount >= lastCount) {
+					last = current;
+					lastCount = currentCount;
+				}
+
+#ifdef DEBUG
+				cout << node->content << " current count " << currentCount << endl;
+				current->Print();
+				cout << node->content << " last count " << lastCount << endl;
+				last->Print();
+#endif
+
+				if (left != last) {
+					deleteTree(left);
+				}
+
+				if (right != last) {
+					deleteTree(right);
+				}
+
+				if (leftLast != last && leftLast != left) {
+					deleteTree(leftLast);
+				}
+
+				if (rightLast != last && rightLast != right) {
+					deleteTree(rightLast);
+				}
+			};
+
+			BinaryNodeWithParent<T> * node;
+			int count;
+			BinaryNodeWithParent<T> * last;
+			int lastCount;
+			search(binaryTree->Root(), node, count, last, lastCount);
+
+			if (node != last) {
+				if (count >= lastCount) {
+					this->root = node;
+					deleteTree(last);
+				} else {
+					this->root = last;
+					deleteTree(node);
+				}
+			} else {
+				this->root = node;
+			}
+		}
+
+		// http://leetcode.com/2010/11/largest-binary-search-tree-bst-in_22.html
+		void MaxTreeFromBinaryTree2(BinaryTree<T, BinaryNode> * binaryTree)
+		{
+			function<void(BinaryNodeWithParent<T> * &)> deleteTree = [&](BinaryNodeWithParent<T> * & node) {
+				node->DeleteTree();
+				delete node;
+			};
+
+			T binaryTreeMin = binaryTree->Min();
+			T binaryTreeMax = binaryTree->Max();
+
+			function<void(const BinaryNode<T> *, T, T, BinaryNodeWithParent<T> * &, int &, BinaryNodeWithParent<T> * &, int &)>
+			search = [&](
+				const BinaryNode<T> * node,          // current node from input binary tree
+				T min,                               // lower bound of node value
+				T max,                               // upper bound of node value
+				BinaryNodeWithParent<T> * & current, // root of current search tree
+				int & currentCount,                  // node count of current search tree
+				BinaryNodeWithParent<T> * & last,    // root of last max search tree. can be current or different.
+				int & lastCount                      // node count of last max search tree.
+				)
+			{
+				if (node == nullptr) {
+					current = nullptr;
+					currentCount = 0;
+					last = nullptr;
+					lastCount = 0;
+					return;
+				}
+
+				if (min < node->content && node->content <= max) {
+					BinaryNodeWithParent<T> * left;
+					int leftCount;
+					BinaryNodeWithParent<T> * leftLast;
+					int leftLastCount;
+					search(node->left, min, node->content, left, leftCount, leftLast, leftLastCount);
+
+					BinaryNodeWithParent<T> * right;
+					int rightCount;
+					BinaryNodeWithParent<T> * rightLast;
+					int rightLastCount;
+					search(node->right, node->content, max, right, rightCount, rightLast, rightLastCount);
+
+					current = new BinaryNodeWithParent<T>(node->content);
+					currentCount = 1;
+
+					if (left != nullptr) {
+						current->left = left;
+						left->parent = current;
+						currentCount += leftCount;
+					}
+
+					if (right != nullptr) {
+						current->right = right;
+						right->parent = current;
+						currentCount += rightCount;
+					}
+
+					if (leftLastCount >= rightLastCount) {
+						last = leftLast;
+						lastCount = leftLastCount;
+					} else {
+						last = rightLast;
+						lastCount = rightLastCount;
+					}
+
+					if (currentCount >= lastCount) {
+						last = current;
+						lastCount = currentCount;
+					}
+
+					if (left != current->left && left != last) {
+						deleteTree(left);
+					}
+
+					if (right != current->right && right != last) {
+						deleteTree(right);
+					}
+
+					if (leftLast != last && leftLast != left) {
+						deleteTree(leftLast);
+					}
+
+					if (rightLast != last && rightLast != right) {
+						deleteTree(rightLast);
+					}
+				} else {
+					search(node, binaryTreeMin - 1, binaryTreeMax + 1, current, currentCount, last, lastCount);
+					current = nullptr;
+					currentCount = 0;
+				}
+			};
+
+			BinaryNodeWithParent<T> * node;
+			int count;
+			BinaryNodeWithParent<T> * last;
+			int lastCount;
+			search(binaryTree->Root(), binaryTreeMin - 1, binaryTreeMax + 1, node, count, last, lastCount);
+
+			if (node != last) {
+				if (count >= lastCount) {
+					this->root = node;
+					deleteTree(last);
+				} else {
+					this->root = last;
+					deleteTree(node);
+				}
+			} else {
+				this->root = node;
+			}
+		}
+
+		// http://leetcode.com/2010/11/largest-binary-search-tree-bst-in_22.html
+		// This implementation has a bug.
+		void MaxTreeFromBinaryTree3(BinaryTree<T, BinaryNode> * binaryTree)
+		{
+			function<void(BinaryNodeWithParent<T> * &)> deleteTree = [&](BinaryNodeWithParent<T> * & node) {
+				node->DeleteTree();
+				delete node;
+			};
+
+			function<void(const BinaryNode<T> *, BinaryNodeWithParent<T> * &, int &, T &, T &, BinaryNodeWithParent<T> * &, int &, T &, T &)>
+			search = [&](
+				const BinaryNode<T> * node,          // current node from input binary tree
+				BinaryNodeWithParent<T> * & current, // root of current search tree
+				int & currentCount,                  // node count of current search tree
+				T & currentMin,                      // min of current search tree
+				T & currentMax,                      // max of current search tree
+				BinaryNodeWithParent<T> * & last,    // root of last max search tree. can be current or different.
+				int & lastCount,                     // node count of last max search tree.
+				T & lastMin,                         // min of last search tree
+				T & lastMax                          // max of last search tree
+				)
+			{
+				if (node == nullptr) {
+					current = nullptr;
+					currentCount = 0;
+					last = nullptr;
+					lastCount = 0;
+					return;
+				}
+
+				BinaryNodeWithParent<T> * left;
+				int leftCount;
+				T leftMin;
+				T leftMax;
+				BinaryNodeWithParent<T> * leftLast;
+				int leftLastCount;
+				T leftLastMin;
+				T leftLastMax;
+				search(node->left, left, leftCount, leftMin, leftMax, leftLast, leftLastCount, leftLastMin, leftLastMax);
+
+				BinaryNodeWithParent<T> * right;
+				int rightCount;
+				T rightMin;
+				T rightMax;
+				BinaryNodeWithParent<T> * rightLast;
+				int rightLastCount;
+				T rightLastMin;
+				T rightLastMax;
+				search(node->right, right, rightCount, rightMin, rightMax, rightLast, rightLastCount, rightLastMin, rightLastMax);
+
+				current = new BinaryNodeWithParent<T>(node->content);
+				currentCount = 1;
+				currentMin = node->content;
+				currentMax = node->content;
+
+				if (left != nullptr && leftMax <= node->content) {
+					current->left = left;
+					left->parent = current;
+					currentCount += leftCount;
+					currentMin = leftMin;
+				} else {
+					// When leftMax > node->content, it is possible part
+					// of left tree and node can form a valid search tree.
+				}
+
+				if (right != nullptr && node->content < rightMin) {
+					current->right = right;
+					right->parent = current;
+					currentCount += rightCount;
+					currentMax = rightMax;
+				} else {
+					// When node->content >= rightMin, it is possible part
+					// of right tree and node can form a valid search tree.
+				}
+
+				if (leftLastCount >= rightLastCount) {
+					last = leftLast;
+					lastCount = leftLastCount;
+					lastMin = leftLastMin;
+					lastMax = leftLastMax;
+				} else {
+					last = rightLast;
+					lastCount = rightLastCount;
+					lastMin = rightLastMin;
+					lastMax = rightLastMax;
+				}
+
+				if (currentCount >= lastCount) {
+					last = current;
+					lastCount = currentCount;
+					lastMin = currentMin;
+					lastMax = currentMax;
+				}
+
+#ifdef DEBUG
+				cout << node->content << " current" << endl;
+				current->Print();
+				cout << node->content << " last" << endl;
+				last->Print();
+#endif
+
+				if (left != current->left && left != last) {
+					deleteTree(left);
+				}
+
+				if (right != current->right && right != last) {
+					deleteTree(right);
+				}
+
+				if (leftLast != last && leftLast != left) {
+					deleteTree(leftLast);
+				}
+
+				if (rightLast != last && rightLast != right) {
+					deleteTree(rightLast);
+				}
+			};
+
+			BinaryNodeWithParent<T> * node;
+			int count;
+			T min;
+			T max;
+			BinaryNodeWithParent<T> * last;
+			int lastCount;
+			T lastMin;
+			T lastMax;
+			search(binaryTree->Root(), node, count, min, max, last, lastCount, lastMin, lastMax);
+
+			if (node != last) {
+				if (count >= lastCount) {
+					this->root = node;
+					deleteTree(last);
+				} else {
+					this->root = last;
+					deleteTree(node);
+				}
+			} else {
+				this->root = node;
+			}
+		}
 	};
 }

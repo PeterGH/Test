@@ -161,5 +161,24 @@ namespace Test {
 		}
 
 		int Depth(void) { return Depth(this); }
+
+		static BinaryNodeWithParent * Clone(BinaryNodeWithParent * node)
+		{
+			if (node == nullptr) return nullptr;
+			BinaryNodeWithParent * newNode = new BinaryNodeWithParent(node->content);
+			BinaryNodeWithParent * left = Clone((BinaryNodeWithParent *)node->left);
+			if (left != nullptr) {
+				newNode->left = left;
+				left->parent = newNode;
+			}
+			BinaryNodeWithParent * right = Clone((BinaryNodeWithParent *)node->right);
+			if (right != nullptr) {
+				newNode->right = right;
+				right->parent = newNode;
+			}
+			return newNode;
+		}
+
+		BinaryNodeWithParent * Clone(void) { return Clone(this); }
 	};
 }

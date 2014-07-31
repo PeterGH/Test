@@ -231,6 +231,14 @@ namespace Test {
 
 		virtual int Height(void) { return Height(this); }
 
+		static int Size(BinaryNode * node)
+		{
+			if (node == nullptr) return 0;
+			return 1 + Size(node->left) + Size(node->right);
+		}
+
+		virtual int Size(void) { return Size(this); }
+
 		static stringstream & ToString(stringstream & ss, BinaryNode * node, int x, vector<int> & y)
 		{
 			if (node == nullptr) return ss;

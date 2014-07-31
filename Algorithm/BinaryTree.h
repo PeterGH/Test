@@ -6,6 +6,7 @@
 #include "Node1.h"
 #include "PostOrderBinaryIterator.h"
 #include "PreOrderBinaryIterator.h"
+#include "Random.h"
 using namespace concurrency;
 using namespace std;
 
@@ -50,6 +51,36 @@ namespace Test {
 			if (left != nullptr && right != nullptr) return node;
 			if (left != nullptr) return left;
 			else return right;
+		}
+
+		static N<T> * Min(N<T> * node)
+		{
+			if (node == nullptr) return node;
+			N<T> * left = Min((N<T> *)node->left);
+			N<T> * right = Min((N<T> *)node->right);
+			N<T> * min = node;
+			if (left != nullptr && left->content < min->content) {
+				min = left;
+			}
+			if (right != nullptr && right->content < min->content) {
+				min = right;
+			}
+			return min;
+		}
+
+		static N<T> * Max(N<T> * node)
+		{
+			if (node == nullptr) return node;
+			N<T> * left = Max((N<T> *)node->left);
+			N<T> * right = Max((N<T> *)node->right);
+			N<T> * max = node;
+			if (left != nullptr && left->content > max->content) {
+				max = left;
+			}
+			if (right != nullptr && right->content > max->content) {
+				max = right;
+			}
+			return max;
 		}
 
 		static N<T> * BuildTreePreOrderInOrderInternal(T * preOrder, int preLength, T * inOrder, int inLength)
@@ -129,7 +160,43 @@ namespace Test {
 			this->DeleteTree();
 		}
 
-		virtual void Insert(T & content) {}
+		const N<T> * Root(void) { return this->root; }
+
+		N<T> * Root(N<T> * other)
+		{
+			N<T> * p = this->root;
+			this->root = other;
+			return p;
+		}
+
+		// Insert a new node below a random leaf node
+		virtual void Insert(T & content)
+		{
+			if (this->root == nullptr) {
+				this->root = new N<T>(content);
+				return;
+			}
+
+			N<T> * p = this->root;
+			unsigned int r = 0;
+			while (p->left != nullptr && p->right != nullptr) {
+				if (r == 0) {
+					r = Random::Next();
+				}
+				if ((r & 0x1) == 0) {
+					p = (N<T> *)p->left;
+				} else {
+					p = (N<T> *)p->right;
+				}
+				r = r >> 1;
+			}
+
+			if (p->left == nullptr) {
+				p->left = new N<T>(content);
+			} else {
+				p->right = new N<T>(content);
+			}
+		}
 
 		virtual N<T> * Search(const T & content)
 		{
@@ -156,6 +223,18 @@ namespace Test {
 				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
 			}
 			return node->content;
+		}
+
+		virtual T & Min(void)
+		{
+			if (this->root != nullptr) return Min(this->root)->content;
+			else throw runtime_error("Tree is empty");
+		}
+
+		virtual T & Max(void)
+		{
+			if (this->root != nullptr) return Max(this->root)->content;
+			else throw runtime_error("Tree is empty");
 		}
 
 		void PreOrderWalk(function<void(T)> f)

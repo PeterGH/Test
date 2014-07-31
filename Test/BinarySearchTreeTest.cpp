@@ -571,4 +571,176 @@ void BinarySearchTreeTest::Init(void)
 			check(count);
 		}
 	});
+
+	Add("MaxTreeFromBinaryTree1", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Search a max binary search tree from a binary tree of %d nodes:\n", count);
+
+			Test::BinaryTree<int, Test::BinaryNode> tree;
+			for (int i = 0; i < count; i++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			Test::BinarySearchTree<int> searchTree;
+			Test::BinarySearchTree<int> searchTree2;
+			// Test::BinarySearchTree<int> searchTree3;
+			searchTree.MaxTreeFromBinaryTree(&tree);
+			searchTree2.MaxTreeFromBinaryTree2(&tree);
+			// searchTree3.MaxTreeFromBinaryTree3(&tree);
+			tree.Print();
+			searchTree.Print();
+			searchTree2.Print();
+			// searchTree3.Print();
+			ASSERT1(searchTree.Verify());
+			ASSERT1(searchTree2.Verify());
+			// ASSERT1(searchTree3.Verify());
+			ASSERT1(searchTree == searchTree2);
+			// ASSERT1(searchTree == searchTree3);
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
+
+	Add("MaxTreeFromBinaryTree2", [&](){
+		Logger().WriteInformation("Search a max binary search tree from a binary tree:\n");
+		Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(80);
+		Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(70);
+		Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(100);
+		Test::BinaryNode<int> * n4 = new Test::BinaryNode<int>(90);
+		Test::BinaryNode<int> * n5 = new Test::BinaryNode<int>(60);
+		Test::BinaryNode<int> * n6 = new Test::BinaryNode<int>(85);
+		Test::BinaryNode<int> * n7 = new Test::BinaryNode<int>(75);
+		n1->left = n2;
+		n1->right = n3;
+		n3->left = n4;
+		n4->left = n5;
+		n5->right = n6;
+		n2->right = n7;
+
+		Test::BinaryTree<int, Test::BinaryNode> tree;
+		tree.Root(n1);
+
+		Test::BinarySearchTree<int> searchTree;
+		Test::BinarySearchTree<int> searchTree2;
+		// Test::BinarySearchTree<int> searchTree3;
+		searchTree.MaxTreeFromBinaryTree(&tree);
+		searchTree2.MaxTreeFromBinaryTree2(&tree);
+		// searchTree2.MaxTreeFromBinaryTree2(&tree);
+		tree.Print();
+		searchTree.Print();
+		searchTree2.Print();
+		// searchTree3.Print();
+		ASSERT1(searchTree.Verify());
+		ASSERT1(searchTree2.Verify());
+		// ASSERT1(searchTree3.Verify());
+		ASSERT1(searchTree == searchTree2);
+		// ASSERT1(searchTree == searchTree3);
+	});
+
+	Add("MaxTreeFromCompleteBinaryTree", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Search a max binary search tree from a complete binary tree of %d nodes:\n", count);
+
+			Test::CompleteBinaryTree<int, Test::BinaryNode> tree;
+			for (int i = 0; i < count; i++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			Test::BinarySearchTree<int> searchTree;
+			Test::BinarySearchTree<int> searchTree2;
+			// Test::BinarySearchTree<int> searchTree3;
+			searchTree.MaxTreeFromBinaryTree(&tree);
+			searchTree2.MaxTreeFromBinaryTree2(&tree);
+			// searchTree3.MaxTreeFromBinaryTree3(&tree);
+			tree.Print();
+			searchTree.Print();
+			searchTree2.Print();
+			// searchTree3.Print();
+			ASSERT1(searchTree.Verify());
+			ASSERT1(searchTree2.Verify());
+			// ASSERT1(searchTree3.Verify());
+			ASSERT1(searchTree == searchTree2);
+			// ASSERT1(searchTree == searchTree3);
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
+
+	Add("MaxTreeFromBinarySearchTree", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Search a max binary search tree from a binary search tree of %d nodes:\n", count);
+
+			Test::BinarySearchTree<int> tree;
+			for (int i = 0; i < count; i++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			Test::BinarySearchTree<int> searchTree;
+			Test::BinarySearchTree<int> searchTree2;
+			Test::BinarySearchTree<int> searchTree3;
+			searchTree.MaxTreeFromBinaryTree((Test::BinaryTree<int, Test::BinaryNode> *)&tree);
+			searchTree2.MaxTreeFromBinaryTree2((Test::BinaryTree<int, Test::BinaryNode> *)&tree);
+			searchTree3.MaxTreeFromBinaryTree3((Test::BinaryTree<int, Test::BinaryNode> *)&tree);
+			tree.Print();
+			searchTree.Print();
+			searchTree2.Print();
+			searchTree3.Print();
+			ASSERT1(searchTree.Verify());
+			ASSERT1(searchTree2.Verify());
+			ASSERT1(searchTree3.Verify());
+			ASSERT1(tree == searchTree);
+			ASSERT1(tree == searchTree2);
+			ASSERT1(tree == searchTree3);
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
 }
