@@ -515,5 +515,50 @@ namespace Test {
 			searchLeft(this->root->left, true);
 			searchRight(this->root->right, true);
 		}
+
+		void Serialize(ostream & output)
+		{
+			function<void(N<T> *)> serialize = [&](N<T> * node){
+				if (node == nullptr) {
+					output << '#';
+				} else {
+					output << node->content << ' ';
+					serialize(node->left);
+					serialize(node->right);
+				}
+			};
+
+			serialize(this->root);
+		}
+
+		void Deserialize(istream & input)
+		{
+			function<void(N<T> * &)> deserialize = [&](N<T> * & node) {
+				char c = input.peek();
+				if (c == ' ') {
+					// Two cases: ' '#, or ' 'number
+					// Skip ' ' using seekg. Using input >> c does not work
+					// because the >> operator actually skips ' ' and reads
+					// next charactor, which is either '#' or a digit.
+					input.seekg(1, ios_base::cur);
+					c = input.peek();
+				}
+
+				if (c == '#') {
+					input >> c;
+					return;
+				}
+
+				T value;
+				// The istream >> operator reads a value and leaves
+				// the next ' ' character in the stream.
+				input >> value;
+				node = new N<T>(value);
+				deserialize(node->left);
+				deserialize(node->right);
+			};
+
+			deserialize(this->root);
+		}
 	};
 }
