@@ -540,4 +540,105 @@ void BinaryTreeTest::Init(void)
 		check(15);
 		check(16);
 	});
+
+	Add("GetBoundaryValues1", [&](){
+		auto print = [&](vector<int> & v) {
+			for_each(v.begin(), v.end(), [&](int i){
+				Logger().WriteInformation("  %d", i);
+			});
+			Logger().WriteInformation("\n");
+		};
+
+		auto check = [&](int count) {
+			Logger().WriteInformation("Get boundary values of a binary tree of %d nodes:\n", count);
+
+			Test::BinaryTree<int, Test::BinaryNode> tree;
+			for (int i = 0; i < count; i++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			vector<int> values;
+			tree.GetBoundaryValues(values);
+			tree.Print();
+			print(values);
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
+
+	Add("GetBoundaryValues2", [&](){
+		Logger().WriteInformation("Get boundary values of a binary tree\n");
+		Test::BinaryNode<int> * n0 = new Test::BinaryNode<int>(0);
+		Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+		Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(2);
+		Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(3);
+		Test::BinaryNode<int> * n4 = new Test::BinaryNode<int>(4);
+		Test::BinaryNode<int> * n5 = new Test::BinaryNode<int>(5);
+		Test::BinaryNode<int> * n6 = new Test::BinaryNode<int>(6);
+		Test::BinaryNode<int> * n7 = new Test::BinaryNode<int>(7);
+		Test::BinaryNode<int> * n8 = new Test::BinaryNode<int>(8);
+		Test::BinaryNode<int> * n9 = new Test::BinaryNode<int>(9);
+		Test::BinaryNode<int> * n10 = new Test::BinaryNode<int>(10);
+		Test::BinaryNode<int> * n11 = new Test::BinaryNode<int>(11);
+		Test::BinaryNode<int> * n12 = new Test::BinaryNode<int>(12);
+		Test::BinaryNode<int> * n13 = new Test::BinaryNode<int>(13);
+		Test::BinaryNode<int> * n14 = new Test::BinaryNode<int>(14);
+		Test::BinaryNode<int> * n15 = new Test::BinaryNode<int>(15);
+		Test::BinaryNode<int> * n16 = new Test::BinaryNode<int>(16);
+		n0->left = n1;
+		n0->right = n9;
+		n1->right = n2;
+		n2->left = n3;
+		n2->right = n5;
+		n3->right = n4;
+		n5->left = n6;
+		n5->right = n8;
+		n6->left = n7;
+		n9->left = n10;
+		n10->left = n11;
+		n10->right = n15;
+		n11->left = n12;
+		n11->right = n13;
+		n13->right = n14;
+		n15->left = n16;
+
+		Test::BinaryTree<int, Test::BinaryNode> tree;
+		tree.Root(n0);
+
+		vector<int> expect = { 0, 1, 2, 3, 4, 7, 8, 12, 14, 16, 15, 10, 9 };
+
+		auto print = [&](vector<int> & v) {
+			for_each(v.begin(), v.end(), [&](int i){
+				Logger().WriteInformation("  %d", i);
+			});
+			Logger().WriteInformation("\n");
+		};
+
+		vector<int> values;
+		tree.GetBoundaryValues(values);
+		tree.Print();
+		print(values);
+		print(expect);
+
+		ASSERT1(values.size() == expect.size());
+		for (unsigned int i = 0; i < expect.size(); i++) {
+			ASSERT1(values[i] == expect[i]);
+		}
+	});
 }

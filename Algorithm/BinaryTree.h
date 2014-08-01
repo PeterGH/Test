@@ -463,5 +463,57 @@ namespace Test {
 
 			this->root = convert(list, 0, i-1);
 		}
+
+		// http://leetcode.com/2010/10/print-edge-nodes-boundary-of-binary.html
+		// The boundary values include left-most nodes, leaf nodes and right-most nodes.
+		// A left-most node may be the right child of its parent if its parent is left-most and has no left child.
+		// Same goes to the right-most nodes.
+		void GetBoundaryValues(vector<T> & values)
+		{
+			if (this->root == nullptr) return;
+
+			values.push_back(this->root->content);
+
+			function<void(N<T> *, bool)> searchLeft = [&](N<T> * node, bool include) {
+				if (node == nullptr) return;
+
+				if (include
+					|| node->left == nullptr && node->right == nullptr) {
+					values.push_back(node->content);
+				}
+
+				if (node->left != nullptr) {
+					searchLeft(node->left, include);
+				}
+
+				if (node->right != nullptr) {
+					// include the right child only if
+					// its parent is included and has no left child
+					searchLeft(node->right, include && node->left == nullptr);
+				}
+			};
+
+			function<void(N<T>*, bool)> searchRight = [&](N<T> * node, bool include) {
+				if (node == nullptr) return;
+
+				if (node->left != nullptr) {
+					// include the left child only if
+					// its parent is included and has no right child
+					searchRight(node->left, include && node->right == nullptr);
+				}
+
+				if (node->right != nullptr) {
+					searchRight(node->right, include);
+				}
+
+				if (include
+					|| node->left == nullptr && node->right == nullptr) {
+					values.push_back(node->content);
+				}
+			};
+
+			searchLeft(this->root->left, true);
+			searchRight(this->root->right, true);
+		}
 	};
 }
