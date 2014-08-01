@@ -931,4 +931,42 @@ void BinarySearchTreeTest::Init(void)
 		check(15);
 		check(16);
 	});
+
+	Add("Serialize", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Serialize/deserialize a binary search tree of %d nodes:\n", count);
+
+			Test::BinarySearchTree<int> tree;
+			for (int i = 0; i < count; i++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			stringstream ss;
+			tree.Serialize(ss);
+			tree.Print();
+			Logger().WriteInformation("%s\n", ss.str().c_str());
+			Test::BinarySearchTree<int> tree2;
+			tree2.Deserialize(ss);
+			tree2.Print();
+			ASSERT1(tree == tree2);
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
 }

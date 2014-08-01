@@ -516,22 +516,22 @@ namespace Test {
 			searchRight(this->root->right, true);
 		}
 
-		void Serialize(ostream & output)
+		virtual void Serialize(ostream & output)
 		{
 			function<void(N<T> *)> serialize = [&](N<T> * node){
 				if (node == nullptr) {
 					output << '#';
 				} else {
 					output << node->content << ' ';
-					serialize(node->left);
-					serialize(node->right);
+					serialize((N<T> *)node->left);
+					serialize((N<T> *)node->right);
 				}
 			};
 
 			serialize(this->root);
 		}
 
-		void Deserialize(istream & input)
+		virtual void Deserialize(istream & input)
 		{
 			function<void(N<T> * &)> deserialize = [&](N<T> * & node) {
 				char c = input.peek();
@@ -554,8 +554,8 @@ namespace Test {
 				// the next ' ' character in the stream.
 				input >> value;
 				node = new N<T>(value);
-				deserialize(node->left);
-				deserialize(node->right);
+				deserialize((N<T> * &)node->left);
+				deserialize((N<T> * &)node->right);
 			};
 
 			deserialize(this->root);

@@ -1075,5 +1075,27 @@ namespace Test {
 
 			this->root = node;
 		}
+
+		void Serialize(ostream & output)
+		{
+			function<void(T)> serialize = [&](T v){
+				output << v << ' ';
+			};
+
+			this->PreOrderWalk(serialize);
+		}
+
+		void Deserialize(istream & input)
+		{
+			T value;
+			while (true) {
+				input >> value;
+				if (input.good() && !input.eof()) {
+					this->Insert(value);
+				} else {
+					break;
+				}
+			}
+		}
 	};
 }
