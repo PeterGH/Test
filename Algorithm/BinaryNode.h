@@ -239,54 +239,142 @@ namespace Test {
 
 		virtual int Size(void) { return Size(this); }
 
-		static stringstream & ToString(stringstream & ss, BinaryNode * node, int x, vector<int> & y)
+		static stringstream & ToString(BinaryNode * node, stringstream & output)
 		{
-			if (node == nullptr) return ss;
+			function<void(BinaryNode *, int, vector<int> &)>
+			toString = [&](
+				BinaryNode * n, // Current node to print
+				int x,          // Current node position
+				vector<int> & y // Positions of unprinted right branch starting points
+				)
+			{
+				if (n == nullptr) return;
 
-			static string link = "____";
-			string c = String::Format(" %d ", node->content);
-			ss << c;
-			x += c.length();
+				static string link = "____";
+				string c = String::Format(" %d ", n->content);
+				output << c;
+				x += c.length();
 			
-			if (node->right != nullptr) {
-				// Record current x coordinate,
-				// so it can be used to draw '|'
-				y.push_back(x);
-			}
-			
-			if (node->left != nullptr) {
-				ss << link;
-				ToString(ss, node->left, x + link.length(), y);
-			}
-			
-			if (node->right != nullptr) {
-				ss << endl;
-				
-				for (size_t i = 0; i < y.size(); i++) {
-					int len = i == 0 ? y[i] : y[i] - y[i - 1];
-					string blank(len - 1, ' ');
-					ss << blank << '|';
+				if (n->right != nullptr) {
+					// Record current x coordinate,
+					// so it can be used to draw '|'
+					y.push_back(x);
 				}
-				
-				ss << link;
-				
-				// The right child is ready to print
-				// Remove its coordinate because it is not needed any more
-				y.pop_back();
-				
-				ToString(ss, node->right, x + link.length(), y);
-			}
 			
-			return ss;
+				if (n->left != nullptr) {
+					output << link;
+					toString(n->left, x + link.length(), y);
+				}
+			
+				if (n->right != nullptr) {
+					output << endl;
+				
+					for (size_t i = 0; i < y.size(); i++) {
+						int len = i == 0 ? y[i] : y[i] - y[i - 1];
+						string blank(len - 1, ' ');
+						output << blank << '|';
+					}
+				
+					output << link;
+				
+					// The right child is ready to print
+					// Remove its coordinate because it is not needed any more
+					y.pop_back();
+				
+					toString(n->right, x + link.length(), y);
+				}
+			};
+
+			vector<int> y;
+			toString(node, 0, y);
+			output << endl;
+			return output;
 		}
-		
+
+		static stringstream & ToString2(BinaryNode * node, stringstream & output)
+		{
+			function<void(stringstream *, int, char)>
+			printChar = [&](stringstream * s, int n, char c) {
+				string chars(n, c);
+				*s << chars;
+			};
+
+			function<void(BinaryNode *, unsigned int, int &, int&, vector<stringstream *> &)>
+			toString = [&](
+				BinaryNode * n,             // current node to print
+				unsigned int y,             // current node level
+				int & x,                    // x-axis position of root of last printed sub tree
+				int & r,                    // x-axis position of right-most boundary of last printed sub tree
+				vector<stringstream *> & ss // output streams, one per level
+				)
+			{
+				if (n == nullptr) {
+					return;
+				}
+
+				if (ss.size() <= y) {
+					ss.push_back(new stringstream());
+				}
+
+				// print left tree, update x and r accordingly
+				toString(n->left, y + 1, x, r, ss);
+
+				stringstream * s = ss[y];
+
+				int l = (int)(s->str().length());
+				if (l < x) {
+					printChar(s, x - l, ' ');
+				}
+
+				if (n->left != nullptr && r > x) {
+					*s << '/';
+					printChar(s, r - x - 1, '-');
+				}
+
+				string nc = to_string(n->content);
+				*s << nc;
+
+				x = (r + (nc.length() >> 1));
+				r = r + nc.length();
+
+				int rx = r;
+				int rr = r;
+				toString(n->right, y + 1, rx, rr, ss);
+
+				if (n->right != nullptr && rx > r) {
+					printChar(s, rx - r - 1, '-');
+					*s << '\\';
+				}
+
+				// Update the right most boundary
+				r = rr;
+			};
+
+			vector<stringstream *> streams;
+			int x = 0;
+			int r = 0;
+			toString(node, 0, x, r, streams);
+
+			for_each (streams.begin(), streams.end(), [&](stringstream * s) {
+				output << s->str() << endl;
+				delete s;
+			});
+
+			return output;
+		}
+
 		void Print(void)
 		{
 			stringstream ss;
-			vector<int> y;
-			ToString(ss, this, 0, y);
-			ss << endl;
+			ToString(this, ss);
 			cout << ss.str();
+		}
+
+		void Print2(void)
+		{
+			stringstream output;
+			ToString2(this, output);
+			cout << output.str();
 		}
 	};
 }

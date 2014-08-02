@@ -679,4 +679,67 @@ void BinaryTreeTest::Init(void)
 		check(15);
 		check(16);
 	});
+
+	Add("Print1", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Print a binary tree of %d nodes:\n", count);
+
+			Test::BinaryTree<int, Test::BinaryNode> tree;
+			for (int i = 0; i < count; i++) {
+				tree.Insert(i);
+			}
+
+			tree.Print();
+			tree.Print2();
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
+
+	Add("Print2", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Print a binary tree of %d nodes:\n", count);
+
+			Test::BinaryTree<int, Test::BinaryNode> tree;
+			for (int i = 0; i < count; i++) {
+				int v = Test::Random::Next();
+				tree.Insert(v);
+			}
+
+			tree.Print();
+			tree.Print2();
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
 }

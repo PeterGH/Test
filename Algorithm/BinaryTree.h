@@ -311,6 +311,11 @@ namespace Test {
 			if (this->root != nullptr) this->root->Print();
 		}
 
+		void Print2(void)
+		{
+			if (this->root != nullptr) this->root->Print2();
+		}
+
 		PreOrderBinaryIterator<T, N> PreOrderBegin() const { return PreOrderBinaryIterator<T, N>(this->root); }
 		PreOrderBinaryIterator<T, N> PreOrderEnd() const { return PreOrderBinaryIterator<T, N>(); }
 
