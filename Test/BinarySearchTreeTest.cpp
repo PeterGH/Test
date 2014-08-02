@@ -942,14 +942,21 @@ void BinarySearchTreeTest::Init(void)
 				tree.Insert(v);
 			}
 
-			stringstream ss;
-			tree.Serialize(ss);
 			tree.Print();
+
+			stringstream ss;
+			stringstream ss2;
+			tree.Serialize(ss);
+			tree.Serialize(ss2);
 			Logger().WriteInformation("%s\n", ss.str().c_str());
 			Test::BinarySearchTree<int> tree2;
 			tree2.Deserialize(ss);
 			tree2.Print();
+			Test::BinarySearchTree<int> tree3;
+			tree3.Deserialize2(ss2, INT_MIN, INT_MAX);
+			tree3.Print();
 			ASSERT1(tree == tree2);
+			ASSERT1(tree == tree3);
 		};
 
 		check(1);

@@ -1085,6 +1085,8 @@ namespace Test {
 			this->PreOrderWalk(serialize);
 		}
 
+		// http://leetcode.com/2010/09/saving-binary-search-tree-to-file.html
+		// Complexity n*log(n)
 		void Deserialize(istream & input)
 		{
 			T value;
@@ -1095,6 +1097,30 @@ namespace Test {
 				} else {
 					break;
 				}
+			}
+		}
+
+		// http://leetcode.com/2010/09/saving-binary-search-tree-to-file.html
+		// Linear time implemenation
+		void Deserialize2(istream & input, T min, T max)
+		{
+			function<void(T, T, T &, BinaryNodeWithParent<T> * &)>
+			deserialize = [&](T l, T h, T & value, BinaryNodeWithParent<T> * & node) {
+				if (l < value && value <= h) {
+					T v = value;
+					node = new BinaryNodeWithParent<T>(v);
+					input >> value;
+					if (input.good() && !input.eof()) {
+						deserialize(l, v, value, (BinaryNodeWithParent<T> * &)node->left);
+						deserialize(v, h, value, (BinaryNodeWithParent<T> * &)node->right);
+					}
+				}
+			};
+
+			T value;
+			input >> value;
+			if (input.good() && !input.eof()) {
+				deserialize(min, max, value, this->root);
 			}
 		}
 	};
