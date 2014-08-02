@@ -295,8 +295,10 @@ namespace Test {
 		{
 			function<void(stringstream *, int, char)>
 			printChar = [&](stringstream * s, int n, char c) {
-				string chars(n, c);
-				*s << chars;
+				if (n > 0) {
+					string chars(n, c);
+					*s << chars;
+				}
 			};
 
 			function<void(BinaryNode *, unsigned int, int &, int&, vector<stringstream *> &)>
@@ -341,7 +343,7 @@ namespace Test {
 				int rr = r;
 				toString(n->right, y + 1, rx, rr, ss);
 
-				if (n->right != nullptr && rx > r) {
+				if (n->right != nullptr && rx >= r) {
 					printChar(s, rx - r - 1, '-');
 					*s << '\\';
 				}
