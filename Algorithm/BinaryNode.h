@@ -237,7 +237,7 @@ namespace Test {
 			}
 		}
 
-		void LevelOrderWalk(function<void(T)> f) { LevelOrderWalk(this, f); }
+		virtual void LevelOrderWalk(function<void(T)> f) { LevelOrderWalk(this, f); }
 
 		// Visit level by level, left to right
 		// Depth-first search

@@ -1,0 +1,115 @@
+#pragma once
+#include "BinaryNode.h"
+namespace Test {
+	template<class T> class BinaryNodeWithRightSibling : public BinaryNode<T> {
+	public:
+		BinaryNodeWithRightSibling * rightSibling;
+
+		BinaryNodeWithRightSibling(const T & content) : BinaryNode(content), rightSibling(nullptr) {}
+
+		virtual ~BinaryNodeWithRightSibling(void)
+		{
+			this->rightSibling = nullptr;
+		}
+
+		static void SetRightSibling(BinaryNodeWithRightSibling * node)
+		{
+			if (node == nullptr) return;
+
+			// Track nodes at current level, which is already done with rightSibling setting
+			BinaryNodeWithRightSibling * current = node;
+			// Track the beginning of next level, which is to set with rightSibling
+			BinaryNodeWithRightSibling * start = nullptr;
+
+			// Find the beginning
+			while (start == nullptr && current != nullptr) {
+				start = (BinaryNodeWithRightSibling *)current->left;
+				if (start == nullptr) {
+					// Current has no left child
+					start = (BinaryNodeWithRightSibling *)current->right;
+				}
+				if (start == nullptr) {
+					// Current has no left and right children
+					current = current->rightSibling;
+				}
+			}
+
+			if (start == nullptr) {
+				// No more nodes in the next level
+				return;
+			}
+
+			BinaryNodeWithRightSibling * prev = start;
+			if (prev == current->left) {
+				if (current->right != nullptr) {
+					prev->rightSibling = (BinaryNodeWithRightSibling *)current->right;
+					prev = (BinaryNodeWithRightSibling *)current->right;
+				}
+			}
+
+			current = current->rightSibling;
+			while (current != nullptr) {
+				if (current->left != nullptr) {
+					prev->rightSibling = (BinaryNodeWithRightSibling *)current->left;
+					prev = (BinaryNodeWithRightSibling *)current->left;
+				}
+				if (current->right != nullptr) {
+					prev->rightSibling = (BinaryNodeWithRightSibling *)current->right;
+					prev = (BinaryNodeWithRightSibling *)current->right;
+				}
+				current = current->rightSibling;
+			}
+
+			SetRightSibling(start);
+		}
+
+		void SetRightSibling(void) { SetRightSibling(this); }
+
+		static BinaryNodeWithRightSibling * Clone(BinaryNode * node)
+		{
+			if (node == nullptr) return nullptr;
+			BinaryNodeWithRightSibling * newNode = new BinaryNodeWithRightSibling(node->content);
+			BinaryNodeWithRightSibling * left = Clone(node->left);
+			if (left != nullptr) {
+				newNode->left = left;
+			}
+			BinaryNodeWithRightSibling * right = Clone(node->right);
+			if (right != nullptr) {
+				newNode->right = right;
+			}
+
+			SetRightSibling(newNode);
+			return newNode;
+		}
+
+		BinaryNodeWithRightSibling * Clone(void) { return Clone(this); }
+
+		// Visit level by level, left to right
+		// Breadth-first search
+		static void LevelOrderWalk(BinaryNodeWithRightSibling * node, function<void(T)> f)
+		{
+			if (node == nullptr || f == nullptr) return;
+			while (node != nullptr) {
+				BinaryNodeWithRightSibling * p = node;
+				while (p != nullptr) {
+					f(p->content);
+					p = p->rightSibling;
+				}
+
+				while (p == nullptr && node != nullptr) {
+					p = (BinaryNodeWithRightSibling *)node->left;
+					if (p == nullptr) {
+						p = (BinaryNodeWithRightSibling *)node->right;
+					}
+					if (p == nullptr) {
+						node = node->rightSibling;
+					}
+				}
+
+				node = p;
+			}
+		}
+
+		virtual void LevelOrderWalk(function<void(T)> f) { LevelOrderWalk(this, f); }
+	};
+}

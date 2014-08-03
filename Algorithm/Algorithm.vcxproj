@@ -82,6 +82,7 @@
     <ClInclude Include="BinaryIterator.h" />
     <ClInclude Include="BinaryNode.h" />
     <ClInclude Include="BinaryNodeWithParent.h" />
+    <ClInclude Include="BinaryNodeWithRightSibling.h" />
     <ClInclude Include="BinarySearch.h" />
     <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="BinaryTree.h" />

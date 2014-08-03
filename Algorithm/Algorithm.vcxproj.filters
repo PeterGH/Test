@@ -213,6 +213,9 @@
     <ClInclude Include="DoubleNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BinaryNodeWithRightSibling.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">

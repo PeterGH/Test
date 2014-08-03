@@ -790,9 +790,15 @@ void BinaryTreeTest::Init(void)
 				tree.Insert(i);
 			}
 
+			Test::BinaryTree<int, Test::BinaryNodeWithRightSibling> tree2;
+			Test::BinaryNodeWithRightSibling<int> * node = Test::BinaryNodeWithRightSibling<int>::Clone(tree.Root());
+			tree2.Root(node);
+
 			tree.Print2();
+			tree2.Print2();
 			vector<int> v1;
 			vector<int> v2;
+			vector<int> v3;
 
 			auto visit = [&](vector<int> & v) -> function<void(int)> {
 				function<void(int)> f = [&](int c) {
@@ -803,12 +809,16 @@ void BinaryTreeTest::Init(void)
 
 			tree.LevelOrderWalk(visit(v1));
 			tree.LevelOrderWalk2(visit(v2));
+			tree2.LevelOrderWalk(visit(v3));
 			print(v1);
 			print(v2);
+			print(v3);
 
 			ASSERT1(v1.size() == v2.size());
+			ASSERT1(v1.size() == v3.size());
 			for (unsigned int i = 0; i < v1.size(); i++) {
 				ASSERT1(v1[i] == v2[i]);
+				ASSERT1(v1[i] == v3[i]);
 			}
 		};
 

@@ -166,12 +166,12 @@ namespace Test {
 		{
 			if (node == nullptr) return nullptr;
 			BinaryNodeWithParent * newNode = new BinaryNodeWithParent(node->content);
-			BinaryNodeWithParent * left = Clone((BinaryNodeWithParent *)node->left);
+			BinaryNodeWithParent * left = Clone(node->left);
 			if (left != nullptr) {
 				newNode->left = left;
 				left->parent = newNode;
 			}
-			BinaryNodeWithParent * right = Clone((BinaryNodeWithParent *)node->right);
+			BinaryNodeWithParent * right = Clone(node->right);
 			if (right != nullptr) {
 				newNode->right = right;
 				right->parent = newNode;
