@@ -773,4 +773,60 @@ void BinaryTreeTest::Init(void)
 		check(15);
 		check(16);
 	});
+
+	Add("LevelOrderWalk", [&](){
+		auto print = [&](vector<int> & v) {
+			for_each(v.begin(), v.end(), [&](int c){
+				Logger().WriteInformation("  %d", c);
+			});
+			Logger().WriteInformation("\n");
+		};
+
+		auto check = [&](int count) {
+			Logger().WriteInformation("Level order walk a binary tree of %d nodes:\n", count);
+
+			Test::BinaryTree<int, Test::BinaryNode> tree;
+			for (int i = 0; i < count; i++) {
+				tree.Insert(i);
+			}
+
+			tree.Print2();
+			vector<int> v1;
+			vector<int> v2;
+
+			auto visit = [&](vector<int> & v) -> function<void(int)> {
+				function<void(int)> f = [&](int c) {
+					v.push_back(c);
+				};
+				return f;
+			};
+
+			tree.LevelOrderWalk(visit(v1));
+			tree.LevelOrderWalk2(visit(v2));
+			print(v1);
+			print(v2);
+
+			ASSERT1(v1.size() == v2.size());
+			for (unsigned int i = 0; i < v1.size(); i++) {
+				ASSERT1(v1[i] == v2[i]);
+			}
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
 }

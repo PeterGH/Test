@@ -300,6 +300,20 @@ namespace Test {
 			}
 		}
 
+		void LevelOrderWalk(function<void(T)> f)
+		{
+			if (this->root != nullptr) {
+				this->root->LevelOrderWalk(f);
+			}
+		}
+
+		void LevelOrderWalk2(function<void(T)> f)
+		{
+			if (this->root != nullptr) {
+				this->root->LevelOrderWalk2(f);
+			}
+		}
+
 		int Height(void)
 		{
 			if (this->root == nullptr) return 0;

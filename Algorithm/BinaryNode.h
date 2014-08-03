@@ -3,6 +3,7 @@
 #if DEBUG
 #include <iostream>
 #endif
+#include <queue>
 #include <stack>
 #include <vector>
 using namespace std;
@@ -219,6 +220,58 @@ namespace Test {
 		}
 
 		void PostOrderWalkWithStack2(function<void(T)> f) { PostOrderWalkWithStack2(this, f); }
+
+		// Visit level by level, left to right
+		// Breadth-first search
+		static void LevelOrderWalk(BinaryNode * node, function<void(T)> f)
+		{
+			if (node == nullptr || f == nullptr) return;
+			queue<BinaryNode *> q;
+			q.push(node);
+			while (!q.empty()) {
+				BinaryNode * p = q.front();
+				q.pop();
+				f(p->content);
+				if (p->left != nullptr) q.push(p->left);
+				if (p->right != nullptr) q.push(p->right);
+			}
+		}
+
+		void LevelOrderWalk(function<void(T)> f) { LevelOrderWalk(this, f); }
+
+		// Visit level by level, left to right
+		// Depth-first search
+		static void LevelOrderWalk2(BinaryNode * node, function<void(T)> f)
+		{
+			if (node == nullptr || f == nullptr) return;
+			vector<vector<T> *> levels;
+
+			function<void(BinaryNode *, unsigned int)> preOrder = [&](BinaryNode * n, unsigned int l) {
+				if (n == nullptr) return;
+
+				if (levels.size() <= l) {
+					levels.push_back(new vector<T>());
+				}
+
+				vector<T> * level = levels[l];
+
+				level->push_back(n->content);
+
+				preOrder(n->left, l + 1);
+				preOrder(n->right, l + 1);
+			};
+
+			preOrder(node, 0);
+
+			for_each (levels.begin(), levels.end(), [&](vector<T> * level){
+				for_each (level->begin(), level->end(), [&](T c){
+					f(c);
+				});
+				delete level;
+			});
+		}
+
+		void LevelOrderWalk2(function<void(T)> f) { LevelOrderWalk2(this, f); }
 
 		// Recursive
 		static int Height(BinaryNode * node)
