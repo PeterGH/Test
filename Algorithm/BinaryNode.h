@@ -378,5 +378,41 @@ namespace Test {
 			ToString2(this, output);
 			cout << output.str();
 		}
+
+		// http://leetcode.com/2010/09/printing-binary-tree-in-zig-zag-level_18.html
+		// Breadth-first-search using stack
+		void PrintZigZag(void)
+		{
+			stack<BinaryNode *> level[2];
+			int l = 0;
+			level[0].push(this);
+			while (true) {
+				stack<BinaryNode *> & current = level[l % 2];
+				stack<BinaryNode *> & next = level[(l+1) % 2];
+				while (!current.empty()) {
+					BinaryNode * p = current.top();
+					current.pop();
+					cout << p->content << ' ';
+					if (l % 2 == 0) {
+						if (p->left != nullptr) {
+							next.push(p->left);
+						}
+						if (p->right != nullptr) {
+							next.push(p->right);
+						}
+					} else {
+						if (p->right != nullptr) {
+							next.push(p->right);
+						}
+						if (p->left != nullptr) {
+							next.push(p->left);
+						}
+					}
+				}
+				cout << endl;
+				if (next.empty()) break;
+				l++;
+			}
+		}
 	};
 }
