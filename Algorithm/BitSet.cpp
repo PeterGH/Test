@@ -113,19 +113,29 @@ namespace Test {
 
 	size_t BitSet::Count(void) const
 	{
+		// http://leetcode.com/2010/09/number-of-1-bits.html
+		auto countInt = [&](int n) -> size_t {
+			int c = 0;
+			while (n != 0) {
+				// erase one bit from the lower end
+				// 0x####0100 & 0x####00FF = 0x####0000
+				n = n & (n - 1);
+				c++;
+			}
+			return c;
+		};
+
 		size_t count = 0;
 		int y = _lenBit % IntBits;
 		for (int i = 0; i < (y == 0 ? _lenInt : _lenInt - 1); i++) {
-			for (int j = 0; j < IntBits; j++) {
-				count += 0x1 & (_ints[i] >> j);
-			}
+			count += countInt(_ints[i]);
 		}
 
 		if (y > 0) {
-			for (int i = 0; i < y; i++) {
-				count += 0x1 & (_ints[_lenInt - 1] >> i);
-			}
+			int last = _ints[_lenInt - 1] & ((0x1 << y) - 1);
+			count += countInt(last);
 		}
+
 		return count;
 	}
 
@@ -147,6 +157,11 @@ namespace Test {
 		int x, y;
 		Position(position, &x, &y);
 		_ints[x] ^= 0x1 << y;
+	}
+
+	bool BitSet::IsPower2(void)
+	{
+		return 1 == Count();
 	}
 
 	void BitSet::LeftShiftInternal(size_t distance)

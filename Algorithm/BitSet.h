@@ -55,6 +55,9 @@ namespace Test {
 		// Flip one bit position
 		__declspec(dllexport) void Flip(size_t position);
 
+		// Test if the bit set represent an integer of power of 2
+		__declspec(dllexport) bool IsPower2(void);
+
 		// Logical shift to the left with a distance
 		__declspec(dllexport) void LeftShift(size_t distance);
 
