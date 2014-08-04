@@ -1,8 +1,9 @@
 #pragma once
-
+#include <functional>
 #include "Array.h"
+#include "BinarySearch.h"
 #include "MergeSort.h"
-
+using namespace std;
 namespace Test {
 	template<class T> class YoungTableau {
 		template<class T> friend Log & operator<<(Log &, const YoungTableau<T> &);
@@ -12,6 +13,9 @@ namespace Test {
 		T * buffer;
 		// Count the used space in buffer
 		unsigned long size;
+
+		pair<int, int> Coordinate(int i) { return make_pair(i / this->cols, i % this->cols); }
+		int Index(int r, int c) { return r * this->cols + c; }
 
 		// Get the index of the element above
 		int Up(int i) { return i - this->cols; }
@@ -50,14 +54,20 @@ namespace Test {
 		void PushDown(T * input, int length, int i);
 		// Push the element at index i up through the tableau
 		void PushUp(T * input, int length, int i);
+
+		pair<int, int> SearchInternal(const T & e, int i0, int j0, int i1, int j1);
 		
 	public:
 		YoungTableau(unsigned int r, unsigned int c) : rows(r), cols(c), buffer(nullptr), size(0) {}
 		YoungTableau(unsigned int r, unsigned int c, const T * input, int length);
 		~YoungTableau(void);
 
+		// Get the rows of used space
+		unsigned int Rows(void);
 		unsigned int Columns(void) { return this->cols; }
 		unsigned long MaxSize(void) { return this->rows * this->cols; }
+		// Get the count of elements at the last row
+		unsigned int LastRowSize(void) { return this->size % this->cols; }
 
 		// Sort all the rows
 		void SortRows(T * input, int length);
@@ -83,6 +93,10 @@ namespace Test {
 		// Push an element into the tableau.
 		void Push(const T & e, bool down = true);
 		bool Verify(void) { return this->Verify(this->buffer, this->size); }
+
+		T & operator()(size_t r, size_t c);
+		pair<int, int> Search(const T & e);
+		pair<int, int> Search2(const T & e);
 	};
 
 	template<class T> YoungTableau<T>::YoungTableau(unsigned int r, unsigned int c, const T * input, int length)
@@ -228,6 +242,13 @@ namespace Test {
 		}
 	}
 
+	template<class T> unsigned int YoungTableau<T>::Rows(void)
+	{
+		unsigned int rows = this->size / this->cols;
+		if (this->size % this->cols > 0) rows++;
+		return rows;
+	}
+
 	template<class T> void YoungTableau<T>::SortRows(T * input, int length)
 	{
 		if (input == nullptr || length <= 0) return;
@@ -266,8 +287,36 @@ namespace Test {
 	{
 		if (input == nullptr || length <= 0) return;
 
+		auto print = [&](){
+			for (unsigned int i = 0; i < this->Columns(); i++) {
+				cout << "\t" << i;
+			}
+			cout << endl;
+
+			int rows = length / this->Columns();
+			for (int i = 0; i < rows; i++) {
+				cout << i;
+				for (unsigned int j = 0; j < this->Columns(); j++) {
+					cout << "\t" << *(input + i * this->Columns() + j);
+				}
+				cout << endl;
+			}
+
+			int remainders = length % this->Columns();
+			if (remainders > 0) {
+				cout << rows;
+				for (int j = 0; j < remainders; j++) {
+					cout << "\t" << *(input + rows * this->Columns() + j);
+				}
+				cout << endl;
+			}
+			cout << endl;
+		};
+
+		// print();
 		for (int i = 0; i < length; i++) {
 			this->PushUp(input, length, i);
+			// print();
 		}
 	}
 
@@ -355,7 +404,7 @@ namespace Test {
 		if (length <= 0) throw invalid_argument(String::Format("length %d is invalid", length));
 
 		if (this->buffer == nullptr) {
-			Init(input, length);
+			Init(input, length, down);
 			return;
 		}
 		
@@ -397,5 +446,118 @@ namespace Test {
 	{
 		Array::Print(log, tableau.buffer, tableau.size, tableau.cols);
 		return log;
+	}
+
+	template<class T> T & YoungTableau<T>::operator()(size_t r, size_t c)
+	{
+		if (r < 0 || r >= this->rows) throw invalid_argument(String::Format("Invalid r %d not in [0, %d]", r, this->rows - 1));
+		if (c < 0 || c >= this->cols) throw invalid_argument(String::Format("Invalid c %d not in [0, %d]", c, this->cols - 1));
+		unsigned int i = Index(r, c);
+		if (i >= this->size) throw invalid_argument(String::Format("Invalid i %d not in [0, %d]", i, this->size - 1));
+		T & value = *(this->buffer + i);
+		return value;
+	}
+
+	template<class T> pair<int, int> YoungTableau<T>::Search(const T & e)
+	{
+		// Default if not found
+		pair<int, int> r = make_pair(-1, -1);
+
+		if (this->size == 0) return r;
+
+		if (this->Rows() == 1) {
+			int j = BinarySearch::Search<T>(e, this->buffer, this->size);
+			if (j == -1) return r;
+			return make_pair(0, j);
+		}
+
+		int i = 0;
+		int j = this->cols - 1;
+		int k = this->Index(i, j);
+		T * c = this->buffer + k;
+		while (c != nullptr) {
+			if (*c < e) {
+				c = Down(this->buffer, this->size, k);
+				i++;
+			} else if (*c > e) {
+				c = Left(this->buffer, this->size, k);
+				j--;
+			} else {
+				return make_pair(i, j);
+			}
+			k = this->Index(i, j);
+		}
+
+		int remainders = this->LastRowSize();
+		if (remainders > 0) {
+			int lastRow = this->size / this->cols;
+			if (i == lastRow) {
+				// Need to check the last row, which is not filled up fully
+				int j = BinarySearch::Search<T>(e, this->buffer + i * this->cols, remainders);
+				if (j != -1) return make_pair(i, j);
+			}
+		}
+
+		return r;
+	}
+
+	template<class T> pair<int, int> YoungTableau<T>::SearchInternal(const T & e, int i0, int j0, int i1, int j1)
+	{
+		if (i0 == i1) {
+			int j = BinarySearch::Search<T>(e, this->buffer + this->Index(i0, j0), j1 - j0 + 1);
+			if (j == -1) return make_pair(-1, -1);
+			else return make_pair(i0, j0 + j);
+		}
+
+		if (j0 == j1) {
+			for (int i = i0; i <= i1; i++) {
+				int k = this->Index(i, j0);
+				if (this->buffer[k] == e) return make_pair(i, j0);
+			}
+			return make_pair(-1, -1);
+		}
+
+		int i = (i0 + i1) >> 1;
+		// j is biased by j0
+		int j = BinarySearch::FindPositionToInsert<T>(e, this->buffer + this->Index(i, j0), j1 - j0 + 1);
+
+		if (j < j1 - j0) {
+			T & v = this->buffer[this->Index(i, j0 + j + 1)];
+			if (v == e) return make_pair(i, j0 + j + 1);
+			if (i > i0) {
+				// Search the top-right area
+				pair<int, int> r = SearchInternal(e, i0, j0 + j + 1, i - 1, j1);
+				if (r.first != -1 && r.second != -1) return r;
+			}
+		}
+
+		if (j > -1) {
+			if (i == i1) {
+				// We are down because no more rows to search
+				return make_pair(-1, -1);
+			}
+			// Search the bottom-left hald
+			return SearchInternal(e, i + 1, j0, i1, j0 + j);
+		}
+
+		return make_pair(-1, -1);
+	}
+
+	template<class T> pair<int, int> YoungTableau<T>::Search2(const T & e)
+	{
+		int rows = this->Rows();
+		int remainders = this->LastRowSize();
+		if (remainders == 0) {
+			return SearchInternal(e, 0, 0, rows - 1, this->cols - 1);
+		}
+
+		if (rows > 1) {
+			pair<int, int> r = SearchInternal(e, 0, 0, rows - 2, this->cols - 1);
+			if (r.first != -1 && r.second != -1) return r;
+		}
+
+		int j = BinarySearch::Search<T>(e, this->buffer + this->Index(rows - 1, 0), remainders);
+		if (j == -1) return make_pair(-1, -1);
+		else return make_pair(rows - 1, j);
 	}
 }

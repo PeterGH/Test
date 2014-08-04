@@ -146,7 +146,7 @@ void YoungTableauTest::Init(void)
 			}
 			
 			int len = max(500, max(lenA, lenB) >> 3);
-			int cols = Test::Random::Next(1, len);
+			int cols = Test::Random::Next(1, len >> 3);
 			int rows = Test::Random::Next(1, (len / cols) << 3);
 
 			Logger().WriteInformation("Run %d, tableau %d X %d, , %d elements and then push %d elements\n", i, rows, cols, lenA, lenB);
@@ -175,7 +175,7 @@ void YoungTableauTest::Init(void)
 			}
 
 			int len = max(500, max(lenA, lenB) >> 3);
-			int cols = Test::Random::Next(1, len);
+			int cols = Test::Random::Next(1, len >> 3);
 			int rows = Test::Random::Next(1, (len / cols) << 3);
 
 			Logger().WriteInformation("Run %d, tableau %d X %d, , %d elements and then push %d elements\n", i, rows, cols, lenA, lenB);
@@ -184,6 +184,163 @@ void YoungTableauTest::Init(void)
 			ASSERT1(yt.Verify());
 			yt.Push(B.get(), lenB, false);
 			ASSERT1(yt.Verify());
+		}
+	});
+
+	Add("Search1", [&]() {
+		int A[20];
+		for (int i = 0; i < 20; i++) {
+			A[i] = 20 - i;
+		}
+
+		Test::YoungTableau<int> yt(1, 20, A, 20);
+		Logger() << yt;
+		ASSERT1(yt.Verify());
+
+		pair<int, int> index;
+		pair<int, int> index2;
+		for (int i = 1; i <= 20; i++) {
+			index = yt.Search(i);
+			index2 = yt.Search2(i);
+			Logger().WriteInformation("%d is at (%d, %d) (%d, %d)\n", i, index.first, index.second, index2.first, index2.second);
+			ASSERT1(index.first == 0);
+			ASSERT1(index.second == i - 1);
+			ASSERT1(index.first == index2.first);
+			ASSERT1(index.second == index2.second);
+		}
+
+		index = yt.Search(21);
+		index2 = yt.Search2(21);
+		ASSERT1(index.first == -1);
+		ASSERT1(index.second == -1);
+		ASSERT1(index2.first == -1);
+		ASSERT1(index2.second == -1);
+	});
+
+	Add("Search2", [&]() {
+		int A[20];
+		for (int i = 0; i < 20; i++) {
+			A[i] = 20 - i;
+		}
+
+		Test::YoungTableau<int> yt(4, 5, A, 20);
+		Logger() << yt;
+		ASSERT1(yt.Verify());
+
+		pair<int, int> index;
+		pair<int, int> index2;
+		for (int i = 1; i <= 20; i++) {
+			index = yt.Search(i);
+			index2 = yt.Search2(i);
+			Logger().WriteInformation("%d is at (%d, %d) (%d, %d)\n", i, index.first, index.second, index2.first, index2.second);
+			ASSERT1(index.first == ((i - 1) / 5));
+			ASSERT1(index.second == ((i - 1) % 5));
+			ASSERT1(index.first == index2.first);
+			ASSERT1(index.second == index2.second);
+		}
+
+		index = yt.Search(21);
+		index2 = yt.Search2(21);
+		ASSERT1(index.first == -1);
+		ASSERT1(index.second == -1);
+		ASSERT1(index2.first == -1);
+		ASSERT1(index2.second == -1);
+	});
+
+	Add("Search3", [&]() {
+		int A[20];
+		for (int i = 0; i < 20; i++) {
+			A[i] = 20 - i;
+		}
+
+		Test::YoungTableau<int> yt(5, 6, A, 20);
+		Logger() << yt;
+		ASSERT1(yt.Verify());
+
+		pair<int, int> index;
+		pair<int, int> index2;
+		for (int i = 1; i <= 20; i++) {
+			index = yt.Search(i);
+			index2 = yt.Search2(i);
+			Logger().WriteInformation("%d is at (%d, %d) (%d, %d)\n", i, index.first, index.second, index2.first, index2.second);
+			ASSERT1(index.first != -1);
+			ASSERT1(index.second != -1);
+			ASSERT1(index.first == index2.first);
+			ASSERT1(index.second == index2.second);
+		}
+
+		index = yt.Search(21);
+		index2 = yt.Search2(21);
+		ASSERT1(index.first == -1);
+		ASSERT1(index.second == -1);
+		ASSERT1(index2.first == -1);
+		ASSERT1(index2.second == -1);
+	});
+
+	Add("Search4", [&]() {
+		int A[20];
+		for (int i = 0; i < 20; i++) {
+			A[i] = 20 - i;
+		}
+
+		Test::YoungTableau<int> yt(5, 6, A, 20);
+		yt(3, 0) = 21;
+		yt(3, 1) = 22;
+
+		Logger() << yt;
+		ASSERT1(yt.Verify());
+
+		pair<int, int> index;
+		pair<int, int> index2;
+		for (int i = 21; i <= 22; i++) {
+			index = yt.Search(i);
+			index2 = yt.Search2(i);
+			Logger().WriteInformation("%d is at (%d, %d) (%d, %d)\n", i, index.first, index.second, index2.first, index2.second);
+			ASSERT1(index.first != -1);
+			ASSERT1(index.second != -1);
+			ASSERT1(index.first == index2.first);
+			ASSERT1(index.second == index2.second);
+		}
+
+		index = yt.Search(23);
+		index2 = yt.Search2(23);
+		ASSERT1(index.first == -1);
+		ASSERT1(index.second == -1);
+		ASSERT1(index2.first == -1);
+		ASSERT1(index2.second == -1);
+	});
+
+	Add("Search5", [&]() {
+		for (int i = 0; i < 100; i++) {
+			int len = Test::Random::Next();
+			unique_ptr<int[]> A(new int[len]);
+			set<int> values;
+			for (int j = 0; j < len; j++) {
+				int v = Test::Random::Next(1000);
+				if (values.find(v) == values.end()) {
+					A[j] = v;
+					values.insert(v);
+				}
+			}
+
+			len = values.size();
+			int len2 = max(500, len >> 3);
+			int cols = Test::Random::Next(1, len2 >> 3);
+			int rows = Test::Random::Next(1, (len2 / cols) << 3);
+			Logger().WriteInformation("Run %d: YoungTableau (%d x %d) with %d elements.\n", i, rows, cols, len);
+
+			Test::YoungTableau<int> yt(rows, cols, A.get(), len);
+			ASSERT1(yt.Verify());
+
+			pair<int, int> index;
+			pair<int, int> index2;
+			for_each(values.begin(), values.end(), [&](int n){
+				index = yt.Search(n);
+				index2 = yt.Search2(n);
+				Logger().WriteInformation("%d is at (%d, %d) (%d, %d)\n", n, index.first, index.second, index2.first, index2.second);
+				ASSERT1(index.first == index2.first);
+				ASSERT1(index.second == index2.second);
+			});
 		}
 	});
 }
