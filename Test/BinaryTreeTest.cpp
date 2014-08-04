@@ -774,7 +774,7 @@ void BinaryTreeTest::Init(void)
 		check(16);
 	});
 
-	Add("LevelOrderWalk", [&](){
+	Add("LevelOrderWalk1", [&](){
 		auto print = [&](vector<int> & v) {
 			for_each(v.begin(), v.end(), [&](int c){
 				Logger().WriteInformation("  %d", c);
@@ -791,14 +791,22 @@ void BinaryTreeTest::Init(void)
 			}
 
 			Test::BinaryTree<int, Test::BinaryNodeWithRightSibling> tree2;
-			Test::BinaryNodeWithRightSibling<int> * node = Test::BinaryNodeWithRightSibling<int>::Clone(tree.Root());
-			tree2.Root(node);
+			Test::BinaryNodeWithRightSibling<int> * node2 = Test::BinaryNodeWithRightSibling<int>::Clone(tree.Root());
+			node2->SetRightSibling();
+			tree2.Root(node2);
+
+			// Test::BinaryTree<int, Test::BinaryNodeWithRightSibling> tree3;
+			// Test::BinaryNodeWithRightSibling<int> * node3 = Test::BinaryNodeWithRightSibling<int>::Clone(tree.Root());
+			// node3->SetRightSibling2();
+			// tree3.Root(node3);
 
 			tree.Print2();
 			tree2.Print2();
+			// tree3.Print2();
 			vector<int> v1;
 			vector<int> v2;
 			vector<int> v3;
+			// vector<int> v4;
 
 			auto visit = [&](vector<int> & v) -> function<void(int)> {
 				function<void(int)> f = [&](int c) {
@@ -810,15 +818,97 @@ void BinaryTreeTest::Init(void)
 			tree.LevelOrderWalk(visit(v1));
 			tree.LevelOrderWalk2(visit(v2));
 			tree2.LevelOrderWalk(visit(v3));
+			// tree3.LevelOrderWalk(visit(v4));
 			print(v1);
 			print(v2);
 			print(v3);
+			// print(v4);
 
 			ASSERT1(v1.size() == v2.size());
 			ASSERT1(v1.size() == v3.size());
+			// ASSERT1(v1.size() == v4.size());
 			for (unsigned int i = 0; i < v1.size(); i++) {
 				ASSERT1(v1[i] == v2[i]);
 				ASSERT1(v1[i] == v3[i]);
+				// ASSERT1(v1[i] == v4[i]);
+			}
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
+
+	Add("LevelOrderWalk2", [&](){
+		auto print = [&](vector<int> & v) {
+			for_each(v.begin(), v.end(), [&](int c){
+				Logger().WriteInformation("  %d", c);
+			});
+			Logger().WriteInformation("\n");
+		};
+
+		auto check = [&](int count) {
+			Logger().WriteInformation("Level order walk a binary tree of %d nodes:\n", count);
+
+			Test::CompleteBinaryTree<int, Test::BinaryNode> tree;
+			for (int i = 0; i < count; i++) {
+				tree.Insert(i);
+			}
+
+			Test::BinaryTree<int, Test::BinaryNodeWithRightSibling> tree2;
+			Test::BinaryNodeWithRightSibling<int> * node2 = Test::BinaryNodeWithRightSibling<int>::Clone(tree.Root());
+			node2->SetRightSibling();
+			tree2.Root(node2);
+
+			Test::BinaryTree<int, Test::BinaryNodeWithRightSibling> tree3;
+			Test::BinaryNodeWithRightSibling<int> * node3 = Test::BinaryNodeWithRightSibling<int>::Clone(tree.Root());
+			node3->SetRightSibling2();
+			tree3.Root(node3);
+
+			tree.Print2();
+			tree2.Print2();
+			tree3.Print2();
+			vector<int> v1;
+			vector<int> v2;
+			vector<int> v3;
+			vector<int> v4;
+
+			auto visit = [&](vector<int> & v) -> function<void(int)> {
+				function<void(int)> f = [&](int c) {
+					v.push_back(c);
+				};
+				return f;
+			};
+
+			tree.LevelOrderWalk(visit(v1));
+			tree.LevelOrderWalk2(visit(v2));
+			tree2.LevelOrderWalk(visit(v3));
+			tree3.LevelOrderWalk(visit(v4));
+			print(v1);
+			print(v2);
+			print(v3);
+			print(v4);
+
+			ASSERT1(v1.size() == v2.size());
+			ASSERT1(v1.size() == v3.size());
+			ASSERT1(v1.size() == v4.size());
+			for (unsigned int i = 0; i < v1.size(); i++) {
+				ASSERT1(v1[i] == v2[i]);
+				ASSERT1(v1[i] == v3[i]);
+				ASSERT1(v1[i] == v4[i]);
 			}
 		};
 

@@ -12,6 +12,7 @@ namespace Test {
 			this->rightSibling = nullptr;
 		}
 
+		// This works for both complete and incomplete binary trees
 		static void SetRightSibling(BinaryNodeWithRightSibling * node)
 		{
 			if (node == nullptr) return;
@@ -65,6 +66,44 @@ namespace Test {
 
 		void SetRightSibling(void) { SetRightSibling(this); }
 
+		// DFS
+		// This works for complete binary tree only
+		static void SetRightSibling2(BinaryNodeWithRightSibling * node)
+		{
+			if (node == nullptr) return;
+
+			BinaryNodeWithRightSibling * p = (BinaryNodeWithRightSibling *)node->left;
+			if (p != nullptr) {
+				p->rightSibling = (BinaryNodeWithRightSibling *)node->right;
+			}
+
+			if (node->right != nullptr) {
+				p = (BinaryNodeWithRightSibling *)node->right;
+			}
+
+			if (p != nullptr) {
+				// For incomplete binary tree, the following search will fail,
+				// because not all rightSibling of nodes at current level are set yet.
+				BinaryNodeWithRightSibling * current = node->rightSibling;
+				while (current != nullptr) {
+					if (current->left != nullptr) {
+						p->rightSibling = (BinaryNodeWithRightSibling *)current->left;
+						break;
+					}
+					if (current->right != nullptr) {
+						p->rightSibling = (BinaryNodeWithRightSibling *)current->right;
+						break;
+					}
+					current = current->rightSibling;
+				}
+			}
+
+			SetRightSibling2((BinaryNodeWithRightSibling *)node->left);
+			SetRightSibling2((BinaryNodeWithRightSibling *)node->right);
+		}
+
+		void SetRightSibling2(void) { SetRightSibling2(this); }
+
 		static BinaryNodeWithRightSibling * Clone(BinaryNode * node)
 		{
 			if (node == nullptr) return nullptr;
@@ -78,7 +117,6 @@ namespace Test {
 				newNode->right = right;
 			}
 
-			SetRightSibling(newNode);
 			return newNode;
 		}
 
