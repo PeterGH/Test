@@ -13,6 +13,9 @@ namespace Test {
 	class __declspec(dllexport) Array {
 	public:
 
+		// For each element input[i] compute multiplication of the other elements in input.
+		static void ExclusiveMultiplication(const int * input, int length, long long * output);
+
 		// Find a subarray of contiguous elements whose sum is maximized
 		// If array contains both positive and negative numbers, return the maximum subarray
 		// If array contains positive numbers, return entire array A

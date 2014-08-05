@@ -1019,4 +1019,43 @@ void ArrayTest::Init(void)
 			} while (w <= length);
 		}
 	});
+
+	Add("ExclusiveMultiplication", [&](){
+		auto printInt = [&](int * input, int length) {
+			for (int i = 0; i < length; i++) {
+				Logger().WriteInformation("\t%d", input[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+
+		auto printLongLong = [&](long long * input, int length) {
+			for (int i = 0; i < length; i++) {
+				Logger().WriteInformation("\t%ld", input[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+
+		auto check = [&](int * input, int length, long long * output, long long * expect) {
+			Test::Array::ExclusiveMultiplication(input, length, output);
+			Logger().WriteInformation("Input:");
+			printInt(input, length);
+			Logger().WriteInformation("Output:");
+			printLongLong(output, length);
+			for (int i = 0; i < length; i++) {
+				ASSERT1(output[i] == expect[i]);
+			}
+		};
+		{
+			int A[] = { 4, 3, 2, 1, 2 };
+			long long B[5];
+			long long C[] = { 12, 16, 24, 48, 24 };
+			check(A, 5, B, C);
+		}
+		{
+			int A[] = { 4, 3, 2, 1, 2, 3 };
+			long long B[6];
+			long long C[] = { 36, 48, 72, 144, 72, 48 };
+			check(A, 6, B, C);
+		}
+	});
 }

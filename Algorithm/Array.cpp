@@ -2,6 +2,24 @@
 
 namespace Test {
 
+	// http://leetcode.com/2010/04/multiplication-of-numbers.html
+	void Array::ExclusiveMultiplication(const int * input, int length, long long * output)
+	{
+		long long left = 1;
+		long long right = 1;
+		for (int i = 0; i < length; i++) {
+			output[i] = 1;
+		}
+		for (int i = 0; i < length; i++) {
+			// At loop i, output[i] = left = multiplication of input[0..i-1]
+			// At loop length - 1 - i, output[i] *= right = multiplication of input[i+1..length-1]
+			output[i] *= left;
+			output[length - 1 - i] *= right;
+			left *= input[i];
+			right *= input[length - 1 - i];
+		}
+	}
+
 	void Array::MaxSubArray(const int * input, int length, int & start, int & end, long & sum)
 	{
 		start = -1;
