@@ -244,5 +244,8 @@ void StringTest::Init(void)
 		check("abcabcab", "abc", 0);
 		check("abcabcab", "bca", 1);
 		check("abcabcab", "cab", 2);
+		check("abdabcab", "abc", 3);
+		check("abdabcab", "bca", 4);
+		check("abdabcab", "cab", 5);
 	});
 }
