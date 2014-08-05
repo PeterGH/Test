@@ -56,6 +56,8 @@ namespace Test {
 		void PushUp(T * input, int length, int i);
 
 		pair<int, int> SearchInternal(const T & e, int i0, int j0, int i1, int j1);
+
+		unsigned long CountLessThanInternal(const T & e, int i0, int j0, int i1, int j1);
 		
 	public:
 		YoungTableau(unsigned int r, unsigned int c) : rows(r), cols(c), buffer(nullptr), size(0) {}
@@ -97,6 +99,9 @@ namespace Test {
 		T & operator()(size_t r, size_t c);
 		pair<int, int> Search(const T & e);
 		pair<int, int> Search2(const T & e);
+
+		unsigned long CountLessThan(const T & e);
+		unsigned long CountLessThan2(const T & e);
 	};
 
 	template<class T> YoungTableau<T>::YoungTableau(unsigned int r, unsigned int c, const T * input, int length)
@@ -559,5 +564,118 @@ namespace Test {
 		int j = BinarySearch::Search<T>(e, this->buffer + this->Index(rows - 1, 0), remainders);
 		if (j == -1) return make_pair(-1, -1);
 		else return make_pair(rows - 1, j);
+	}
+
+	template<class T> unsigned long YoungTableau<T>::CountLessThanInternal(const T & e, int i0, int j0, int i1, int j1)
+	{
+		int i = i0;
+		int j = j0;
+		while (i <= i1 && j <= j1) {
+			int k = this->Index(i, j);
+			if (this->buffer[k] >= e) break;
+			i++;
+			j++;
+		}
+
+		if (i == i0 && j == j0) return 0;
+
+		unsigned long count = (i - i0) * (j - j0);
+
+		if (j <= j1) {
+			count += CountLessThanInternal(e, i0, j, i > i1 ? i1 : i - 1, j1);
+		}
+
+		if (i <= i1) {
+			count += CountLessThanInternal(e, i, j0, i1, j > j1 ? j1 : j - 1);
+		}
+
+		return count;
+	}
+
+	template<class T> unsigned long YoungTableau<T>::CountLessThan(const T & e)
+	{
+		int rows = this->Rows();
+		int remainders = this->LastRowSize();
+		if (remainders == 0) {
+			return this->CountLessThanInternal(e, 0, 0, rows - 1, this->cols - 1);
+		}
+
+		int count = 0;
+		if (rows > 1) {
+			count = this->CountLessThanInternal(e, 0, 0, rows - 2, this->cols - 1);
+		}
+
+		int j = BinarySearch::FindPositionToInsert<T>(e, this->buffer + this->Index(rows - 1, 0), remainders);
+		count += (j + 1);
+
+		return count;
+	}
+
+	template<class T> unsigned long YoungTableau<T>::CountLessThan2(const T & e)
+	{
+		int rows = this->Rows();
+		int remainders = this->LastRowSize();
+
+		int r = remainders > 0 ? rows - 1 : rows;
+		int c = this->cols;
+
+		int count = 0;
+		for (int j = 0; j < min(r, c); j++) {
+			int t = 0;
+			for (int i = 0; i <= j; i++) {
+				int k = this->Index(i, j - i);
+				if (this->buffer[k] < e) t++;
+			}
+			if (t == 0) break;
+			else count += t;
+		}
+
+		if (r < c) {
+			for (int j = r; j < c; j++) {
+				int t = 0;
+				for (int i = 0; i < r; i++) {
+					int k = this->Index(i, j - i);
+					if (this->buffer[k] < e) t++;
+				}
+				if (t == 0) break;
+				else count += t;
+			}
+			for (int j = c - r + 1; j < c; j++) {
+				int t = 0;
+				for (int i = j - (c - r); i < r; i++) {
+					int k = this->Index(i, j - i + r - 1);
+					if (this->buffer[k] < e) t++;
+				}
+				if (t == 0) break;
+				else count += t;
+			}
+
+		} else if (r > c) {
+			for (int i = c; i < r; i++) {
+				int t = 0;
+				for (int j = 0; j < c; j++) {
+					int k = this->Index(i - j, j);
+					if (this->buffer[k] < e) t++;
+				}
+				if (t == 0) break;
+				else count += t;
+			}
+			for (int i = r - c + 1; i < r; i++) {
+				int t = 0;
+				for (int j = i - (r - c); j < c; j++) {
+					int k = this->Index(i - j + c - 1, j);
+					if (this->buffer[k] < e) t++;
+				}
+				if (t == 0) break;
+				else count += t;
+			}
+		}
+
+		if (remainders > 0) {
+			int j = BinarySearch::FindPositionToInsert<T>(e, this->buffer + this->Index(rows - 1, 0), remainders);
+			count += (j + 1);
+		}
+
+		return count;
 	}
 }

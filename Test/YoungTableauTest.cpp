@@ -343,4 +343,94 @@ void YoungTableauTest::Init(void)
 			});
 		}
 	});
+
+	Add("CountLessThan1", [&]() {
+		int A[20];
+		for (int i = 0; i < 20; i++) {
+			A[i] = 20 - i;
+		}
+
+		Test::YoungTableau<int> yt(1, 20, A, 20);
+		Logger() << yt;
+		ASSERT1(yt.Verify());
+
+		int count;
+		int count2;
+		for (int i = 1; i <= 21; i++) {
+			count = yt.CountLessThan(i);
+			count2 = yt.CountLessThan2(i);
+			Logger().WriteInformation("(%d, %d) elements is less than %d\n", count, count2, i);
+			ASSERT1(count == i - 1);
+			ASSERT1(count2 == i - 1);
+		}
+	});
+
+	Add("CountLessThan2", [&]() {
+		int A[20];
+		for (int i = 0; i < 20; i++) {
+			A[i] = 20 - i;
+		}
+
+		Test::YoungTableau<int> yt(4, 5, A, 20);
+		Logger() << yt;
+		ASSERT1(yt.Verify());
+
+		int count;
+		int count2;
+		for (int i = 1; i <= 21; i++) {
+			count = yt.CountLessThan(i);
+			count2 = yt.CountLessThan2(i);
+			Logger().WriteInformation("(%d, %d) elements is less than %d\n", count, count2, i);
+			ASSERT1(count == i - 1);
+			ASSERT1(count2 == i - 1);
+		}
+	});
+
+	Add("CountLessThan3", [&]() {
+		int A[20];
+		for (int i = 0; i < 20; i++) {
+			A[i] = 20 - i;
+		}
+
+		Test::YoungTableau<int> yt(5, 6, A, 20);
+		Logger() << yt;
+		ASSERT1(yt.Verify());
+
+		int count;
+		int count2;
+		for (int i = 1; i <= 21; i++) {
+			count = yt.CountLessThan(i);
+			count2 = yt.CountLessThan2(i);
+			Logger().WriteInformation("(%d, %d) elements is less than %d\n", count, count2, i);
+			ASSERT1(count == i - 1);
+			ASSERT1(count2 == i - 1);
+		}
+	});
+
+	Add("CountLessThan4", [&]() {
+		for (int i = 0; i < 100; i++) {
+			int len = Test::Random::Next(10000);
+			unique_ptr<int[]> A(new int[len]);
+			set<int> values;
+			for (int j = 0; j < len; j++) {
+				A[j] = j;
+			}
+
+			int cols = Test::Random::Next(1, max(500, len >> 4));
+			int rows = len / cols + 1;
+			Logger().WriteInformation("Run %d: YoungTableau (%d x %d) with %d elements.\n", i, rows, cols, len);
+
+			Test::YoungTableau<int> yt(rows, cols, A.get(), len);
+			ASSERT1(yt.Verify());
+
+			int count;
+			int count2;
+			for (int j = 0; j < len; j++) {
+				count = yt.CountLessThan(A[j]);
+				count2 = yt.CountLessThan2(A[j]);
+				ASSERT1(count == j);
+				ASSERT1(count2 == j);
+			}
+		}
+	});
 }
