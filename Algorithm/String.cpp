@@ -243,4 +243,46 @@ namespace Test {
 
 		*i = '\0';
 	}
+
+	const char * String::StrStr(const char * input1, const char * input2)
+	{
+		if (input1 == nullptr || input2 == nullptr || *input1 == '\0' || * input2 == '\0') return nullptr;
+
+		const char * q = input1;
+		const char * p = input2;
+		while (*(q+1) != '\0' && *(p+1) != '\0') {
+			q++;
+			p++;
+		}
+		if (*(q+1) == '\0' && *(p+1) != '\0') {
+			// input2 is longer than input1
+			return nullptr;
+		}
+
+		// now input1 is not shorter than input2
+		// set p to the beginning of input1
+		p = input1;
+		const char * s = input2;
+
+		// Hop p and q at same step until q reaches the end of input1
+		while (*q != '\0') {
+			if (*p == *s) {
+				const char * r = p;
+				while (*s != '\0' && *r == *s) {
+					r++;
+					s++;
+				}
+				if (*s == '\0') {
+					// match;
+					return p;
+				} else {
+					// reset s for next match
+					s = input2;
+				}
+			}
+			p++;
+			q++;
+		}
+		return nullptr;
+	}
 }

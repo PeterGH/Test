@@ -207,4 +207,42 @@ void StringTest::Init(void)
 			check(A[i][0], A[i][1], A[i][2], A[i][3]);
 		}
 	});
+
+	Add("StrStr", [&](){
+		auto check = [&](char * input1, char * input2, int index) {
+			Logger().WriteInformation("\nInput1:\t%s\n", input1);
+			Logger().WriteInformation("Input2:\t%s\n", input2);
+			const char * p = Test::String::StrStr(input1, input2);
+			int i = p == nullptr ? -1 : p - input1;
+			Logger().WriteInformation("Index:\t%d\n", i);
+			ASSERT1(i == index);
+		};
+
+		check("a", "a", 0);
+		check("a", "b", -1);
+		check("a", "aa", -1);
+		check("aa", "a", 0);
+		check("aa", "b", -1);
+		check("aa", "aa", 0);
+		check("aa", "aaa", -1);
+		check("ab", "a", 0);
+		check("ab", "b", 1);
+		check("ab", "c", -1);
+		check("ab", "ab", 0);
+		check("abc", "a", 0);
+		check("abc", "b", 1);
+		check("abc", "c", 2);
+		check("abc", "d", -1);
+		check("abc", "ab", 0);
+		check("abc", "bc", 1);
+		check("abc", "abc", 0);
+		check("ababa", "ab", 0);
+		check("ababa", "ba", 1);
+		check("ababa", "aba", 0);
+		check("ababa", "bab", 1);
+		check("ababa", "ababa", 0);
+		check("abcabcab", "abc", 0);
+		check("abcabcab", "bca", 1);
+		check("abcabcab", "cab", 2);
+	});
 }
