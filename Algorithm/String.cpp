@@ -191,4 +191,56 @@ namespace Test {
 			length = j - i;
 		}
 	}
+
+	// http://leetcode.com/2010/11/microsoft-string-replacement-problem.html
+	// Replace a pattern with a shorter string in place.
+	// Continous occurrences of the pattern should be replaced with one shorter string.
+	void String::ReplaceWithShorterString(char * input, const char * pattern, const char * shorter)
+	{
+		if (input == nullptr || pattern == nullptr || shorter == nullptr
+			|| *input == '\0' || pattern == '\0' || shorter == '\0')
+			return;
+
+		char * i = input; // Next insert position
+		char * j = input; // Next check position
+
+		const char * s = shorter;
+		const char * p = pattern;
+
+		while (*j != '\0') {
+			bool found = false;
+			while (*j == *p) {
+				char * k = j;
+				while (*k != '\0' && *p != '\0' && *k == *p) {
+					// Do not use *k++ == *p++ in the while condition statement,
+					// because k and p will advance even if *k and *p are different.
+					k++;
+					p++;
+				}
+				if (*p == '\0') {
+					// Found one pattern, skip it and
+					// check for next continous pattern
+					found = true;
+					j = k;
+					p = pattern;
+				} else {
+					// Input is done or not match
+					p = pattern;
+					break;
+				}
+			}
+
+			if (found) {
+				while (*s != '\0') *i++ = *s++;
+				s = shorter;
+			}
+
+			if (*j != '\0') {
+				// j may reach the end if the input ends with the pattern
+				*i++ = *j++;
+			}
+		}
+
+		*i = '\0';
+	}
 }

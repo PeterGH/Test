@@ -96,6 +96,8 @@ namespace Test {
 
 		__declspec(dllexport) static void LongestSubStringWithUniqueChars(const string & input, int & index, int & length);
 
+		__declspec(dllexport) static void ReplaceWithShorterString(char * input, const char * pattern, const char * shorter);
+
 		template<class T, class C> static basic_string<C> Join(const T * input, int length, const C * separator)
 		{
 			basic_stringstream<C> ss;

@@ -129,4 +129,82 @@ void StringTest::Init(void)
 		check("aaabcd", 2, 4);
 		check("abcabcbb", 0, 3);
 	});
+
+	Add("ReplaceWithShorterString", [&](){
+		auto check = [&](char * input, char * pattern, char * shorter, char * expect) {
+			Logger().WriteInformation("\nInput:   %s\n", input);
+			Logger().WriteInformation("Pattern: %s\n", pattern);
+			Logger().WriteInformation("Shorter: %s\n", shorter);
+			Test::String::ReplaceWithShorterString(input, pattern, shorter);
+			Logger().WriteInformation("Output:  %s\n", input);
+			while (*input != '\0') {
+				ASSERT1(*input++ == *expect++);
+			}
+		};
+
+		char A[][4][256] = {
+				{ "a", "a", "X", "X" },
+				{ "aa", "aa", "X", "X" },
+				{ "aa", "a", "X", "X" },
+				{ "aa", "aaa", "X", "aa" },
+				{ "abc", "abc", "X", "X" },
+				{ "abcabc", "abc", "X", "X" },
+				{ "abcabcabc", "abc", "X", "X" },
+				{ "abcaabcaabc", "abc", "X", "XaXaX" },
+				{ "abcaaabcaaabca", "abc", "X", "XaaXaaXa" },
+				{ "abcabcabababcabc", "abc", "X", "XababX" },
+				{ "abcabcabababcabcab", "abc", "X", "XababXab" },
+				{ "aabbaabbaaabbbaabb", "aabb", "X", "XaXbX" },
+				{ "aabbaabbaaabbbaabb", "aaabb", "X", "aabbaabbXbaabb" },
+				{ "aabbaabbaaabbbaaabb", "aaabb", "X", "aabbaabbXbX" },
+				{ "aabbaabbaaabbbaaabc", "aaabb", "X", "aabbaabbXbaaabc" },
+				{ "abcdeffdfegabcabc", "abc", "X", "XdeffdfegX" },
+				{ "abcdeffdfegabcabc", "ab", "X", "XcdeffdfegXcXc" },
+				{ "abcdeffdfegabcabc", "a", "X", "XbcdeffdfegXbcXbc" },
+				{ "abcdeffdfegabcab", "abc", "X", "XdeffdfegXab" },
+				{ "abcdeffdfegabcabcab", "abc", "X", "XdeffdfegXab" },
+				{ "abcdeffdfegabcaabcab", "abc", "X", "XdeffdfegXaXab" },
+				{ "abcdeffdfegabcaaaabcab", "abc", "X", "XdeffdfegXaaaXab" },
+				{ "aaaaaa", "a", "X", "X" },
+				{ "aaaaaa", "aa", "X", "X" },
+				{ "aaaaaa", "aaaaaa", "X", "X" },
+				{ "aaaaaa", "aaaaaaa", "X", "aaaaaa" },
+				{ "aabaababaaab", "a", "X", "XbXbXbXb" },
+				{ "aabaababaaa", "a", "X", "XbXbXbX" },
+				{ "aaaab", "a", "X", "Xb" },
+				{ "baaa", "a", "X", "bX" },
+				{ "aabaaabaab", "aaa", "X", "aabXbaab" },
+				{ "aabaaabaab", "aa", "X", "XbXabXb" },
+				{ "aabaaabaa", "aa", "X", "XbXabX" },
+				{ "aa", "aa", "XY", "XY" },
+				{ "aa", "aaa", "XY", "aa" },
+				{ "abc", "abc", "XY", "XY" },
+				{ "abcabc", "abc", "XY", "XY" },
+				{ "abcabcabc", "abc", "XY", "XY" },
+				{ "abcaabcaabc", "abc", "XY", "XYaXYaXY" },
+				{ "abcaaabcaaabca", "abc", "XY", "XYaaXYaaXYa" },
+				{ "abcabcabababcabc", "abc", "XY", "XYababXY" },
+				{ "abcabcabababcabcab", "abc", "XY", "XYababXYab" },
+				{ "aabbaabbaaabbbaabb", "aabb", "XY", "XYaXYbXY" },
+				{ "aabbaabbaaabbbaabb", "aaabb", "XY", "aabbaabbXYbaabb" },
+				{ "aabbaabbaaabbbaaabb", "aaabb", "XY", "aabbaabbXYbXY" },
+				{ "aabbaabbaaabbbaaabc", "aaabb", "XY", "aabbaabbXYbaaabc" },
+				{ "abcdeffdfegabcabc", "abc", "XY", "XYdeffdfegXY" },
+				{ "abcdeffdfegabcabc", "ab", "XY", "XYcdeffdfegXYcXYc" },
+				{ "abcdeffdfegabcab", "abc", "XY", "XYdeffdfegXYab" },
+				{ "abcdeffdfegabcabcab", "abc", "XY", "XYdeffdfegXYab" },
+				{ "abcdeffdfegabcaabcab", "abc", "XY", "XYdeffdfegXYaXYab" },
+				{ "abcdeffdfegabcaaaabcab", "abc", "XY", "XYdeffdfegXYaaaXYab" },
+				{ "aaaaaa", "aa", "XY", "XY" },
+				{ "aaaaaa", "aaaaaa", "XY", "XY" },
+				{ "aaaaaa", "aaaaaaa", "XY", "aaaaaa" },
+				{ "aabaaabaab", "aaa", "XY", "aabXYbaab" },
+				{ "aabaaabaab", "aa", "XY", "XYbXYabXYb" },
+				{ "aabaaabaa", "aa", "XY", "XYbXYabXY" }
+		};
+		int len = sizeof(A) / sizeof(A[0]);
+		for (int i = 0; i < len; i++) {
+			check(A[i][0], A[i][1], A[i][2], A[i][3]);
+		}
+	});
 }
