@@ -95,6 +95,7 @@
     <ClInclude Include="ColumnSortTest.h" />
     <ClInclude Include="CountingSortTest.h" />
     <ClInclude Include="DestructorTest.h" />
+    <ClInclude Include="DynamicProgrammingTest.h" />
     <ClInclude Include="FiniteAutomationTest.h" />
     <ClInclude Include="GeometryTest.h" />
     <ClInclude Include="GraphTest.h" />
@@ -149,6 +150,7 @@
     <ClCompile Include="ColumnSortTest.cpp" />
     <ClCompile Include="CountingSortTest.cpp" />
     <ClCompile Include="DestructorTest.cpp" />
+    <ClCompile Include="DynamicProgrammingTest.cpp" />
     <ClCompile Include="FiniteAutomationTest.cpp" />
     <ClCompile Include="GeometryTest.cpp" />
     <ClCompile Include="GraphTest.cpp" />

@@ -96,6 +96,7 @@
     <ClInclude Include="CountingSort.h" />
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="DoubleNode.h" />
+    <ClInclude Include="DynamicProgramming.h" />
     <ClInclude Include="FiniteAutomation.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Graph.h" />
@@ -151,6 +152,7 @@
     <ClCompile Include="CoinChange.cpp" />
     <ClCompile Include="CoinSelect.cpp" />
     <ClCompile Include="CountingSort.cpp" />
+    <ClCompile Include="DynamicProgramming.cpp" />
     <ClCompile Include="FiniteAutomation.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="GraphSearchTree.cpp" />

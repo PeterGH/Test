@@ -20,6 +20,7 @@
 #include "ColumnSortTest.h"
 #include "CountingSortTest.h"
 #include "DestructorTest.h"
+#include "DynamicProgrammingTest.h"
 #include "FiniteAutomationTest.h"
 #include "GraphTest.h"
 #include "GeometryTest.h"
@@ -94,6 +95,7 @@ int main(int argc, char * argv[])
 	suite.Add(new ColumnSortTest(log));
 	suite.Add(new CountingSortTest(log));
 	suite.Add(new DestructorTest(log));
+	suite.Add(new DynamicProgrammingTest(log));
 	suite.Add(new FiniteAutomationTest(log));
 	suite.Add(new GraphTest(log));
 	suite.Add(new GeometryTest(log));
