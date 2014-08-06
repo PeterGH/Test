@@ -192,6 +192,46 @@ namespace Test {
 		}
 	}
 
+	// http://leetcode.com/2010/11/finding-minimum-window-in-s-which.html
+	// Find the shortest substring containing all the characters in a given set
+	// Assuming the given set does not contain duplicate characters
+	void String::ShortestSubStringContainingGivenChars(const string & chars, const string & input, int & index, int & length)
+	{
+		index = -1;
+		length = input.length();
+		queue<int> indices;
+		set<char> found;
+		for (unsigned int i = 0; i < input.length(); i++) {
+			if (chars.find(input[i]) != string::npos) {
+				while (!indices.empty() && input[indices.front()] == input[i]) {
+					// no need to track the indices if the oldest chars are the same as current one
+					indices.pop();
+				}
+
+				indices.push(i);
+
+				if (found.find(input[i]) == found.end()) {
+					found.insert(input[i]);
+					if (found.size() == chars.length()) {
+						// found all chars
+						int l = indices.back() - indices.front() + 1;
+						if (l < length) {
+							// Update if the current one is shorter
+							index = indices.front();
+							length = l;
+						}
+
+						// erase the oldest char in order to start next search
+						found.erase(input[indices.front()]);
+						indices.pop();
+					}
+				}
+			}
+		}
+
+		if (index == -1) length = 0;
+	}
+
 	// http://leetcode.com/2010/11/microsoft-string-replacement-problem.html
 	// Replace a pattern with a shorter string in place.
 	// Continous occurrences of the pattern should be replaced with one shorter string.

@@ -130,6 +130,34 @@ void StringTest::Init(void)
 		check("abcabcbb", 0, 3);
 	});
 
+	Add("ShortestSubStringContainingGivenChars", [&](){
+		auto check = [&](const string & input, const string & chars, const string & expect) {
+			int index;
+			int length;
+			Test::String::ShortestSubStringContainingGivenChars(chars, input, index, length);
+			string match = index == -1 ? "" : input.substr(index, length);
+			Logger().WriteInformation("Input: %s\n", input.c_str());
+			Logger().WriteInformation("Chars: %s\n", chars.c_str());
+			Logger().WriteInformation("Match: %s %s %s\n", match.c_str(), match == expect ? "==" : "!=", expect.c_str());
+			ASSERT1(match == expect);
+		};
+
+		check("aaaaa", "a", "a");
+		check("aaaaa", "b", "");
+		check("aaaaa", "ab", "");
+		check("abaa", "ab", "ab");
+		check("abaa", "ba", "ab");
+		check("ccab", "ab", "ab");
+		check("ccab", "ba", "ab");
+		check("aabaa", "ab", "ab");
+		check("aabaa", "ba", "ab");
+		check("ccaba", "ab", "ab");
+		check("ccaba", "ba", "ab");
+		check("aacbddaa", "ba", "acb");
+		check("aacdbddbeaa", "ab", "bea");
+		check("ADOBECODEBANC", "ABC", "BANC");
+	});
+
 	Add("ReplaceWithShorterString", [&](){
 		auto check = [&](char * input, char * pattern, char * shorter, char * expect) {
 			Logger().WriteInformation("\nInput:   %s\n", input);

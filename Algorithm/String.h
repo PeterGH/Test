@@ -2,6 +2,8 @@
 
 #include <bitset>
 #include <map>
+#include <queue>
+#include <set>
 #include <sstream>
 #include <stdarg.h>
 #include <string>
@@ -95,6 +97,7 @@ namespace Test {
 		__declspec(dllexport) static bool IsMatch2(char * input, char * pattern);
 
 		__declspec(dllexport) static void LongestSubStringWithUniqueChars(const string & input, int & index, int & length);
+		__declspec(dllexport) static void ShortestSubStringContainingGivenChars(const string & chars, const string & input, int & index, int & length);
 
 		__declspec(dllexport) static void ReplaceWithShorterString(char * input, const char * pattern, const char * shorter);
 
