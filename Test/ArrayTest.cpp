@@ -1058,4 +1058,121 @@ void ArrayTest::Init(void)
 			check(A, 6, B, C);
 		}
 	});
+
+	Add("BuySellStock", [&](){
+		auto print = [&](int * input, int length) {
+			for (int i = 0; i < length; i++) {
+				Logger().WriteInformation("  %d", input[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](int * input, int length) {
+			print(input, length);
+
+			int buy;
+			int sell;
+			int profit;
+			Test::Array::BuySellStock(input, length, buy, sell, profit);
+			int buy2;
+			int sell2;
+			int profit2;
+			Test::Array::BuySellStock2(input, length, buy2, sell2, profit2);
+			Logger().WriteInformation("\t%d\t%d\t%ld\n", buy, sell, profit);
+			Logger().WriteInformation("\t%d\t%d\t%ld\n", buy2, sell2, profit2);
+			ASSERT1(buy == buy2);
+			ASSERT1(sell == sell2);
+			ASSERT1(profit == profit2);
+		};
+		{
+			int A[] = { 1 };
+			check(A, 1);
+		}
+		{
+			int A[] = { 1, 2 };
+			check(A, 2);
+		}
+		{
+			int A[] = { 2, 1 };
+			check(A, 2);
+		}
+		{
+			int A[] = { 2, 2 };
+			check(A, 2);
+		}
+		{
+			int A[] = { 1, 2, 3 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 1, 3, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 1, 3 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 3, 1 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 3, 1, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 3, 2, 1 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 1, 2, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 1, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 2, 1 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 2, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 1, 2, 3, 4 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 2, 1, 3, 4 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 2, 1, 4, 3 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 1, 2, 4, 3 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 2, 7, 1, 6 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 3, 7, 1, 6 };
+			check(A, 4);
+		}
+		{
+			for (int i = 0; i < 100; i++) {
+				int len = 1 + Test::Random::Next(100);
+				unique_ptr<int[]> A(new int[len]);
+				for (int j = 0; j < len; j++) {
+					A[j] = Test::Random::Next();
+				}
+				Logger().WriteInformation("\nRun %d with %d elements\n", i, len);
+				check(A.get(), len);
+			}
+		}
+	});
 }

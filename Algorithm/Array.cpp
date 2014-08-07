@@ -20,6 +20,7 @@ namespace Test {
 		}
 	}
 
+	// This is a solution to the buy-sell-stock problem in Introduction to Algorithms
 	void Array::MaxSubArray(const int * input, int length, int & start, int & end, long & sum)
 	{
 		start = -1;
@@ -70,6 +71,61 @@ namespace Test {
 			start = max;
 			end = max;
 			sum = input[max];
+		}
+	}
+
+	// http://leetcode.com/2010/11/best-time-to-buy-and-sell-stock.html
+	// Buy on one day and sell later. Maximize the profit.
+	void Array::BuySellStock(const int * input, int length, int & buy, int & sell, int & profit)
+	{
+		int min = 0;
+		buy = 0;
+		sell = 0;
+		profit = 0;
+		for (int i = 1; i < length; i++) {
+			if (input[i] < input[min]) {
+				min = i;
+			}
+			int diff = input[i] - input[min];
+			if (diff > profit) {
+				buy = min;
+				sell = i;
+				profit = diff;
+			}
+		}
+	}
+
+	// http://leetcode.com/2010/11/best-time-to-buy-and-sell-stock.html
+	// Buy on one day and sell later. Maximize the profit.
+	void Array::BuySellStock2(const int * input, int length, int & buy, int & sell, int & profit)
+	{
+		buy = 0;
+		sell = 0;
+		profit = 0;
+		stack<int> sellCandidates; // track the increasing values from end to beginning
+		sellCandidates.push(length - 1);
+		for (int i = length - 2; i > 0; i--) {
+			if (input[i] >= input[sellCandidates.top()]) {
+				// i is the possible sell date, because
+				// other dates later than i have less stock values
+				sellCandidates.push(i);
+			}
+		}
+		int min = 0;
+		for (int i = 0; i < length - 1; i++) {
+			if (i == 0 || input[i] < input[min]) {
+				min = i;
+				while (min >= sellCandidates.top()) {
+					// i may be way later than top candidates
+					sellCandidates.pop();
+				}
+				int diff = input[sellCandidates.top()] - input[min];
+				if (diff > profit) {
+					buy = min;
+					sell = sellCandidates.top();
+					profit = diff;
+				}
+			}
 		}
 	}
 

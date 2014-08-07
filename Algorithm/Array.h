@@ -2,6 +2,7 @@
 #include <deque>
 #include <functional>
 #include <queue>
+#include <stack>
 #include <vector>
 #include "BinarySearch.h"
 #include "BitSet.h"
@@ -23,6 +24,10 @@ namespace Test {
 		// Parameter sum is the summation of the returned subarray
 		// Parameters start and end are the start and end indices of the returned subarray
 		static void MaxSubArray(const int * input, int length, int & start, int & end, long & sum);
+
+		// Buy on one day and sell later. Maximize the profit.
+		static void BuySellStock(const int * input, int length, int & buy, int & sell, int & profit);
+		static void BuySellStock2(const int * input, int length, int & buy, int & sell, int & profit);
 
 		// An inversion is a pair (i, j) such that i < j and I[i] > I[j].
 		// Find an inversion such that j - i is maximized.
