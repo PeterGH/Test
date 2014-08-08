@@ -236,6 +236,38 @@ void StringTest::Init(void)
 		}
 	});
 
+	Add("ReverseWords", [&](){
+		auto check = [&](string & input, const string & expect) {
+			Logger().WriteInformation("\nInput:  %s\n", input.c_str());
+			Test::String::ReverseWords(input);
+			Logger().WriteInformation("Output: %s\n", input.c_str());
+			ASSERT1(input == expect);
+		};
+
+		string i = "a";
+		check(i, "a");
+		i = "";
+		check(i, "");
+		i = " ";
+		check(i, "");
+		i = "  ";
+		check(i, "");
+		i = "ab";
+		check(i, "ab");
+		i = "a b";
+		check(i, "b a");
+		i = "a  b";
+		check(i, "b a");
+		i = " a b ";
+		check(i, "b a");
+		i = "  a  b  ";
+		check(i, "b a");
+		i = "  ab  cd  ";
+		check(i, "cd ab");
+		i = "   This is a test!   ";
+		check(i, "test! a is This");
+	});
+
 	Add("StrStr", [&](){
 		auto check = [&](char * input1, char * input2, int index) {
 			Logger().WriteInformation("\nInput1:\t%s\n", input1);

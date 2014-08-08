@@ -101,6 +101,8 @@ namespace Test {
 
 		__declspec(dllexport) static void ReplaceWithShorterString(char * input, const char * pattern, const char * shorter);
 
+		__declspec(dllexport) static void ReverseWords(string & input);
+
 		__declspec(dllexport) static const char * StrStr(const char * input1, const char * input2);
 
 		template<class T, class C> static basic_string<C> Join(const T * input, int length, const C * separator)

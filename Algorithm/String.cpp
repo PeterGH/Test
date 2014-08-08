@@ -284,6 +284,28 @@ namespace Test {
 		*i = '\0';
 	}
 
+	// input is a sentence of words separated by spaces
+	// Reverse the words in place
+	void String::ReverseWords(string & input)
+	{
+		int len = input.length();
+		int i = 0;
+		while (i < len && input[i] == ' ') i++;
+		if (i == len) {
+			input.clear();
+			return;
+		}
+		while (i < len) {
+			int j = input.find_first_of(" ", i);
+			if (j == string::npos) j = len;
+			input.insert(len, input, i, j - i);
+			input.insert(len, 1, ' ');
+			while (j < len && input[j] == ' ') j++;
+			i = j;
+		}
+		input = input.substr(i+1);
+	}
+
 	const char * String::StrStr(const char * input1, const char * input2)
 	{
 		if (input1 == nullptr || input2 == nullptr || *input1 == '\0' || * input2 == '\0') return nullptr;
