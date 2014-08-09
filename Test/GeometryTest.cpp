@@ -70,4 +70,120 @@ void GeometryTest::Init(void)
 		check(5, 2, 7, 1, 3, 4, 5, 3, false);
 		check(6, 2, 8, 1, 3, 4, 5, 3, false);
 	});
+
+	Add("IntPoint", [&](){
+		vector<Test::Geometry::IntPoint> points = {
+			Test::Geometry::IntPoint { 3, 1 },
+			Test::Geometry::IntPoint { 3, 1 },
+			Test::Geometry::IntPoint { 0, 2 },
+			Test::Geometry::IntPoint { 0, 1 },
+			Test::Geometry::IntPoint { -1, 0 },
+			Test::Geometry::IntPoint { 0, 0 }
+		};
+		sort(points.begin(), points.end());
+		for_each(points.begin(), points.end(), [&](Test::Geometry::IntPoint & p){
+			Logger().WriteInformation("  (%d, %d)", p.x, p.y);
+		});
+		Logger().WriteInformation("\n");
+		Test::Geometry::IntPoint p0(-1, 0);
+		ASSERT1(points[0] == p0);
+		Test::Geometry::IntPoint p1(0, 0);
+		ASSERT1(points[1] == p1);
+		Test::Geometry::IntPoint p2(0, 1);
+		ASSERT1(points[2] == p2);
+		Test::Geometry::IntPoint p3(0, 2);
+		ASSERT1(points[3] == p3);
+		Test::Geometry::IntPoint p4(3, 1);
+		ASSERT1(points[4] == p4);
+		Test::Geometry::IntPoint p5(3, 1);
+		ASSERT1(points[5] == p5);
+	});
+
+	Add("MaxPointsOnLine", [&](){
+		auto check = [&](vector<Test::Geometry::IntPoint> & points, int expect) {
+			Logger().WriteInformation("Input %d points:\n", points.size());
+			for_each(points.begin(), points.end(), [&](const Test::Geometry::IntPoint & p){
+				Logger().WriteInformation("  (%d, %d)", p.x, p.y);
+			});
+			Logger().WriteInformation("\n");
+			set<Test::Geometry::IntPoint> output;
+			int count = Test::Geometry::MaxPointsOnALine(points, output);
+			Logger().WriteInformation("Max points on a line: %d\n", count);
+			for_each(output.begin(), output.end(), [&](const Test::Geometry::IntPoint & p){
+				Logger().WriteInformation("  (%d, %d)", p.x, p.y);
+			});
+			Logger().WriteInformation("\n");
+			ASSERT1(count == expect);
+		};
+		{
+			vector<Test::Geometry::IntPoint> points = {
+				Test::Geometry::IntPoint { 1, 1 }
+			};
+			check(points, 1);
+		}
+		{
+			vector<Test::Geometry::IntPoint> points = {
+				Test::Geometry::IntPoint { 1, 1 },
+				Test::Geometry::IntPoint { 1, 2 }
+			};
+			check(points, 2);
+		}
+		{
+			vector<Test::Geometry::IntPoint> points = {
+				Test::Geometry::IntPoint { 1, 1 },
+				Test::Geometry::IntPoint { 2, 1 }
+			};
+			check(points, 2);
+		}
+		{
+			vector<Test::Geometry::IntPoint> points = {
+				Test::Geometry::IntPoint { 2, 3 },
+				Test::Geometry::IntPoint { 4, 5 }
+			};
+			check(points, 2);
+		}
+		{
+			vector<Test::Geometry::IntPoint> points = {
+				Test::Geometry::IntPoint { 1, 2 },
+				Test::Geometry::IntPoint { 2, 2 },
+				Test::Geometry::IntPoint { 1, 1 },
+				Test::Geometry::IntPoint { 2, 1 }
+			};
+			check(points, 2);
+		}
+		{
+			vector<Test::Geometry::IntPoint> points = {
+				Test::Geometry::IntPoint { 1, 2 },
+				Test::Geometry::IntPoint { 2, 2 },
+				Test::Geometry::IntPoint { 1, 1 },
+				Test::Geometry::IntPoint { 2, 1 },
+				Test::Geometry::IntPoint { 3, 1 }
+			};
+			check(points, 3);
+		}
+		{
+			vector<Test::Geometry::IntPoint> points = {
+				Test::Geometry::IntPoint { 2, 3 },
+				Test::Geometry::IntPoint { 1, 2 },
+				Test::Geometry::IntPoint { 2, 2 },
+				Test::Geometry::IntPoint { 1, 1 },
+				Test::Geometry::IntPoint { 2, 1 }
+			};
+			check(points, 3);
+		}
+		{
+			vector<Test::Geometry::IntPoint> points = {
+				Test::Geometry::IntPoint { 1, 4 },
+				Test::Geometry::IntPoint { 1, 3 },
+				Test::Geometry::IntPoint { 2, 3 },
+				Test::Geometry::IntPoint { 1, 2 },
+				Test::Geometry::IntPoint { 2, 2 },
+				Test::Geometry::IntPoint { 3, 2 },
+				Test::Geometry::IntPoint { 2, 1 },
+				Test::Geometry::IntPoint { 3, 1 },
+				Test::Geometry::IntPoint { 4, 1 }
+			};
+			check(points, 4);
+		}
+	});
 }
