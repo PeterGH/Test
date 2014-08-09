@@ -43,4 +43,49 @@ namespace Test {
 		}
 		return code;
 	}
+
+	// Evaluate the value of an arithmetic expression in Reverse Polish Notation.
+	int Math::EvalRPNExpression(vector<string> & tokens)
+	{
+		if (tokens.size() == 0) throw runtime_error("No token is provided");
+		stack<int> args;
+		int first;
+		int second;
+		int s;
+		for_each(tokens.begin(), tokens.end(), [&](string & t){
+			if (t != "+" && t != "-" && t != "*" && t != "/") {
+				if (t.length() == 0) throw runtime_error("Token is empty");
+				s = 0;
+				bool negative = false;
+				if (t[0] == '-') {
+					negative = true;
+				}
+				for (unsigned int i = negative ? 1 : 0; i < t.length(); i++) {
+					if (t[i] < '0' || t[i] > '9') throw runtime_error("Token is not an integer");
+					s = s * 10 + t[i] - '0';
+				}
+				if (negative) s = -s;
+				args.push(s);
+			} else {
+				if (args.empty()) throw runtime_error("Not enough tokens");
+				second = args.top();
+				args.pop();
+				if (args.empty()) throw runtime_error("Not enough tokens");
+				first = args.top();
+				args.pop();
+				if (t == "+") {
+					s = first + second;
+				} else if (t == "-") {
+					s = first - second;
+				} else if (t == "*") {
+					s = first * second;
+				} else if (t == "/") {
+					if (second == 0) throw runtime_error("Divided by zero");
+					s = first / second;
+				}
+				args.push(s);
+			}
+		});
+		return args.top();
+	}
 }

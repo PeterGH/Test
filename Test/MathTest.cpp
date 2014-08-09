@@ -47,4 +47,29 @@ void MathTest::Init(void)
 			ASSERT1(decode == n);
 		}
 	});
+
+	Add("RPN", [&](){
+		auto check = [&](vector<string> & tokens, int expect) {
+			Logger().WriteInformation("Expression:");
+			for_each(tokens.begin(), tokens.end(), [&](string & t) {
+				Logger().WriteInformation(" %s", t.c_str());
+			});
+			Logger().WriteInformation("\n");
+			int r = Test::Math::EvalRPNExpression(tokens);
+			Logger().WriteInformation("Result:     %d\n", r);
+			ASSERT1(r == expect);
+		};
+		vector<string> t = { "2", "1", "+", "3", "*" };
+		check(t, 9);
+		t = { "4", "13", "5", "/", "+" };
+		check(t, 6);
+		t = { "-1", "-22", "+" };
+		check(t, -23);
+		t = { "1", "-22", "-" };
+		check(t, 23);
+		t = { "-2", "-3", "*" };
+		check(t, 6);
+		t = { "-22", "-2", "/" };
+		check(t, 11);
+	});
 }
