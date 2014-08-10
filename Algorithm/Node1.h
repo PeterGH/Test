@@ -14,7 +14,18 @@ namespace Test {
 			}
 		}
 
-		Node1 * & Next(void) { return (Node1 * &)this->first; }
-		void Next(Node1 * next) { this->first = next; }
+		virtual Node1 * Search(const T & v);
+		virtual bool Contain(const T & v) { return nullptr != Search(v); }
 	};
+
+	template<class T> Node1<T> * Node1<T>::Search(const T & v)
+	{
+		Node1 * p = this;
+		while (nullptr != p && p->value != v) {
+			p = (Node1 *)p->first;
+		}
+
+		// p == nullptr || p->value == v
+		return p;
+	}
 }

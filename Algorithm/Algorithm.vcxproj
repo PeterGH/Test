@@ -137,6 +137,7 @@
     <ClInclude Include="RodCut.h" />
     <ClInclude Include="SeamCarving.h" />
     <ClInclude Include="SingleLinkList.h" />
+    <ClInclude Include="SingleNode.h" />
     <ClInclude Include="SortedCircularSingleLinkList.h" />
     <ClInclude Include="SortedSingleLinkList.h" />
     <ClInclude Include="Stack.h" />

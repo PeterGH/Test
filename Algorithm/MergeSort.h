@@ -2,12 +2,13 @@
 
 #include <ppl.h>
 #include "Heap.h"
+#include "SingleNode.h"
 
 using namespace concurrency;
 
 namespace Test {
 	class _declspec(dllexport) MergeSort {
-	private:
+	public:
 		// Assuming input[head..(middle-1)] and input[middle..tail] are already sorted,
 		// rearrange input so that input[head..tail] is sorted.
 		// In-place and stable.
@@ -17,6 +18,8 @@ namespace Test {
 		// rearrange elements every step so that input[head..tail] is sorted.
 		// In-place and stable.
 		template<class T> static void Merge(T * input, int head, int middle, int tail, int step);
+
+		template<class T> static void Merge(SingleNode<T> * & first, SingleNode<T> * second);
 
 		// An inversion is a pair {input[i], input[j]} such that input[i] > input[j] when i < j.
 		// We can extend the concept to two sub arrays of input, and the set of inversions
@@ -28,12 +31,14 @@ namespace Test {
 		// count inversions between input[head..(middle-1)] and input[middle..tail] by merging 
 		// them into a sorted array input[head..tail].
 		template<class T> static int CountInversions(T * input, int head, int middle, int tail);
-	public:
+
 		// Sort input[head..tail] using merge
 		template<class T> static void Sort(T * input, int head, int tail);
 		template<class T> static void Sort(T * input, int length) { Sort(input, 0, length - 1); }
 
 		template<class T> static void Sort(T * input, int head, int tail, int step);
+
+		template<class T> static void Sort(SingleNode<T> * & list);
 
 		template<class T> static void ParallelSort(T * input, int head, int tail);
 		template<class T> static void ParallelSort(T * input, int length) { ParallelSort(input, 0, length - 1); }
@@ -99,6 +104,48 @@ namespace Test {
 		}
 	}
 	
+	template<class T> void MergeSort::Merge(SingleNode<T> * & first, SingleNode<T> * second)
+	{
+		if (second == nullptr) return;
+
+		if (first == nullptr) {
+			first = second;
+			return;
+		}
+
+		SingleNode<T> * p;
+		if (second->Value() < first->Value()) {
+			p = second->Next();
+			second->Next() = first;
+			first = second;
+			second = p;
+		}
+
+		// Now first->Value() <= second->Value()
+
+		p = first;
+		while (p != nullptr && second != nullptr) {
+			while (p->Next() != nullptr && p->Next()->Value() <= second->Value()) {
+				p = p->Next();
+			}
+
+			// Now p->Value() <= second->Value()
+
+			if (p->Next() == nullptr) {
+				// first list is done, append rest of second to first
+				p->Next() = second;
+				break;
+			} else {
+				// Insert second between p and p->Next()
+				SingleNode<T> * q = second->Next();
+				second->Next() = p->Next();
+				p->Next() = second;
+				p = second;
+				second = q;
+			}
+		}
+	}
+
 	template<class T> int MergeSort::CountInversions(T * input, int head, int middle, int tail)
 	{
 		if (input == nullptr || head < 0 || middle <= 0 || tail < middle || tail <= head) return 0;

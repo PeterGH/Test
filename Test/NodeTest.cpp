@@ -12,49 +12,134 @@ void NodeTest::Init(void)
 		}
 	});
 
-	Add("Node1", [&](){
+	Add("SingleNode", [&](){
 		{
-			Test::Node1<int> node(1);
+			Test::SingleNode<int> node(1);
+			cout << &node << endl;
+			cout << "Middle: " << node.Middle()->Value() << endl;
+			Test::SingleNode<int> * r = node.Reverse();
+			cout << "Reverse: " << r << endl;
 		}
 		{
-			Test::Node1<int> * p = new Test::Node1<int>(2);
+			Test::SingleNode<int> * p = new Test::SingleNode<int>(2);
+			cout << p << endl;
 			delete p;
 		}
 		{
-			Test::Node1<int> * n1 = new Test::Node1<int>(1);
-			Test::Node1<int> * n2 = new Test::Node1<int>(2);
-			Test::Node1<int> * n3 = new Test::Node1<int>(3);
-			Test::Node1<int> * n4 = new Test::Node1<int>(4);
+			Test::SingleNode<int> * n1 = new Test::SingleNode<int>(1);
+			Test::SingleNode<int> * n2 = new Test::SingleNode<int>(2);
+			Test::SingleNode<int> * n3 = new Test::SingleNode<int>(3);
+			Test::SingleNode<int> * n4 = new Test::SingleNode<int>(4);
 			n1->Next() = n2;
 			n2->Next() = n3;
 			n3->Next() = n4;
 
-			Test::Node1<int> * p = n1;
-			Test::Node1<int> * c = n1;
-			do {
-				Logger().WriteInformation("Value %d\n", c->Value());
-				p = c;
-				c = p->Next();
-				delete p;
-			} while (c != nullptr);
+			cout << n1 << endl;
+
+			cout << "Middle: " << n1->Middle()->Value() << endl;
+
+			n1->DeleteList();
+			delete n1;
 		}
 		{
-			Test::Node1<int> * n1 = new Test::Node1<int>(1);
-			Test::Node1<int> * n2 = new Test::Node1<int>(2);
-			Test::Node1<int> * n3 = new Test::Node1<int>(3);
-			Test::Node1<int> * n4 = new Test::Node1<int>(4);
+			Test::SingleNode<int> * n1 = new Test::SingleNode<int>(1);
+			Test::SingleNode<int> * n2 = new Test::SingleNode<int>(2);
+			Test::SingleNode<int> * n3 = new Test::SingleNode<int>(3);
+			Test::SingleNode<int> * n4 = new Test::SingleNode<int>(4);
 			n1->Next(n2);
 			n2->Next(n3);
 			n3->Next(n4);
 
-			Test::Node1<int> * p = n1;
-			Test::Node1<int> * c = n1;
-			do {
-				Logger().WriteInformation("Value %d\n", c->Value());
-				p = c;
-				c = p->Next();
-				delete p;
-			} while (c != nullptr);
+			cout << n1 << endl;
+
+			n1->DeleteList();
+			delete n1;
+		}
+		{
+			Test::SingleNode<int> * n1 = new Test::SingleNode<int>(1);
+			Test::SingleNode<int> * n2 = new Test::SingleNode<int>(2);
+			Test::SingleNode<int> * n3 = new Test::SingleNode<int>(3);
+			Test::SingleNode<int> * n4 = new Test::SingleNode<int>(4);
+			n1->Next() = n2;
+			n2->Next() = n3;
+			n3->Next() = n4;
+			n4->Next() = n1;
+
+			cout << n1 << endl;
+
+			cout << "Middle: " << n1->Middle()->Value() << endl;
+
+			n1->DeleteList();
+			delete n1;
+		}
+		{
+			Test::SingleNode<int> n1(0);
+			for (int i = 1; i < 10; i++) {
+				n1.InsertAtEnd(new Test::SingleNode<int>(i));
+				cout << &n1 << endl;
+				int m = n1.Middle()->Value();
+				cout << "Middle: " << m << endl;
+				ASSERT1(m == i >> 1);
+			}
+			n1.DeleteList();
+		}
+		{
+			Test::SingleNode<int> n1(0);
+			n1.Next() = &n1;
+			for (int i = 1; i < 10; i++) {
+				n1.InsertAtEnd(new Test::SingleNode<int>(i));
+				cout << &n1 << endl;
+				int m = n1.Middle()->Value();
+				cout << "Middle: " << m << endl;
+				ASSERT1(m == i >> 1);
+			}
+			n1.DeleteList();
+		}
+		{
+			Test::SingleNode<int> n1(0);
+			for (int i = 9; i > 0; i--) {
+				n1.InsertAfter(new Test::SingleNode<int>(i));
+				cout << &n1 << endl;
+			}
+			int m = n1.Middle()->Value();
+			cout << "Middle: " << m << endl;
+			ASSERT1(m == 4);
+			n1.DeleteList();
+		}
+		{
+			Test::SingleNode<int> n1(0);
+			n1.Next() = &n1;
+			for (int i = 9; i > 0; i--) {
+				n1.InsertAfter(new Test::SingleNode<int>(i));
+				cout << &n1 << endl;
+			}
+			int m = n1.Middle()->Value();
+			cout << "Middle: " << m << endl;
+			ASSERT1(m == 4);
+			n1.DeleteList();
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			for (int i = 1; i < 10; i++) {
+				n->InsertAtEnd(new Test::SingleNode<int>(i));
+				cout << n << endl;
+				n = n->Reverse();
+				cout << "Reverse: " << endl << n << endl;
+			}
+			n->DeleteList();
+			delete n;
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			n->Next() = n;
+			for (int i = 1; i < 10; i++) {
+				n->InsertAtEnd(new Test::SingleNode<int>(i));
+				cout << n << endl;
+				n = n->Reverse();
+				cout << "Reverse: " << endl << n << endl;
+			}
+			n->DeleteList();
+			delete n;
 		}
 	});
 

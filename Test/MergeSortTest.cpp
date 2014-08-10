@@ -178,4 +178,110 @@ void MergeSortTest::Init(void)
 
 		Logger().WriteInformation("\n");
 	});
+
+	Add("MergeList", [&](){
+		auto check = [&](Test::SingleNode<int> * f, Test::SingleNode<int> * s){
+			cout << "First: " << f << endl;
+			cout << "Second: " << s << endl;
+			Test::MergeSort::Merge(f, s);
+			cout << "Merge: " << f << endl;
+			Test::SingleNode<int> * p = f;
+			int i = 0;
+			while (p != nullptr) {
+				ASSERT1(p->Value() == i);
+				p = p->Next();
+				i++;
+			}
+			f->DeleteList();
+			delete f;
+		};
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(0);
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(1);
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(1);
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(0);
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(0);
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(1);
+			s->InsertAtEnd(new Test::SingleNode<int>(2));
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(1);
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(0);
+			s->InsertAtEnd(new Test::SingleNode<int>(2));
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(2);
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(0);
+			s->InsertAtEnd(new Test::SingleNode<int>(1));
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(0);
+			f->InsertAtEnd(new Test::SingleNode<int>(1));
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(2);
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(0);
+			f->InsertAtEnd(new Test::SingleNode<int>(2));
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(1);
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(1);
+			f->InsertAtEnd(new Test::SingleNode<int>(2));
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(0);
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(0);
+			f->InsertAtEnd(new Test::SingleNode<int>(1));
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(2);
+			s->InsertAtEnd(new Test::SingleNode<int>(3));
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(0);
+			f->InsertAtEnd(new Test::SingleNode<int>(2));
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(1);
+			s->InsertAtEnd(new Test::SingleNode<int>(3));
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(0);
+			f->InsertAtEnd(new Test::SingleNode<int>(3));
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(1);
+			s->InsertAtEnd(new Test::SingleNode<int>(2));
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(1);
+			f->InsertAtEnd(new Test::SingleNode<int>(2));
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(0);
+			s->InsertAtEnd(new Test::SingleNode<int>(3));
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(1);
+			f->InsertAtEnd(new Test::SingleNode<int>(3));
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(0);
+			s->InsertAtEnd(new Test::SingleNode<int>(2));
+			check(f, s);
+		}
+		{
+			Test::SingleNode<int> * f = new Test::SingleNode<int>(2);
+			f->InsertAtEnd(new Test::SingleNode<int>(3));
+			Test::SingleNode<int> * s = new Test::SingleNode<int>(0);
+			s->InsertAtEnd(new Test::SingleNode<int>(1));
+			check(f, s);
+		}
+	});
 }

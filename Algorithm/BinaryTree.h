@@ -3,7 +3,7 @@
 #include <ppl.h>
 #include "BinaryIterator.h"
 #include "InOrderBinaryIterator.h"
-#include "Node1.h"
+#include "SingleNode.h"
 #include "PostOrderBinaryIterator.h"
 #include "PreOrderBinaryIterator.h"
 #include "Random.h"
@@ -409,11 +409,11 @@ namespace Test {
 			return head;
 		}
 
-		void FromSingleLinkList(Node1<T> * list)
+		void FromSingleLinkList(SingleNode<T> * list)
 		{
 			if (list == nullptr) return;
 
-			function<N<T> * (Node1<T> *)> convert = [&](Node1<T> * head) -> N<T> * {
+			function<N<T> * (SingleNode<T> *)> convert = [&](SingleNode<T> * head) -> N<T> * {
 				if (head == nullptr) return nullptr;
 
 				if (head->Next() == nullptr) {
@@ -422,15 +422,15 @@ namespace Test {
 					return tree;
 				}
 
-				Node1<T> * first = head;
-				Node1<T> * second = head->Next();
+				SingleNode<T> * first = head;
+				SingleNode<T> * second = head->Next();
 				while (second->Next() != nullptr && second->Next()->Next() != nullptr) {
 					first = first->Next();
 					second = second->Next();
 					second = second->Next();
 				}
 
-				Node1<T> * node = first->Next();
+				SingleNode<T> * node = first->Next();
 				first->Next() = nullptr;
 				first = node->Next();
 				node->Next() = nullptr;
@@ -449,11 +449,11 @@ namespace Test {
 			this->root = convert(list);
 		}
 
-		void FromSingleLinkList2(Node1<T> * list)
+		void FromSingleLinkList2(SingleNode<T> * list)
 		{
 			if (list == nullptr) return;
 
-			function<N<T> * (Node1<T> * &, int, int)> convert = [&](Node1<T> * & head, int begin, int end) -> N<T> * {
+			function<N<T> * (SingleNode<T> * &, int, int)> convert = [&](SingleNode<T> * & head, int begin, int end) -> N<T> * {
 				if (head == nullptr || begin > end) return nullptr;
 
 				// Choose the median one if there are odd numbers in [begin, end]
@@ -464,7 +464,7 @@ namespace Test {
 				N<T> * node = new N<T>(head->Value());
 				node->left = left;
 
-				Node1<T> * p = head;
+				SingleNode<T> * p = head;
 				head = head->Next();
 				delete p;
 
@@ -473,7 +473,7 @@ namespace Test {
 				return node;
 			};
 
-			Node1<T> * p = list;
+			SingleNode<T> * p = list;
 			int i = 0;
 			while (p != nullptr) {
 				p = p->Next();
