@@ -16,6 +16,9 @@ namespace Test {
 		// Set the next node pointer
 		void Next(SingleNode * next) { this->first = next; }
 
+		// Count list nodes
+		size_t Length(void);
+
 		// Insert a node or a list after this one
 		void InsertAfter(SingleNode * node);
 
@@ -34,6 +37,17 @@ namespace Test {
 		// Reverse this node and return the head of new list
 		SingleNode * Reverse(void);
 	};
+
+	template<class T> size_t SingleNode<T>::Length(void)
+	{
+		size_t s = 1;
+		SingleNode * p = this->Next();
+		while (p != nullptr && p != this) {
+			s++;
+			p = p->Next();
+		}
+		return s;
+	}
 
 	template<class T> void SingleNode<T>::InsertAfter(SingleNode * node)
 	{

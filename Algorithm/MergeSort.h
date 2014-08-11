@@ -104,6 +104,7 @@ namespace Test {
 		}
 	}
 	
+	// Merge two sorted single link lists
 	template<class T> void MergeSort::Merge(SingleNode<T> * & first, SingleNode<T> * second)
 	{
 		if (second == nullptr) return;
@@ -214,6 +215,46 @@ namespace Test {
 			Sort(input, head, middle - step, step);
 			Sort(input, middle, tail, step);
 			Merge(input, head, middle, tail, step);			
+		}
+	}
+
+	// Sort a single link list or a circular list
+	template<class T> void MergeSort::Sort(SingleNode<T> * & list)
+	{
+		if (list == nullptr || list->Next() == nullptr || list->Next() == list) return;
+
+		SingleNode<T> * m = list;
+		SingleNode<T> * p = list;
+
+		while (p->Next() != nullptr && p->Next() != list
+			&& p->Next()->Next() != nullptr && p->Next()->Next() != list) {
+			// p visits the (2n-1)-th node.
+			p = p->Next()->Next();
+			// middle visits the n-th node.
+			m = m->Next();
+		}
+
+		bool circular = false;
+		if (p->Next() == list) {
+			circular = true;
+			p->Next() = nullptr;
+		} else if (p->Next() != nullptr && p->Next()->Next() == list) {
+			circular = true;
+			p->Next()->Next() = nullptr;
+		}
+
+		SingleNode<T> * second = m->Next();
+		m->Next() = nullptr;
+		Sort(list);
+		Sort(second);
+		Merge(list, second);
+
+		if (circular) {
+			p = list;
+			while (p->Next() != nullptr) {
+				p = p->Next();
+			}
+			p->Next() = list;
 		}
 	}
 	
