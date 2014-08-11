@@ -31,6 +31,7 @@
 #include "ListGraphTest.h"
 #include "LongestCommonSubsequenceTest.h"
 #include "LongestIncreasingSubsequenceTest.h"
+#include "LRUCacheTest.h"
 #include "MathTest.h"
 #include "MatrixChainTest.h"
 #include "MatrixGraphTest.h"
@@ -107,6 +108,7 @@ int main(int argc, char * argv[])
 	suite.Add(new ListGraphTest(log));
 	suite.Add(new LongestCommonSubsequenceTest(log));
 	suite.Add(new LongestIncreasingSubsequenceTest(log));
+	suite.Add(new LRUCacheTest(log));
 	suite.Add(new MathTest(log));
 	suite.Add(new MatrixChainTest(log));
 	suite.Add(new MatrixGraphTest(log));
