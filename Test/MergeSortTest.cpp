@@ -339,6 +339,17 @@ void MergeSortTest::Init(void)
 			check(list);
 		}
 		{
+			Test::SingleNode<int> * list = new Test::SingleNode<int>(2);
+			list->InsertAtEnd(new Test::SingleNode<int>(2));
+			check(list);
+		}
+		{
+			Test::SingleNode<int> * list = new Test::SingleNode<int>(2);
+			list->Next() = list;
+			list->InsertAtEnd(new Test::SingleNode<int>(2));
+			check(list);
+		}
+		{
 			Test::SingleNode<int> * list = new Test::SingleNode<int>(1);
 			list->InsertAtEnd(new Test::SingleNode<int>(2));
 			list->InsertAtEnd(new Test::SingleNode<int>(3));
@@ -420,6 +431,58 @@ void MergeSortTest::Init(void)
 			Test::SingleNode<int> * p = new Test::SingleNode<int>(1);
 			list->InsertAtEnd(p);
 			p->Next() = list;
+			check(list);
+		}
+		{
+			Test::SingleNode<int> * list = new Test::SingleNode<int>(1);
+			list->InsertAtEnd(new Test::SingleNode<int>(2));
+			list->InsertAtEnd(new Test::SingleNode<int>(2));
+			check(list);
+		}
+		{
+			Test::SingleNode<int> * list = new Test::SingleNode<int>(1);
+			list->Next() = list;
+			list->InsertAtEnd(new Test::SingleNode<int>(2));
+			list->InsertAtEnd(new Test::SingleNode<int>(2));
+			check(list);
+		}
+		{
+			Test::SingleNode<int> * list = new Test::SingleNode<int>(2);
+			list->InsertAtEnd(new Test::SingleNode<int>(1));
+			list->InsertAtEnd(new Test::SingleNode<int>(2));
+			check(list);
+		}
+		{
+			Test::SingleNode<int> * list = new Test::SingleNode<int>(2);
+			list->Next() = list;
+			list->InsertAtEnd(new Test::SingleNode<int>(1));
+			list->InsertAtEnd(new Test::SingleNode<int>(2));
+			check(list);
+		}
+		{
+			Test::SingleNode<int> * list = new Test::SingleNode<int>(2);
+			list->InsertAtEnd(new Test::SingleNode<int>(2));
+			list->InsertAtEnd(new Test::SingleNode<int>(1));
+			check(list);
+		}
+		{
+			Test::SingleNode<int> * list = new Test::SingleNode<int>(2);
+			list->Next() = list;
+			list->InsertAtEnd(new Test::SingleNode<int>(2));
+			list->InsertAtEnd(new Test::SingleNode<int>(1));
+			check(list);
+		}
+		{
+			Test::SingleNode<int> * list = new Test::SingleNode<int>(3);
+			list->InsertAtEnd(new Test::SingleNode<int>(3));
+			list->InsertAtEnd(new Test::SingleNode<int>(3));
+			check(list);
+		}
+		{
+			Test::SingleNode<int> * list = new Test::SingleNode<int>(3);
+			list->Next() = list;
+			list->InsertAtEnd(new Test::SingleNode<int>(3));
+			list->InsertAtEnd(new Test::SingleNode<int>(3));
 			check(list);
 		}
 		{
