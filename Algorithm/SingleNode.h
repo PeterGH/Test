@@ -36,6 +36,13 @@ namespace Test {
 
 		// Reverse this node and return the head of new list
 		SingleNode * Reverse(void);
+
+		// Reorder single-link list
+		// (1)  0 -> 1 -> 2 -> ...... -> n-1 -> n -> n+1 -> ...... 2n-1 -> nullptr
+		//      0 -> 2n-1 -> 1 -> 2n-2 -> 2 -> ...... -> n-2 -> n+1 -> n-1 -> n -> nullptr
+		// (2)  0 -> 1 -> 2 -> ...... -> n-1 -> n -> n+1 -> ...... 2n-1 -> 2n nullptr
+		//      0 -> 2n -> 1 -> 2n-1 -> 2 -> ...... -> n+2 -> n-1 -> n+1 -> n -> nullptr
+		static void Reorder(SingleNode * node);
 	};
 
 	template<class T> size_t SingleNode<T>::Length(void)
@@ -134,12 +141,9 @@ namespace Test {
 	// The middle node is the n-th node, no matter if the list contain (2n-1) nodes or 2n nodes.
 	template<class T> SingleNode<T> * SingleNode<T>::Middle(void)
 	{
-		SingleNode * middle;
-		SingleNode * p;
-
 		// Start from the first (1-th) node.
-		middle = this;
-		p = this;
+		SingleNode * middle = this;
+		SingleNode * p = this;
 
 		while (p->Next() != nullptr && p->Next() != this
 			&& p->Next()->Next() != nullptr && p->Next()->Next() != this) {
@@ -202,4 +206,56 @@ namespace Test {
 		return os;
 	}
 
+	// Reorder single-link list
+	// (1)  0 -> 1 -> 2 -> ...... -> n-1 -> n -> n+1 -> ...... 2n-1 -> nullptr
+	//      0 -> 2n-1 -> 1 -> 2n-2 -> 2 -> ...... -> n-2 -> n+1 -> n-1 -> n -> nullptr
+	// (2)  0 -> 1 -> 2 -> ...... -> n-1 -> n -> n+1 -> ...... 2n-1 -> 2n nullptr
+	//      0 -> 2n -> 1 -> 2n-1 -> 2 -> ...... -> n+2 -> n-1 -> n+1 -> n -> nullptr
+	template<class T> void SingleNode<T>::Reorder(SingleNode * node)
+	{
+		if (node == nullptr) return;
+
+		// Find the middle node
+		SingleNode * m = node;
+		SingleNode * p = node;
+		while (p->Next() != nullptr && p->Next()->Next() != nullptr) {
+			m = m->Next();
+			p = p->Next()->Next();
+		}
+
+		if (m == node) {
+			// Only one node or two nodes
+			return;
+		}
+
+		// Break the list at the middle
+		SingleNode * second = m->Next();
+		m->Next() = nullptr;
+
+		// Reverse the second half of list
+		if (second->Next() != nullptr) {
+			p = second;
+			m = p->Next();
+			SingleNode * q = m->Next();
+			p->Next() = nullptr;
+			while (m != nullptr && q != nullptr) {
+				m->Next() = p;
+				p = m;
+				m = q;
+				q = m->Next();
+			}
+			m->Next() = p;
+			second = m;
+		}
+
+		// Merge two lists
+		m = node;
+		while (second != nullptr) {
+			 p = second;
+			 second = p->Next();
+			 p->Next() = m->Next();
+			 m->Next() = p;
+			 m = p->Next();
+		}
+	}
 }

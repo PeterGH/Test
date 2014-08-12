@@ -143,6 +143,63 @@ void NodeTest::Init(void)
 		}
 	});
 
+	Add("SingleNodeReorder", [&](){
+		auto check = [&](Test::SingleNode<int> * node) {
+			size_t len = node->Length();
+			cout << node << endl;
+			Test::SingleNode<int>::Reorder(node);
+			size_t len2 = node->Length();
+			cout << node << endl;
+			ASSERT1(len == len2);
+			size_t i = 0;
+			Test::SingleNode<int> * p = node;
+			while (p != nullptr) {
+				ASSERT1(p->Value() == i);
+				p = p->Next();
+				i++;
+			}
+			node->DeleteList();
+			delete node;
+		};
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			check(n);
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			n->InsertAtEnd(new Test::SingleNode<int>(1));
+			check(n);
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			n->InsertAtEnd(new Test::SingleNode<int>(2));
+			n->InsertAtEnd(new Test::SingleNode<int>(1));
+			check(n);
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			n->InsertAtEnd(new Test::SingleNode<int>(2));
+			n->InsertAtEnd(new Test::SingleNode<int>(3));
+			n->InsertAtEnd(new Test::SingleNode<int>(1));
+			check(n);
+		}
+		{
+			for (int i = 5; i < 100; i++) {
+				Logger().WriteInformation("Reorder a list of %d nodes\n", i);
+				Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+				int j = (i + 1) >> 1;
+				for (int k = 1; k < j; k++) {
+					n->InsertAtEnd(new Test::SingleNode<int>(2 * k));
+				}
+				j = i >> 1;
+				for (int k = j; k > 0; k--) {
+					n->InsertAtEnd(new Test::SingleNode<int>(2 * k - 1));
+				}
+				check(n);
+			}
+		}
+	});
+
 	Add("DoubleNode", [&](){
 		{
 			Test::DoubleNode<int> node(1);
