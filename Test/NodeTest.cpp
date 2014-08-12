@@ -200,6 +200,115 @@ void NodeTest::Init(void)
 		}
 	});
 
+	Add("SingleNodeCycle", [&](){
+		auto check = [&](Test::SingleNode<int> * node, int beginning){
+			bool hasCycle = Test::SingleNode<int>::HasCycle(node);
+			if (hasCycle) {
+				Test::SingleNode<int> * cycle = Test::SingleNode<int>::FindCycle(node);
+				Logger().WriteInformation("Has cycle at %d\n", cycle->Value());
+				int v = cycle->Value();
+				if (cycle != node) {
+					Test::SingleNode<int> * p = node;
+					while (p->Next() != cycle) {
+						p = p->Next();
+					}
+					p->Next() = nullptr;
+					node->DeleteList();
+					delete node;
+				}
+				cycle->DeleteList();
+				delete cycle;
+				ASSERT1(beginning == v);
+			} else {
+				Logger().WriteInformation("No cycle\n");
+				node->DeleteList();
+				delete node;
+				ASSERT1(beginning == -1);
+			}
+		};
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			check(n, -1);
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			n->Next() = n;
+			check(n, 0);
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			n->InsertAtEnd(new Test::SingleNode<int>(1));
+			check(n, -1);
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			n->Next() = n;
+			n->InsertAtEnd(new Test::SingleNode<int>(1));
+			check(n, 0);
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			Test::SingleNode<int> * c = new Test::SingleNode<int>(1);
+			c->Next() = c;
+			n->Next() = c;
+			check(n, 1);
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			n->InsertAtEnd(new Test::SingleNode<int>(1));
+			n->InsertAtEnd(new Test::SingleNode<int>(2));
+			check(n, -1);
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			n->Next() = n;
+			n->InsertAtEnd(new Test::SingleNode<int>(1));
+			n->InsertAtEnd(new Test::SingleNode<int>(2));
+			check(n, 0);
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			Test::SingleNode<int> * c = new Test::SingleNode<int>(1);
+			c->Next() = c;
+			c->InsertAtEnd(new Test::SingleNode<int>(2));
+			n->Next() = c;
+			check(n, 1);
+		}
+		{
+			Test::SingleNode<int> * n = new Test::SingleNode<int>(0);
+			n->InsertAtEnd(new Test::SingleNode<int>(1));
+			Test::SingleNode<int> * c = new Test::SingleNode<int>(2);
+			c->Next() = c;
+			n->Next() = c;
+			check(n, 2);
+		}
+		{
+			for (int i = 4; i < 100; i++) {
+				Logger().WriteInformation("Test %d nodes\n", i);
+				for (int j = 0; j < i; j++) {
+					Test::SingleNode<int> * n;
+					Test::SingleNode<int> * c = new Test::SingleNode<int>(j);
+					c->Next() = c;
+					for (int k = j+1; k < i; k++) {
+						c->InsertAtEnd(new Test::SingleNode<int>(k));
+					}
+					if (j == 0) {
+						n = c;
+					} else {
+						n = new Test::SingleNode<int>(0);
+						Test::SingleNode<int> * p = n;
+						for (int k = 1; k < j; k++) {
+							p = new Test::SingleNode<int>(k);
+							n->InsertAtEnd(p);
+						}
+						p->Next() = c;
+					}
+					check(n, j);
+				}
+			}
+		}
+	});
+
 	Add("DoubleNode", [&](){
 		{
 			Test::DoubleNode<int> node(1);

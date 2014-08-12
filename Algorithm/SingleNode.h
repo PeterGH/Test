@@ -43,6 +43,11 @@ namespace Test {
 		// (2)  0 -> 1 -> 2 -> ...... -> n-1 -> n -> n+1 -> ...... 2n-1 -> 2n nullptr
 		//      0 -> 2n -> 1 -> 2n-1 -> 2 -> ...... -> n+2 -> n-1 -> n+1 -> n -> nullptr
 		static void Reorder(SingleNode * node);
+
+		static bool HasCycle(SingleNode * node);
+
+		// Find the beginning of cycle if exists
+		static SingleNode * FindCycle(SingleNode * node);
 	};
 
 	template<class T> size_t SingleNode<T>::Length(void)
@@ -257,5 +262,59 @@ namespace Test {
 			 m->Next() = p;
 			 m = p->Next();
 		}
+	}
+
+	template<class T> bool SingleNode<T>::HasCycle(SingleNode * node)
+	{
+		if (node == nullptr) return false;
+
+		SingleNode * p = node;
+		SingleNode * q = node;
+		while (q->Next() != nullptr && q->Next()->Next() != nullptr) {
+			p = p->Next();
+			q = q->Next()->Next();
+			if (p == q) return true;
+		}
+
+		return false;
+	}
+
+	template<class T> SingleNode<T> * SingleNode<T>::FindCycle(SingleNode * node)
+	{
+		if (node == nullptr) return nullptr;
+
+		bool hasCycle = false;
+		SingleNode * p = node;
+		size_t m = 0;
+		SingleNode * q = node;
+		size_t n = 0;
+		while (q->Next() != nullptr && q->Next()->Next() != nullptr) {
+			p = p->Next();
+			m++;
+			q = q->Next()->Next();
+			n += 2;
+			if (p == q) {
+				hasCycle = true;
+				break;
+			}
+		}
+
+		if (!hasCycle) return nullptr;
+
+		// Multiple of cycle length
+		m = n - m;
+
+		p = node;
+		q = node;
+		for (size_t i = 0; i < m; i++) {
+			q = q->Next();
+		}
+
+		while (p != q) {
+			p = p->Next();
+			q = q->Next();
+		}
+
+		return p;
 	}
 }
