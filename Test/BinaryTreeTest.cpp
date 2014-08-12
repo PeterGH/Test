@@ -188,6 +188,8 @@ void BinaryTreeTest::Init(void)
 			vector<int> v4;
 			vector<int> v5;
 			vector<int> v6;
+			vector<int> v7;
+			vector<int> v8;
 
 			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
 				function<void(int)> w = [&](int n){
@@ -200,16 +202,20 @@ void BinaryTreeTest::Init(void)
 			tree.PreOrderWalk(f(v1));
 			tree.PreOrderWalkWithStack(f(v2));
 			tree.PreOrderWalkWithStack2(f(v3));
-			tree2.PreOrderWalk(f(v4));
-			tree2.PreOrderWalkWithStack(f(v5));
-			tree2.PreOrderWalkWithStack2(f(v6));
+			tree.PreOrderWalkWithStack3(f(v4));
+			tree2.PreOrderWalk(f(v5));
+			tree2.PreOrderWalkWithStack(f(v6));
+			tree2.PreOrderWalkWithStack2(f(v7));
+			tree2.PreOrderWalkWithStack3(f(v8));
 
 			ASSERT2(v1.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v1.size()));
 			ASSERT2(v2.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v2.size()));
 			ASSERT2(v3.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v3.size()));
 			ASSERT2(v4.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v4.size()));
-			ASSERT2(v5.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v4.size()));
-			ASSERT2(v6.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v4.size()));
+			ASSERT2(v5.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v5.size()));
+			ASSERT2(v6.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v6.size()));
+			ASSERT2(v7.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v7.size()));
+			ASSERT2(v8.size() == count, Test::String::Format("Expect %d elements, actual visited %d", count, v8.size()));
 
 			for (int j = 0; j < count; j++) {
 				ASSERT1(v1[j] == v2[j]);
@@ -217,6 +223,8 @@ void BinaryTreeTest::Init(void)
 				ASSERT1(v1[j] == v4[j]);
 				ASSERT1(v1[j] == v5[j]);
 				ASSERT1(v1[j] == v6[j]);
+				ASSERT1(v1[j] == v7[j]);
+				ASSERT1(v1[j] == v8[j]);
 			}
 		}
 	});

@@ -258,6 +258,13 @@ namespace Test {
 			}
 		}
 
+		void PreOrderWalkWithStack3(function<void(T)> f)
+		{
+			if (this->root != nullptr) {
+				this->root->PreOrderWalkWithStack3(f);
+			}
+		}
+
 		void InOrderWalk(function<void(T)> f)
 		{
 			if (this->root != nullptr) {

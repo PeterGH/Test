@@ -65,11 +65,11 @@ namespace Test {
 			}
 			this->keys[key] = p;
 		} else {
-			if (this->keys[key]->value != value) {
-				p = this->keys[key];
-				p->value = value;
-				MoveFront(p);
-			}
+			// Whether or not to change the value,
+			// it counts as an access.
+			p = this->keys[key];
+			p->value = value;
+			MoveFront(p);
 		}
 	}
 }

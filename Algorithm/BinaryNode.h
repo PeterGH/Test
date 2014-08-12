@@ -99,6 +99,39 @@ namespace Test {
 
 		void PreOrderWalkWithStack2(function<void(T)> f) { PreOrderWalkWithStack2(this, f); }
 
+		// Non-recursive with stack
+		static void PreOrderWalkWithStack3(BinaryNode * node, function<void(T)> f)
+		{
+			if (node == nullptr || f == nullptr) return;
+			stack<BinaryNode *> path;
+			path.push(node);
+			BinaryNode * prev = node;
+			while (!path.empty()) {
+				node = path.top();
+				if (prev == node->right) {
+					path.pop();
+					prev = node;
+				} else if (node->left != nullptr && node->left != prev) {
+					f(node->content);
+					path.push(node->left);
+					prev = node;
+				} else {
+					if (node->left != prev) {
+						f(node->content);
+					}
+
+					if (node->right == nullptr) {
+						path.pop();
+					} else {
+						path.push(node->right);
+					}
+					prev = node;
+				}
+			}
+		}
+
+		void PreOrderWalkWithStack3(function<void(T)> f) { PreOrderWalkWithStack3(this, f); }
+
 		// Recursive
 		static void InOrderWalk(BinaryNode * node, function<void(T)> f)
 		{
