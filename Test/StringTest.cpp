@@ -308,4 +308,62 @@ void StringTest::Init(void)
 		check("abdabcab", "bca", 4);
 		check("abdabcab", "cab", 5);
 	});
+
+	Add("BreakWord", [&](){
+		auto check = [&](string s, unordered_set<string> & dict){
+			Logger().WriteInformation("Input: %s\n", s.c_str());
+			Logger().WriteInformation("Dictionary: [");
+			int i = 0;
+			for_each(dict.begin(), dict.end(), [&](string w){
+				if (i != 0) {
+					Logger().WriteInformation(" ");
+				}
+				Logger().WriteInformation("%s", w.c_str());
+				i++;
+			});
+			Logger().WriteInformation("]\n");
+			bool breakable = Test::String::BreakWord3(s, dict);
+			if (breakable) {
+				Logger().WriteInformation("breakable\n");
+			} else {
+				Logger().WriteInformation("unbreakable\n");
+			}
+			vector<string> sentences = Test::String::BreakWord(s, dict);
+			vector<string> sentences2 = Test::String::BreakWord2(s, dict);
+			Logger().WriteInformation("Output1:\n");
+			for_each(sentences.begin(), sentences.end(), [&](string s){
+				Logger().WriteInformation("\t%s\n", s.c_str());
+			});
+			Logger().WriteInformation("Output2:\n");
+			for_each(sentences2.begin(), sentences2.end(), [&](string s){
+				Logger().WriteInformation("\t%s\n", s.c_str());
+			});
+			ASSERT1(sentences.size() == sentences2.size());
+			sort(sentences.begin(), sentences.end());
+			sort(sentences2.begin(), sentences2.end());
+			for (size_t i = 0; i < sentences.size(); i++) {
+				ASSERT1(sentences[i] == sentences2[i]);
+			}
+		};
+		{
+			string s = "catsanddog";
+			unordered_set<string> dict = { "cat", "cats", "and", "sand", "dog" };
+			check(s, dict);
+		}
+		{
+			string s;
+			unordered_set<string> dict = { "cat", "cats", "and", "sand", "dog" };
+			check(s, dict);
+		}
+		{
+			string s = "aaaaaaa";
+			unordered_set<string> dict = { "a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa" };
+			check(s, dict);
+		}
+		{
+			string s = "dogs";
+			unordered_set<string> dict = { "dog", "s", "gs" };
+			check(s, dict);
+		}
+	});
 }

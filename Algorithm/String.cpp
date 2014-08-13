@@ -347,4 +347,142 @@ namespace Test {
 		}
 		return nullptr;
 	}
+
+	// Given a input string, break it by inserting spaces so that each word is in a given dictionary.
+	vector<string> String::BreakWord(string input, unordered_set<string> & dictionary)
+	{
+		function<void(string, unordered_set<string> &, string, vector<string> &)>
+		breakWord = [&](
+			string s,
+			unordered_set<string> & dict,
+			string sentence,
+			vector<string> & results)
+		{
+			size_t len = s.length();
+			for_each (dict.begin(), dict.end(), [&] (string w) {
+				size_t wlen = w.length();
+				if (len >= wlen) {
+					bool match = true;
+					for (size_t i = 0; i < wlen; i++) {
+						if (s[i] != w[i]) {
+							match = false;
+							break;
+						}
+					}
+					if (match) {
+						string sen(sentence);
+						if (sen.length() > 0) {
+							sen.append(1, ' ');
+						}
+						sen.append(s.substr(0, wlen));
+						if (len == wlen) {
+							results.push_back(sen);
+						} else {
+							breakWord(s.substr(wlen), dict, sen, results);
+						}
+					}
+				}
+			});
+		};
+
+		vector<string> sentences;
+		breakWord(input, dictionary, string(), sentences);
+		return sentences;
+	}
+
+	// Given a input string, break it by inserting spaces so that each word is in a given dictionary.
+	vector<string> String::BreakWord2(string input, unordered_set<string> & dictionary)
+	{
+		function<void(string &, size_t, unordered_set<string> &, map<size_t, vector<string>> &)>
+		breakWord = [&](
+			string & s,
+			size_t index,
+			unordered_set<string> & dict,
+			map<size_t, vector<string>> & results)
+		{
+			if (results.find(index) == results.end()) {
+				results[index] = vector<string> { };
+			}
+			size_t len = s.length() - index;
+			for_each (dict.begin(), dict.end(), [&] (string w) {
+				size_t wlen = w.length();
+				if (len >= wlen) {
+					bool match = true;
+					for (size_t i = 0; i < wlen; i++) {
+						if (s[index + i] != w[i]) {
+							match = false;
+							break;
+						}
+					}
+					if (match) {
+						size_t wi = index + wlen;
+						if (wi == s.length()) {
+							results[index].push_back(w);
+						} else {
+							if (results.find(wi) == results.end()) {
+								breakWord(s, wi, dict, results);
+							}
+							for_each (results[wi].begin(), results[wi].end(), [&](string r){
+								string rs(w);
+								rs.append(1, ' ');
+								rs.append(r);
+								results[index].push_back(rs);
+							});
+						}
+					}
+				}
+			});
+		};
+
+		map<size_t, vector<string>> sentences;
+		breakWord(input, 0, dictionary, sentences);
+		return sentences[0];
+	}
+
+	bool String::BreakWord3(string input, unordered_set<string> & dictionary)
+	{
+		function<void(string &, size_t, unordered_set<string> &, map<size_t, bool> &)>
+		breakWord = [&](
+			string & s,
+			size_t index,
+			unordered_set<string> & dict,
+			map<size_t, bool> & results)
+		{
+			if (results.find(index) == results.end()) {
+				results[index] = false;
+			}
+			size_t len = s.length() - index;
+			for_each (dict.begin(), dict.end(), [&] (string w) {
+				size_t wlen = w.length();
+				if (len >= wlen) {
+					bool match = true;
+					for (size_t i = 0; i < wlen; i++) {
+						if (s[index + i] != w[i]) {
+							match = false;
+							break;
+						}
+					}
+					if (match) {
+						size_t wi = index + wlen;
+						if (wi == s.length()) {
+							results[index] = true;
+							return;
+						} else {
+							if (results.find(wi) == results.end()) {
+								breakWord(s, wi, dict, results);
+							}
+							if (results[wi]) {
+								results[index] = true;
+								return;
+							}
+						}
+					}
+				}
+			});
+		};
+
+		map<size_t, bool> sentences;
+		breakWord(input, 0, dictionary, sentences);
+		return sentences[0];
+	}
 }

@@ -1,13 +1,14 @@
 #pragma once
 
 #include <bitset>
+#include <functional>
 #include <map>
 #include <queue>
 #include <set>
 #include <sstream>
 #include <stdarg.h>
 #include <string>
-
+#include <unordered_set>
 using namespace std;
 
 namespace Test {
@@ -104,6 +105,10 @@ namespace Test {
 		__declspec(dllexport) static void ReverseWords(string & input);
 
 		__declspec(dllexport) static const char * StrStr(const char * input1, const char * input2);
+
+		__declspec(dllexport) static vector<string> BreakWord(string input, unordered_set<string> & dictionary);
+		__declspec(dllexport) static vector<string> BreakWord2(string input, unordered_set<string> & dictionary);
+		__declspec(dllexport) static bool BreakWord3(string input, unordered_set<string> & dictionary);
 
 		template<class T, class C> static basic_string<C> Join(const T * input, int length, const C * separator)
 		{
