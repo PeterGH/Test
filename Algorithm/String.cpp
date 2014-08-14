@@ -390,6 +390,7 @@ namespace Test {
 		return sentences;
 	}
 
+	#pragma warning( disable : 4503 )
 	// Given a input string, break it by inserting spaces so that each word is in a given dictionary.
 	vector<string> String::BreakWord2(string input, unordered_set<string> & dictionary)
 	{

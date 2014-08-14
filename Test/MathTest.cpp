@@ -99,4 +99,298 @@ void MathTest::Init(void)
 		check(-57, -21, 3);
 		check(77, -9, 1);
 	});
+
+	Add("SingleNumber", [&](){
+		auto check = [&](int input[], int length, int expect){
+			int r1 = Test::Math::FindSingleNumber(input, length);
+			int r2 = Test::Math::FindSingleNumber2(input, length);
+			Logger().WriteInformation("Single number: %d, %d\n", r1, r2);
+			ASSERT1(r1 == expect);
+			ASSERT1(r2 == expect);
+		};
+		{
+			int A[] = { 0, 1, 0, 0 };
+			check(A, 4, 1);
+		}
+		{
+			int A[] = { 0xFFFFFFFF, 3, 0xFFFFFFFF, 0xFFFFFFFF };
+			check(A, 4, 3);
+		}
+		{
+			int A[] = { 1, 2, 3, 1, 2, 3, 4, 1, 2, 3 };
+			check(A, 10, 4);
+		}
+		{
+			int A[] = { 0, 1, 0, 1, 0, 1, 99 };
+			check(A, 7, 99);
+		}
+	});
+
+	Add("Candy", [&](){
+		auto print = [&](int input[], int length){
+			for (int i = 0; i < length; i++) {
+				Logger().WriteInformation("  %d", input[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](int ratings[], int length, int amount[], int expect) {
+			Logger().WriteInformation("Input:");
+			print(ratings, length);
+			int total = Test::Math::AllocateCandy(ratings, length, amount);
+			Logger().WriteInformation("Candy:");
+			print(amount, length);
+			Logger().WriteInformation("Total:  %d\n", total);
+			int total2 = Test::Math::AllocateCandy2(ratings, length, amount);
+			Logger().WriteInformation("Candy:");
+			print(amount, length);
+			Logger().WriteInformation("Total:  %d\n", total2);
+			ASSERT1(total == expect);
+			ASSERT1(total2 == expect);
+		};
+		{
+			int r[] = { 0 };
+			int a[1];
+			check(r, 1, a, 1);
+		}
+		{
+			int r[] = { 0, 0 };
+			int a[2];
+			check(r, 2, a, 2);
+		}
+		{
+			int r[] = { 0, 1 };
+			int a[2];
+			check(r, 2, a, 3);
+		}
+		{
+			int r[] = { 1, 0 };
+			int a[2];
+			check(r, 2, a, 3);
+		}
+		{
+			int r[] = { 0, 0, 0 };
+			int a[3];
+			check(r, 3, a, 3);
+		}
+		{
+			int r[] = { 0, 0, 1 };
+			int a[3];
+			check(r, 3, a, 4);
+		}
+		{
+			int r[] = { 0, 1, 0 };
+			int a[3];
+			check(r, 3, a, 4);
+		}
+		{
+			int r[] = { 1, 0, 0 };
+			int a[3];
+			check(r, 3, a, 4);
+		}
+		{
+			int r[] = { 0, 1, 1 };
+			int a[3];
+			check(r, 3, a, 5);
+		}
+		{
+			int r[] = { 1, 0, 1 };
+			int a[3];
+			check(r, 3, a, 5);
+		}
+		{
+			int r[] = { 1, 1, 0 };
+			int a[3];
+			check(r, 3, a, 5);
+		}
+		{
+			int r[] = { 0, 1, 2 };
+			int a[3];
+			check(r, 3, a, 6);
+		}
+		{
+			int r[] = { 0, 2, 1 };
+			int a[3];
+			check(r, 3, a, 4);
+		}
+		{
+			int r[] = { 1, 0, 2 };
+			int a[3];
+			check(r, 3, a, 5);
+		}
+		{
+			int r[] = { 1, 2, 0 };
+			int a[3];
+			check(r, 3, a, 4);
+		}
+		{
+			int r[] = { 2, 0, 1 };
+			int a[3];
+			check(r, 3, a, 5);
+		}
+		{
+			int r[] = { 2, 1, 0 };
+			int a[3];
+			check(r, 3, a, 6);
+		}
+		{
+			int r[] = { 0, 0, 0, 0 };
+			int a[4];
+			check(r, 4, a, 4);
+		}
+		{
+			int r[] = { 0, 0, 0, 1 };
+			int a[4];
+			check(r, 4, a, 5);
+		}
+		{
+			int r[] = { 0, 0, 1, 0 };
+			int a[4];
+			check(r, 4, a, 5);
+		}
+		{
+			int r[] = { 0, 1, 0, 0 };
+			int a[4];
+			check(r, 4, a, 5);
+		}
+		{
+			int r[] = { 1, 0, 0, 0 };
+			int a[4];
+			check(r, 4, a, 5);
+		}
+		{
+			int r[] = { 0, 0, 1, 1 };
+			int a[4];
+			check(r, 4, a, 6);
+		}
+		{
+			int r[] = { 0, 1, 0, 1 };
+			int a[4];
+			check(r, 4, a, 6);
+		}
+		{
+			int r[] = { 1, 0, 0, 1 };
+			int a[4];
+			check(r, 4, a, 6);
+		}
+		{
+			int r[] = { 1, 0, 1, 0 };
+			int a[4];
+			check(r, 4, a, 6);
+		}
+		{
+			int r[] = { 1, 1, 0, 0 };
+			int a[4];
+			check(r, 4, a, 6);
+		}
+		{
+			int r[] = { 0, 1, 1, 1 };
+			int a[4];
+			check(r, 4, a, 7);
+		}
+		{
+			int r[] = { 1, 0, 1, 1 };
+			int a[4];
+			check(r, 4, a, 7);
+		}
+		{
+			int r[] = { 1, 1, 0, 1 };
+			int a[4];
+			check(r, 4, a, 7);
+		}
+		{
+			int r[] = { 1, 1, 1, 0 };
+			int a[4];
+			check(r, 4, a, 7);
+		}
+		{
+			int r[] = { 0, 0, 1, 2 };
+			int a[4];
+			check(r, 4, a, 7);
+		}
+		{
+			int r[] = { 0, 1, 0, 2 };
+			int a[4];
+			check(r, 4, a, 6);
+		}
+		{
+			int r[] = { 1, 0, 0, 2 };
+			int a[4];
+			check(r, 4, a, 6);
+		}
+		{
+			int r[] = { 1, 0, 2, 0 };
+			int a[4];
+			check(r, 4, a, 6);
+		}
+		{
+			int r[] = { 1, 2, 0, 0 };
+			int a[4];
+			check(r, 4, a, 5);
+		}
+		{
+			int r[] = { 0, 0, 2, 1 };
+			int a[4];
+			check(r, 4, a, 5);
+		}
+		{
+			int r[] = { 0, 2, 0, 1 };
+			int a[4];
+			check(r, 4, a, 6);
+		}
+		{
+			int r[] = { 2, 0, 0, 1 };
+			int a[4];
+			check(r, 4, a, 6);
+		}
+		{
+			int r[] = { 2, 0, 1, 0 };
+			int a[4];
+			check(r, 4, a, 6);
+		}
+		{
+			int r[] = { 2, 1, 0, 0 };
+			int a[4];
+			check(r, 4, a, 7);
+		}
+		{
+			int r[] = { 0, 1, 1, 2 };
+			int a[4];
+			check(r, 4, a, 8);
+		}
+		{
+			int r[] = { 1, 0, 1, 2 };
+			int a[4];
+			check(r, 4, a, 8);
+		}
+		{
+			int r[] = { 1, 1, 0, 2 };
+			int a[4];
+			check(r, 4, a, 7);
+		}
+		{
+			int r[] = { 1, 1, 2, 0 };
+			int a[4];
+			check(r, 4, a, 5);
+		}
+		{
+			int r[] = { 0, 1, 2, 1 };
+			int a[4];
+			check(r, 4, a, 7);
+		}
+		{
+			int r[] = { 0, 2, 1, 1 };
+			int a[4];
+			check(r, 4, a, 5);
+		}
+		{
+			int r[] = { 2, 0, 1, 1 };
+			int a[4];
+			check(r, 4, a, 7);
+		}
+		{
+			int r[] = { 0, 0, 0, 0, 0 };
+			int a[5];
+			check(r, 5, a, 5);
+		}
+	});
 }
