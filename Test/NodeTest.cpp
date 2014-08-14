@@ -392,4 +392,191 @@ void NodeTest::Init(void)
 			} while (c != nullptr);
 		}
 	});
+
+	Add("DoubleNodeClone", [&](){
+		{
+			Test::DoubleNode<int> node(1);
+			Test::DoubleNode<int> * copy = (Test::DoubleNode<int> *)Test::DoubleNode<int>::Clone(&node);
+			ASSERT1(copy->Value() == 1);
+			ASSERT1(copy->Prev() == nullptr);
+			ASSERT1(copy->Next() == nullptr);
+			delete copy;
+		}
+		{
+			Test::DoubleNode<int> node(1);
+			node.Prev() = &node;
+			node.Next() = &node;
+			Test::DoubleNode<int> * copy = (Test::DoubleNode<int> *)Test::DoubleNode<int>::Clone(&node);
+			ASSERT1(copy->Value() == 1);
+			ASSERT1(copy->Prev() == copy);
+			ASSERT1(copy->Next() == copy);
+			delete copy;
+		}
+		{
+			Test::DoubleNode<int> * n1 = new Test::DoubleNode<int>(1);
+			Test::DoubleNode<int> * n2 = new Test::DoubleNode<int>(2);
+			Test::DoubleNode<int> * n3 = new Test::DoubleNode<int>(3);
+			Test::DoubleNode<int> * n4 = new Test::DoubleNode<int>(4);
+			n1->Next() = n2;
+			n2->Prev() = n1;
+			n2->Next() = n3;
+			n3->Prev() = n2;
+			n3->Next() = n4;
+			n4->Prev() = n3;
+
+			Test::DoubleNode<int> * copy = (Test::DoubleNode<int> *)Test::DoubleNode<int>::Clone(n1);
+
+			Test::DoubleNode<int> * p = n1;
+			Logger().WriteInformation("Head");
+			do {
+				Logger().WriteInformation(" -> %d", p->Value());
+				p = p->Next();
+			} while (p != nullptr);
+			Logger().WriteInformation("\n");
+
+			p = copy;
+			Logger().WriteInformation("Head");
+			do {
+				Logger().WriteInformation(" -> %d", p->Value());
+				p = p->Next();
+			} while (p != nullptr);
+			Logger().WriteInformation("\n");
+
+			p = n1;
+			Test::DoubleNode<int> * c = n1;
+			do {
+				Logger().WriteInformation("Value %d\n", c->Value());
+				p = c;
+				c = p->Next();
+				delete p;
+			} while (c != nullptr);
+
+			p = copy;
+			c = copy;
+			do {
+				Logger().WriteInformation("Value %d\n", c->Value());
+				p = c;
+				c = p->Next();
+				delete p;
+			} while (c != nullptr);
+		}
+		{
+			Test::DoubleNode<int> * n1 = new Test::DoubleNode<int>(1);
+			Test::DoubleNode<int> * n2 = new Test::DoubleNode<int>(2);
+			Test::DoubleNode<int> * n3 = new Test::DoubleNode<int>(3);
+			Test::DoubleNode<int> * n4 = new Test::DoubleNode<int>(4);
+			n1->Next() = n2;
+			n2->Prev() = n1;
+			n2->Next() = n3;
+			n3->Prev() = n1;
+			n3->Next() = n4;
+			n4->Prev() = n1;
+
+			Test::DoubleNode<int> * copy = (Test::DoubleNode<int> *)Test::DoubleNode<int>::Clone(n1);
+
+			Test::DoubleNode<int> * p = n1;
+			Logger().WriteInformation("Head");
+			do {
+				Logger().WriteInformation(" -> %d", p->Value());
+				p = p->Next();
+			} while (p != nullptr);
+			Logger().WriteInformation("\n");
+
+			p = copy;
+			Logger().WriteInformation("Head");
+			do {
+				Logger().WriteInformation(" -> %d", p->Value());
+				p = p->Next();
+			} while (p != nullptr);
+			Logger().WriteInformation("\n");
+
+			ASSERT1(copy->Prev() == nullptr);
+			ASSERT1(copy->Value() == 1);
+			ASSERT1(copy->Next()->Value() == 2);
+			ASSERT1(copy->Next()->Prev() == copy);
+			ASSERT1(copy->Next()->Next()->Value() == 3);
+			ASSERT1(copy->Next()->Next()->Prev() == copy);
+			ASSERT1(copy->Next()->Next()->Next()->Value() == 4);
+			ASSERT1(copy->Next()->Next()->Next()->Prev() == copy);
+			ASSERT1(copy->Next()->Next()->Next()->Next() == nullptr);
+
+			p = n1;
+			Test::DoubleNode<int> * c = n1;
+			do {
+				Logger().WriteInformation("Value %d\n", c->Value());
+				p = c;
+				c = p->Next();
+				delete p;
+			} while (c != nullptr);
+
+			p = copy;
+			c = copy;
+			do {
+				Logger().WriteInformation("Value %d\n", c->Value());
+				p = c;
+				c = p->Next();
+				delete p;
+			} while (c != nullptr);
+		}
+		{
+			Test::DoubleNode<int> * n1 = new Test::DoubleNode<int>(1);
+			Test::DoubleNode<int> * n2 = new Test::DoubleNode<int>(2);
+			Test::DoubleNode<int> * n3 = new Test::DoubleNode<int>(3);
+			Test::DoubleNode<int> * n4 = new Test::DoubleNode<int>(4);
+			n1->Prev() = n4;
+			n1->Next() = n2;
+			n2->Prev() = n4;
+			n2->Next() = n3;
+			n3->Prev() = n4;
+			n3->Next() = n4;
+			n4->Prev() = n4;
+			n4->Next() = nullptr;
+
+			Test::DoubleNode<int> * copy = (Test::DoubleNode<int> *)Test::DoubleNode<int>::Clone(n1);
+
+			Test::DoubleNode<int> * p = n1;
+			Logger().WriteInformation("Head");
+			do {
+				Logger().WriteInformation(" -> %d", p->Value());
+				p = p->Next();
+			} while (p != nullptr);
+			Logger().WriteInformation("\n");
+
+			p = copy;
+			Logger().WriteInformation("Head");
+			do {
+				Logger().WriteInformation(" -> %d", p->Value());
+				p = p->Next();
+			} while (p != nullptr);
+			Logger().WriteInformation("\n");
+
+			ASSERT1(copy->Prev() == copy->Next()->Next()->Next());
+			ASSERT1(copy->Value() == 1);
+			ASSERT1(copy->Next()->Value() == 2);
+			ASSERT1(copy->Next()->Prev() == copy->Next()->Next()->Next());
+			ASSERT1(copy->Next()->Next()->Value() == 3);
+			ASSERT1(copy->Next()->Next()->Prev() == copy->Next()->Next()->Next());
+			ASSERT1(copy->Next()->Next()->Next()->Value() == 4);
+			ASSERT1(copy->Next()->Next()->Next()->Prev() == copy->Next()->Next()->Next());
+			ASSERT1(copy->Next()->Next()->Next()->Next() == nullptr);
+
+			p = n1;
+			Test::DoubleNode<int> * c = n1;
+			do {
+				Logger().WriteInformation("Value %d\n", c->Value());
+				p = c;
+				c = p->Next();
+				delete p;
+			} while (c != nullptr);
+
+			p = copy;
+			c = copy;
+			do {
+				Logger().WriteInformation("Value %d\n", c->Value());
+				p = c;
+				c = p->Next();
+				delete p;
+			} while (c != nullptr);
+		}
+	});
 }
