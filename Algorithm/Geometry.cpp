@@ -110,4 +110,147 @@ namespace Test {
 
 		return max;
 	}
+
+	// Given a chess board containing 'X' and 'O'.
+	// Capture the regions of 'o's and flip 'o's to 'x's.
+	// Ignore the regions on the board boundary.
+	// X X X X          X X X X
+	// X O O X    =>    X X X X
+	// X X O X          X X X X
+	// X O X X          X O X X
+	void Geometry::CaptureSurroundedRegion(vector<vector<char>> & board)
+	{
+		int height = board.size();
+		if (height == 0) return;
+		int width = board[0].size();
+		set<pair<int, int>> nocapture;
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				if (board[i][j] == 'O') {
+					pair<int, int> p = make_pair(i, j);
+					if (nocapture.find(p) != nocapture.end()) {
+						continue;
+					}
+					bool boundary = i == 0 || i == height - 1 || j == 0 || j == width - 1;
+					set<pair<int, int>> region;
+					queue<pair<int, int>> q;
+					region.insert(p);
+					q.push(p);
+					while (!q.empty()) {
+						p = q.front();
+						q.pop();
+						pair<int, int> n;
+						if (p.first > 0 && board[p.first - 1][p.second] == 'O') {
+							if (p.first - 1 == 0) boundary = true;
+							n = make_pair(p.first - 1, p.second);
+							if (region.find(n) == region.end()) {
+								region.insert(n);
+								q.push(n);
+							}
+						}
+						if (p.second > 0 && board[p.first][p.second - 1] == 'O') {
+							if (p.second - 1 == 0) boundary = true;
+							n = make_pair(p.first, p.second - 1);
+							if (region.find(n) == region.end()) {
+								region.insert(n);
+								q.push(n);
+							}
+						}
+						if (p.second < width - 1 && board[p.first][p.second + 1] == 'O') {
+							if (p.second + 1 == width - 1) boundary = true;
+							n = make_pair(p.first, p.second + 1);
+							if (region.find(n) == region.end()) {
+								region.insert(n);
+								q.push(n);
+							}
+						}
+						if (p.first < height - 1 && board[p.first + 1][p.second] == 'O') {
+							if (p.first + 1 == height - 1) boundary = true;
+							n = make_pair(p.first + 1, p.second);
+							if (region.find(n) == region.end()) {
+								region.insert(n);
+								q.push(n);
+							}
+						}
+					}
+
+					if (boundary) {
+						nocapture.insert(region.begin(), region.end());
+					} else {
+						for_each (region.begin(), region.end(), [&](pair<int, int> p){
+							board[p.first][p.second] = 'X';
+						});
+					}
+				}
+			}
+		}
+	}
+
+	// Given a chess board containing 'X' and 'O'.
+	// Capture the regions of 'o's and flip 'o's to 'x's.
+	// Ignore the regions on the board boundary.
+	// X X X X          X X X X
+	// X O O X    =>    X X X X
+	// X X O X          X X X X
+	// X O X X          X O X X
+	void Geometry::CaptureSurroundedRegion2(vector<vector<char>> & board)
+	{
+		int height = board.size();
+		if (height == 0) return;
+		int width = board[0].size();
+
+		auto search = [&](int i, int j) {
+			if (board[i][j] == 'O') {
+				board[i][j] = 'C';
+				pair<int, int> p = make_pair(i, j);
+				queue<pair<int, int>> q;
+				q.push(p);
+				while (!q.empty()) {
+					p = q.front();
+					q.pop();
+					pair<int, int> n;
+					if (p.first > 0 && board[p.first - 1][p.second] == 'O') {
+						board[p.first - 1][p.second] = 'C';
+						n = make_pair(p.first - 1, p.second);
+						q.push(n);
+					}
+					if (p.second > 0 && board[p.first][p.second - 1] == 'O') {
+						board[p.first][p.second - 1] = 'C';
+						n = make_pair(p.first, p.second - 1);
+						q.push(n);
+					}
+					if (p.second < width - 1 && board[p.first][p.second + 1] == 'O') {
+						board[p.first][p.second + 1] = 'C';
+						n = make_pair(p.first, p.second + 1);
+						q.push(n);
+					}
+					if (p.first < height - 1 && board[p.first + 1][p.second] == 'O') {
+						board[p.first + 1][p.second] = 'C';
+						n = make_pair(p.first + 1, p.second);
+						q.push(n);
+					}
+				}
+			}
+		};
+
+		for (int i = 0; i < height; i++) {
+			search(i, 0);
+			search(i, width - 1);
+		}
+
+		for (int i = 0; i < width; i++) {
+			search(0, i);
+			search(height - 1, i);
+		}
+
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				if (board[i][j] == 'O') {
+					board[i][j] = 'X';
+				} else if (board[i][j] == 'C') {
+					board[i][j] = 'O';
+				}
+			}
+		}
+	}
 }

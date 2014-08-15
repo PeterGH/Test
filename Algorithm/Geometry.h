@@ -1,6 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <map>
+#include <queue>
 #include <set>
 #include <utility>
 #include <vector>
@@ -45,5 +46,8 @@ namespace Test {
 		__declspec(dllexport) static pair<int, int> NomalizeSlope(const IntPoint & p0, const IntPoint & p1);
 
 		__declspec(dllexport) static int MaxPointsOnALine(vector<IntPoint> & points, set<IntPoint> & output);
+
+		__declspec(dllexport) static void CaptureSurroundedRegion(vector<vector<char>> & board);
+		__declspec(dllexport) static void CaptureSurroundedRegion2(vector<vector<char>> & board);
 	};
 }

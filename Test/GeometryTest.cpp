@@ -186,4 +186,243 @@ void GeometryTest::Init(void)
 			check(points, 4);
 		}
 	});
+
+	Add("SurroundedRegion", [&](){
+		auto print = [&](vector<vector<char>> & board){
+			for_each (board.begin(), board.end(), [&](vector<char> & b){
+				for_each (b.begin(), b.end(), [&](char c){
+					Logger().WriteInformation(" %c", c);
+				});
+				Logger().WriteInformation("\n");
+			});
+		};
+
+		auto verify = [&](vector<vector<char>> & board){
+			int height = board.size();
+			int width = board[0].size();
+			for (int i = 0; i < height; i++) {
+				for (int j = 0; j < width; j++) {
+					if (board[i][j] == 'O') {
+						bool boundary = i == 0 || i == height - 1 || j == 0 || j == width - 1;
+						pair<int, int> p = make_pair(i, j);
+						set<pair<int, int>> region;
+						queue<pair<int, int>> q;
+						region.insert(p);
+						q.push(p);
+						while (!q.empty()) {
+							p = q.front();
+							q.pop();
+							pair<int, int> n;
+							if (p.first > 0 && board[p.first - 1][p.second] == 'O') {
+								if (p.first - 1 == 0) boundary = true;
+								n = make_pair(p.first - 1, p.second);
+								if (region.find(n) == region.end()) {
+									region.insert(n);
+									q.push(n);
+								}
+							}
+							if (p.second > 0 && board[p.first][p.second - 1] == 'O') {
+								if (p.second - 1 == 0) boundary = true;
+								n = make_pair(p.first, p.second - 1);
+								if (region.find(n) == region.end()) {
+									region.insert(n);
+									q.push(n);
+								}
+							}
+							if (p.second < width - 1 && board[p.first][p.second + 1] == 'O') {
+								if (p.second + 1 == width - 1) boundary = true;
+								n = make_pair(p.first, p.second + 1);
+								if (region.find(n) == region.end()) {
+									region.insert(n);
+									q.push(n);
+								}
+							}
+							if (p.first < height - 1 && board[p.first + 1][p.second] == 'O') {
+								if (p.first + 1 == height - 1) boundary = true;
+								n = make_pair(p.first + 1, p.second);
+								if (region.find(n) == region.end()) {
+									region.insert(n);
+									q.push(n);
+								}
+							}
+						}
+
+						ASSERT1(boundary);
+					}
+				}
+			}
+		};
+
+		auto check = [&](vector<vector<char>> & board, vector<vector<char>> & board2){
+			Logger().WriteInformation("Input:\n");
+			print(board);
+			Test::Geometry::CaptureSurroundedRegion(board);
+			Logger().WriteInformation("Output1:\n");
+			print(board);
+			verify(board);
+			Test::Geometry::CaptureSurroundedRegion(board2);
+			Logger().WriteInformation("Output2:\n");
+			print(board2);
+			verify(board2);
+			int height = board.size();
+			int width = board[0].size();
+			int height2 = board.size();
+			int width2 = board[0].size();
+			ASSERT1(height == height2);
+			ASSERT1(width == width2);
+			for (int i = 0; i < height; i++) {
+				for (int j = 0; j < width; j++) {
+					ASSERT1(board[i][j] == board2[i][j]);
+				}
+			}
+		};
+		{
+			vector<vector<char>> board = { { 'X' } };
+			vector<vector<char>> board2 = { { 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'O' } };
+			vector<vector<char>> board2 = { { 'O' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X', 'X' } };
+			vector<vector<char>> board2 = { { 'X', 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X', 'O' } };
+			vector<vector<char>> board2 = { { 'X', 'O' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'O', 'X' } };
+			vector<vector<char>> board2 = { { 'O', 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'O', 'O' } };
+			vector<vector<char>> board2 = { { 'O', 'O' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X' }, { 'X' } };
+			vector<vector<char>> board2 = { { 'X' }, { 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X' }, { 'O' } };
+			vector<vector<char>> board2 = { { 'X' }, { 'O' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'O' }, { 'X' } };
+			vector<vector<char>> board2 = { { 'O' }, { 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'O' }, { 'O' } };
+			vector<vector<char>> board2 = { { 'O' }, { 'O' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X', 'X' }, { 'X', 'X' } };
+			vector<vector<char>> board2 = { { 'X', 'X' }, { 'X', 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'O', 'X' }, { 'X', 'X' } };
+			vector<vector<char>> board2 = { { 'O', 'X' }, { 'X', 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X', 'O' }, { 'X', 'X' } };
+			vector<vector<char>> board2 = { { 'X', 'O' }, { 'X', 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X', 'X' }, { 'O', 'X' } };
+			vector<vector<char>> board2 = { { 'X', 'X' }, { 'O', 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X', 'X' }, { 'X', 'O' } };
+			vector<vector<char>> board2 = { { 'X', 'X' }, { 'X', 'O' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'O', 'O' }, { 'X', 'X' } };
+			vector<vector<char>> board2 = { { 'O', 'O' }, { 'X', 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X', 'X' }, { 'O', 'O' } };
+			vector<vector<char>> board2 = { { 'X', 'X' }, { 'O', 'O' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'O', 'X' }, { 'O', 'X' } };
+			vector<vector<char>> board2 = { { 'O', 'X' }, { 'O', 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X', 'O' }, { 'X', 'O' } };
+			vector<vector<char>> board2 = { { 'X', 'O' }, { 'X', 'O' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'O', 'X' }, { 'X', 'O' } };
+			vector<vector<char>> board2 = { { 'O', 'X' }, { 'X', 'O' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X', 'O' }, { 'O', 'X' } };
+			vector<vector<char>> board2 = { { 'X', 'O' }, { 'O', 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X', 'X', 'X' }, { 'X', 'X', 'X' }, { 'X', 'X', 'X' } };
+			vector<vector<char>> board2 = { { 'X', 'X', 'X' }, { 'X', 'X', 'X' }, { 'X', 'X', 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'O', 'X', 'X' }, { 'X', 'X', 'X' }, { 'X', 'X', 'X' } };
+			vector<vector<char>> board2 = { { 'O', 'X', 'X' }, { 'X', 'X', 'X' }, { 'X', 'X', 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'O', 'X', 'X' }, { 'X', 'O', 'X' }, { 'X', 'X', 'X' } };
+			vector<vector<char>> board2 = { { 'O', 'X', 'X' }, { 'X', 'O', 'X' }, { 'X', 'X', 'X' } };
+			check(board, board2);
+		}
+		{
+			vector<vector<char>> board = { { 'X', 'O', 'X' }, { 'X', 'O', 'X' }, { 'X', 'X', 'X' } };
+			vector<vector<char>> board2 = { { 'X', 'O', 'X' }, { 'X', 'O', 'X' }, { 'X', 'X', 'X' } };
+			check(board, board2);
+		}
+		{
+			for (int i = 0; i < 100; i++) {
+				int height = 1 + Test::Random::Next(100);
+				int width = 1 + Test::Random::Next(100);
+				Logger().WriteInformation("Run %d, %d X %d\n", i, height, width);
+				vector<vector<char>> board;
+				vector<vector<char>> board2;
+				for (int j = 0; j < height; j++) {
+					vector<char> row;
+					for (int k = 0; k < width; k++) {
+						int v = Test::Random::Next();
+						if ((v & 0x1) == 1) {
+							row.push_back('X');
+						} else {
+							row.push_back('O');
+						}
+					}
+					board.push_back(row);
+					board2.push_back(row);
+				}
+				check(board, board2);
+			}
+		}
+	});
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "..\Algorithm\Geometry.h"
+#include "..\Algorithm\Random.h"
 #include "..\Algorithm\TestClass.h"
 class GeometryTest : public Test::TestClass {
 public:
