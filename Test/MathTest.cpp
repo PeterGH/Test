@@ -393,4 +393,47 @@ void MathTest::Init(void)
 			check(r, 5, a, 5);
 		}
 	});
+
+	Add("BinaryTreeSumBranches", [&](){
+		auto check = [&](Test::BinaryNode<unsigned int> * node, unsigned long long expect){
+			node->Print2();
+			unsigned long long sum = Test::Math::BinaryTreeSumBranches(node);
+			Logger().WriteInformation("Sum %llu %s %llu\n", sum, sum == expect ? "==" : "!=", expect);
+			ASSERT1(sum == expect);
+		};
+		{
+			Test::BinaryNode<unsigned int> n1(1);
+			check(&n1, 1);
+		}
+		{
+			Test::BinaryNode<unsigned int> n1(1);
+			Test::BinaryNode<unsigned int> n2(2);
+			n1.left = &n2;
+			check(&n1, 12);
+		}
+		{
+			Test::BinaryNode<unsigned int> n1(1);
+			Test::BinaryNode<unsigned int> n2(2);
+			n1.right = &n2;
+			check(&n1, 12);
+		}
+		{
+			Test::BinaryNode<unsigned int> n1(1);
+			Test::BinaryNode<unsigned int> n2(2);
+			Test::BinaryNode<unsigned int> n3(3);
+			n1.left = &n2;
+			n1.right = &n3;
+			check(&n1, 25);
+		}
+		{
+			Test::BinaryNode<unsigned int> n1(1);
+			Test::BinaryNode<unsigned int> n2(2);
+			Test::BinaryNode<unsigned int> n3(3);
+			Test::BinaryNode<unsigned int> n4(4);
+			n1.left = &n2;
+			n1.right = &n3;
+			n2.left = &n4;
+			check(&n1, 137);
+		}
+	});
 }

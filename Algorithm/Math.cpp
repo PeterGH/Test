@@ -230,4 +230,35 @@ namespace Test {
 
 		return s;
 	}
+
+	// Binary tree branch (root-to-leaf path) represents a number with each node as a digit.
+	// Sum all branch numbers.
+	// 1____2
+	//  |___8
+	// 12 + 18 = 30
+	unsigned long long Math::BinaryTreeSumBranches(BinaryNode<unsigned int> * node)
+	{
+		if (node == nullptr) return 0;
+		stack<BinaryNode<unsigned int> *> path;
+		map<BinaryNode<unsigned int> *, unsigned long long> number;
+		unsigned long long sum = 0;
+		number[node] = node->content;
+		path.push(node);
+		while (!path.empty()) {
+			node = path.top();
+			path.pop();
+			if (node->left == nullptr && node->right == nullptr) {
+				sum += number[node];
+			}
+			if (node->right != nullptr) {
+				number[node->right] = 10 * number[node] + node->right->content;
+				path.push(node->right);
+			}
+			if (node->left != nullptr) {
+				number[node->left] = 10 * number[node] + node->left->content;
+				path.push(node->left);
+			}
+		}
+		return sum;
+	}
 }

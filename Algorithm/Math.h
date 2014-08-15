@@ -1,9 +1,11 @@
 #pragma once
 #include <algorithm>
+#include <map>
 #include <memory>
 #include <stack>
 #include <string>
 #include <vector>
+#include "BinaryNode.h"
 using namespace std;
 namespace Test {
 	class Math {
@@ -21,6 +23,8 @@ namespace Test {
 
 		__declspec(dllexport) static int AllocateCandy(int ratings[], int length, int amount[]);
 		__declspec(dllexport) static int AllocateCandy2(int ratings[], int length, int amount[]);
+
+		__declspec(dllexport) static unsigned long long BinaryTreeSumBranches(BinaryNode<unsigned int> * node);
 
 		template<class T> __declspec(dllexport) static T GreatestCommonDivisor(T n0, T n1);
 	};
