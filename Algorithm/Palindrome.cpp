@@ -305,4 +305,134 @@ namespace Test {
 			output.insert(b + j, getChar(i));
 		}
 	}
+
+	#pragma warning( disable : 4503 )
+	// Partition input into a set of palindrom substrings.
+	// Return all possible sets.
+	vector<vector<string>> Palindrome::Partition(const string & input)
+	{
+		function<void(const string &, size_t, map<size_t, vector<vector<string>>> &)>
+		partition = [&](
+			const string & s,
+			size_t index,
+			map<size_t, vector<vector<string>>> & sets)
+		{
+			if (sets.find(index) == sets.end()) {
+				sets[index] = vector<vector<string>> { };
+			}
+
+			for (size_t k = index; k < s.length(); k++) {
+				int i = index;
+				int j = k;
+				while (i <= j) {
+					if (s[i] != s[j]) break;
+					i++;
+					j--;
+				}
+				if (i > j) {
+					// s[index..k] is a palindrom
+					if (k == s.length() - 1) {
+						sets[index].push_back(vector<string> { s.substr(index, k - index + 1) });
+					} else {
+						if (sets.find(k+1) == sets.end()) {
+							partition(s, k+1, sets);
+						}
+						for_each (sets[k+1].begin(), sets[k+1].end(), [&](vector<string> & r){
+							vector<string> set = { s.substr(index, k - index + 1) };
+							set.insert(set.end(), r.begin(), r.end());
+							sets[index].push_back(set);
+						});
+					}
+				}
+			}
+		};
+
+		map<size_t, vector<vector<string>>> partitions;
+		partition(input, 0, partitions);
+		return partitions[0];
+	}
+
+	// Partition input into a set of palindrom substrings.
+	// Return the partion with minimum cut, i.e., the count of palindrome substrins is as less as possible.
+	vector<string> Palindrome::MinCutPartition(const string & input)
+	{
+		function<void(const string &, size_t, map<size_t, vector<string>> &)>
+		partition = [&](
+			const string & s,
+			size_t index,
+			map<size_t, vector<string>> & set)
+		{
+			if (set.find(index) == set.end()) {
+				set[index] = vector<string> { };
+			}
+
+			size_t minIndex = index;
+			size_t minCuts = s.length();
+			for (size_t k = index; k < s.length(); k++) {
+				int i = index;
+				int j = k;
+				while (i <= j) {
+					if (s[i] != s[j]) break;
+					i++;
+					j--;
+				}
+				if (i > j) {
+					// s[index..k] is a palindrom
+					if (k == s.length() - 1) {
+						set[index].push_back(s.substr(index, k - index + 1));
+						return;
+					} else {
+						if (set.find(k+1) == set.end()) {
+							partition(s, k+1, set);
+						}
+						if (set[k+1].size() < minCuts) {
+							minCuts = set[k+1].size();
+							minIndex = k+1;
+						}
+					}
+				}
+			}
+
+			set[index].push_back(s.substr(index, minIndex - index));
+			set[index].insert(set[index].end(), set[minIndex].begin(), set[minIndex].end());
+		};
+
+		map<size_t, vector<string>> mincut;
+		partition(input, 0, mincut);
+		return mincut[0];
+	}
+
+	// Partition input into a set of palindrom substrings.
+	// Return the partion with minimum cut, i.e., the count of palindrome substrins is as less as possible.
+	int Palindrome::MinCutPartition2(const string & input)
+	{
+		unique_ptr<int[]> mincut(new int[input.length()]);
+		vector<vector<bool>> palindrome(input.size(), vector<bool>(input.size(), false));
+		for (int i = input.length() - 1; i >= 0; i--) {
+			mincut[i] = input.length() - i - 1;
+			for (int j = i; j < (int)input.length(); j++) {
+				if (input[i] == input[j]) {
+					if (j - i <= 1) {
+						palindrome[i][j] = true;
+					} else {
+						palindrome[i][j] = palindrome[i+1][j-1];
+					}
+				} else {
+					palindrome[i][j] = false;
+				}
+				if (palindrome[i][j]) {
+					// input[i..j] is a palindrome
+					if (j == (int)input.length() - 1) {
+						mincut[i] = 0;
+						break;
+					} else {
+						if (mincut[j+1] + 1 < mincut[i]) {
+							mincut[i] = mincut[j+1] + 1;
+						}
+					}
+				}
+			}
+		}
+		return mincut[0];
+	}
 }

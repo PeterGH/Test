@@ -129,4 +129,54 @@ void PalindromeTest::Init(void)
 		ASSERT1(o2 == o1);
 		ASSERT1(o3 == o1);
 	});
+
+	Add("Partition", [&](){
+		auto check = [&](const string & input){
+			Logger().WriteInformation("Input: %s\n", input.c_str());
+			vector<vector<string>> partitions = Test::Palindrome::Partition(input);
+			vector<string> mincut = Test::Palindrome::MinCutPartition(input);
+			size_t mincutSize2 = (size_t)Test::Palindrome::MinCutPartition2(input);
+			Logger().WriteInformation("    %d partitions:\n", partitions.size());
+			size_t mincutSize = input.length();
+			for_each (partitions.begin(), partitions.end(), [&](vector<string> & partition){
+				if (partition.size() < mincutSize) mincutSize = partition.size();
+				Logger().WriteInformation("      [");
+				for (size_t i = 0; i < partition.size(); i++) {
+					if (i != 0) {
+						Logger().WriteInformation(", ");
+					}
+					Logger().WriteInformation("%s", partition[i].c_str());
+				}
+				Logger().WriteInformation("]\n");
+			});
+			Logger().WriteInformation("    Min cuts: %d, %d\n", mincut.size() - 1, mincutSize2);
+			Logger().WriteInformation("      [");
+			for (size_t i = 0; i < mincut.size(); i++) {
+				if (i != 0) {
+					Logger().WriteInformation(", ");
+				}
+				Logger().WriteInformation("%s", mincut[i].c_str());
+			}
+			Logger().WriteInformation("]\n");
+			ASSERT1(mincut.size() == mincutSize);
+			ASSERT1(mincut.size() == mincutSize2 + 1);
+		};
+
+		check("a");
+		check("aa");
+		check("ab");
+		check("aaa");
+		check("aab");
+		check("abb");
+		check("aba");
+		check("aaaa");
+		check("aaab");
+		check("aaba");
+		check("abaa");
+		check("baaa");
+		check("aabb");
+		check("abab");
+		check("baab");
+		check(string(10, 'a'));
+	});
 }
