@@ -87,6 +87,34 @@ void PalindromeTest::Init(void)
 		check(1234567, false);
 	});
 
+	Add("String", [&](){
+		auto check = [&](const string & s, bool e){
+			bool r = Test::Palindrome::IsPalindrom(s);
+			Logger().WriteInformation("\"%s\" is %s palindrome\n", s.c_str(), r ? "" : "not");
+			ASSERT1(r == e);
+		};
+
+		check("", true);
+		check("1", true);
+		check("a", true);
+		check(",", true);
+		check("22", true);
+		check("23", false);
+		check("ab", false);
+		check("a1", false);
+		check(":3", true);
+		check("a;", true);
+		check("?b", true);
+		check("# #4**", true);
+		check("# c**", true);
+		check("a, b&*() A;", true);
+		check("A man, a plan, a canal: Panama", true);
+		check("race a car", false);
+		check("^%(&*%$%(", true);
+		check("A^%(&*%$%(a", true);
+		check("^%9(&*%$9%(", true);
+	});
+
 	Add("Substring1", [&](){
 		string i = "babcbabcbaccba";
 		string o;

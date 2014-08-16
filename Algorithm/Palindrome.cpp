@@ -206,6 +206,39 @@ namespace Test {
 		return true;
 	}
 
+	// Determine if a string is palindrome.
+	// 1. Consider alphanumeric characters only.
+	// 2. Ignore case
+	bool Palindrome::IsPalindrom(const string & input)
+	{
+		if (input.size() == 0) return true;
+
+		auto isAlphaNumeric = [&](char c)->bool{
+			return c >= 'a' && c <= 'z'
+				|| c >= 'A' && c <= 'Z'
+				|| c >= '0' && c <= '9';
+		};
+
+		auto equal = [&](char a, char b)->bool{
+			if (a >= 'a' && a <= 'z' && (b - 'a' == a - 'a' || b - 'A' == a - 'a')) return true;
+			else if (a >= 'A' && a <= 'Z' && b - 'a' == a - 'A' || b - 'A' == a - 'A') return true;
+			else if (a >= '0' && a <= '9' && b == a) return true;
+			return false;
+		};
+
+		int i = 0;
+		int j = input.size() - 1;
+		while (i <= j) {
+			while (i <= j && !isAlphaNumeric(input[i])) i++;
+			while (i <= j && !isAlphaNumeric(input[j])) j--;
+			if (i > j) return true;
+			if (!equal(input[i], input[j])) return false;
+			i++;
+			j--;
+		}
+		return true;
+	}
+
 	// Manacher Algorithm
 	// Discussed at http://leetcode.com/2011/11/longest-palindromic-substring-part-ii.html
 	// Find the longest substring (contiguous characters) which is a palindrome
