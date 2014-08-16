@@ -4,6 +4,7 @@
 #include <memory>
 #include <stack>
 #include <string>
+#include <unordered_map>
 #include <vector>
 #include "BinaryNode.h"
 using namespace std;
@@ -25,6 +26,10 @@ namespace Test {
 		__declspec(dllexport) static int AllocateCandy2(int ratings[], int length, int amount[]);
 
 		__declspec(dllexport) static unsigned long long BinaryTreeSumBranches(BinaryNode<unsigned int> * node);
+
+		// Find the elements forming the longest contiguous sequence.
+		// Given [100, 4, 200, 1, 3, 2], The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4. 
+		__declspec(dllexport) static void LongestConsecutiveSequence(vector<int> & input, int & begin, int & length);
 
 		template<class T> __declspec(dllexport) static T GreatestCommonDivisor(T n0, T n1);
 	};

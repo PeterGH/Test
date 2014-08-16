@@ -261,4 +261,72 @@ namespace Test {
 		}
 		return sum;
 	}
+
+	// Find the elements forming the longest contiguous sequence.
+	// Given [100, 4, 200, 1, 3, 2], The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4.
+	void Math::LongestConsecutiveSequence(vector<int> & input, int & begin, int & length)
+	{
+		if (input.size() == 0) {
+			length = 0;
+			return;
+		}
+
+		begin = input[0];
+		length = 1;
+
+		// Given a open range (begin, end), track the begin and end using two hash tables.
+		unordered_map<int, int> rangeBegin; // (begin, end)
+		unordered_map<int, int> rangeEnd;   // (end, begin)
+		for_each (input.begin(), input.end(), [&](int i){
+			bool foundBegin = rangeBegin.find(i) != rangeBegin.end();
+			bool foundEnd = rangeEnd.find(i) != rangeEnd.end();
+			if (foundBegin && foundEnd) {
+				// merge (i, rangeBegin[i]) with (i, rangeEnd[i])
+				if (rangeBegin[i] - rangeEnd[i] - 1 > length) {
+					length = rangeBegin[i] - rangeEnd[i] - 1;
+					begin = rangeEnd[i] + 1;
+				}
+				rangeBegin[rangeEnd[i]] = rangeBegin[i];
+				rangeEnd[rangeBegin[i]] = rangeEnd[i];
+				rangeBegin.erase(i);
+				rangeEnd.erase(i);
+			} else if (foundBegin) {
+				// expand (i, rangeBegin[i]) and (rangeEnd[rangeBegin[i]], i)
+				if (rangeBegin[i] - i > length) {
+					length = rangeBegin[i] - i;
+					begin = i;
+				}
+				if (rangeBegin.find(i-1) == rangeBegin.end()) {
+					rangeBegin[i-1] = rangeBegin[i];
+					rangeEnd[rangeBegin[i]] = i-1;
+					rangeBegin.erase(i);
+				}
+			} else if (foundEnd) {
+				// expand (rangeBegin[rangeEnd[i]], i) and (i, rangeEnd[i])
+				if (i - rangeEnd[i] > length) {
+					length = i - rangeEnd[i];
+					begin = rangeEnd[i] + 1;
+				}
+				if (rangeEnd.find(i+1) == rangeEnd.end()) {
+					rangeEnd[i+1] = rangeEnd[i];
+					rangeBegin[rangeEnd[i]] = i+1;
+					rangeEnd.erase(i);
+				}
+			} else {
+				// add new range (i-1, i+1) and (i+1, i-1)
+				// the new range may already be covered in existing range, e.g.
+				// { 0, 1, 2, 1}, when the second 1 occurrs, a new range (0,2) is added,
+				// but the first three numbers already generate range (-1, 3).
+				if (1 > length) {
+					length = 1;
+					begin = i;
+				}
+				if (rangeBegin.find(i-1) == rangeBegin.end()
+					&& rangeEnd.find(i+1) == rangeEnd.end()) {
+					rangeBegin[i-1] = i+1;
+					rangeEnd[i+1] = i-1;
+				}
+			}
+		});
+	}
 }

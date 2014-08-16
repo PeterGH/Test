@@ -436,4 +436,93 @@ void MathTest::Init(void)
 			check(&n1, 137);
 		}
 	});
+
+	Add("LongestConsecutiveSequence", [&](){
+		auto print = [&](vector<int> & input){
+			Logger().WriteInformation("Input:");
+			for (size_t i = 0; i < input.size(); i++) {
+				Logger().WriteInformation("  %d", input[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+
+		auto check = [&](vector<int> & input, int expectBegin, int expectLength) {
+			int begin;
+			int length;
+			print(input);
+			Test::Math::LongestConsecutiveSequence(input, begin, length);
+			Logger().WriteInformation("  Begin:  %d %s %d\n", begin, begin == expectBegin ? "==" : "!=", expectBegin);
+			Logger().WriteInformation("  Length: %d %s %d\n", length, length == expectLength ? "==" : "!=", expectLength);
+			ASSERT1(begin == expectBegin);
+			ASSERT1(length == expectLength);
+		};
+		{
+			vector<int> input = { 0 };
+			check(input, 0, 1);
+		}
+		{
+			vector<int> input = { 0, 0 };
+			check(input, 0, 1);
+		}
+		{
+			vector<int> input = { 0, 1 };
+			check(input, 0, 2);
+		}
+		{
+			vector<int> input = { 1, 0 };
+			check(input, 0, 2);
+		}
+		{
+			vector<int> input = { 0, 2 };
+			check(input, 0, 1);
+		}
+		{
+			vector<int> input = { 0, 1, 2 };
+			check(input, 0, 3);
+		}
+		{
+			vector<int> input = { 0, 1, 3 };
+			check(input, 0, 2);
+		}
+		{
+			vector<int> input = { -1, 1, 2 };
+			check(input, 1, 2);
+		}
+		{
+			vector<int> input = { 0, -1, 2 };
+			check(input, -1, 2);
+		}
+		{
+			vector<int> input = { 3, 1, 2 };
+			check(input, 1, 3);
+		}
+		{
+			vector<int> input = { 0, 1, 1 };
+			check(input, 0, 2);
+		}
+		{
+			vector<int> input = { 1, 0, 1, 1 };
+			check(input, 0, 2);
+		}
+		{
+			vector<int> input = { 1, 0, 1, 0 };
+			check(input, 0, 2);
+		}
+		{
+			vector<int> input = { 1, 0, -1 };
+			check(input, -1, 3);
+		}
+		{
+			vector<int> input = { 0, 1, 2, 1 };
+			check(input, 0, 3);
+		}
+		{
+			vector<int> input = { -7, -1, 3, -9, -4, 7, -3, 2, 4, 9, 4, -9, 8, -7 ,5, -1, -7 };
+			check(input, 2, 4);
+		}
+		{
+			vector<int> input = { -6, 8, -5, 7, -9, -1, -7, -6, -9, -7, 5, 7, -1, -8, -8, -2, 0 };
+			check(input, -9, 5);
+		}
+	});
 }
