@@ -384,9 +384,23 @@ void StringTest::Init(void)
 			int length = Test::String::WordLadder(start, end, dict);
 			int length2 = Test::String::WordLadder2(start, end, dict);
 			int length3 = Test::String::WordLadder2(start, end, dict);
+			vector<vector<string>> ladders = Test::String::WordLadders(start, end, dict);
 			Logger().WriteInformation("    Length:  %d %s %d\n", length, length == expect ? "==" : "!=", expect);
 			Logger().WriteInformation("    Length2: %d %s %d\n", length2, length2 == expect ? "==" : "!=", expect);
 			Logger().WriteInformation("    Length3: %d %s %d\n", length3, length3 == expect ? "==" : "!=", expect);
+			Logger().WriteInformation("    Ladders:\n");
+			for_each (ladders.begin(), ladders.end(), [&](vector<string> & l){
+				Logger().WriteInformation("            [");
+				int i = 0;
+				for_each(l.begin(), l.end(), [&](string w){
+					if (i != 0) {
+						Logger().WriteInformation(" ");
+					}
+					Logger().WriteInformation("%s", w.c_str());
+					i++;
+				});
+				Logger().WriteInformation("]\n");
+			});
 			ASSERT1(length == expect);
 			ASSERT1(length2 == expect);
 			ASSERT1(length3 == expect);
@@ -398,6 +412,10 @@ void StringTest::Init(void)
 		{
 			unordered_set<string> dict = { "hot", "dot", "dog", "lot", "log" };
 			check("hit", "cog", dict, 5);
+		}
+		{
+			unordered_set<string> dict = { "ted", "tex", "red", "tax", "tad", "den", "rex", "pee" };
+			check("red", "tax", dict, 4);
 		}
 	});
 }

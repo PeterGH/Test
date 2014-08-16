@@ -8,6 +8,7 @@
 #include <sstream>
 #include <stdarg.h>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 using namespace std;
 
@@ -113,6 +114,8 @@ namespace Test {
 		__declspec(dllexport) static int WordLadder(const string & start, const string & end, const unordered_set<string> & dictionary);
 		__declspec(dllexport) static int WordLadder2(const string & start, const string & end, const unordered_set<string> & dictionary);
 		__declspec(dllexport) static int WordLadder3(const string & start, const string & end, const unordered_set<string> & dictionary);
+
+		__declspec(dllexport) static vector<vector<string>> WordLadders(const string & start, const string & end, const unordered_set<string> & dictionary);
 
 		template<class T, class C> static basic_string<C> Join(const T * input, int length, const C * separator)
 		{
