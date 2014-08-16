@@ -486,4 +486,163 @@ namespace Test {
 		breakWord(input, 0, dictionary, sentences);
 		return sentences[0];
 	}
+
+	// Find the length of shortest transformation sequence from a start string to a end string, such that
+	// 1. only one character can be changed at each step
+	// 2. each intermediate word must exist in a dictionary
+	// Notes:
+	// 1. all words are in the lower case
+	// 2. start and end may not be in the dictionary
+	int String::WordLadder(const string & start, const string & end, const unordered_set<string> & dictionary)
+	{
+		if (start.length() == 0 || end.length() == 0 || dictionary.size() == 0) return 0;
+		unordered_set<string> dict;
+		dict.insert(dictionary.begin(), dictionary.end());
+		if (dict.find(start) == dict.end()) dict.insert(start);
+		if (dict.find(end) == dict.end()) dict.insert(end);
+
+		map<string, vector<string>> graph;
+		for_each (dict.begin(), dict.end(), [&](string word){
+			graph[word] = vector<string> { };
+		});
+
+		for_each (dict.begin(), dict.end(), [&](string word){
+			int wordLen = word.length();
+			for (map<string, vector<string>>::iterator it = graph.begin(); it != graph.end(); it++){
+				if (wordLen == it->first.length()) {
+					int diff = 0;
+					for (int i = 0; i < wordLen; i++) {
+						if (word[i] != it->first[i]) diff++;
+						if (diff > 1) break;
+					}
+					if (diff == 1) {
+						it->second.push_back(word);
+					}
+				}
+			}
+		});
+
+		bool found = false;
+		unordered_set<string> visited;
+		queue<string> q[2];
+		int step = 0;
+		q[0].push(start);
+		visited.insert(start);
+		while (!q[0].empty() || !q[1].empty()) {
+			queue<string> & current = q[step & 0x1];
+			queue<string> & next = q[(step + 1) & 0x1];
+			while (!current.empty()) {
+				string word = current.front();
+				current.pop();
+				for (size_t i = 0; i <  graph[word].size(); i++){
+					if (graph[word][i] == end) {
+						found = true;
+						break;
+					}
+					if (visited.find(graph[word][i]) == visited.end()){
+						visited.insert(graph[word][i]);
+						next.push(graph[word][i]);
+					}
+				}
+
+				if (found) {
+					return step + 2;
+				}
+			}
+
+			step++;
+		}
+		return 0;
+	}
+
+	// Find the length of shortest transformation sequence from a start string to a end string, such that
+	// 1. only one character can be changed at each step
+	// 2. each intermediate word must exist in a dictionary
+	// Notes:
+	// 1. all words are in the lower case
+	// 2. start and end may not be in the dictionary
+	int String::WordLadder2(const string & start, const string & end, const unordered_set<string> & dictionary)
+	{
+		if (start.length() == 0 || end.length() == 0 || dictionary.size() == 0) return 0;
+		unordered_set<string> dict;
+		dict.insert(dictionary.begin(), dictionary.end());
+
+		auto diff1 = [&](const string & first, const string & second)->bool {
+			if (first.size() != second.size()) return false;
+			int diff = 0;
+			for (size_t i = 0; i < first.length(); i++) {
+				if (first[i] != second[i]) diff++;
+				if (diff > 1) return false;
+			}
+			return diff == 1;
+		};
+
+		vector<string> q[2];
+		int step = 0;
+		q[0].push_back(start);
+		while (!q[0].empty() || !q[1].empty()) {
+			vector<string> & current = q[step & 0x1];
+			vector<string> & next = q[(step + 1) & 0x1];
+			while (!current.empty()) {
+				string word = current.front();
+				current.erase(current.begin());
+				for (unordered_set<string>::iterator it = dict.begin(); it != dict.end(); it++){
+					if (diff1(word, *it)) {
+						if (diff1(*it, end)) {
+							return step + 3;
+						} else {
+							next.push_back(*it);
+						}
+					}
+				}
+			}
+			for_each (next.begin(), next.end(), [&](string & s){
+				dict.erase(s);
+			});
+			step++;
+		}
+		return 0;
+	}
+
+	// Find the length of shortest transformation sequence from a start string to a end string, such that
+	// 1. only one character can be changed at each step
+	// 2. each intermediate word must exist in a dictionary
+	// Notes:
+	// 1. all words are in the lower case
+	// 2. start and end may not be in the dictionary
+	int String::WordLadder3(const string & start, const string & end, const unordered_set<string> & dictionary)
+	{
+		if (start.length() == 0 || end.length() == 0 || dictionary.size() == 0) return 0;
+
+		unordered_set<string> visited;
+		queue<string> q[2];
+		int step = 0;
+		q[0].push(start);
+		visited.insert(start);
+		while (!q[0].empty() || !q[1].empty()) {
+			queue<string> & current = q[step & 0x1];
+			queue<string> & next = q[(step + 1) & 0x1];
+			while (!current.empty()) {
+				string word = current.front();
+				current.pop();
+				int wordLen = word.size();
+				string temp;
+				for (int i = 0; i < wordLen; i++) {
+					temp = word;
+					for (char j = 'a'; j <= 'z'; j++) {
+						temp[i] = j;
+						if (temp == end) {
+							return step + 2;
+						}
+						if (dictionary.find(temp) != dictionary.end() && visited.find(temp) == visited.end()) {
+							visited.insert(temp);
+							next.push(temp);
+						}
+					}
+				}
+			}
+			step++;
+		}
+		return 0;
+	}
 }

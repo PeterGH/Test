@@ -110,6 +110,10 @@ namespace Test {
 		__declspec(dllexport) static vector<string> BreakWord2(string input, unordered_set<string> & dictionary);
 		__declspec(dllexport) static bool BreakWord3(string input, unordered_set<string> & dictionary);
 
+		__declspec(dllexport) static int WordLadder(const string & start, const string & end, const unordered_set<string> & dictionary);
+		__declspec(dllexport) static int WordLadder2(const string & start, const string & end, const unordered_set<string> & dictionary);
+		__declspec(dllexport) static int WordLadder3(const string & start, const string & end, const unordered_set<string> & dictionary);
+
 		template<class T, class C> static basic_string<C> Join(const T * input, int length, const C * separator)
 		{
 			basic_stringstream<C> ss;
