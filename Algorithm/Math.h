@@ -33,6 +33,8 @@ namespace Test {
 		// Given [100, 4, 200, 1, 3, 2], The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4. 
 		__declspec(dllexport) static void LongestConsecutiveSequence(vector<int> & input, int & begin, int & length);
 
+		__declspec(dllexport) static int TriangleMinPathSum(vector<vector<int>> & triangle);
+
 		template<class T> __declspec(dllexport) static T GreatestCommonDivisor(T n0, T n1);
 	};
 
