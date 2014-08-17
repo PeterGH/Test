@@ -262,6 +262,164 @@ namespace Test {
 		return sum;
 	}
 
+	// In a binary tree find a path where the sum of node values is maximized.
+	long long Math::BinaryTreeMaxPathSum(BinaryNode<int> * root, vector<BinaryNode<int> *> & path)
+	{
+		if (root == nullptr) return 0;
+
+		function<void(BinaryNode<int> *, long long &, vector<BinaryNode<int> *> &, long long &, vector<BinaryNode<int> *> &)>
+		search = [&](
+			BinaryNode<int> * node,
+			long long & currentSum,
+			vector<BinaryNode<int> *> & currentPath,
+			long long & maxSum,
+			vector<BinaryNode<int> *> & maxPath)
+		{
+			currentSum = 0;
+			currentPath.clear();
+			maxSum = 0;
+			maxPath.clear();
+			if (node == nullptr) return;
+
+			if (node->left == nullptr && node->right == nullptr) {
+				currentSum = node->content;
+				currentPath.push_back(node);
+				maxSum = node->content;
+				maxPath.push_back(node);
+				return;
+			}
+
+			long long leftSum;
+			vector<BinaryNode<int> *> leftPath;
+			long long leftMaxSum;
+			vector<BinaryNode<int> *> leftMaxPath;
+			search(node->left, leftSum, leftPath, leftMaxSum, leftMaxPath);
+
+			long long rightSum;
+			vector<BinaryNode<int> *> rightPath;
+			long long rightMaxSum;
+			vector<BinaryNode<int> *> rightMaxPath;
+			search(node->right, rightSum, rightPath, rightMaxSum, rightMaxPath);
+
+			if (node->left != nullptr && node->right == nullptr) {
+				maxSum = leftMaxSum;
+				maxPath.insert(maxPath.begin(), leftMaxPath.begin(), leftMaxPath.end());
+
+				if (leftSum <= 0) {
+					currentSum = node->content;
+					currentPath.push_back(node);
+
+					if (node->content > maxSum) {
+						maxSum = node->content;
+						maxPath.clear();
+						maxPath.push_back(node);
+					}
+				} else {
+					currentSum = leftSum + node->content;
+					currentPath.push_back(node);
+					currentPath.insert(currentPath.end(), leftPath.begin(), leftPath.end());
+
+					if (leftSum + node->content > maxSum) {
+						maxSum = leftSum + node->content;
+						maxPath.clear();
+						maxPath.insert(maxPath.end(), leftPath.rbegin(), leftPath.rend());
+						maxPath.push_back(node);
+					}
+				}
+			} else if (node->left == nullptr && node->right != nullptr) {
+				maxSum = rightMaxSum;
+				maxPath.insert(maxPath.begin(), rightMaxPath.begin(), rightMaxPath.end());
+
+				if (rightSum <= 0) {
+					currentSum = node->content;
+					currentPath.push_back(node);
+
+					if (node->content > maxSum) {
+						maxSum = node->content;
+						maxPath.clear();
+						maxPath.push_back(node);
+					}
+				} else {
+					currentSum = node->content + rightSum;
+					currentPath.push_back(node);
+					currentPath.insert(currentPath.end(), rightPath.begin(), rightPath.end());
+
+					if (node->content + rightSum > maxSum) {
+						maxSum = node->content + rightSum;
+						maxPath.clear();
+						maxPath.push_back(node);
+						maxPath.insert(maxPath.end(), rightPath.begin(), rightPath.end());
+					}
+				}
+			} else {
+				if (leftMaxSum >= rightMaxSum) {
+					maxSum = leftMaxSum;
+					maxPath.insert(maxPath.begin(), leftMaxPath.begin(), leftMaxPath.end());
+				} else {
+					maxSum = rightMaxSum;
+					maxPath.insert(maxPath.begin(), rightMaxPath.begin(), rightMaxPath.end());
+				}
+
+				if (leftSum <= 0 && rightSum <= 0) {
+					currentSum = node->content;
+					currentPath.push_back(node);
+
+					if (node->content > maxSum) {
+						maxSum = node->content;
+						maxPath.clear();
+						maxPath.push_back(node);
+					}
+				} else if (leftSum > 0 && rightSum <= 0) {
+					currentSum = leftSum + node->content;
+					currentPath.push_back(node);
+					currentPath.insert(currentPath.end(), leftPath.begin(), leftPath.end());
+
+					if (leftSum + node->content > maxSum) {
+						maxSum = leftSum + node->content;
+						maxPath.clear();
+						maxPath.insert(maxPath.end(), leftPath.rbegin(), leftPath.rend());
+						maxPath.push_back(node);
+					}
+				} else if (leftSum <= 0 && rightSum > 0) {
+					currentSum = node->content + rightSum;
+					currentPath.push_back(node);
+					currentPath.insert(currentPath.end(), rightPath.begin(), rightPath.end());
+
+					if (node->content + rightSum > maxSum) {
+						maxSum = node->content + rightSum;
+						maxPath.clear();
+						maxPath.push_back(node);
+						maxPath.insert(maxPath.end(), rightPath.begin(), rightPath.end());
+					}
+				} else {
+					if (leftSum >= rightSum) {
+						currentSum = leftSum + node->content;
+						currentPath.push_back(node);
+						currentPath.insert(currentPath.end(), leftPath.begin(), leftPath.end());
+					} else {
+						currentSum = node->content + rightSum;
+						currentPath.push_back(node);
+						currentPath.insert(currentPath.end(), rightPath.begin(), rightPath.end());
+					}
+
+					if (leftSum + node->content + rightSum > maxSum) {
+						maxSum = leftSum + node->content + rightSum;
+						maxPath.clear();
+						maxPath.insert(maxPath.end(), leftPath.rbegin(), leftPath.rend());
+						maxPath.push_back(node);
+						maxPath.insert(maxPath.end(), rightPath.begin(), rightPath.end());
+					}
+				}
+			}
+		};
+
+		long long currentSum;
+		vector<BinaryNode<int> *> currentPath;
+		long long max;
+		search(root, currentSum, currentPath, max, path);
+		return max;
+	}
+
 	// Find the elements forming the longest contiguous sequence.
 	// Given [100, 4, 200, 1, 3, 2], The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4.
 	void Math::LongestConsecutiveSequence(vector<int> & input, int & begin, int & length)

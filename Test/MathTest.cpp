@@ -437,6 +437,242 @@ void MathTest::Init(void)
 		}
 	});
 
+	Add("BinaryTreeMaxPathSum", [&](){
+		auto check = [&](Test::BinaryNode<int> * node, long long expect){
+			node->Print2();
+			vector<Test::BinaryNode<int> *> path;
+			long long sum = Test::Math::BinaryTreeMaxPathSum(node, path);
+			Logger().WriteInformation("Sum %lld %s %lld\n", sum, sum == expect ? "==" : "!=", expect);
+			Logger().WriteInformation("Path:");
+			for_each (path.begin(), path.end(), [&](Test::BinaryNode<int> * n){
+				Logger().WriteInformation("  %d", n->content);
+			});
+			Logger().WriteInformation("\n");
+			ASSERT1(sum == expect);
+			Logger().WriteInformation("\n");
+		};
+		{
+			Test::BinaryNode<int> n1(1);
+			check(&n1, 1);
+		}
+		{
+			Test::BinaryNode<int> n1(-1);
+			check(&n1, -1);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(2);
+			n1.left = &n2;
+			check(&n1, 3);
+		}
+		{
+			Test::BinaryNode<int> n1(-1);
+			Test::BinaryNode<int> n2(2);
+			n1.left = &n2;
+			check(&n1, 2);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(-2);
+			n1.left = &n2;
+			check(&n1, 1);
+		}
+		{
+			Test::BinaryNode<int> n1(-1);
+			Test::BinaryNode<int> n2(-2);
+			n1.left = &n2;
+			check(&n1, -1);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(2);
+			n1.right = &n2;
+			check(&n1, 3);
+		}
+		{
+			Test::BinaryNode<int> n1(-1);
+			Test::BinaryNode<int> n2(2);
+			n1.right = &n2;
+			check(&n1, 2);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(-2);
+			n1.right = &n2;
+			check(&n1, 1);
+		}
+		{
+			Test::BinaryNode<int> n1(-1);
+			Test::BinaryNode<int> n2(-2);
+			n1.right = &n2;
+			check(&n1, -1);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(2);
+			Test::BinaryNode<int> n3(3);
+			n1.left = &n2;
+			n1.right = &n3;
+			check(&n1, 6);
+		}
+		{
+			Test::BinaryNode<int> n1(-1);
+			Test::BinaryNode<int> n2(2);
+			Test::BinaryNode<int> n3(3);
+			n1.left = &n2;
+			n1.right = &n3;
+			check(&n1, 4);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(-2);
+			Test::BinaryNode<int> n3(3);
+			n1.left = &n2;
+			n1.right = &n3;
+			check(&n1, 4);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(2);
+			Test::BinaryNode<int> n3(-3);
+			n1.left = &n2;
+			n1.right = &n3;
+			check(&n1, 3);
+		}
+		{
+			Test::BinaryNode<int> n1(-2);
+			Test::BinaryNode<int> n2(2);
+			Test::BinaryNode<int> n3(3);
+			n1.left = &n2;
+			n1.right = &n3;
+			check(&n1, 3);
+		}
+		{
+			Test::BinaryNode<int> n1(-2);
+			Test::BinaryNode<int> n2(3);
+			Test::BinaryNode<int> n3(2);
+			n1.left = &n2;
+			n1.right = &n3;
+			check(&n1, 3);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(-2);
+			Test::BinaryNode<int> n3(-3);
+			n1.left = &n2;
+			n1.right = &n3;
+			check(&n1, 1);
+		}
+		{
+			Test::BinaryNode<int> n1(-4);
+			Test::BinaryNode<int> n2(-2);
+			Test::BinaryNode<int> n3(-3);
+			n1.left = &n2;
+			n1.right = &n3;
+			check(&n1, -2);
+		}
+		{
+			Test::BinaryNode<int> n1(-4);
+			Test::BinaryNode<int> n2(-4);
+			Test::BinaryNode<int> n3(-3);
+			n1.left = &n2;
+			n1.right = &n3;
+			check(&n1, -3);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(2);
+			Test::BinaryNode<int> n3(3);
+			Test::BinaryNode<int> n4(4);
+			n1.left = &n2;
+			n1.right = &n3;
+			n2.left = &n4;
+			check(&n1, 10);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(-2);
+			Test::BinaryNode<int> n3(3);
+			Test::BinaryNode<int> n4(4);
+			n1.left = &n2;
+			n1.right = &n3;
+			n2.left = &n4;
+			check(&n1, 6);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(-4);
+			Test::BinaryNode<int> n3(3);
+			Test::BinaryNode<int> n4(4);
+			n1.left = &n2;
+			n1.right = &n3;
+			n2.left = &n4;
+			check(&n1, 4);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(2);
+			Test::BinaryNode<int> n3(3);
+			Test::BinaryNode<int> n4(-4);
+			n1.left = &n2;
+			n1.right = &n3;
+			n2.left = &n4;
+			check(&n1, 6);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(2);
+			Test::BinaryNode<int> n3(3);
+			Test::BinaryNode<int> n4(4);
+			Test::BinaryNode<int> n5(3);
+			n1.left = &n2;
+			n1.right = &n3;
+			n2.left = &n4;
+			n2.right = &n5;
+			check(&n1, 10);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(2);
+			Test::BinaryNode<int> n3(3);
+			Test::BinaryNode<int> n4(4);
+			Test::BinaryNode<int> n5(5);
+			n1.left = &n2;
+			n1.right = &n3;
+			n2.left = &n4;
+			n2.right = &n5;
+			check(&n1, 11);
+		}
+		{
+			Test::BinaryNode<int> n1(1);
+			Test::BinaryNode<int> n2(2);
+			Test::BinaryNode<int> n3(3);
+			Test::BinaryNode<int> n4(4);
+			Test::BinaryNode<int> n5(5);
+			Test::BinaryNode<int> n6(6);
+			n1.left = &n2;
+			n1.right = &n3;
+			n2.left = &n4;
+			n2.right = &n5;
+			n3.left = &n6;
+			check(&n1, 17);
+		}
+		{
+			Test::BinaryNode<int> n1(-10);
+			Test::BinaryNode<int> n2(2);
+			Test::BinaryNode<int> n3(3);
+			Test::BinaryNode<int> n4(4);
+			Test::BinaryNode<int> n5(5);
+			Test::BinaryNode<int> n6(6);
+			n1.left = &n2;
+			n1.right = &n3;
+			n2.left = &n4;
+			n2.right = &n5;
+			n3.left = &n6;
+			check(&n1, 11);
+		}
+	});
+
 	Add("LongestConsecutiveSequence", [&](){
 		auto print = [&](vector<int> & input){
 			Logger().WriteInformation("Input:");

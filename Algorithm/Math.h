@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include <functional>
 #include <map>
 #include <memory>
 #include <stack>
@@ -26,6 +27,7 @@ namespace Test {
 		__declspec(dllexport) static int AllocateCandy2(int ratings[], int length, int amount[]);
 
 		__declspec(dllexport) static unsigned long long BinaryTreeSumBranches(BinaryNode<unsigned int> * node);
+		__declspec(dllexport) static long long BinaryTreeMaxPathSum(BinaryNode<int> * root, vector<BinaryNode<int> *> & path);
 
 		// Find the elements forming the longest contiguous sequence.
 		// Given [100, 4, 200, 1, 3, 2], The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4. 
