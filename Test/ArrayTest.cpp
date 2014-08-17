@@ -1175,4 +1175,226 @@ void ArrayTest::Init(void)
 			}
 		}
 	});
+
+	Add("BuySellStockMultipleTransactions", [&](){
+		auto print = [&](int * input, int length) {
+			for (int i = 0; i < length; i++) {
+				Logger().WriteInformation("  %d", input[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](int * input, int length) {
+			print(input, length);
+
+			vector<int> buy;
+			vector<int> sell;
+			vector<int> profit;
+			Test::Array::BuySellStock(input, length, buy, sell, profit);
+			int total = 0;
+			for (size_t i = 0; i < buy.size(); i++) {
+				total += profit[i];
+				Logger().WriteInformation("\t%d\t%d\t%ld\n", buy[i], sell[i], profit[i]);
+			}
+			Logger().WriteInformation("\tTotal: %d\n", total);
+		};
+		{
+			int A[] = { 1 };
+			check(A, 1);
+		}
+		{
+			int A[] = { 1, 2 };
+			check(A, 2);
+		}
+		{
+			int A[] = { 2, 1 };
+			check(A, 2);
+		}
+		{
+			int A[] = { 2, 2 };
+			check(A, 2);
+		}
+		{
+			int A[] = { 1, 2, 3 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 1, 3, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 1, 3 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 3, 1 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 3, 1, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 3, 2, 1 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 1, 2, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 1, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 2, 1 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 2, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 1, 2, 3, 4 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 2, 1, 3, 4 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 2, 1, 4, 3 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 1, 2, 4, 3 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 2, 7, 1, 6 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 3, 7, 1, 6 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 9, 7, 10, 9, 5, 8, 3, 7, 2, 1, 5, 3 };
+			check(A, 12);
+		}
+		{
+			int A[] = { 6, 1, 3, 2, 4, 7 };
+			check(A, 6);
+		}
+	});
+
+	Add("BuySellStockTwoTransactions", [&](){
+		auto print = [&](int * input, int length) {
+			for (int i = 0; i < length; i++) {
+				Logger().WriteInformation("  %d", input[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](int * input, int length) {
+			print(input, length);
+
+			vector<int> buy;
+			vector<int> sell;
+			vector<int> profit;
+			Test::Array::BuySellStock2(input, length, buy, sell, profit);
+			int total = 0;
+			for (size_t i = 0; i < buy.size(); i++) {
+				total += profit[i];
+				Logger().WriteInformation("\t%d\t%d\t%ld\n", buy[i], sell[i], profit[i]);
+			}
+			Logger().WriteInformation("\tTotal: %d\n", total);
+		};
+		{
+			int A[] = { 1 };
+			check(A, 1);
+		}
+		{
+			int A[] = { 1, 2 };
+			check(A, 2);
+		}
+		{
+			int A[] = { 2, 1 };
+			check(A, 2);
+		}
+		{
+			int A[] = { 2, 2 };
+			check(A, 2);
+		}
+		{
+			int A[] = { 1, 2, 3 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 1, 3, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 1, 3 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 3, 1 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 3, 1, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 3, 2, 1 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 1, 2, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 1, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 2, 1 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 2, 2, 2 };
+			check(A, 3);
+		}
+		{
+			int A[] = { 1, 2, 3, 4 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 2, 1, 3, 4 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 2, 1, 4, 3 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 1, 2, 4, 3 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 2, 7, 1, 6 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 3, 7, 1, 6 };
+			check(A, 4);
+		}
+		{
+			int A[] = { 9, 7, 10, 9, 5, 8, 3, 7, 2, 1, 5, 3 };
+			check(A, 12);
+		}
+		{
+			int A[] = { 6, 1, 3, 2, 4, 7 };
+			check(A, 6);
+		}
+	});
 }

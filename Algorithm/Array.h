@@ -28,6 +28,10 @@ namespace Test {
 		// Buy on one day and sell later. Maximize the profit.
 		static void BuySellStock(const int * input, int length, int & buy, int & sell, int & profit);
 		static void BuySellStock2(const int * input, int length, int & buy, int & sell, int & profit);
+		// Multiple transactions. But two transactions cannot overlap, i.e., must sell before buy again.
+		static void BuySellStock(const int * input, int length, vector<int> & buy, vector<int> & sell, vector<int> & profit);
+		// At most two transactions. But two transactions cannot overlap, i.e., must sell before buy again.
+		static void BuySellStock2(const int * input, int length, vector<int> & buy, vector<int> & sell, vector<int> & profit);
 
 		// An inversion is a pair (i, j) such that i < j and I[i] > I[j].
 		// Find an inversion such that j - i is maximized.

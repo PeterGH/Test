@@ -85,12 +85,13 @@ namespace Test {
 		for (int i = 1; i < length; i++) {
 			if (input[i] < input[min]) {
 				min = i;
-			}
-			int diff = input[i] - input[min];
-			if (diff > profit) {
-				buy = min;
-				sell = i;
-				profit = diff;
+			} else {
+				int diff = input[i] - input[min];
+				if (diff > profit) {
+					buy = min;
+					sell = i;
+					profit = diff;
+				}
 			}
 		}
 	}
@@ -126,6 +127,97 @@ namespace Test {
 					profit = diff;
 				}
 			}
+		}
+	}
+
+	// Multiple transactions. But two transactions cannot overlap, i.e., must sell before buy again.
+	// However, sell and buy can happen on the same day.
+	void Array::BuySellStock(const int * input, int length, vector<int> & buy, vector<int> & sell, vector<int> & profit)
+	{
+		if (input == nullptr || length < 2) return;
+		for (int i = 1; i < length; i++) {
+			if (input[i] > input[i-1]) {
+				buy.push_back(i-1);
+				sell.push_back(i);
+				profit.push_back(input[i] - input[i-1]);
+			}
+		}
+	}
+
+	// At most two transactions. But two transactions cannot overlap, i.e., must sell before buy again.
+	// However, sell and buy can happen on the same day.
+	void Array::BuySellStock2(const int * input, int length, vector<int> & buy, vector<int> & sell, vector<int> & profit)
+	{
+		if (input == nullptr || length < 2) return;
+		auto maxProfit = [&](int begin, int end, int & buy, int & sell, int & profit){
+			int min = begin;
+			buy = begin;
+			sell = begin;
+			profit = 0;
+			if (end == begin) return;
+			for (int i = begin + 1; i <= end; i++) {
+				if (input[i] < input[min]) {
+					min = i;
+				} else {
+					if (input[i] - input[min] > profit) {
+						buy = min;
+						sell = i;
+						profit = input[i] - input[min];
+					}
+				}
+			}
+		};
+
+		int buy1 = 0;
+		int sell1 = 0;
+		int profit1 = 0;
+		int buy2 = 0;
+		int sell2 = 0;
+		int profit2 = 0;
+
+		int b1 = 0;
+		int s1 = 0;
+		int p1 = 0;
+		int b2 = 0;
+		int s2 = 0;
+		int p2 = 0;
+		int i = 0;
+		while (i < length - 1) {
+			while (i < length - 1 && input[i+1] <= input[i]) i++;
+			if (i == length - 1) break;
+			while (i < length - 1 && input[i+1] > input[i]) i++;
+
+			maxProfit(b1, i, b1, s1, p1);
+
+			if (i > b2)	maxProfit(i, length - 1, b2, s2, p2);
+
+			if (p1 + p2 > profit1 + profit2) {
+				buy1 = b1;
+				sell1 = s1;
+				profit1 = p1;
+				buy2 = b2;
+				sell2 = s2;
+				profit2 = p2;
+			}
+
+			i++;
+		}
+
+		int b3;
+		int s3;
+		int p3;
+		maxProfit(0, length - 1, b3, s3, p3);
+		if (p3 > profit1 + profit2) {
+			buy.push_back(b3);
+			sell.push_back(s3);
+			profit.push_back(p3);
+		} else {
+			buy.push_back(buy1);
+			sell.push_back(sell1);
+			profit.push_back(profit1);
+			buy.push_back(buy2);
+			sell.push_back(sell2);
+			profit.push_back(profit2);
 		}
 	}
 
