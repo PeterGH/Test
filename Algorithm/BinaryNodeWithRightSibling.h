@@ -17,51 +17,50 @@ namespace Test {
 		{
 			if (node == nullptr) return;
 
-			// Track nodes at current level, which is already done with rightSibling setting
-			BinaryNodeWithRightSibling * current = node;
-			// Track the beginning of next level, which is to set with rightSibling
-			BinaryNodeWithRightSibling * start = nullptr;
-
-			// Find the beginning
-			while (start == nullptr && current != nullptr) {
-				start = (BinaryNodeWithRightSibling *)current->left;
-				if (start == nullptr) {
-					// Current has no left child
-					start = (BinaryNodeWithRightSibling *)current->right;
+			while (node != nullptr) {
+				// Track nodes at current level, which is already done with rightSibling setting
+				BinaryNodeWithRightSibling * current = node;
+				// Track the beginning of next level, which is to set with rightSibling
+				node = (BinaryNodeWithRightSibling *)current->left;
+				// Find the beginning
+				while (node == nullptr && current != nullptr) {
+					node = (BinaryNodeWithRightSibling *)current->left;
+					if (node == nullptr) {
+						// Current has no left child
+						node = (BinaryNodeWithRightSibling *)current->right;
+					}
+					if (node == nullptr) {
+						// Current has no left and right children
+						current = current->rightSibling;
+					}
 				}
-				if (start == nullptr) {
-					// Current has no left and right children
+
+				if (node == nullptr) {
+					// No more nodes in the next level
+					return;
+				}
+
+				BinaryNodeWithRightSibling * prev = node;
+				if (prev == current->left) {
+					if (current->right != nullptr) {
+						prev->rightSibling = (BinaryNodeWithRightSibling *)current->right;
+						prev = (BinaryNodeWithRightSibling *)current->right;
+					}
+				}
+
+				current = current->rightSibling;
+				while (current != nullptr) {
+					if (current->left != nullptr) {
+						prev->rightSibling = (BinaryNodeWithRightSibling *)current->left;
+						prev = (BinaryNodeWithRightSibling *)current->left;
+					}
+					if (current->right != nullptr) {
+						prev->rightSibling = (BinaryNodeWithRightSibling *)current->right;
+						prev = (BinaryNodeWithRightSibling *)current->right;
+					}
 					current = current->rightSibling;
 				}
 			}
-
-			if (start == nullptr) {
-				// No more nodes in the next level
-				return;
-			}
-
-			BinaryNodeWithRightSibling * prev = start;
-			if (prev == current->left) {
-				if (current->right != nullptr) {
-					prev->rightSibling = (BinaryNodeWithRightSibling *)current->right;
-					prev = (BinaryNodeWithRightSibling *)current->right;
-				}
-			}
-
-			current = current->rightSibling;
-			while (current != nullptr) {
-				if (current->left != nullptr) {
-					prev->rightSibling = (BinaryNodeWithRightSibling *)current->left;
-					prev = (BinaryNodeWithRightSibling *)current->left;
-				}
-				if (current->right != nullptr) {
-					prev->rightSibling = (BinaryNodeWithRightSibling *)current->right;
-					prev = (BinaryNodeWithRightSibling *)current->right;
-				}
-				current = current->rightSibling;
-			}
-
-			SetRightSibling(start);
 		}
 
 		void SetRightSibling(void) { SetRightSibling(this); }
