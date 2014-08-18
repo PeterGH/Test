@@ -117,6 +117,9 @@ namespace Test {
 
 		__declspec(dllexport) static vector<vector<string>> WordLadders(const string & start, const string & end, const unordered_set<string> & dictionary);
 
+		__declspec(dllexport) static int MatchSubsequence(const string & input, const string & pattern);
+		__declspec(dllexport) static int MatchSubsequence2(const string & input, const string & pattern);
+
 		template<class T, class C> static basic_string<C> Join(const T * input, int length, const C * separator)
 		{
 			basic_stringstream<C> ss;

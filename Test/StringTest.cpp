@@ -418,4 +418,29 @@ void StringTest::Init(void)
 			check("red", "tax", dict, 4);
 		}
 	});
+
+	Add("MatchSubsequence", [&](){
+		auto check = [&](const string & input, const string & pattern, int expect){
+			Logger().WriteInformation("Input:   %s\n", input.c_str());
+			Logger().WriteInformation("Pattern: %s\n", pattern.c_str());
+			int count = Test::String::MatchSubsequence(input, pattern);
+			int count2 = Test::String::MatchSubsequence2(input, pattern);
+			Logger().WriteInformation("Matches: %d %s %d\n", count, count == expect ? "==" : "!=", expect);
+			Logger().WriteInformation("Matches: %d %s %d\n", count2, count2 == expect ? "==" : "!=", expect);
+			ASSERT1(count == expect);
+			ASSERT1(count2 == expect);
+		};
+		check("r", "r", 1);
+		check("s", "r", 0);
+		check("rr", "r", 2);
+		check("rb", "r", 1);
+		check("br", "r", 1);
+		check("vb", "r", 0);
+		check("rabbbit", "rabbit", 3);
+		check("rrrr", "rr", 6);
+		check("rrrrr", "rr", 10);
+		check("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr", "rr", 861);
+		check("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr", "rr", 5151);
+		check("aabdbaabeeadcbbdedacbbeecbabebaeeecaeabaedadcbdbcdaabebdadbbaeabdadeaabbabbecebbebcaddaacccebeaeedababedeacdeaaaeeaecbe", "bddabdcae", 10582116);
+	});
 }

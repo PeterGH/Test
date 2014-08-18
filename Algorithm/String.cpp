@@ -707,4 +707,55 @@ namespace Test {
 		}
 		return ladders;
 	}
+
+	// Find all subsequences of input string that match a pattern.
+	// Return the total count.
+	int String::MatchSubsequence(const string & input, const string & pattern)
+	{
+		if (input.length() < pattern.length() || pattern.length() == 0) return 0;
+		if (input.length() == pattern.length()) {
+			if (input == pattern) return 1;
+			else return 0;
+		}
+		int count = 0;
+		for (size_t i = 0; i <= input.length() - pattern.length(); i++) {
+			if (input[i] == pattern[0]) {
+				if (pattern.length() == 1) count++;
+				else count += MatchSubsequence(input.substr(i+1), pattern.substr(1));
+			}
+		}
+		return count;
+	}
+
+	// Find all subsequences of input string that match a pattern.
+	// Return the total count.
+	int String::MatchSubsequence2(const string & input, const string & pattern)
+	{
+		if (input.length() < pattern.length() || pattern.length() == 0) return 0;
+
+		map<pair<size_t, size_t>, int> count;
+		function<int(size_t, size_t)>
+		search = [&](size_t i, size_t j) -> int {
+			if (input.length() - i == pattern.length() - j) {
+				return input.substr(i) == pattern.substr(j) ? 1 : 0;
+			}
+			int c = 0;
+			for (size_t k = i; k <= input.length() - pattern.length() + j; k++) {
+				if (input[k] == pattern[j]) {
+					pair<size_t, size_t> p = make_pair(k, j);
+					if (count.find(p) == count.end()) {
+						if (j == pattern.length() - 1) {
+							count[p] = 1;
+						} else {
+							count[p] = search(k+1, j+1);
+						}
+					}
+					c+= count[p];
+				}
+			}
+			return c;
+		};
+
+		return search(0, 0);
+	}
 }
