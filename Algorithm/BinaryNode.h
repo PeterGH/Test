@@ -500,5 +500,72 @@ namespace Test {
 				l++;
 			}
 		}
+
+		// Convert a binary tree to a linked list so that the list nodes
+		// are linked by the right pointer and are in pre-order of original tree.
+		// e.g.
+		//      1
+		//     / \
+		//    2   5
+		//   / \   \
+		//  3   4   6
+		// to
+		//  1
+		//   \
+		//    2
+		//     \
+		//      3
+		//       \
+		//        4
+		//         \
+		//          5
+		//           \
+		//            6
+		// This version builds a double-link list by setting node->left also.
+		// If need a single-link list, just remove the statements setting node->left.
+		static void ToPreOrderLinkList(BinaryNode * node)
+		{
+			if (node == nullptr) return;
+
+			function<void(BinaryNode *, BinaryNode * &)>
+			convert = [&](BinaryNode * head, BinaryNode * & tail){
+				if (head == nullptr) {
+					tail = nullptr;
+					return;
+				}
+
+				if (head->left == nullptr && head->right == nullptr) {
+					tail = head;
+					return;
+				}
+
+				BinaryNode * leftTail = nullptr;
+				convert(head->left, leftTail);
+
+				BinaryNode * rightTail = nullptr;
+				convert(head->right, rightTail);
+
+				if (head->left != nullptr) {
+					head->left->left = head;
+					leftTail->right = head->right;
+					head->right = head->left;
+					head->left = nullptr;
+					if (leftTail->right == nullptr) {
+						tail = leftTail;
+					} else {
+						leftTail->right->left = leftTail;
+						tail = rightTail;
+					}
+				} else {
+					head->right->left = head;
+					tail = rightTail;
+				}
+			};
+
+			BinaryNode * tail;
+			convert(node, tail);
+		}
+
+		void ToPreOrderLinkList(void) { ToPreOrderLinkList(this); }
 	};
 }

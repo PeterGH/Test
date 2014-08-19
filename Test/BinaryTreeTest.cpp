@@ -504,6 +504,191 @@ void BinaryTreeTest::Init(void)
 		}
 	});
 
+	Add("ToPreOrderLinkList1", [&](){
+		auto check = [&](int count) {
+			Test::CompleteBinaryTree<int, Test::BinaryNode> tree;
+			for (int i = 0; i < count; i++) {
+				tree.Insert(i);
+			}
+
+			tree.Print();
+
+			Test::BinaryNode<int> * head = tree.Root(nullptr);
+
+			vector<int> v;
+
+			function<void(int)> f = [&](int n){
+				v.push_back(n);
+			};
+
+			head->PreOrderWalk(f);
+
+			head->ToPreOrderLinkList();
+
+			auto print = [&](Test::BinaryNode<int> * n) -> int {
+				if (n == nullptr) return 0;
+				int c = 0;
+				Logger().WriteInformation("head");
+				do {
+					Logger().WriteInformation(" <=> %d", n->content);
+					c++;
+					n = n->right;
+				} while (n != nullptr);
+				Logger().WriteInformation(" <=> tail\n");
+				return c;
+			};
+
+			int c = print(head);
+			ASSERT1(c == count);
+
+			if (c > 0) {
+				Test::BinaryNode<int> * p = head;
+				int i = 0;
+				do {
+					ASSERT1(p->content == v[i]);
+					p = p->right;
+					i++;
+				} while (p != nullptr && i < c);
+
+				do {
+					p = head;
+					head = head->right;
+					delete p;
+				} while (head != nullptr);
+			}
+		};
+
+		for (int i = 1; i <= 10; i++) {
+			check(i);
+		}
+
+		for (int i = 1; i <= 100; i++) {
+			int count = 1 + Test::Random::Next();
+			check(count);
+		}
+	});
+
+	Add("ToPreOrderLinkList2", [&](){
+		auto check = [&](int count) {
+			Test::BinaryTree<int, Test::BinaryNode> tree;
+			for (int i = 0; i < count; i++) {
+				tree.Insert(i);
+			}
+
+			tree.Print();
+
+			Test::BinaryNode<int> * head = tree.Root(nullptr);
+
+			vector<int> v;
+
+			function<void(int)> f = [&](int n){
+				v.push_back(n);
+			};
+
+			head->PreOrderWalk(f);
+
+			head->ToPreOrderLinkList();
+
+			auto print = [&](Test::BinaryNode<int> * n) -> int {
+				if (n == nullptr) return 0;
+				int c = 0;
+				Logger().WriteInformation("head");
+				do {
+					Logger().WriteInformation(" <=> %d", n->content);
+					c++;
+					n = n->right;
+				} while (n != nullptr);
+				Logger().WriteInformation(" <=> tail\n");
+				return c;
+			};
+
+			int c = print(head);
+			ASSERT1(c == count);
+
+			if (c > 0) {
+				Test::BinaryNode<int> * p = head;
+				int i = 0;
+				do {
+					ASSERT1(p->content == v[i]);
+					p = p->right;
+					i++;
+				} while (p != nullptr && i < c);
+
+				do {
+					p = head;
+					head = head->right;
+					delete p;
+				} while (head != nullptr);
+			}
+		};
+
+		for (int i = 1; i <= 10; i++) {
+			check(i);
+		}
+
+		for (int i = 1; i <= 100; i++) {
+			int count = 1 + Test::Random::Next();
+			check(count);
+		}
+	});
+
+	Add("ToPreOrderLinkList3", [&](){
+		auto check = [&](Test::BinaryNode<int> * node) {
+			node->Print2();
+
+			vector<int> v;
+			function<void(int)> f = [&](int n){
+				v.push_back(n);
+			};
+
+			node->PreOrderWalk(f);
+
+			node->ToPreOrderLinkList();
+
+			auto print = [&](Test::BinaryNode<int> * n) -> int {
+				if (n == nullptr) return 0;
+				int c = 0;
+				Logger().WriteInformation("head");
+				do {
+					Logger().WriteInformation(" <=> %d", n->content);
+					c++;
+					n = n->right;
+				} while (n != nullptr);
+				Logger().WriteInformation(" <=> tail\n");
+				return c;
+			};
+
+			int c = print(node);
+			if (c > 0) {
+				Test::BinaryNode<int> * p = node;
+				int i = 0;
+				do {
+					ASSERT1(p->content == v[i]);
+					p = p->right;
+					i++;
+				} while (p != nullptr && i < c);
+
+				do {
+					p = node;
+					node = node->right;
+					delete p;
+				} while (node != nullptr);
+			}
+		};
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(2);
+			n1->left = n2;
+			check(n1);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(2);
+			n1->right = n2;
+			check(n1);
+		}
+	});
+
 	Add("FromSingleLinkList", [&](){
 		auto initList = [&](Test::SingleNode<int> * & list, int count) {
 			list = new Test::SingleNode<int>(0);
