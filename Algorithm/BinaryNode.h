@@ -567,5 +567,137 @@ namespace Test {
 		}
 
 		void ToPreOrderLinkList(void) { ToPreOrderLinkList(this); }
+
+		// A tree is balanced if the heights of its left tree and right tree differs no more than 1.
+		static bool IsBalanced(BinaryNode * node)
+		{
+			if (node == nullptr) return true;
+
+			function<bool(BinaryNode *, int &)>
+			balanced = [&](BinaryNode * n, int & h)->bool{
+				if (n == nullptr) {
+					h = 0;
+					return true;
+				}
+
+				if (n->left == nullptr && n->right == nullptr) {
+					h = 1;
+					return true;
+				}
+
+				int lh;
+				bool l = balanced(n->left, lh);
+				int rh;
+				bool r = balanced(n->right, rh);
+
+				h = 1 + (lh >= rh ? lh : rh);
+
+				if (!l || !r) return false;
+				if (lh - rh > 1 || rh - lh > 1) return false;
+				return true;
+			};
+
+			int leftHeight;
+			bool leftBalanced = balanced(node->left, leftHeight);
+			if (!leftBalanced) return false;
+			int rightHeight;
+			bool rightBalanced = balanced(node->right, rightHeight);
+			if (!rightBalanced) return false;
+			if (leftHeight - rightHeight > 1 || rightHeight - leftHeight > 1) return false;
+			return true;
+		}
+
+		bool IsBalanced(void) { return IsBalanced(this); }
+
+		// A tree is balanced if the heights of its left tree and right tree differs no more than 1.
+		static bool IsBalanced2(BinaryNode * node)
+		{
+			if (node == nullptr) return true;
+
+			function<bool(BinaryNode *, int &)>
+			balanced = [&](BinaryNode * n, int & h)->bool{
+				if (n == nullptr) {
+					h = 0;
+					return true;
+				}
+
+				if (n->left == nullptr && n->right == nullptr) {
+					h = 1;
+					return true;
+				}
+
+				int lh;
+				bool l = balanced(n->left, lh);
+				if (!l) return false;
+
+				int rh;
+				bool r = balanced(n->right, rh);
+				if (!r) return false;
+
+				if (lh - rh > 1 || rh - lh > 1) return false;
+
+				h = 1 + (lh >= rh ? lh : rh);
+				return true;
+			};
+
+			int leftHeight;
+			bool leftBalanced = balanced(node->left, leftHeight);
+			if (!leftBalanced) return false;
+			int rightHeight;
+			bool rightBalanced = balanced(node->right, rightHeight);
+			if (!rightBalanced) return false;
+			if (leftHeight - rightHeight > 1 || rightHeight - leftHeight > 1) return false;
+			return true;
+		}
+
+		bool IsBalanced2(void) { return IsBalanced2(this); }
+
+		// A tree is balanced if the heights of its left tree and right tree differs no more than 1.
+		// This algorithm is wrong. A failed example is:
+		//         1
+		//     2       2
+		//   3   3   3   3
+		//  4 4 4 4 4 4
+		// 5 5
+		static bool IsBalanced3(BinaryNode * node)
+		{
+			if (node == nullptr) return true;
+
+			int minDepth = INT_MAX;
+			bool foundMinDepth = false;
+			int depth = 0;
+			queue<BinaryNode *> q[2];
+			q[0].push(node);
+			while (!q[0].empty() || !q[1].empty()) {
+				queue<BinaryNode *> & current = q[depth & 0x1];
+				queue<BinaryNode *> & next = q[(depth + 1) & 0x1];
+				while (!current.empty()) {
+					node = current.front();
+					current.pop();
+					if (node->left == nullptr && node->right == nullptr && !foundMinDepth) {
+						foundMinDepth = true;
+						minDepth = depth;
+					}
+
+					if (node->left != nullptr && node->right == nullptr) {
+						if (node->left->left != nullptr || node->left->right != nullptr) return false;
+					}
+
+					if (node->left == nullptr && node->right != nullptr) {
+						if (node->right->left != nullptr || node->right->right != nullptr) return false;
+					}
+
+					if (foundMinDepth && depth - minDepth > 1) return false;
+
+					if (node->left != nullptr) next.push(node->left);
+					if (node->right != nullptr) next.push(node->right);
+				}
+
+				depth++;
+			}
+			return true;
+		}
+
+		bool IsBalanced3(void) { return IsBalanced3(this); }
 	};
 }

@@ -1122,4 +1122,85 @@ void BinaryTreeTest::Init(void)
 		check(15);
 		check(16);
 	});
+
+	Add("IsBalanced", [&](){
+		auto check = [&](Test::BinaryNode<int> * node){
+			bool b = node->IsBalanced();
+			bool b2 = node->IsBalanced2();
+			bool b3 = node->IsBalanced3();
+			Logger().WriteInformation("Is%sbalanced\n", b ? " " : " not ");
+			Logger().WriteInformation("Is%sbalanced\n", b2 ? " " : " not ");
+			Logger().WriteInformation("Is%sbalanced\n", b3 ? " " : " not ");
+			node->DeleteTree();
+			delete node;
+			ASSERT1(b == b2);
+			ASSERT1(b == b3);
+		};
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(2);
+			Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(3);
+			n1->right = n2;
+			n2->right = n3;
+			n1->Print2();
+			check(n1);
+		}
+		{
+			for (int i = 0; i < 100; i++) {
+				int count = 1 + Test::Random::Next();
+				Logger().WriteInformation("Run %d with a binary tree of %d nodes.\n", i, count);
+				Test::BinaryTree<int, Test::BinaryNode> tree;
+				for (int i = 0; i < count; i++) {
+					tree.Insert(i);
+				}
+				Test::BinaryNode<int> * root = tree.Root(nullptr);
+				check(root);
+			}
+		}
+		{
+			for (int i = 0; i < 100; i++) {
+				int count = 1 + Test::Random::Next();
+				Logger().WriteInformation("Run %d with a complete binary tree of %d nodes.\n", i, count);
+				Test::CompleteBinaryTree<int, Test::BinaryNode> tree;
+				for (int i = 0; i < count; i++) {
+					tree.Insert(i);
+				}
+				Test::BinaryNode<int> * root = tree.Root(nullptr);
+				check(root);
+			}
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			Test::BinaryNode<int> * n21 = new Test::BinaryNode<int>(2);
+			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(2);
+			n1->left = n21;
+			n1->right = n22;
+			Test::BinaryNode<int> * n31 = new Test::BinaryNode<int>(3);
+			Test::BinaryNode<int> * n32 = new Test::BinaryNode<int>(3);
+			Test::BinaryNode<int> * n33 = new Test::BinaryNode<int>(3);
+			Test::BinaryNode<int> * n34 = new Test::BinaryNode<int>(3);
+			n21->left = n31;
+			n21->right = n32;
+			n22->left = n33;
+			n22->right = n34;
+			Test::BinaryNode<int> * n41 = new Test::BinaryNode<int>(4);
+			Test::BinaryNode<int> * n42 = new Test::BinaryNode<int>(4);
+			Test::BinaryNode<int> * n43 = new Test::BinaryNode<int>(4);
+			Test::BinaryNode<int> * n44 = new Test::BinaryNode<int>(4);
+			Test::BinaryNode<int> * n45 = new Test::BinaryNode<int>(4);
+			Test::BinaryNode<int> * n46 = new Test::BinaryNode<int>(4);
+			n31->left = n41;
+			n31->right = n42;
+			n32->left = n43;
+			n32->right = n44;
+			n33->left = n45;
+			n33->right = n46;
+			Test::BinaryNode<int> * n51 = new Test::BinaryNode<int>(5);
+			Test::BinaryNode<int> * n52 = new Test::BinaryNode<int>(5);
+			n41->left = n51;
+			n41->right = n52;
+			n1->Print2();
+			check(n1);
+		}
+	});
 }
