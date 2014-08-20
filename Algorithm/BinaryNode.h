@@ -306,6 +306,44 @@ namespace Test {
 
 		void LevelOrderWalk2(function<void(T)> f) { LevelOrderWalk2(this, f); }
 
+		// Visit nodes level by level from bottom up and left to right
+		static void LevelOrderWalkBottomUp(BinaryNode * node, function<void(T)> f)
+		{
+			if (node == nullptr) return;
+			vector<vector<T>> levels;
+			levels.push_back(vector<T> { node->content });
+			queue<BinaryNode *> q[2];
+			q[0].push(node);
+			int l = 0;
+			while (!q[0].empty() || !q[1].empty()) {
+				queue<BinaryNode *> & current = q[l & 0x1];
+				queue<BinaryNode *> & next = q[(1+l) & 0x1];
+				vector<T> level;
+				while (!current.empty()) {
+					BinaryNode * p = current.front();
+					current.pop();
+					if (p->left != nullptr) {
+						level.push_back(p->left->content);
+						next.push(p->left);
+					}
+					if (p->right != nullptr) {
+						level.push_back(p->right->content);
+						next.push(p->right);
+					}
+				}
+				if (level.size() > 0) levels.insert(levels.begin(), level);
+				l++;
+			}
+
+			for_each (levels.begin(), levels.end(), [&](vector<T> & level){
+				for_each (level.begin(), level.end(), [&](T c){
+					f(c);
+				});
+			});
+		}
+
+		void LevelOrderWalkBottomUp(function<void(T)> f) { LevelOrderWalkBottomUp(this, f); }
+
 		// Recursive
 		static int Height(BinaryNode * node)
 		{
