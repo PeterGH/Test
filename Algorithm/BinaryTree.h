@@ -349,6 +349,7 @@ namespace Test {
 		void BuildTreePreOrderInOrder(T * preOrder, int preLength, T * inOrder, int inLength)
 		{
 			if (this->root != nullptr) {
+				this->root->DeleteTree();
 				delete this->root;
 				this->root = nullptr;
 			}
@@ -356,14 +357,99 @@ namespace Test {
 			this->root = BuildTreePreOrderInOrderInternal(preOrder, preLength, inOrder, inLength);
 		}
 
+		void BuildTreePreOrderInOrder2(T * preOrder, int preLength, T * inOrder, int inLength)
+		{
+			if (this->root != nullptr) {
+				this->root->DeleteTree();
+				delete this->root;
+				this->root = nullptr;
+			}
+
+			if (preOrder == nullptr || preLength <= 0 || inOrder == nullptr || inLength <= 0 || preLength != inLength) return;
+
+			stack<N<T> *> path;
+
+			int i = 0;
+			int j = 0;
+			int f = 0;
+
+			this->root = new N<T>(preOrder[i]);
+			path.push(this->root);
+			N<T> * t = this->root;
+			i++;
+
+			while (i < preLength) {
+				if (!path.empty() && path.top()->content == inOrder[j]) {
+					t = path.top();
+					path.pop();
+					f = 1;
+					j++;
+				} else {
+					if (f == 0) {
+						t->left = new N<T>(preOrder[i]);
+						t = (N<T>*)t->left;
+					} else {
+						f = 0;
+						t->right = new N<T>(preOrder[i]);
+						t = (N<T>*)t->right;
+					}
+					path.push(t);
+					i++;
+				}
+			}
+		}
+
 		void BuildTreeInOrderPostOrder(T * inOrder, int inLength, T * postOrder, int postLength)
 		{
 			if (this->root != nullptr) {
+				this->root->DeleteTree();
 				delete this->root;
 				this->root = nullptr;
 			}
 
 			this->root = BuildTreeInOrderPostOrderInternal(inOrder, inLength, postOrder, postLength);
+		}
+
+		void BuildTreeInOrderPostOrder2(T * inOrder, int inLength, T * postOrder, int postLength)
+		{
+			if (this->root != nullptr) {
+				this->root->DeleteTree();
+				delete this->root;
+				this->root = nullptr;
+			}
+
+			if (inOrder == nullptr || inLength <= 0 || postOrder == nullptr || postLength <= 0 || inLength != postLength) return;
+
+			stack<N<T> *> path;
+
+			int i = postLength - 1;
+			int j = inLength - 1;
+			int f = 0;
+
+			this->root = new N<T>(postOrder[i]);
+			path.push(this->root);
+			N<T> * t = this->root;
+			i--;
+
+			while (i >= 0) {
+				if (!path.empty() && path.top()->content == inOrder[j]) {
+					t = path.top();
+					path.pop();
+					f = 1;
+					j--;
+				} else {
+					if (f == 0) {
+						t->right = new N<T>(postOrder[i]);
+						t = (N<T>*)t->right;
+					} else {
+						f = 0;
+						t->left = new N<T>(postOrder[i]);
+						t = (N<T>*)t->left;
+					}
+					path.push(t);
+					i--;
+				}
+			}
 		}
 
 		bool operator==(const BinaryTree & other) const { return Compare(this->root, other.root) == 0; }
