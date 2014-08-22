@@ -737,5 +737,84 @@ namespace Test {
 		}
 
 		bool IsBalanced3(void) { return IsBalanced3(this); }
+
+		// Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+		// For example, this binary tree is symmetric:
+		//    1
+		//   / \
+		//  2   2
+		// / \ / \
+		// 3 4 4  3
+		// But the following is not:
+		//   1
+		//  / \
+		// 2   2
+		//  \   \
+		//   3   3
+		static bool IsSymmetric(BinaryNode * node)
+		{
+			function<bool(BinaryNode *, BinaryNode *)>
+			isSymmetric = [&](BinaryNode * left, BinaryNode * right) -> bool {
+				if (left == nullptr && right == nullptr) return true;
+				if (left != nullptr && right == nullptr
+					|| left == nullptr && right != nullptr) return false;
+				if (left->content != right->content) return false;
+				if (!isSymmetric(left->left, right->right)) return false;
+				return isSymmetric(left->right, right->left);
+			};
+
+			return isSymmetric(node, node);
+		}
+
+		bool IsSymmetric(void) { return IsSymmetric(this); }
+
+		// Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+		// For example, this binary tree is symmetric:
+		//    1
+		//   / \
+		//  2   2
+		// / \ / \
+		// 3 4 4  3
+		// But the following is not:
+		//   1
+		//  / \
+		// 2   2
+		//  \   \
+		//   3   3
+		static bool IsSymmetric2(BinaryNode * node)
+		{
+			if (node == nullptr) return true;
+			if (node->left == nullptr && node->right == nullptr) return true;
+			if (node->left != nullptr && node->right == nullptr
+				|| node->left == nullptr && node->right != nullptr) return false;
+			if (node->left->content != node->right->content) return false;
+			deque<BinaryNode *> q;
+			q.push_front(node->left);
+			q.push_back(node->right);
+			while (!q.empty()) {
+				BinaryNode * left = q.front();
+				q.pop_front();
+				BinaryNode * right = q.back();
+				q.pop_back();
+				if (left->right != nullptr && right->left == nullptr
+					|| left->right == nullptr && right->left != nullptr) return false;
+				if (left->right != nullptr && right->left != nullptr) {
+					if (left->right->content != right->left->content) return false;
+					q.push_front(left->right);
+					q.push_back(right->left);
+				}
+				if (left->left != nullptr && right->right == nullptr
+					|| left->left == nullptr && right->right != nullptr) return false;
+				if (left->left != nullptr && right->right != nullptr) {
+					if (left->left->content != right->right->content) return false;
+					q.push_front(left->left);
+					q.push_back(right->right);
+				}
+			}
+
+			return true;
+		}
+
+		bool IsSymmetric2(void) { return IsSymmetric2(this); }
 	};
 }

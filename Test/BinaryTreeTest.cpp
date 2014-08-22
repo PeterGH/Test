@@ -375,25 +375,36 @@ void BinaryTreeTest::Init(void)
 		}
 		Logger().WriteInformation("\n");
 
+		int equal;
+
 		Test::CompleteBinaryTree<int, Test::BinaryNode> tree3;
 		tree3.BuildTreePreOrderInOrder(preOrder.get(), count, inOrder.get(), count);
 		tree3.Print();
 		ASSERT1(tree == tree3);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree.Root(), tree3.Root());
+		ASSERT1(equal == 0);
 
 		Test::CompleteBinaryTree<int, Test::BinaryNode> tree4;
 		tree4.BuildTreePreOrderInOrder2(preOrder.get(), count, inOrder.get(), count);
 		tree4.Print();
 		ASSERT1(tree == tree4);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree.Root(), tree4.Root());
+		ASSERT1(equal == 0);
 
 		Test::CompleteBinaryTree<int, Test::BinaryNodeWithParent> tree5;
 		tree5.BuildTreePreOrderInOrder(preOrder.get(), count, inOrder.get(), count);
 		tree5.Print();
 		ASSERT1(tree2 == tree5);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree2.Root(), tree5.Root());
+		ASSERT1(equal == 0);
 
 		Test::CompleteBinaryTree<int, Test::BinaryNodeWithParent> tree6;
 		tree6.BuildTreePreOrderInOrder2(preOrder.get(), count, inOrder.get(), count);
 		tree6.Print();
 		ASSERT1(tree2 == tree6);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree2.Root(), tree6.Root());
+		ASSERT1(equal == 0);
+
 	});
 
 	Add("BuildTreePreOrderInOrder2", [&](){
@@ -454,25 +465,35 @@ void BinaryTreeTest::Init(void)
 		}
 		Logger().WriteInformation("\n");
 
+		int equal;
+
 		Test::BinaryTree<int, Test::BinaryNode> tree3;
 		tree3.BuildTreePreOrderInOrder(preOrder.get(), count, inOrder.get(), count);
 		tree3.Print();
 		ASSERT1(tree == tree3);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree.Root(), tree3.Root());
+		ASSERT1(equal == 0);
 
 		Test::BinaryTree<int, Test::BinaryNode> tree4;
 		tree4.BuildTreePreOrderInOrder2(preOrder.get(), count, inOrder.get(), count);
 		tree4.Print();
 		ASSERT1(tree == tree4);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree.Root(), tree4.Root());
+		ASSERT1(equal == 0);
 
 		Test::BinaryTree<int, Test::BinaryNodeWithParent> tree5;
 		tree5.BuildTreePreOrderInOrder(preOrder2.get(), count, inOrder2.get(), count);
 		tree5.Print();
 		ASSERT1(tree2 == tree5);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree2.Root(), tree5.Root());
+		ASSERT1(equal == 0);
 
 		Test::BinaryTree<int, Test::BinaryNodeWithParent> tree6;
 		tree6.BuildTreePreOrderInOrder2(preOrder2.get(), count, inOrder2.get(), count);
 		tree6.Print();
 		ASSERT1(tree2 == tree6);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree2.Root(), tree6.Root());
+		ASSERT1(equal == 0);
 	});
 
 	Add("BuildTreeInOrderPostOrder1", [&](){
@@ -515,25 +536,35 @@ void BinaryTreeTest::Init(void)
 		}
 		Logger().WriteInformation("\n");
 
+		int equal;
+
 		Test::CompleteBinaryTree<int, Test::BinaryNode> tree3;
 		tree3.BuildTreeInOrderPostOrder(inOrder.get(), count, postOrder.get(), count);
 		tree3.Print();
 		ASSERT1(tree == tree3);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree.Root(), tree3.Root());
+		ASSERT1(equal == 0);
 
 		Test::CompleteBinaryTree<int, Test::BinaryNode> tree4;
 		tree4.BuildTreeInOrderPostOrder2(inOrder.get(), count, postOrder.get(), count);
 		tree4.Print();
 		ASSERT1(tree == tree4);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree.Root(), tree4.Root());
+		ASSERT1(equal == 0);
 
 		Test::CompleteBinaryTree<int, Test::BinaryNodeWithParent> tree5;
 		tree5.BuildTreeInOrderPostOrder(inOrder.get(), count, postOrder.get(), count);
 		tree5.Print();
 		ASSERT1(tree2 == tree5);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree2.Root(), tree5.Root());
+		ASSERT1(equal == 0);
 
 		Test::CompleteBinaryTree<int, Test::BinaryNodeWithParent> tree6;
 		tree6.BuildTreeInOrderPostOrder2(inOrder.get(), count, postOrder.get(), count);
 		tree6.Print();
 		ASSERT1(tree2 == tree6);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree2.Root(), tree6.Root());
+		ASSERT1(equal == 0);
 	});
 
 	Add("BuildTreeInOrderPostOrder2", [&](){
@@ -595,25 +626,35 @@ void BinaryTreeTest::Init(void)
 		}
 		Logger().WriteInformation("\n");
 
+		int equal;
+
 		Test::BinaryTree<int, Test::BinaryNode> tree3;
 		tree3.BuildTreeInOrderPostOrder(inOrder.get(), count, postOrder.get(), count);
 		tree3.Print();
 		ASSERT1(tree == tree3);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree.Root(), tree3.Root());
+		ASSERT1(equal == 0);
 
 		Test::BinaryTree<int, Test::BinaryNode> tree4;
 		tree4.BuildTreeInOrderPostOrder2(inOrder.get(), count, postOrder.get(), count);
 		tree4.Print();
 		ASSERT1(tree == tree4);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree.Root(), tree4.Root());
+		ASSERT1(equal == 0);
 
 		Test::BinaryTree<int, Test::BinaryNodeWithParent> tree5;
 		tree5.BuildTreeInOrderPostOrder(inOrder2.get(), count, postOrder2.get(), count);
 		tree5.Print();
 		ASSERT1(tree2 == tree5);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree2.Root(), tree5.Root());
+		ASSERT1(equal == 0);
 
 		Test::BinaryTree<int, Test::BinaryNodeWithParent> tree6;
 		tree6.BuildTreeInOrderPostOrder2(inOrder2.get(), count, postOrder2.get(), count);
 		tree6.Print();
 		ASSERT1(tree2 == tree6);
+		equal = Test::BinaryTree<int, Test::BinaryNode>::Compare2(tree2.Root(), tree6.Root());
+		ASSERT1(equal == 0);
 	});
 
 	Add("ToDoubleLinkList", [&](){
@@ -1115,11 +1156,42 @@ void BinaryTreeTest::Init(void)
 		check(16);
 	});
 
-	Add("PrintZigZag", [&](){
+	Add("PrintZigZag1", [&](){
 		auto check = [&](int count) {
 			Logger().WriteInformation("Print a binary tree of %d nodes:\n", count);
 
 			Test::BinaryTree<int, Test::BinaryNode> tree;
+			for (int i = 0; i < count; i++) {
+				tree.Insert(i);
+			}
+
+			tree.Print2();
+			tree.Root()->PrintZigZag();
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
+
+	Add("PrintZigZag2", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Print a binary tree of %d nodes:\n", count);
+
+			Test::CompleteBinaryTree<int, Test::BinaryNode> tree;
 			for (int i = 0; i < count; i++) {
 				tree.Insert(i);
 			}
@@ -1428,6 +1500,108 @@ void BinaryTreeTest::Init(void)
 			n41->right = n52;
 			n1->Print2();
 			check(n1);
+		}
+	});
+
+	Add("IsSymmetric", [&](){
+		auto check = [&](Test::BinaryNode<int> * node, bool expect) {
+			node->Print2();
+			bool symmetric = node->IsSymmetric();
+			bool symmetric2 = node->IsSymmetric2();
+			node->DeleteTree();
+			delete node;
+			ASSERT1(symmetric == expect);
+			ASSERT1(symmetric2 == expect);
+		};
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			check(n1, true);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			Test::BinaryNode<int> * n21 = new Test::BinaryNode<int>(2);
+
+			n1->left = n21;
+			check(n1, false);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(2);
+
+			n1->right = n22;
+			check(n1, false);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			Test::BinaryNode<int> * n21 = new Test::BinaryNode<int>(2);
+			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(2);
+
+			n1->left = n21;
+			n1->right = n22;
+			check(n1, true);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			Test::BinaryNode<int> * n21 = new Test::BinaryNode<int>(2);
+			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(3);
+
+			n1->left = n21;
+			n1->right = n22;
+			check(n1, false);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			Test::BinaryNode<int> * n21 = new Test::BinaryNode<int>(2);
+			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(2);
+			Test::BinaryNode<int> * n31 = new Test::BinaryNode<int>(3);
+
+			n1->left = n21;
+			n1->right = n22;
+			n21->left = n31;
+			check(n1, false);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			Test::BinaryNode<int> * n21 = new Test::BinaryNode<int>(2);
+			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(2);
+			Test::BinaryNode<int> * n31 = new Test::BinaryNode<int>(3);
+			Test::BinaryNode<int> * n34 = new Test::BinaryNode<int>(3);
+
+			n1->left = n21;
+			n1->right = n22;
+			n21->left = n31;
+			n22->right = n34;
+			check(n1, true);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			Test::BinaryNode<int> * n21 = new Test::BinaryNode<int>(2);
+			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(2);
+			Test::BinaryNode<int> * n31 = new Test::BinaryNode<int>(3);
+			Test::BinaryNode<int> * n34 = new Test::BinaryNode<int>(3);
+
+			n1->left = n21;
+			n1->right = n22;
+			n21->right = n31;
+			n22->right = n34;
+			check(n1, false);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
+			Test::BinaryNode<int> * n21 = new Test::BinaryNode<int>(2);
+			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(2);
+			Test::BinaryNode<int> * n31 = new Test::BinaryNode<int>(3);
+			Test::BinaryNode<int> * n32 = new Test::BinaryNode<int>(4);
+			Test::BinaryNode<int> * n33 = new Test::BinaryNode<int>(4);
+			Test::BinaryNode<int> * n34 = new Test::BinaryNode<int>(3);
+
+			n1->left = n21;
+			n1->right = n22;
+			n21->left = n31;
+			n21->right = n32;
+			n22->left = n33;
+			n22->right = n34;
+			check(n1, true);
 		}
 	});
 }

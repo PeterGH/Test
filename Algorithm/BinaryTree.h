@@ -101,18 +101,6 @@ namespace Test {
 			return node;
 		}
 
-		static int Compare(N<T> * first, N<T> * second)
-		{
-			if (first == nullptr && second == nullptr) return 0;
-			if (first == nullptr && second != nullptr) return -1;
-			if (first != nullptr && second == nullptr) return 1;
-			if (first->content < second->content) return -1;
-			if (first->content > second->content) return 1;
-			int v = Compare((N<T> *)first->left, (N<T> *)second->left);
-			if (v == 0) return Compare((N<T> *)first->right, (N<T> *)second->right);
-			return v;
-		}
-
 	public:
 		BinaryTree(void) : root(nullptr) {}
 
@@ -450,6 +438,57 @@ namespace Test {
 					i--;
 				}
 			}
+		}
+
+		static int Compare(N<T> * first, N<T> * second)
+		{
+			if (first == nullptr && second == nullptr) return 0;
+			if (first == nullptr && second != nullptr) return -1;
+			if (first != nullptr && second == nullptr) return 1;
+			if (first->content < second->content) return -1;
+			if (first->content > second->content) return 1;
+			int v = Compare((N<T> *)first->left, (N<T> *)second->left);
+			if (v == 0) return Compare((N<T> *)first->right, (N<T> *)second->right);
+			return v;
+		}
+
+		static int Compare2(N<T> * first, N<T> * second)
+		{
+			if (first == nullptr && second == nullptr) return 0;
+			if (first == nullptr && second != nullptr) return -1;
+			if (first != nullptr && second == nullptr) return 1;
+			if (first->content < second->content) return -1;
+			if (first->content > second->content) return 1;
+
+			deque<N<T> *> q;
+			q.push_front(first);
+			q.push_back(second);
+
+			while (!q.empty()) {
+				first = q.front();
+				q.pop_front();
+				second = q.back();
+				q.pop_back();
+
+				if (first->right == nullptr && second->right != nullptr) return -1;
+				if (first->right != nullptr && second->right == nullptr) return 1;
+				if (first->right != nullptr && second->right != nullptr) {
+					if (first->right->content < second->right->content) return -1;
+					if (first->right->content > second->right->content) return 1;
+					q.push_front(first->right);
+					q.push_back(second->right);
+				}
+
+				if (first->left == nullptr && second->left != nullptr) return -1;
+				if (first->left != nullptr && second->left == nullptr) return 1;
+				if (first->left != nullptr && second->left != nullptr) {
+					if (first->left->content < second->left->content) return -1;
+					if (first->left->content > second->left->content) return 1;
+					q.push_front(first->left);
+					q.push_back(second->left);
+				}
+			}
+			return 0;
 		}
 
 		bool operator==(const BinaryTree & other) const { return Compare(this->root, other.root) == 0; }
