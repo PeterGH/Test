@@ -228,6 +228,9 @@
     <ClInclude Include="LRUCache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LeetCode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="String.cpp">

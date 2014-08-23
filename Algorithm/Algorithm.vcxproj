@@ -108,6 +108,7 @@
     <ClInclude Include="InsertionSort.h" />
     <ClInclude Include="KMP.h" />
     <ClInclude Include="Knapsack.h" />
+    <ClInclude Include="LeetCode.h" />
     <ClInclude Include="ListGraph.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="LongestCommonSubsequence.h" />

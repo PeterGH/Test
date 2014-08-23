@@ -28,6 +28,7 @@
 #include "HeapTest.h"
 #include "InsertionSortTest.h"
 #include "KnapsackTest.h"
+#include "LeetCodeTest.h"
 #include "ListGraphTest.h"
 #include "LongestCommonSubsequenceTest.h"
 #include "LongestIncreasingSubsequenceTest.h"
@@ -105,6 +106,7 @@ int main(int argc, char * argv[])
 	suite.Add(new HeapTest(log));
 	suite.Add(new InsertionSortTest(log));
 	suite.Add(new KnapsackTest(log));
+	suite.Add(new LeetCodeTest(log));
 	suite.Add(new ListGraphTest(log));
 	suite.Add(new LongestCommonSubsequenceTest(log));
 	suite.Add(new LongestIncreasingSubsequenceTest(log));
