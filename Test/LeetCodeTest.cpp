@@ -468,12 +468,68 @@ void LeetCodeTest::Init(void)
 		auto check = [&](int n, int c){
 			int m = Test::LeetCode::UniqueBinarySearchTrees(n);
 			Logger().WriteInformation("%d distinct numbers can build %d unique binary search trees.\n", n, m);
+			vector<Test::LeetCode::TreeNode *> trees = Test::LeetCode::CreateUniqueBinarySearchTrees(n);
+			for_each (trees.begin(), trees.end(), [&](Test::LeetCode::TreeNode * t){
+				bool valid1 = Test::LeetCode::IsBinarySearchTree(t);
+				bool valid2 = Test::LeetCode::IsBinarySearchTree2(t);
+				Test::LeetCode::Print(t);
+				Test::LeetCode::DeleteTree(t);
+				ASSERT1(valid1 == true);
+				ASSERT1(valid2 == true);
+			});
 			ASSERT1(m == c);
+			ASSERT1((int)trees.size() == c);
 		};
 
 		check(1, 1);
 		check(2, 2);
 		check(3, 5);
 		check(4, 14);
+	});
+
+	Add("IpAddresses", [&](){
+		auto check = [&](const string & s){
+			Logger().WriteInformation("%s\n", s.c_str());
+			vector<string> ips = Test::LeetCode::GetIpAddresses(s);
+			for_each (ips.begin(), ips.end(), [&](string & i){
+				Logger().WriteInformation("\t%s\n", i.c_str());
+			});
+		};
+
+		check("0000");
+		check("1234");
+		check("255255255255");
+		check("25525511135");
+		check("010010");
+	});
+
+	Add("ReverseList", [&](){
+		auto check = [&](vector<int> nums, int m, int n){
+			Logger().WriteInformation("Reverse between %d and %d\n", m, n);
+			Test::LeetCode::ListNode * list = Test::LeetCode::ToList(nums);
+			Test::LeetCode::Print(list);
+			list = Test::LeetCode::ReverseList(list, m, n);
+			Test::LeetCode::Print(list);
+			Logger().WriteInformation("\n");
+			Test::LeetCode::DeleteList(list);
+		};
+
+		check(vector<int> { 1 }, 1, 1);
+		check(vector<int> { 1 }, 1, 2);
+		check(vector<int> { 1, 2 }, 1, 1);
+		check(vector<int> { 1, 2 }, 2, 2);
+		check(vector<int> { 1, 2 }, 2, 3);
+		check(vector<int> { 1, 2 }, 1, 2);
+		check(vector<int> { 1, 2 }, 1, 3);
+		check(vector<int> { 1, 2, 3, 4, 5 }, 1, 2);
+		check(vector<int> { 1, 2, 3, 4, 5 }, 1, 3);
+		check(vector<int> { 1, 2, 3, 4, 5 }, 1, 4);
+		check(vector<int> { 1, 2, 3, 4, 5 }, 1, 5);
+		check(vector<int> { 1, 2, 3, 4, 5 }, 2, 3);
+		check(vector<int> { 1, 2, 3, 4, 5 }, 2, 4);
+		check(vector<int> { 1, 2, 3, 4, 5 }, 2, 5);
+		check(vector<int> { 1, 2, 3, 4, 5 }, 3, 4);
+		check(vector<int> { 1, 2, 3, 4, 5 }, 3, 5);
+		check(vector<int> { 1, 2, 3, 4, 5 }, 4, 5);
 	});
 }

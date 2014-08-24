@@ -375,5 +375,196 @@ namespace Test {
 
 			return count[0][n-1];
 		}
+
+		// Given n distinct numbers (e.g., 1, 2, 3, ..., n)
+		// Create unique binary search trees that can be built with the n numbers
+		static vector<TreeNode *> CreateUniqueBinarySearchTrees(int n)
+		{
+			function<vector<TreeNode *>(int, int)>
+			create = [&](int i, int j)->vector<TreeNode *>{
+				vector<TreeNode *> trees;
+
+				if (i > j) return trees;
+
+				if (i == j) {
+					trees.push_back(new TreeNode(i));
+					return trees;
+				}
+
+				if (i + 1 == j) {
+					TreeNode * n = new TreeNode(j);
+					n->left = new TreeNode(i);
+					trees.push_back(n);
+					n = new TreeNode(i);
+					n->right = new TreeNode(j);
+					trees.push_back(n);
+					return trees;
+				}
+
+				vector<TreeNode *> firstTrees = create(i+1, j);
+				for_each (firstTrees.begin(), firstTrees.end(), [&](TreeNode * f){
+					TreeNode * n = new TreeNode(i);
+					n->right = f;
+					trees.push_back(n);
+				});
+
+				vector<TreeNode *> lastTrees = create(i, j-1);
+				for_each (lastTrees.begin(), lastTrees.end(), [&](TreeNode * l){
+					TreeNode * n = new TreeNode(j);
+					n->left = l;
+					trees.push_back(n);
+				});
+
+				for (int k = i+1; k < j; k++) {
+					vector<TreeNode *> leftTrees = create(i, k-1);
+					vector<TreeNode *> rightTrees = create(k+1, j);
+					for_each (leftTrees.begin(), leftTrees.end(), [&](TreeNode * l){
+						for_each (rightTrees.begin(), rightTrees.end(), [&](TreeNode * r){
+							TreeNode * n = new TreeNode(k);
+							n->left = Clone(l);
+							n->right = Clone(r);
+							trees.push_back(n);
+						});
+					});
+
+					for_each (leftTrees.begin(), leftTrees.end(), [&](TreeNode * l){
+						DeleteTree(l);
+					});
+					for_each (rightTrees.begin(), rightTrees.end(), [&](TreeNode * r){
+						DeleteTree(r);
+					});
+				}
+
+				return trees;
+			};
+
+			return create(1, n);
+		}
+
+		// Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+		// Given "25525511135",
+		// return ["255.255.11.135", "255.255.111.35"]. (Order does not matter)
+		static vector<string> GetIpAddresses(const string & s)
+		{
+			vector<string> ips;
+			int len = s.length();
+			if (len < 4 || len > 12) return ips;
+
+			auto check = [&](const string & octet)->bool{
+				int l = octet.length();
+				for (int i = 0; i < min(3, l); i++) {
+					if (octet[i] < '0' || octet[i] > '9') return false;
+				}
+				int m = 0;
+				for (int i = 0; i < min(3, l); i++) {
+					m = 10 * m + octet[i] - '0';
+				}
+				return 0 <= m && m <= 255;
+			};
+
+			for (int i = 1;	i <= (s[0] == '0' ? 1 : min(3, len-3)); i++) {
+				for (int j = i+1; j <= (s[i] == '0' ? i+1 : min(i+3, len-2)); j++) {
+					for (int k = j+1; k <= (s[j] == '0' ? j+1 : min(j+3, len-1)); k++) {
+						if (len - k > 3 || len - k > 1 && s[k] == '0') continue;
+						if (check(s.substr(0, i)) && check(s.substr(i, j-i)) && check(s.substr(j, k-j)) && check(s.substr(k, len-k))) {
+							string ip(s.substr(0, i));
+							ip.append(1, '.');
+							ip.append(s.substr(i, j-i));
+							ip.append(1, '.');
+							ip.append(s.substr(j, k-j));
+							ip.append(1, '.');
+							ip.append(s.substr(k, len-k));
+							ips.push_back(ip);
+						}
+					}
+				}
+			}
+
+			return ips;
+		}
+
+		struct ListNode {
+			int val;
+			ListNode * next;
+			ListNode(int v) : val(v), next(nullptr) {}
+		};
+
+		static void Print(ListNode * node)
+		{
+			if (node == nullptr) return;
+			while (node != nullptr) {
+				cout << node->val << "->";
+				node = node->next;
+			}
+			cout << "null" << endl;
+		}
+
+		static void DeleteList(ListNode * node)
+		{
+			if (node == nullptr) return;
+			ListNode * p = node;
+			while (p != nullptr) {
+				node = p->next;
+				delete p;
+				p = node;
+			}
+		}
+
+		static ListNode * ToList(vector<int> & numbers)
+		{
+			ListNode * list = nullptr;
+			if (numbers.size() == 0) return list;
+			list = new ListNode(numbers[0]);
+			ListNode * n = list;
+			for (size_t i = 1; i < numbers.size(); i++) {
+				n->next = new ListNode(numbers[i]);
+				n = n->next;
+			}
+			return list;
+		}
+
+		// Reverse a linked list from position m to n. Do it in-place and in one-pass.
+		// For example:
+		// Given 1->2->3->4->5->NULL, m = 2 and n = 4,
+		// return 1->4->3->2->5->NULL.
+		static ListNode * ReverseList(ListNode * head, int m, int n)
+		{
+			if (head == nullptr || m <= 0 || n <= 0 || m >= n) return head;
+
+			ListNode * ph = nullptr;
+			ListNode * pm = head;
+			int i = 1;
+			while (i < m && pm->next != nullptr) {
+				ph = pm;
+				pm = pm->next;
+				i++;
+			}
+
+			if (i < m) return head;
+
+			ListNode * r = ph;
+			ListNode * s = pm;
+			ListNode * t = pm->next;
+
+			while (i <= n && t != nullptr) {
+				s->next = r;
+				r = s;
+				s = t;
+				t = t->next;
+				i++;
+			}
+
+			if (i <= n && t == nullptr) {
+				s->next = r;
+				r = s;
+				s = t;
+			}
+
+			pm->next = s;
+			if (ph != nullptr) ph->next = r;
+			else head = r;
+
+			return head;
+		}
 	};
 }
