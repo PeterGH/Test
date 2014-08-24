@@ -532,4 +532,41 @@ void LeetCodeTest::Init(void)
 		check(vector<int> { 1, 2, 3, 4, 5 }, 3, 5);
 		check(vector<int> { 1, 2, 3, 4, 5 }, 4, 5);
 	});
+
+	Add("Subsets", [&](){
+		auto print = [&](vector<int> & s){
+			Logger().WriteInformation("\t[");
+			for (size_t i = 0; i < s.size(); i++) {
+				if (i != 0) Logger().WriteInformation(" ");
+				Logger().WriteInformation("%d", s[i]);
+			}
+			Logger().WriteInformation("]\n");
+		};
+		auto check = [&](vector<int> & s){
+			Logger().WriteInformation("%d elements\n", s.size());
+			print(s);
+			int expectSize = 1 << s.size();
+			vector<vector<int>> sets = Test::LeetCode::Subsets(s);
+			int actualSize = sets.size();
+			Logger().WriteInformation("%d subsets\n", actualSize);
+			for_each (sets.begin(), sets.end(), [&](vector<int> & ss){
+				print(ss);
+				bool sorted = is_sorted(ss.begin(), ss.end());
+				ASSERT1(sorted);
+			});
+			ASSERT1(actualSize == expectSize);
+			vector<vector<int>> uniquesets = Test::LeetCode::UniqueSubsets(s);
+			int actualUniqueSize = uniquesets.size();
+			Logger().WriteInformation("%d unique subsets\n", actualUniqueSize);
+			for_each (uniquesets.begin(), uniquesets.end(), [&](vector<int> & ss){
+				print(ss);
+				bool sorted = is_sorted(ss.begin(), ss.end());
+				ASSERT1(sorted);
+			});
+			ASSERT1(actualUniqueSize <= expectSize);
+			Logger().WriteInformation("\n");
+		};
+
+		check(vector<int> { 1, 2, 2 });
+	});
 }

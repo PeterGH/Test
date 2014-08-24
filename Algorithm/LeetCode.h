@@ -566,5 +566,59 @@ namespace Test {
 
 			return head;
 		}
+
+		// Given a collection of integers that might contain duplicates, S, return all possible subsets.
+		// Elements in a subset must be in non-descending order.
+		static vector<vector<int>> Subsets(vector<int> & s)
+		{
+			sort(s.begin(), s.end());
+			vector<vector<int>> sets = { vector<int> { } };
+			for_each (s.begin(), s.end(), [&](int n){
+				int size = sets.size();
+				for (int i = 0; i < size; i++) {
+					vector<int> ex(sets[i].begin(), sets[i].end());
+					ex.push_back(n);
+					sets.push_back(ex);
+				}
+			});
+			return sets;
+		}
+
+		// Given a collection of integers that might contain duplicates, S, return all possible subsets.
+		// Note:
+		//   Elements in a subset must be in non-descending order.
+		//   The solution set must not contain duplicate subsets.
+		// For example, if S = [1,2,2], a solution is:
+		// [
+		//  [2],
+		//  [1],
+		//  [1,2,2],
+		//  [2,2],
+		//  [1,2],
+		//  []
+		// ]
+		static vector<vector<int>> UniqueSubsets(vector<int> & s)
+		{
+			sort(s.begin(), s.end());
+			vector<vector<int>> sets = { vector<int> { } };
+			size_t i = 0;
+			while (i < s.size()) {
+				int size = sets.size();
+				size_t j = i;
+				while (j < s.size() - 1 && s[j+1] == s[j]) j++;
+				// s[i..j] are duplicates
+				for (int k = 0; k < size; k++) {
+					vector<int> c;
+					for (size_t l = i; l <= j; l++) {
+						c.push_back(s[l]);
+						vector<int> ex(sets[k].begin(), sets[k].end());
+						ex.insert(ex.end(), c.begin(), c.end());
+						sets.push_back(ex);
+					}
+				}
+				i = j + 1;
+			}
+			return sets;
+		}
 	};
 }
