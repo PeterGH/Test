@@ -1,9 +1,11 @@
 #pragma once
 #include <algorithm>
+#include <array>
 #include <functional>
 #include <iostream>
 #include <stack>
 #include <sstream>
+#include <unordered_map>
 #include <vector>
 using namespace std;
 namespace Test {
@@ -106,6 +108,74 @@ namespace Test {
 			if (first->val != second->val) return false;
 			if (!Equal(first->left, second->left)) return false;
 			return Equal(first->right, second->right);
+		}
+
+		// Verify if a tree is a binary search tree.
+		// Assume no duplicate elements.
+		static bool IsBinarySearchTree(TreeNode * root)
+		{
+			if (root == nullptr) return true;
+			stack<TreeNode *> path;
+			path.push(root);
+			TreeNode * node = root;
+			TreeNode * prev = nullptr;
+			TreeNode * lastVisited = nullptr;
+			while (!path.empty()) {
+				node = path.top();
+				if (node->right != nullptr && node->right == lastVisited) {
+					lastVisited = node;
+					path.pop();
+				} else if (node->left != nullptr && node->left != lastVisited) {
+					lastVisited = node;
+					path.push(node->left);
+				} else {
+					if (prev != nullptr && prev->val >= node->val) return false;
+					prev = node;
+					lastVisited = node;
+					if (node->right != nullptr) path.push(node->right);
+					else path.pop();
+				}
+			}
+			return true;
+		}
+
+		static bool IsBinarySearchTree2(TreeNode * root)
+		{
+			function<bool(TreeNode *, int &, int &)>
+			verify = [&](TreeNode * node, int & min, int & max)->bool{
+				if (node == nullptr) return true;
+				if (node->left == nullptr && node->right == nullptr) {
+					min = node->val;
+					max = node->val;
+					return true;
+				}
+
+				if (node->left == nullptr) {
+					min = node->val;
+				} else {
+					int leftMin;
+					int leftMax;
+					if (!verify(node->left, leftMin, leftMax)) return false;
+					if (leftMax >= node->val) return false;
+					min = leftMin;
+				}
+
+				if (node->right == nullptr) {
+					max = node->val;
+				} else {
+					int rightMin;
+					int rightMax;
+					if (!verify(node->right, rightMin, rightMax)) return false;
+					if (rightMin <= node->val) return false;
+					max = rightMax;
+				}
+
+				return true;
+			};
+
+			int min;
+			int max;
+			return verify(root, min, max);
 		}
 
 		// Two elements of a binary search tree are swapped by mistake.
@@ -241,6 +311,69 @@ namespace Test {
 				n1->val = n4->val;
 				n4->val = t;
 			}
+		}
+
+		// Given s1, s2, s3, find whether s3 is formed by the interleaving of s1 and s2.
+		// For example,
+		// s1 = "aabcc",
+		// s2 = "dbbca",
+		// When s3 = "aadbbcbcac", return true.
+		// When s3 = "aadbbbaccc", return false.
+		//   j 0 1 2
+		// i 0
+		//   1
+		//   2
+		// Let M[i][j] indicates whether s3[0..i+j-] is interleave of s1[0..i-1] and s2[0..j-1]
+		// M[i][j] =   s1[i-1] == s3[i+j-1] && M[i-1][j]
+		//          || s2[j-1] == s3[i+j-1] && M[i][j-1]
+		static bool IsInterLeave(const string & s1, const string & s2, const string & s3)
+		{
+			if (s3.length() != s1.length() + s2.length()) return false;
+			if (s3.length() == 0) return true;
+
+			vector<bool> match(1 + s2.size(), true);
+			for (size_t j = 1; j <= s2.size(); j++) {
+				match[j] = match[j-1] && s2[j-1] == s3[j-1];
+			}
+
+			for (size_t i = 1; i <= s1.size(); i++) {
+				match[0] = match[0] && s1[i-1] == s3[i-1];
+				for (size_t j = 1; j <= s2.size(); j++) {
+					match[j] = match[j] && s1[i-1] == s3[i+j-1] || match[j-1] && s2[j-1] == s3[i+j-1];
+				}
+			}
+
+			return match[s2.size()];
+		}
+
+		// Given n distinct numbers (e.g., 1, 2, 3, ..., n)
+		// count unique binary search trees that can be built with the n numbers
+		// Let C[i,j] be the count of unique binary search trees using numbers i to j
+		// Then chose a k between i and j and solve sub problems
+		// C[i,j] = C[i+1, j]
+		//        + C[i, j-1]
+		//        + C[i, k-1] * C[k+1, j]
+		static int UniqueBinarySearchTrees(int n)
+		{
+			if (n <= 0) return 0;
+
+			vector<vector<int>> count(n, vector<int>(n, 0));
+
+			for (int i = 0; i < n; i++) {
+				count[i][i] = 1;
+			}
+
+			for (int l = 1; l < n; l++) {
+				for (int i = 0; i < n - l; i++) {
+					int j = i + l;
+					count[i][j] = count[i+1][j] + count[i][j-1];
+					for (int k = i+1; k < j; k++) {
+						count[i][j] += count[i][k-1] * count[k+1][j];
+					}
+				}
+			}
+
+			return count[0][n-1];
 		}
 	};
 }
