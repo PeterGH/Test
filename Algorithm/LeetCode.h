@@ -648,5 +648,51 @@ namespace Test {
 			}
 			return c2;
 		}
+
+		// The gray code is a binary numeral system where two successive values differ in only one bit.
+		// Given a non-negative integer n representing the total number of bits in the code, print the sequence of gray code.
+		// A gray code sequence must begin with 0.
+		// For example, given n = 2, return [0,1,3,2]. Its gray code sequence is:
+		// 00 - 0
+		// 01 - 1
+		// 11 - 3
+		// 10 - 2
+		// Note:
+		// For a given n, a gray code sequence is not uniquely defined.
+		// For example, [0,2,3,1] is also a valid gray code sequence according to the above definition.
+		static vector<int> GrayCode(int n)
+		{
+			vector<int> codes = { };
+			if (n <= 0 || n > 8 * sizeof(int)) return codes;
+			function<void(int &, int)> toggle = [&](int & code, int position){
+				code = code ^ (0x1 << position);
+				codes.push_back(code);
+				if (position > 0) {
+					for (int i = 0; i < position; i++) toggle(code, i);
+				}
+			};
+
+			int code = 0;
+			codes.push_back(code);
+			for (int i = 0; i < n; i++) toggle(code, i);
+
+			return codes;
+		}
+
+		static vector<int> GrayCode2(int n)
+		{
+			vector<int> codes = { };
+			if (n <= 0 || n > 8 * sizeof(int)) return codes;
+			codes.push_back(0);
+			for (int i = 0; i < n; i++) {
+				int b = 0x1 << i;
+				int j = codes.size();
+				for (int k = j - 1; k >= 0; k--) {
+					int c = codes[k] ^ b;
+					codes.push_back(c);
+				}
+			}
+			return codes;
+		}
 	};
 }

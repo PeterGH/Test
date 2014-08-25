@@ -584,4 +584,28 @@ void LeetCodeTest::Init(void)
 		check("123");
 		check("1234");
 	});
+
+	Add("GrayCode", [&](){
+		auto check = [&](int n){
+			vector<int> codes = Test::LeetCode::GrayCode(n);
+			vector<int> codes2 = Test::LeetCode::GrayCode2(n);
+			Logger().WriteInformation("%d-bit gray codes:\n", n);
+			ASSERT1(codes.size() == codes2.size());
+			for (size_t i = 0; i < codes.size(); i++){
+				Logger().WriteInformation("  ");
+				for (int j = n - 1; j >= 0; j--) {
+					Logger().WriteInformation("%d", (codes[i] >> j) & 0x1);
+				}
+				Logger().WriteInformation(" %s %d\n", codes[i] == codes2[i] ? "==" : "!=", codes2[i]);
+				ASSERT1(codes[i] == codes2[i]);
+			}
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+	});
 }
