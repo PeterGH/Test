@@ -608,4 +608,91 @@ void LeetCodeTest::Init(void)
 		check(5);
 		check(6);
 	});
+
+	Add("Merge", [&](){
+		auto print = [&](int a[], int n){
+			Logger().WriteInformation("\t[");
+			for (int i = 0; i < n; i++) {
+				if (i != 0) Logger().WriteInformation(" ");
+				Logger().WriteInformation("%d", a[i]);
+			}
+			Logger().WriteInformation("]\n");
+		};
+
+		auto check = [&](int A1[], int A2[], int m, int B1[], int B2[], int n) {
+			Logger().WriteInformation("Merge:\n");
+			print(A1, m);
+			print(B1, n);
+			Test::LeetCode::MergeSortedArrays(A1, m, B1, n);
+			Test::LeetCode::MergeSortedArrays(A2, m, B2, n);
+			Logger().WriteInformation("  to:\n");
+			print(A1, m + n);
+			for (int i = 1; i < m + n; i++) {
+				ASSERT1(A1[i-1] <= A1[i]);
+			}
+			for (int i = 1; i < m + n; i++) {
+				ASSERT1(A2[i-1] <= A2[i]);
+			}
+			for (int i = 0; i < m + n; i++) {
+				ASSERT1(A1[i] == A2[i]);
+			}
+		};
+
+		{
+			int A1[1] = { };
+			int B1[] = { 1 };
+			int A2[1] = { };
+			int B2[] = { 1 };
+			check(A1, A2, 0, B1, B2, 1);
+		}
+		{
+			int A1[1] = { 1 };
+			int B1[1] = { };
+			int A2[1] = { 1 };
+			int B2[1] = { };
+			check(A1, A2, 1, B1, B2, 0);
+		}
+		{
+			int A1[2] = { 1 };
+			int B1[1] = { 2 };
+			int A2[2] = { 1 };
+			int B2[1] = { 2 };
+			check(A1, A2, 1, B1, B2, 1);
+		}
+		{
+			int A1[2] = { 1 };
+			int B1[1] = { 0 };
+			int A2[2] = { 1 };
+			int B2[1] = { 0 };
+			check(A1, A2, 1, B1, B2, 1);
+		}
+		{
+			int A1[3] = { 1, 1 };
+			int B1[1] = { 2 };
+			int A2[3] = { 1, 1 };
+			int B2[1] = { 2 };
+			check(A1, A2, 2, B1, B2, 1);
+		}
+		{
+			int A1[3] = { 1, 2 };
+			int B1[1] = { 2 };
+			int A2[3] = { 1, 2 };
+			int B2[1] = { 2 };
+			check(A1, A2, 2, B1, B2, 1);
+		}
+		{
+			int A1[3] = { 1, 3 };
+			int B1[1] = { 2 };
+			int A2[3] = { 1, 3 };
+			int B2[1] = { 2 };
+			check(A1, A2, 2, B1, B2, 1);
+		}
+		{
+			int A1[3] = { 1, 1 };
+			int B1[1] = { 0 };
+			int A2[3] = { 1, 1 };
+			int B2[1] = { 0 };
+			check(A1, A2, 2, B1, B2, 1);
+		}
+	});
 }

@@ -694,5 +694,49 @@ namespace Test {
 			}
 			return codes;
 		}
+
+		static void MergeSortedArrays(int A[], int m, int B[], int n) {
+			if (A == nullptr || m < 0 || B == nullptr || n < 0) return;
+			int i = 0;
+			int j = 0;
+			while (i < m && j < n) {
+				if (A[i] <= B[j]) i++;
+				else {
+					for (int k = m; k > i; k--) {
+						A[k] = A[k-1];
+					}
+					A[i] = B[j];
+					m++;
+					i++;
+					j++;
+				}
+			}
+			if (j < n) {
+				for (int k = j; k < n; k++) {
+					A[i] = B[k];
+					i++;
+				}
+			}
+		}
+
+		static void MergeSortedArrays2(int A[], int m, int B[], int n) {
+			if (A == nullptr || m < 0 || B == nullptr || n < 0) return;
+			int i = m - 1;
+			int j = n - 1;
+			while (i >= 0 && j >= 0) {
+				if (A[i] > B[j]) {
+					A[i+j+1] = A[i];
+					i--;
+				} else {
+					A[i+j+1] = B[j];
+					j--;
+				}
+			}
+			if (j >= 0) {
+				for (int p = j; p >= 0; p--) {
+					A[p] = B[p];
+				}
+			}
+		}
 	};
 }
