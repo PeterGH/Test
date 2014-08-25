@@ -569,4 +569,19 @@ void LeetCodeTest::Init(void)
 
 		check(vector<int> { 1, 2, 2 });
 	});
+
+	Add("DecodeString", [&](){
+		auto check = [&](const string & s){
+			int c = Test::LeetCode::CountStringDecodings(s);
+			Logger().WriteInformation("There are %d ways to decode %s\n", c, s.c_str());
+		};
+		check("#");
+		check("0");
+		check("1");
+		check("12");
+		check("1@2");
+		check("12#");
+		check("123");
+		check("1234");
+	});
 }
