@@ -695,4 +695,43 @@ void LeetCodeTest::Init(void)
 			check(A1, A2, 2, B1, B2, 1);
 		}
 	});
+
+	Add("ScrambleString", [&](){
+		auto check = [&](const string & s1, const string & s2){
+			bool isScramble = Test::LeetCode::IsScramble(s1, s2);
+			bool isScramble2 = Test::LeetCode::IsScramble2(s1, s2);
+			Logger().WriteInformation("%s is %sscramble of %s\n", s2.c_str(), isScramble ? "" : "not ", s1.c_str());
+			ASSERT1(isScramble == isScramble2);
+		};
+		check("", "");
+		check("a", "b");
+		check("a", "a");
+		check("ab", "ab");
+		check("ab", "ba");
+		check("ab", "ac");
+		check("ab", "ca");
+		check("aaa", "aaa");
+		check("abcd", "acbd");
+		check("abcd", "adbc");
+		check("abcd", "badc");
+		check("abcd", "bdac");
+		check(
+			"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+			"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+		for (int i = 0; i < 100; i++) {
+			int len = 1 + Test::Random::Next(10);
+			string s1;
+			for (int j = 0; j < len; j++) {
+				char c = 'a' + Test::Random::Next(25);
+				s1.append(1, c);
+			}
+
+			for (int j = 0; j < 10; j++) {
+				string s2(s1);
+				random_shuffle(s2.begin(), s2.end());
+				check(s1, s2);
+			}
+		}
+	});
 }

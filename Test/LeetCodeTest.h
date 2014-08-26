@@ -1,5 +1,6 @@
 #pragma once
 #include "..\Algorithm\LeetCode.h"
+#include "..\Algorithm\Random.h"
 #include "..\Algorithm\TestClass.h"
 class LeetCodeTest : public Test::TestClass {
 public:
