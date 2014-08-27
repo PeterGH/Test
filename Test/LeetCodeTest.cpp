@@ -734,4 +734,643 @@ void LeetCodeTest::Init(void)
 			}
 		}
 	});
+
+	Add("PartitionList", [&](){
+		auto check = [&](Test::LeetCode::ListNode * list, int x){
+			Logger().WriteInformation("Partition by %d:\n", x);
+			Test::LeetCode::Print(list);
+			list = Test::LeetCode::PartitionList(list, x);
+			Test::LeetCode::Print(list);
+			Test::LeetCode::DeleteList(list);
+		};
+		{
+			vector<int> nums = { 1 };
+			Test::LeetCode::ListNode * list = Test::LeetCode::ToList(nums);
+			check(list, 3);
+		}
+		{
+			vector<int> nums = { 5 };
+			Test::LeetCode::ListNode * list = Test::LeetCode::ToList(nums);
+			check(list, 3);
+		}
+		{
+			vector<int> nums = { 2, 1 };
+			Test::LeetCode::ListNode * list = Test::LeetCode::ToList(nums);
+			check(list, 3);
+		}
+		{
+			vector<int> nums = { 5, 3 };
+			Test::LeetCode::ListNode * list = Test::LeetCode::ToList(nums);
+			check(list, 3);
+		}
+		{
+			vector<int> nums = { 2, 4 };
+			Test::LeetCode::ListNode * list = Test::LeetCode::ToList(nums);
+			check(list, 3);
+		}
+		{
+			vector<int> nums = { 5, 1 };
+			Test::LeetCode::ListNode * list = Test::LeetCode::ToList(nums);
+			check(list, 3);
+		}
+		{
+			vector<int> nums = { 1, 4, 3, 2, 5, 2 };
+			Test::LeetCode::ListNode * list = Test::LeetCode::ToList(nums);
+			check(list, 3);
+		}
+	});
+
+	Add("MaximalRectangle", [&](){
+		auto check = [&](vector<vector<char>> & matrix, int expect){
+			Logger().WriteInformation("Matrix:\n");
+			for (int i = 0; i < (int)matrix.size(); i++) {
+				for (int j = 0; j < (int)matrix[i].size(); j++) {
+					Logger().WriteInformation(" %d", matrix[i][j]);
+				}
+				Logger().WriteInformation("\n");
+			}
+			int area = Test::LeetCode::MaximalRectangle(matrix);
+			Logger().WriteInformation("Area: %d\n", area);
+			ASSERT1(area == expect);
+		};
+		{
+			vector<vector<char>> m = { { 0 } };
+			check(m, 0);
+		}
+		{
+			vector<vector<char>> m = { { 1 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 0 }, { 0 } };
+			check(m, 0);
+		}
+		{
+			vector<vector<char>> m = { { 0 }, { 1 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 1 }, { 0 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 1 }, { 1 } };
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = { { 0, 0 } };
+			check(m, 0);
+		}
+		{
+			vector<vector<char>> m = { { 0, 1 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 1, 0 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 1, 1 } };
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = { { 0, 0 }, { 0, 0 } };
+			check(m, 0);
+		}
+		{
+			vector<vector<char>> m = { { 1, 0 }, { 0, 0 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 0, 1 }, { 0, 0 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 0, 0 }, { 1, 0 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 0, 0 }, { 0, 1 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 1, 1 }, { 0, 0 } };
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = { { 1, 0 }, { 1, 0 } };
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = { { 1, 0 }, { 0, 1 } };
+			check(m, 4);
+		}
+		{
+			vector<vector<char>> m = { { 0, 1 }, { 1, 0 } };
+			check(m, 4);
+		}
+		{
+			vector<vector<char>> m = { { 0, 1 }, { 0, 1 } };
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = { { 0, 0 }, { 1, 1 } };
+			check(m, 2);
+		}
+	});
+
+	Add("MaximalRectangleAtPoint", [&](){
+		auto print = [&](vector<vector<char>> & matrix){
+			Logger().WriteInformation("Matrix:\n");
+			for (int i = 0; i < (int)matrix.size(); i++) {
+				for (int j = 0; j < (int)matrix[i].size(); j++) {
+					Logger().WriteInformation(" %d", matrix[i][j]);
+				}
+				Logger().WriteInformation("\n");
+			}
+		};
+
+		auto check = [&](vector<vector<char>> & matrix, int pi, int pj, int expect){
+			int area = Test::LeetCode::MaximalRectangleAtPoint(matrix, pi, pj);
+			Logger().WriteInformation(" Area at (%d, %d): %d\n", pi, pj, area);
+			ASSERT1(area == expect);
+		};
+		{
+			vector<vector<char>> m = { { 0 } };
+			print(m);
+			check(m, 0, 0, 0);
+		}
+		{
+			vector<vector<char>> m = { { 1 } };
+			print(m);
+			check(m, 0, 0, 1);
+		}
+		{
+			vector<vector<char>> m = { { 0, 0 } };
+			print(m);
+			check(m, 0, 0, 0);
+			check(m, 0, 1, 0);
+		}
+		{
+			vector<vector<char>> m = { { 0, 1 } };
+			print(m);
+			check(m, 0, 0, 0);
+			check(m, 0, 1, 1);
+		}
+		{
+			vector<vector<char>> m = { { 1, 0 } };
+			print(m);
+			check(m, 0, 0, 1);
+			check(m, 0, 1, 0);
+		}
+		{
+			vector<vector<char>> m = { { 1, 1 } };
+			print(m);
+			check(m, 0, 0, 2);
+			check(m, 0, 1, 1);
+		}
+		{
+			vector<vector<char>> m = { { 0 }, { 0 } };
+			print(m);
+			check(m, 0, 0, 0);
+			check(m, 1, 0, 0);
+		}
+		{
+			vector<vector<char>> m = { { 1 }, { 0 } };
+			print(m);
+			check(m, 0, 0, 1);
+			check(m, 1, 0, 0);
+		}
+		{
+			vector<vector<char>> m = { { 0 }, { 1 } };
+			print(m);
+			check(m, 0, 0, 0);
+			check(m, 1, 0, 1);
+		}
+		{
+			vector<vector<char>> m = { { 1 }, { 1 } };
+			print(m);
+			check(m, 0, 0, 2);
+			check(m, 1, 0, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 0 },
+					{ 0, 0 }
+			};
+			print(m);
+			check(m, 0, 0, 0);
+			check(m, 0, 1, 0);
+			check(m, 1, 0, 0);
+			check(m, 1, 1, 0);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 0 },
+					{ 0, 0 }
+			};
+			print(m);
+			check(m, 0, 0, 1);
+			check(m, 0, 1, 0);
+			check(m, 1, 0, 0);
+			check(m, 1, 1, 0);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 1 },
+					{ 0, 0 }
+			};
+			print(m);
+			check(m, 0, 0, 0);
+			check(m, 0, 1, 1);
+			check(m, 1, 0, 0);
+			check(m, 1, 1, 0);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 0 },
+					{ 1, 0 }
+			};
+			print(m);
+			check(m, 0, 0, 0);
+			check(m, 0, 1, 0);
+			check(m, 1, 0, 1);
+			check(m, 1, 1, 0);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 0 },
+					{ 0, 1 }
+			};
+			print(m);
+			check(m, 0, 0, 0);
+			check(m, 0, 1, 0);
+			check(m, 1, 0, 0);
+			check(m, 1, 1, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1 },
+					{ 0, 0 }
+			};
+			print(m);
+			check(m, 0, 0, 2);
+			check(m, 0, 1, 1);
+			check(m, 1, 0, 0);
+			check(m, 1, 1, 0);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 0 },
+					{ 1, 0 }
+			};
+			print(m);
+			check(m, 0, 0, 2);
+			check(m, 0, 1, 0);
+			check(m, 1, 0, 1);
+			check(m, 1, 1, 0);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 0 },
+					{ 0, 1 }
+			};
+			print(m);
+			check(m, 0, 0, 1);
+			check(m, 0, 1, 0);
+			check(m, 1, 0, 0);
+			check(m, 1, 1, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 1 },
+					{ 1, 0 }
+			};
+			print(m);
+			check(m, 0, 0, 0);
+			check(m, 0, 1, 1);
+			check(m, 1, 0, 1);
+			check(m, 1, 1, 0);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 1 },
+					{ 0, 1 }
+			};
+			print(m);
+			check(m, 0, 0, 0);
+			check(m, 0, 1, 2);
+			check(m, 1, 0, 0);
+			check(m, 1, 1, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 0 },
+					{ 1, 1 }
+			};
+			print(m);
+			check(m, 0, 0, 0);
+			check(m, 0, 1, 0);
+			check(m, 1, 0, 2);
+			check(m, 1, 1, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1 },
+					{ 1, 0 }
+			};
+			print(m);
+			check(m, 0, 0, 2);
+			check(m, 0, 1, 1);
+			check(m, 1, 0, 1);
+			check(m, 1, 1, 0);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1 },
+					{ 0, 1 }
+			};
+			print(m);
+			check(m, 0, 0, 2);
+			check(m, 0, 1, 2);
+			check(m, 1, 0, 0);
+			check(m, 1, 1, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 0 },
+					{ 1, 1 }
+			};
+			print(m);
+			check(m, 0, 0, 2);
+			check(m, 0, 1, 0);
+			check(m, 1, 0, 2);
+			check(m, 1, 1, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 1 },
+					{ 1, 1 }
+			};
+			print(m);
+			check(m, 0, 0, 0);
+			check(m, 0, 1, 2);
+			check(m, 1, 0, 2);
+			check(m, 1, 1, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1 },
+					{ 1, 1 }
+			};
+			print(m);
+			check(m, 0, 0, 4);
+			check(m, 0, 1, 2);
+			check(m, 1, 0, 2);
+			check(m, 1, 1, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1, 1 },
+					{ 1, 0, 0 }
+			};
+			print(m);
+			check(m, 0, 0, 3);
+			check(m, 0, 1, 2);
+			check(m, 0, 2, 1);
+			check(m, 1, 0, 1);
+			check(m, 1, 1, 0);
+			check(m, 1, 2, 0);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1, 1 },
+					{ 1, 1, 0 }
+			};
+			print(m);
+			check(m, 0, 0, 4);
+			check(m, 0, 1, 2);
+			check(m, 0, 2, 1);
+			check(m, 1, 0, 2);
+			check(m, 1, 1, 1);
+			check(m, 1, 2, 0);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1, 1 },
+					{ 1, 1, 1 }
+			};
+			print(m);
+			check(m, 0, 0, 6);
+			check(m, 0, 1, 4);
+			check(m, 0, 2, 2);
+			check(m, 1, 0, 3);
+			check(m, 1, 1, 2);
+			check(m, 1, 2, 1);
+		}
+	});
+
+	Add("MaximalRectangleFullOnes", [&](){
+		auto print = [&](vector<vector<char>> & matrix){
+			Logger().WriteInformation("Matrix:\n");
+			for (int i = 0; i < (int)matrix.size(); i++) {
+				for (int j = 0; j < (int)matrix[i].size(); j++) {
+					Logger().WriteInformation(" %d", matrix[i][j]);
+				}
+				Logger().WriteInformation("\n");
+			}
+		};
+
+		auto check = [&](vector<vector<char>> & matrix, int expect){
+			print(matrix);
+			int area = Test::LeetCode::MaximalRectangleFullOnes(matrix);
+			Logger().WriteInformation(" Area: %d\n", area);
+			ASSERT1(area == expect);
+		};
+		{
+			vector<vector<char>> m = { { 0 } };
+			check(m, 0);
+		}
+		{
+			vector<vector<char>> m = { { 1 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 0, 0 } };
+			check(m, 0);
+		}
+		{
+			vector<vector<char>> m = { { 0, 1 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 1, 0 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 1, 1 } };
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = { { 0 }, { 0 } };
+			check(m, 0);
+		}
+		{
+			vector<vector<char>> m = { { 1 }, { 0 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 0 }, { 1 } };
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = { { 1 }, { 1 } };
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 0 },
+					{ 0, 0 }
+			};
+			check(m, 0);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 0 },
+					{ 0, 0 }
+			};
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 1 },
+					{ 0, 0 }
+			};
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 0 },
+					{ 1, 0 }
+			};
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 0 },
+					{ 0, 1 }
+			};
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1 },
+					{ 0, 0 }
+			};
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 0 },
+					{ 1, 0 }
+			};
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 0 },
+					{ 0, 1 }
+			};
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 1 },
+					{ 1, 0 }
+			};
+			check(m, 1);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 1 },
+					{ 0, 1 }
+			};
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 0 },
+					{ 1, 1 }
+			};
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1 },
+					{ 1, 0 }
+			};
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1 },
+					{ 0, 1 }
+			};
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 0 },
+					{ 1, 1 }
+			};
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 1 },
+					{ 1, 1 }
+			};
+			check(m, 2);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1 },
+					{ 1, 1 }
+			};
+			check(m, 4);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1, 1 },
+					{ 1, 0, 0 }
+			};
+			check(m, 3);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1, 1 },
+					{ 1, 1, 0 }
+			};
+			check(m, 4);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 1, 1, 1 },
+					{ 1, 1, 1 }
+			};
+			check(m, 6);
+		}
+		{
+			vector<vector<char>> m = {
+					{ 0, 0, 1, 0 },
+					{ 1, 1, 1, 1 },
+					{ 1, 1, 1, 1 },
+					{ 1, 1, 1, 0 },
+					{ 1, 1, 0, 0 },
+					{ 1, 1, 1, 1 },
+					{ 1, 1, 1, 0 },
+			};
+			check(m, 12);
+		}
+	});
 }

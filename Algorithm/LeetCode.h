@@ -909,5 +909,141 @@ namespace Test {
 
 			return isScramble(0, (int)s1.length() - 1, 0, (int)s2.length() - 1);
 		}
+
+		// Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
+		// You should preserve the original relative order of the nodes in each of the two partitions.
+		// For example,
+		// Given 1->4->3->2->5->2 and x = 3,
+		// return 1->2->2->4->3->5.
+		static ListNode * PartitionList(ListNode * head, int x)
+		{
+			if (head == nullptr) return nullptr;
+
+			// p is the last node less than x
+			ListNode * p = head;
+
+			// q is the last node no less than x
+			ListNode * q = head;
+
+			if (head->val >= x) {
+				while (q->next != nullptr && q->next->val >= x) q = q->next;
+				if (q->next == nullptr) {
+					// every node is equal to or greater than x
+					return head;
+				}
+
+				// q->next is less than x
+				ListNode * t = q->next;
+				q->next = t->next;
+				t->next = head;
+				head = t;
+
+				p = head;
+			} else {
+				while (p->next != nullptr && p->next->val < x) p = p->next;
+				if (p->next == nullptr) {
+					// every node is less than x
+					return head;
+				}
+
+				q = p->next;
+			}
+
+			// Now check if q->next should be moved to be after p
+
+			while (q->next != nullptr) {
+				if (q->next->val < x) {
+					ListNode * t = q->next;
+					q->next = t->next;
+					t->next = p->next;
+					p->next = t;
+					p = t;
+				} else {
+					q = q->next;
+				}
+			}
+
+			return head;
+		}
+
+		// Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing all ones and return its area.
+		static int MaximalRectangle(vector<vector<char>> & matrix)
+		{
+			if (matrix.size() == 0 || matrix[0].size() == 0) return 0;
+			bool foundOne = false;
+			int imin = -1;
+			int imax = -1;
+			int jmin = -1;
+			int jmax = -1;
+			for (int i = 0; i < (int)matrix.size(); i++) {
+				for (int j = 0; j < (int)matrix[i].size(); j++) {
+					if (matrix[i][j] == 1) {
+						if (foundOne) {
+							if (i < imin) imin = i;
+							if (i > imax) imax = i;
+							if (j < jmin) jmin = j;
+							if (j > jmax) jmax = j;
+						} else {
+							imin = i;
+							imax = i;
+							jmin = j;
+							jmax = j;
+							foundOne = true;
+						}
+					}
+				}
+			}
+
+			if (!foundOne) return 0;
+
+			int area = (imax - imin + 1) * (jmax - jmin + 1);
+			return area;
+		}
+
+		// Given a 2D binary matrix filled with 0's and 1's,
+		// find the largest rectangle full of ones and with a give point on its top-left corner,
+		// return the rectangle area.
+		static int MaximalRectangleAtPoint(vector<vector<char>> & matrix, int pi, int pj)
+		{
+			if (matrix.size() == 0 || matrix[0].size() == 0) return 0;
+			if (pi < 0 || pi >= (int)matrix.size() || pj < 0 || pj >= (int)matrix[0].size()) return 0;
+			if (matrix[pi][pj] != 1) return 0;
+
+			int i = pi;
+			int j = pj;
+
+			while (j + 1 < (int)matrix[0].size() && matrix[i][j+1] == 1) j++;
+
+			int maxj = j;
+			int maxArea = j - pj + 1;
+
+			while (i + 1 < (int)matrix.size() && matrix[i+1][pj] == 1) {
+				i++;
+				j = pj;
+				while (j + 1 <= maxj && matrix[i][j+1] == 1 && matrix[i-1][j+1] == 1) j++;
+				int area = (i - pi + 1) * (j - pj + 1);
+				if (area > maxArea) maxArea = area;
+				maxj = j;
+			}
+
+			return maxArea;
+		}
+
+		// Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle full of ones,
+		// return its area.
+		static int MaximalRectangleFullOnes(vector<vector<char>> & matrix)
+		{
+			if (matrix.size() == 0 || matrix[0].size() == 0) return 0;
+			int maxArea = 0;
+			for (int i = 0; i < (int)matrix.size(); i++) {
+				for (int j = 0; j < (int)matrix[i].size(); j++) {
+					if (matrix[i][j] == 1) {
+						int area = MaximalRectangleAtPoint(matrix, i, j);
+						if (area > maxArea) maxArea = area;
+					}
+				}
+			}
+			return maxArea;
+		}
 	};
 }
