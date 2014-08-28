@@ -1373,4 +1373,161 @@ void LeetCodeTest::Init(void)
 			check(m, 12);
 		}
 	});
+
+	Add("LargestRectangleInHistogram", [&](){
+		auto check = [&](vector<int> & h, int e){
+			Logger().WriteInformation("Histogram:");
+			for (int i = 0; i < (int)h.size(); i++) {
+				Logger().WriteInformation(" %d", h[i]);
+			}
+			Logger().WriteInformation("\n");
+			int a = Test::LeetCode::LargestRectangleInHistogram(h);
+			int b = Test::LeetCode::LargestRectangleInHistogram2(h);
+			Logger().WriteInformation(" max area: %d, %d\n", a, b);
+			if (e >= 0) {
+				ASSERT1(a == e);
+				ASSERT1(b == e);
+			} else {
+				ASSERT1(a == b);
+			}
+		};
+
+		check(vector<int> { 1 }, 1);
+		check(vector<int> { 2 }, 2);
+		check(vector<int> { 1, 1 }, 2);
+		check(vector<int> { 1, 2 }, 2);
+		check(vector<int> { 1, 3 }, 3);
+		check(vector<int> { 2, 3 }, 4);
+		check(vector<int> { 0, 1 }, 1);
+		check(vector<int> { 0, 2 }, 2);
+		check(vector<int> { 0, 0 }, 0);
+		check(vector<int> { 1, 0 }, 1);
+		check(vector<int> { 2, 0 }, 2);
+		check(vector<int> { 2, 1 }, 2);
+		check(vector<int> { 3, 1 }, 3);
+		check(vector<int> { 3, 2 }, 4);
+		check(vector<int> { 0, 0, 0 }, 0);
+		check(vector<int> { 1, 0, 0 }, 1);
+		check(vector<int> { 0, 1, 0 }, 1);
+		check(vector<int> { 0, 0, 1 }, 1);
+		check(vector<int> { 1, 1, 0 }, 2);
+		check(vector<int> { 1, 0, 1 }, 1);
+		check(vector<int> { 0, 1, 1 }, 2);
+		check(vector<int> { 1, 1, 1 }, 3);
+		check(vector<int> { 2, 1, 1 }, 3);
+		check(vector<int> { 1, 2, 1 }, 3);
+		check(vector<int> { 1, 1, 2 }, 3);
+		check(vector<int> { 3, 1, 1 }, 3);
+		check(vector<int> { 1, 3, 1 }, 3);
+		check(vector<int> { 1, 1, 3 }, 3);
+		check(vector<int> { 4, 1, 1 }, 4);
+		check(vector<int> { 1, 4, 1 }, 4);
+		check(vector<int> { 1, 1, 4 }, 4);
+		check(vector<int> { 1, 2, 2 }, 4);
+		check(vector<int> { 2, 1, 2 }, 3);
+		check(vector<int> { 2, 2, 1 }, 4);
+		check(vector<int> { 1, 2, 3 }, 4);
+		check(vector<int> { 1, 3, 2 }, 4);
+		check(vector<int> { 2, 1, 3 }, 3);
+		check(vector<int> { 2, 3, 1 }, 4);
+		check(vector<int> { 3, 1, 2 }, 3);
+		check(vector<int> { 3, 2, 1 }, 4);
+		check(vector<int> { 1, 2, 5 }, 5);
+		check(vector<int> { 1, 5, 2 }, 5);
+		check(vector<int> { 5, 2, 1 }, 5);
+		check(vector<int> { 5, 1, 2 }, 5);
+		check(vector<int> { 1, 3, 4 }, 6);
+		check(vector<int> { 3, 1, 4 }, 4);
+		check(vector<int> { 1, 2, 3, 4 }, 6);
+		check(vector<int> { 2, 1, 3, 4 }, 6);
+		check(vector<int> { 2, 3, 1, 4 }, 4);
+		check(vector<int> { 4, 2, 1, 3 }, 4);
+		check(vector<int> { 4, 2, 3, 1 }, 6);
+		check(vector<int> { 1, 2, 3, 4, 5 }, 9);
+		check(vector<int> { 5, 4, 3, 2, 1 }, 9);
+		check(vector<int> { 2, 1, 5, 6, 2, 3 }, 10);
+		for (int i = 0; i < 100; i++) {
+			int len = 1 + Test::Random::Next(100);
+			vector<int> hist;
+			for (int j = 0; j < len; j++) {
+				int v = Test::Random::Next(100);
+				hist.push_back(v);
+			}
+			check(hist, -1);
+		}
+	});
+
+	Add("DeleteDuplicates1", [&](){
+		auto check = [&](vector<int> & nums){
+			Test::LeetCode::ListNode * list = Test::LeetCode::ToList(nums);
+			Logger().WriteInformation("List:  ");
+			Test::LeetCode::Print(list);
+			list = Test::LeetCode::DeleteDuplicates(list);
+			Logger().WriteInformation("Dedup: ");
+			if (list == nullptr) Logger().WriteInformation("\n");
+			else {
+				Test::LeetCode::Print(list);
+				int v = list->val;
+				Test::LeetCode::ListNode * p = list->next;
+				bool foundDup = false;
+				while (p != nullptr) {
+					if (p->val == v) foundDup = true;
+					v = p->val;
+					p = p->next;
+				}
+				Test::LeetCode::DeleteList(list);
+				ASSERT1(foundDup == false);
+			}
+		};
+		check(vector<int> { 1 });
+		check(vector<int> { 1, 1 });
+		check(vector<int> { 1, 2 });
+		check(vector<int> { 1, 1, 2 });
+		check(vector<int> { 1, 2, 2 });
+		check(vector<int> { 1, 1, 1 });
+		check(vector<int> { 1, 2, 3 });
+		check(vector<int> { 1, 1, 2, 2 });
+		check(vector<int> { 1, 1, 1, 2 });
+		check(vector<int> { 1, 2, 2, 2 });
+		check(vector<int> { 1, 1, 1, 1 });
+		check(vector<int> { 1, 2, 2, 3 });
+		check(vector<int> { 1, 2, 3, 4 });
+	});
+
+	Add("DeleteDuplicates2", [&](){
+		auto check = [&](vector<int> & nums){
+			Test::LeetCode::ListNode * list = Test::LeetCode::ToList(nums);
+			Logger().WriteInformation("List:  ");
+			Test::LeetCode::Print(list);
+			list = Test::LeetCode::DeleteDuplicates2(list);
+			Logger().WriteInformation("Dedup: ");
+			if (list == nullptr) Logger().WriteInformation("\n");
+			else {
+				Test::LeetCode::Print(list);
+				int v = list->val;
+				Test::LeetCode::ListNode * p = list->next;
+				bool foundDup = false;
+				while (p != nullptr) {
+					if (p->val == v) foundDup = true;
+					v = p->val;
+					p = p->next;
+				}
+				Test::LeetCode::DeleteList(list);
+				ASSERT1(foundDup == false);
+			}
+		};
+		check(vector<int> { 1 });
+		check(vector<int> { 1, 1 });
+		check(vector<int> { 1, 2 });
+		check(vector<int> { 1, 1, 2 });
+		check(vector<int> { 1, 2, 2 });
+		check(vector<int> { 1, 1, 1 });
+		check(vector<int> { 1, 2, 3 });
+		check(vector<int> { 1, 1, 2, 2 });
+		check(vector<int> { 1, 1, 1, 2 });
+		check(vector<int> { 1, 2, 2, 2 });
+		check(vector<int> { 1, 1, 1, 1 });
+		check(vector<int> { 1, 2, 2, 3 });
+		check(vector<int> { 1, 2, 3, 4 });
+	});
 }

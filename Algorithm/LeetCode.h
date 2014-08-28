@@ -1045,5 +1045,145 @@ namespace Test {
 			}
 			return maxArea;
 		}
+
+		// Given n non-negative integers representing the histogram's bar height
+		// where the width of each bar is 1, find the area of largest rectangle in the histogram.
+		// One example histogram has width of each bar 1, given height = [2,1,5,6,2,3].
+		// The largest rectangle has area = 10 unit, which is under the 3rd and 4th columns.
+		static int LargestRectangleInHistogram(vector<int> & height)
+		{
+			if (height.size() == 0) return 0;
+
+			map<int, pair<int, int>> rec = { { 0, make_pair(0, height[0]) } };
+			int maxArea = height[0];
+
+			for (int i = 1; i < (int)height.size(); i++) {
+				if (height[i] == 0) {
+					rec.clear();
+					continue;
+				}
+
+				for (map<int, pair<int, int>>::iterator it = rec.begin(); it != rec.end(); it++) {
+					if (height[i] < it->second.second)
+					{
+						it->second.second = height[i];
+					}
+
+					it->second.first++;
+
+					int area = (it->second.first - it->first + 1) * it->second.second;
+					if (area > maxArea) {
+						maxArea = area;
+					}
+				}
+
+				if (height[i] > height[i-1]) {
+					rec[i] = make_pair(i, height[i]);
+					if (height[i] > maxArea) {
+						maxArea = height[i];
+					}
+				}
+			}
+
+			return maxArea;
+		}
+
+		static int LargestRectangleInHistogram2(vector<int> & height)
+		{
+			if (height.size() == 0) return 0;
+
+			int maxArea = 0;
+			stack<int> rec;
+			for (int i = 0; i < (int)height.size(); i++) {
+				while (!rec.empty() && height[rec.top()] > height[i]) {
+					int t = rec.top();
+					rec.pop();
+					int area = height[t] * (i - 1 - (rec.empty() ? -1 : rec.top()));
+					if (area > maxArea) maxArea = area;
+				}
+				rec.push(i);
+			}
+
+			while (!rec.empty()) {
+				int t = rec.top();
+				rec.pop();
+				int area = height[t] * ((int)height.size() - 1 - (rec.empty() ? -1 : rec.top()));
+				if (area > maxArea) maxArea = area;
+			}
+
+			return maxArea;
+		}
+
+		// Given a sorted linked list, for each node delete all its duplicates,
+		// such that each node has only one copy.
+		// For example,
+		// Given 1->2->3->3->4->4->5, return 1->2->3->4->5.
+		// Given 1->1->1->2->3, return 1->2->3.
+		static ListNode * DeleteDuplicates(ListNode * head)
+		{
+			if (head == nullptr) return nullptr;
+
+			ListNode * p = head;
+			while (p->next != nullptr) {
+				if (p->val != p->next->val) {
+					p = p->next;
+				} else {
+					ListNode * q = p->next;
+					while (q != nullptr && q->val == p->val) {
+						p->next = q->next;
+						delete q;
+						q = p->next;
+					}
+					if (q == nullptr) return head;
+				}
+			}
+
+			return head;
+		}
+
+		// Given a sorted linked list, delete all nodes that have duplicate numbers,
+		// leaving only distinct numbers from the original list.
+		// For example,
+		// Given 1->2->3->3->4->4->5, return 1->2->5.
+		// Given 1->1->1->2->3, return 2->3.
+		static ListNode * DeleteDuplicates2(ListNode * head)
+		{
+			if (head == nullptr) return nullptr;
+
+			ListNode * p;
+
+			while (head->next != nullptr && head->val == head->next->val) {
+				int dup = head->val;
+				while (head != nullptr && head->val == dup) {
+					p = head;
+					head = p->next;
+					delete p;
+				}
+
+				if (head == nullptr) return nullptr;
+			}
+
+			if (head->next == nullptr) return head;
+
+			p = head;
+			ListNode * q = p->next;
+
+			while (q->next != nullptr) {
+				if (q->val != q->next->val) {
+					p = q;
+					q = p->next;
+				} else {
+					int dup = q->val;
+					while (q != nullptr && q->val == dup) {
+						p->next = q->next;
+						delete q;
+						q = p->next;
+					}
+					if (q == nullptr) return head;
+				}
+			}
+
+			return head;
+		}
 	};
 }
