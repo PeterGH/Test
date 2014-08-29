@@ -1185,5 +1185,140 @@ namespace Test {
 
 			return head;
 		}
+
+		// Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+		// (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+		// You are given a target value to search. If found in the array return its index, otherwise return -1.
+		// You may assume no duplicate exists in the array.
+		static int SearchInRotatedSortedArray(int A[], int n, int target)
+		{
+			if (A == nullptr || n <= 0) return -1;
+
+			function<int(int [], int, int, int)>
+			search = [&](int a[], int l, int r, int t)->int{
+				while (l <= r) {
+					if (a[l] == t) return l;
+					if (a[r] == t) return r;
+
+					// l < m < r, if l + 1 < r
+					// l = m < r, if l + 1 = r
+					// l = m = r, if l = r
+					int m = (l + r) >> 1;
+
+					if (a[m] == t) return m;
+
+					if (m == l) return -1;
+
+					if (a[m] > a[l] && a[m] > a[r]) {
+						if (a[l] < t && t < a[m]) r = m;
+						else l = m;
+					} else if (a[m] < a[l] && a[m] < a[r]) {
+						if (a[m] < t && t < a[r]) l = m;
+						else r = m;
+					} else {
+						// a[l] < a[m] < a[r]
+						if (t < a[m]) r = m;
+						else l = m;
+					}
+				}
+				return -1;
+			};
+
+			return search(A, 0, n-1, target);
+		}
+
+		// Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+		// (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+		// You are given a target value to search. If found in the array return its index, otherwise return -1.
+		// Duplicates are possible in the array.
+		static int SearchInRotatedSortedArray2(int A[], int n, int target)
+		{
+			if (A == nullptr || n <= 0) return -1;
+
+			function<int(int [], int, int, int)>
+			search = [&](int a[], int l, int r, int t)->int{
+				while (l <= r) {
+					if (a[l] == t) return l;
+					if (a[r] == t) return r;
+
+					// l < m < r, if l + 1 < r
+					// l = m < r, if l + 1 = r
+					// l = m = r, if l = r
+					int m = (l + r) >> 1;
+
+					if (a[m] == t) return m;
+
+					if (m == l) return -1;
+
+					if (a[l] < a[m] && a[m] > a[r]) {
+						if (a[l] < t && t < a[m]) r = m;
+						else l = m;
+					} else if (a[l] > a[m] && a[m] < a[r]) {
+						if (a[m] < t && t < a[r]) l = m;
+						else r = m;
+					} else if (a[l] == a[m] && a[m] > a[r]) {
+						l = m;
+					} else if (a[l] > a[m] && a[m] == a[r]) {
+						r = m;
+					} else if (a[l] == a[m] && a[m] == a[r]) {
+						int i = search(a, l, m, t) ;
+						if (i == -1) i = search(a, m, r, t);
+						return i;
+					} else {
+						// a[l] < a[m] < a[r]
+						if (t < a[m]) r = m;
+						else l = m;
+					}
+				}
+				return -1;
+			};
+
+			return search(A, 0, n-1, target);
+		}
+
+		// Update a sorted array so that each element can occurr only once.
+		// For example,
+		// Given sorted array A = [1,1,1,2,2,3],
+		// Your function should return length = 3, and A is now [1,2,3].
+		static int RemoveDuplicates(int A[], int n)
+		{
+			if (A == nullptr || n <= 1) return n;
+
+			int i = 0;
+			int j = 1;
+
+			while (j < n) {
+				while (j < n && A[j] == A[i]) j++;
+				if (j == n) break;
+				if (i + 1 < j) A[i+1] = A[j];
+				i++;
+				j++;
+			}
+
+			return i+1;
+		}
+
+		// Update a sorted array so that each element can occurr no more than two times.
+		// For example,
+		// Given sorted array A = [1,1,1,2,2,3],
+		// Your function should return length = 5, and A is now [1,1,2,2,3].
+		static int RemoveDuplicates2(int A[], int n)
+		{
+			if (A == nullptr || n <= 2) return n;
+
+			int i = 0;
+			int j = 1;
+
+			while (j < n) {
+				if (i + 1 < j) A[i+1] = A[j];
+				i++;
+				j++;
+				if (A[i-1] == A[i]) {
+					while (j < n && A[j] == A[i]) j++;
+				}
+			}
+
+			return i+1;
+		}
 	};
 }

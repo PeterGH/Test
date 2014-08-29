@@ -1530,4 +1530,621 @@ void LeetCodeTest::Init(void)
 		check(vector<int> { 1, 2, 2, 3 });
 		check(vector<int> { 1, 2, 3, 4 });
 	});
+
+	Add("SearchInRotatedSortedArray1", [&](){
+		auto print = [&](int a[], int n){
+			Logger().WriteInformation("Array:");
+			for (int i = 0; i < n; i++) {
+				Logger().WriteInformation(" %d", a[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](int a[], int n, int t, int e) {
+			int b = Test::LeetCode::SearchInRotatedSortedArray(a, n, t);
+			int c = Test::LeetCode::SearchInRotatedSortedArray2(a, n, t);
+			Logger().WriteInformation("  %d is at index %d, %d\n", t, b, c);
+			ASSERT1(b == e);
+			ASSERT1(c == e);
+		};
+		{
+			int a[] = { 1 };
+			print(a, 1);
+			check(a, 1, 1, 0);
+			check(a, 1, 0, -1);
+			check(a, 1, 2, -1);
+		}
+		{
+			int a[] = { 1, 2 };
+			print(a, 2);
+			check(a, 2, 0, -1);
+			check(a, 2, 1, 0);
+			check(a, 2, 2, 1);
+			check(a, 2, 3, -1);
+		}
+		{
+			int a[] = { 2, 1 };
+			print(a, 2);
+			check(a, 2, 0, -1);
+			check(a, 2, 1, 1);
+			check(a, 2, 2, 0);
+			check(a, 2, 3, -1);
+		}
+		{
+			int a[] = { 1, 2, 3 };
+			print(a, 3);
+			check(a, 3, 0, -1);
+			check(a, 3, 1, 0);
+			check(a, 3, 2, 1);
+			check(a, 3, 3, 2);
+			check(a, 3, 4, -1);
+		}
+		{
+			int a[] = { 3, 1, 2 };
+			print(a, 3);
+			check(a, 3, 0, -1);
+			check(a, 3, 1, 1);
+			check(a, 3, 2, 2);
+			check(a, 3, 3, 0);
+			check(a, 3, 4, -1);
+		}
+		{
+			int a[] = { 2, 3, 1 };
+			print(a, 3);
+			check(a, 3, 0, -1);
+			check(a, 3, 1, 2);
+			check(a, 3, 2, 0);
+			check(a, 3, 3, 1);
+			check(a, 3, 4, -1);
+		}
+		{
+			int a[] = { 1, 2, 3, 4 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 0);
+			check(a, 4, 2, 1);
+			check(a, 4, 3, 2);
+			check(a, 4, 4, 3);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 4, 1, 2, 3 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 1);
+			check(a, 4, 2, 2);
+			check(a, 4, 3, 3);
+			check(a, 4, 4, 0);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 3, 4, 1, 2 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 2);
+			check(a, 4, 2, 3);
+			check(a, 4, 3, 0);
+			check(a, 4, 4, 1);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 2, 3, 4, 1 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 3);
+			check(a, 4, 2, 0);
+			check(a, 4, 3, 1);
+			check(a, 4, 4, 2);
+			check(a, 4, 5, -1);
+		}
+	});
+
+	Add("SearchInRotatedSortedArray2", [&](){
+		auto print = [&](int a[], int n){
+			Logger().WriteInformation("Array:");
+			for (int i = 0; i < n; i++) {
+				Logger().WriteInformation(" %d", a[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](int a[], int n, int t, int e) {
+			int b = Test::LeetCode::SearchInRotatedSortedArray2(a, n, t);
+			Logger().WriteInformation("  %d is at index %d\n", t, b);
+			if (e == -1) ASSERT1(b == -1);
+			else ASSERT1(a[b] == a[e]);
+		};
+		{
+			int a[] = { 2, 2 };
+			print(a, 2);
+			check(a, 2, 0, -1);
+			check(a, 2, 2, 1);
+			check(a, 2, 3, -1);
+		}
+		{
+			int a[] = { 1, 2, 2 };
+			print(a, 3);
+			check(a, 3, 0, -1);
+			check(a, 3, 1, 0);
+			check(a, 3, 2, 1);
+			check(a, 3, 3, -1);
+		}
+		{
+			int a[] = { 2, 1, 2 };
+			print(a, 3);
+			check(a, 3, 0, -1);
+			check(a, 3, 1, 1);
+			check(a, 3, 2, 2);
+			check(a, 3, 3, -1);
+		}
+		{
+			int a[] = { 2, 2, 1 };
+			print(a, 3);
+			check(a, 3, 0, -1);
+			check(a, 3, 1, 2);
+			check(a, 3, 2, 1);
+			check(a, 3, 3, -1);
+		}
+		{
+			int a[] = { 1, 1, 2 };
+			print(a, 3);
+			check(a, 3, 0, -1);
+			check(a, 3, 1, 1);
+			check(a, 3, 2, 2);
+			check(a, 3, 3, -1);
+		}
+		{
+			int a[] = { 2, 1, 1 };
+			print(a, 3);
+			check(a, 3, 0, -1);
+			check(a, 3, 1, 1);
+			check(a, 3, 2, 0);
+			check(a, 3, 3, -1);
+		}
+		{
+			int a[] = { 1, 2, 1 };
+			print(a, 3);
+			check(a, 3, 0, -1);
+			check(a, 3, 1, 2);
+			check(a, 3, 2, 1);
+			check(a, 3, 3, -1);
+		}
+		{
+			int a[] = { 2, 2, 2 };
+			print(a, 3);
+			check(a, 3, 1, -1);
+			check(a, 3, 2, 2);
+			check(a, 3, 3, -1);
+		}
+		{
+			int a[] = { 1, 1, 3, 4 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 0);
+			check(a, 4, 2, -1);
+			check(a, 4, 3, 2);
+			check(a, 4, 4, 3);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 4, 1, 1, 3 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 1);
+			check(a, 4, 2, -1);
+			check(a, 4, 3, 3);
+			check(a, 4, 4, 0);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 3, 4, 1, 1 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 2);
+			check(a, 4, 2, -1);
+			check(a, 4, 3, 0);
+			check(a, 4, 4, 1);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 1, 3, 4, 1 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 0);
+			check(a, 4, 2, -1);
+			check(a, 4, 3, 1);
+			check(a, 4, 4, 2);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 1, 1, 1, 4 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 0);
+			check(a, 4, 2, -1);
+			check(a, 4, 4, 3);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 4, 1, 1, 1 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 1);
+			check(a, 4, 2, -1);
+			check(a, 4, 4, 0);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 1, 4, 1, 1 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 0);
+			check(a, 4, 2, -1);
+			check(a, 4, 4, 1);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 1, 1, 4, 1 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 0);
+			check(a, 4, 2, -1);
+			check(a, 4, 4, 2);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 1, 1, 1, 1 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 0);
+			check(a, 4, 2, -1);
+			check(a, 4, 4, -1);
+		}
+		{
+			int a[] = { 1, 2, 2, 4 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 0);
+			check(a, 4, 2, 1);
+			check(a, 4, 3, -1);
+			check(a, 4, 4, 3);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 4, 1, 2, 2 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 1);
+			check(a, 4, 2, 2);
+			check(a, 4, 3, -1);
+			check(a, 4, 4, 0);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 2, 4, 1, 2 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 2);
+			check(a, 4, 2, 0);
+			check(a, 4, 3, -1);
+			check(a, 4, 4, 1);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 2, 2, 4, 1 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 3);
+			check(a, 4, 2, 0);
+			check(a, 4, 3, -1);
+			check(a, 4, 4, 2);
+			check(a, 4, 5, -1);
+		}
+		{
+			int a[] = { 1, 2, 2, 2 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 0);
+			check(a, 4, 2, 1);
+			check(a, 4, 3, -1);
+			check(a, 4, 4, -1);
+		}
+		{
+			int a[] = { 2, 1, 2, 2 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 1);
+			check(a, 4, 2, 0);
+			check(a, 4, 3, -1);
+			check(a, 4, 4, -1);
+		}
+		{
+			int a[] = { 2, 2, 1, 2 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 2);
+			check(a, 4, 2, 0);
+			check(a, 4, 3, -1);
+			check(a, 4, 4, -1);
+		}
+		{
+			int a[] = { 2, 2, 2, 1 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 3);
+			check(a, 4, 2, 0);
+			check(a, 4, 3, -1);
+			check(a, 4, 4, -1);
+		}
+		{
+			int a[] = { 1, 2, 4, 4 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 0);
+			check(a, 4, 2, 1);
+			check(a, 4, 3, -1);
+			check(a, 4, 4, 2);
+		}
+		{
+			int a[] = { 4, 1, 2, 4 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 1);
+			check(a, 4, 2, 2);
+			check(a, 4, 3, -1);
+			check(a, 4, 4, 0);
+		}
+		{
+			int a[] = { 4, 4, 1, 2 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 2);
+			check(a, 4, 2, 3);
+			check(a, 4, 3, -1);
+			check(a, 4, 4, 0);
+		}
+		{
+			int a[] = { 2, 4, 4, 1 };
+			print(a, 4);
+			check(a, 4, 0, -1);
+			check(a, 4, 1, 3);
+			check(a, 4, 2, 0);
+			check(a, 4, 3, -1);
+			check(a, 4, 4, 1);
+		}
+		{
+			int a[] = { 1 };
+			print(a, 1);
+			check(a, 1, 0, -1);
+			check(a, 1, 1, 0);
+		}
+	});
+
+	Add("RemoveDuplicates1", [&]() {
+		auto print = [&](int a[], int n){
+			for (int i = 0; i < n; i++) {
+				Logger().WriteInformation(" %d", a[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+
+		auto check = [&](int a[], int n, int e){
+			Logger().WriteInformation("Input: ");
+			print(a, n);
+			n = Test::LeetCode::RemoveDuplicates(a, n);
+			Logger().WriteInformation("Output:");
+			print(a, n);
+			ASSERT1(n == e);
+		};
+
+		{
+			int a[] = { 1 };
+			check(a, 1, 1);
+		}
+		{
+			int a[] = { 1, 1 };
+			check(a, 2, 1);
+		}
+		{
+			int a[] = { 1, 2 };
+			check(a, 2, 2);
+		}
+		{
+			int a[] = { 1, 1, 2 };
+			check(a, 3, 2);
+		}
+		{
+			int a[] = { 1, 1, 1 };
+			check(a, 3, 1);
+		}
+		{
+			int a[] = { 1, 2, 2 };
+			check(a, 3, 2);
+		}
+		{
+			int a[] = { 1, 2, 3 };
+			check(a, 3, 3);
+		}
+		{
+			int a[] = { 1, 2, 3, 4 };
+			check(a, 4, 4);
+		}
+		{
+			int a[] = { 1, 1, 3, 4 };
+			check(a, 4, 3);
+		}
+		{
+			int a[] = { 1, 1, 1, 4 };
+			check(a, 4, 2);
+		}
+		{
+			int a[] = { 1, 1, 1, 1 };
+			check(a, 4, 1);
+		}
+		{
+			int a[] = { 1, 2, 2, 4 };
+			check(a, 4, 3);
+		}
+		{
+			int a[] = { 1, 2, 2, 2 };
+			check(a, 4, 2);
+		}
+		{
+			int a[] = { 1, 2, 3, 3 };
+			check(a, 4, 3);
+		}
+		{
+			int a[] = { 1, 1, 3, 3 };
+			check(a, 4, 2);
+		}
+		{
+			int a[] = { 1, 2, 3, 4, 5 };
+			check(a, 5, 5);
+		}
+		{
+			int a[] = { 1, 1, 2, 2, 5 };
+			check(a, 5, 3);
+		}
+		{
+			int a[] = { 1, 1, 3, 4, 5 };
+			check(a, 5, 4);
+		}
+		{
+			int a[] = { 1, 1, 1, 4, 4 };
+			check(a, 5, 2);
+		}
+		{
+			int a[] = { 1, 1, 1, 1, 5 };
+			check(a, 5, 2);
+		}
+		{
+			int a[] = { 1, 1, 1, 1, 1 };
+			check(a, 5, 1);
+		}
+		{
+			int a[] = { 1, 1, 3, 3, 3 };
+			check(a, 5, 2);
+		}
+		{
+			int a[] = { 1, 3, 3, 3, 3 };
+			check(a, 5, 2);
+		}
+		{
+			int a[] = { 1, 3, 3, 3, 4 };
+			check(a, 5, 3);
+		}
+	});
+
+	Add("RemoveDuplicates2", [&]() {
+		auto print = [&](int a[], int n){
+			for (int i = 0; i < n; i++) {
+				Logger().WriteInformation(" %d", a[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+
+		auto check = [&](int a[], int n, int e){
+			Logger().WriteInformation("Input: ");
+			print(a, n);
+			n = Test::LeetCode::RemoveDuplicates2(a, n);
+			Logger().WriteInformation("Output:");
+			print(a, n);
+			ASSERT1(n == e);
+		};
+
+		{
+			int a[] = { 1 };
+			check(a, 1, 1);
+		}
+		{
+			int a[] = { 1, 1 };
+			check(a, 2, 2);
+		}
+		{
+			int a[] = { 1, 2 };
+			check(a, 2, 2);
+		}
+		{
+			int a[] = { 1, 1, 2 };
+			check(a, 3, 3);
+		}
+		{
+			int a[] = { 1, 1, 1 };
+			check(a, 3, 2);
+		}
+		{
+			int a[] = { 1, 2, 2 };
+			check(a, 3, 3);
+		}
+		{
+			int a[] = { 1, 2, 3 };
+			check(a, 3, 3);
+		}
+		{
+			int a[] = { 1, 2, 3, 4 };
+			check(a, 4, 4);
+		}
+		{
+			int a[] = { 1, 1, 3, 4 };
+			check(a, 4, 4);
+		}
+		{
+			int a[] = { 1, 1, 1, 4 };
+			check(a, 4, 3);
+		}
+		{
+			int a[] = { 1, 1, 1, 1 };
+			check(a, 4, 2);
+		}
+		{
+			int a[] = { 1, 2, 2, 4 };
+			check(a, 4, 4);
+		}
+		{
+			int a[] = { 1, 2, 2, 2 };
+			check(a, 4, 3);
+		}
+		{
+			int a[] = { 1, 2, 3, 3 };
+			check(a, 4, 4);
+		}
+		{
+			int a[] = { 1, 1, 3, 3 };
+			check(a, 4, 4);
+		}
+		{
+			int a[] = { 1, 2, 3, 4, 5 };
+			check(a, 5, 5);
+		}
+		{
+			int a[] = { 1, 1, 2, 2, 5 };
+			check(a, 5, 5);
+		}
+		{
+			int a[] = { 1, 1, 3, 4, 5 };
+			check(a, 5, 5);
+		}
+		{
+			int a[] = { 1, 1, 1, 4, 4 };
+			check(a, 5, 4);
+		}
+		{
+			int a[] = { 1, 1, 1, 1, 5 };
+			check(a, 5, 3);
+		}
+		{
+			int a[] = { 1, 1, 1, 1, 1 };
+			check(a, 5, 2);
+		}
+		{
+			int a[] = { 1, 1, 3, 3, 3 };
+			check(a, 5, 4);
+		}
+		{
+			int a[] = { 1, 3, 3, 3, 3 };
+			check(a, 5, 3);
+		}
+		{
+			int a[] = { 1, 3, 3, 3, 4 };
+			check(a, 5, 4);
+		}
+	});
 }
