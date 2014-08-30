@@ -4,6 +4,7 @@
 #include <functional>
 #include <iostream>
 #include <map>
+#include <queue>
 #include <set>
 #include <stack>
 #include <sstream>
@@ -1475,6 +1476,106 @@ namespace Test {
 			}
 
 			return s[n-k];
+		}
+
+		// Minimum Window Substring
+		// Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+		// For example,
+		// S = "ADOBECODEBANC"
+		// T = "ABC"
+		// Minimum window is "BANC".
+		// Note:
+		// If there is no such window in S that covers all characters in T, return the emtpy string "".
+		// If there are multiple such windows, you are guaranteed that there will always be only one unique minimum window in S.
+		static string MinWindow(const string & s, const string & t)
+		{
+			if (s.length() == 0 || t.length() == 0 || s.length() < t.length()) return "";
+
+			map<char, int> countT;
+			for (size_t i = 0; i < t.length(); i++) {
+				if (countT.find(t[i]) == countT.end()) countT[t[i]] = 1;
+				else countT[t[i]] += 1;
+			}
+
+			// c1 count should be no less than c2 count
+			auto compare = [&](map<char, int> & c1, map<char, int> & c2)->bool{
+				if (c1.size() != c2.size()) return false;
+				for (map<char, int>::iterator it = c1.begin(); it != c1.end(); it++) {
+					if (c2.find(it->first) == c2.end()) return false;
+					if (c2[it->first] > it->second) return false;
+				}
+				return true;
+			};
+
+			map<char, int> countS;
+			queue<pair<char, int>> indices;
+			int begin = -1;
+			int end = (int)s.length();
+			for (int i = 0; i < (int)s.length(); i++) {
+				if (countT.find(s[i]) != countT.end()) {
+					if (countS.find(s[i]) == countS.end()) countS[s[i]] = 1;
+					else countS[s[i]] += 1;
+
+					indices.push(make_pair(s[i], i));
+
+					while (countS[indices.front().first] > countT[indices.front().first]) {
+						countS[indices.front().first] -= 1;
+						indices.pop();
+					}
+
+					if (compare(countS, countT)) {
+						if (i - indices.front().second < end - begin) {
+							begin = indices.front().second;
+							end = i;
+						}
+					}
+				}
+			}
+
+			if (begin == -1) return "";
+			else return s.substr(begin, end - begin + 1);
+		}
+
+		static string MinWindow2(const string & s, const string & t)
+		{
+			if (s.length() == 0 || t.length() == 0 || s.length() < t.length()) return "";
+
+			map<char, int> countT;
+			for (size_t i = 0; i < t.length(); i++) {
+				if (countT.find(t[i]) == countT.end()) countT[t[i]] = 1;
+				else countT[t[i]] += 1;
+			}
+
+			map<char, int> countS;
+			int total = 0;
+			queue<pair<char, int>> indices;
+			int begin = -1;
+			int end = (int)s.length();
+			for (int i = 0; i < (int)s.length(); i++) {
+				if (countT.find(s[i]) != countT.end()) {
+					if (countS.find(s[i]) == countS.end()) countS[s[i]] = 1;
+					else countS[s[i]] += 1;
+
+					if (countS[s[i]] <= countT[s[i]]) total++;
+
+					indices.push(make_pair(s[i], i));
+
+					while (countS[indices.front().first] > countT[indices.front().first]) {
+						countS[indices.front().first] -= 1;
+						indices.pop();
+					}
+
+					if (total == (int)t.length()) {
+						if (i - indices.front().second < end - begin) {
+							begin = indices.front().second;
+							end = i;
+						}
+					}
+				}
+			}
+
+			if (begin == -1) return "";
+			else return s.substr(begin, end - begin + 1);
 		}
 	};
 }

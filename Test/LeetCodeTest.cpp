@@ -2262,4 +2262,28 @@ void LeetCodeTest::Init(void)
 		check(5, 4);
 		check(5, 5);
 	});
+
+	Add("MinWindow", [&](){
+		auto check = [&](const string & s, const string & t, const string & e){
+			Logger().WriteInformation("Source: %s\n", s.c_str());
+			Logger().WriteInformation("Target: %s\n", t.c_str());
+			string u = Test::LeetCode::MinWindow(s, t);
+			string v = Test::LeetCode::MinWindow2(s, t);
+			Logger().WriteInformation("Substring: %s %s %s\n", u.c_str(), u == v ? "==" : "!=", v.c_str());
+			ASSERT1(u == e);
+			ASSERT1(v == e);
+		};
+		check("", "", "");
+		check("", "A", "");
+		check("A", "", "");
+		check("AA", "A", "A");
+		check("AA", "AA", "AA");
+		check("AB", "A", "A");
+		check("AB", "B", "B");
+		check("AB", "BA", "AB");
+		check("AB", "AB", "AB");
+		check("ACCCCCBCCCACCACB", "ABA", "ACCACB");
+		check("ACCCCCBCCCACCACB", "ABD", "");
+		check("ADOBECODEBANC", "ABC", "BANC");
+	});
 }
