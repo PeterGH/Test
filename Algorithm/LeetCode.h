@@ -1577,5 +1577,40 @@ namespace Test {
 			if (begin == -1) return "";
 			else return s.substr(begin, end - begin + 1);
 		}
+
+		// An array contains integers 0, 1, 2. Sort it.
+		static void SortColors(int A[], int n)
+		{
+			if (A == nullptr || n <= 1) return;
+
+			int i = 0;
+			int j = 0;
+			int k = n - 1;
+			int t;
+			while (i < k) {
+				while (A[i] == 0) i++;
+				while (A[k] == 2) k--;
+				if (i >= k) return;
+				if (A[i] > A[k]) {
+					t = A[i];
+					A[i] = A[k];
+					A[k] = t;
+				} else {
+					// A[i] == A[k] == 1
+					if (j <= i) j = i+1;
+					while (A[j] == 1) j++;
+					if (j >= k) return;
+					if (A[j] == 0) {
+						t = A[i];
+						A[i] = A[j];
+						A[j] = t;
+					} else {
+						t = A[k];
+						A[k] = A[j];
+						A[j] = t;
+					}
+				}
+			}
+		}
 	};
 }

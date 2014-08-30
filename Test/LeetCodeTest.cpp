@@ -2286,4 +2286,185 @@ void LeetCodeTest::Init(void)
 		check("ACCCCCBCCCACCACB", "ABD", "");
 		check("ADOBECODEBANC", "ABC", "BANC");
 	});
+
+	Add("SortColors", [&](){
+		auto print = [&](int a[], int n){
+			Logger().WriteInformation("[");
+				for (int i = 0; i < n; i++) {
+					if (i != 0) Logger().WriteInformation(" ");
+					Logger().WriteInformation("%d", a[i]);
+				}
+				Logger().WriteInformation("]\n");
+		};
+		auto check = [&](int a[], int n){
+			Logger().WriteInformation("Input:  ");
+			print(a, n);
+			Test::LeetCode::SortColors(a, n);
+			Logger().WriteInformation("Output: ");
+			print(a, n);
+			for (int i = 1; i < n; i++) {
+				ASSERT1(a[i] >= a[i-1]);
+			}
+		};
+		{
+			int a[] = { 1 };
+			check(a, 1);
+		}
+		{
+			int a[] = { 0, 0 };
+			check(a, 2);
+		}
+		{
+			int a[] = { 0, 1 };
+			check(a, 2);
+		}
+		{
+			int a[] = { 0, 2 };
+			check(a, 2);
+		}
+		{
+			int a[] = { 1, 0 };
+			check(a, 2);
+		}
+		{
+			int a[] = { 1, 1 };
+			check(a, 2);
+		}
+		{
+			int a[] = { 1, 2 };
+			check(a, 2);
+		}
+		{
+			int a[] = { 2, 0 };
+			check(a, 2);
+		}
+		{
+			int a[] = { 2, 1 };
+			check(a, 2);
+		}
+		{
+			int a[] = { 2, 2 };
+			check(a, 2);
+		}
+		{
+			int a[] = { 0, 0, 0 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 0, 0, 1 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 0, 0, 2 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 0, 1, 0 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 0, 1, 1 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 0, 1, 2 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 0, 2, 0 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 0, 2, 1 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 0, 2, 2 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 1, 0, 0 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 1, 0, 1 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 1, 0, 2 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 1, 1, 0 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 1, 1, 1 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 1, 1, 2 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 1, 2, 0 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 1, 2, 1 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 1, 2, 2 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 2, 0, 0 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 2, 0, 1 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 2, 0, 2 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 2, 1, 0 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 2, 1, 1 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 2, 1, 2 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 2, 2, 0 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 2, 2, 1 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 2, 2, 2 };
+			check(a, 3);
+		}
+		{
+			for (int i = 0; i < 100; i++) {
+				int len = 1 + Test::Random::Next(50);
+				unique_ptr<int[]> a(new int[len]);
+				for (int j = 0; j < len; j++) {
+					int v = Test::Random::Next();
+					v = v % 3;
+					a[j] = v;
+				}
+				check(a.get(), len);
+			}
+		}
+	});
 }
