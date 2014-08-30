@@ -2147,4 +2147,119 @@ void LeetCodeTest::Init(void)
 			check(a, 5, 4);
 		}
 	});
+
+	Add("SearchWord", [&](){
+		auto print = [&](vector<vector<char>> & board) {
+			Logger().WriteInformation("Board:\n");
+			for_each (board.begin(), board.end(), [&](vector<char> & row){
+				for_each (row.begin(), row.end(), [&](char c){
+					Logger().WriteInformation(" %c", c);
+				});
+				Logger().WriteInformation("\n");
+			});
+		};
+		auto check = [&](vector<vector<char>> & board, const string & word, bool expect) {
+			bool actual = Test::LeetCode::SearchWord(board, word);
+			Logger().WriteInformation("  %s is %sfound\n", word.c_str(), actual ? "" : "not ");
+			ASSERT1(actual == expect);
+		};
+		{
+			vector<vector<char>> b = {
+					{ 'A' }
+			};
+			print(b);
+			check(b, "A", true);
+			check(b, "B", false);
+			check(b, "AA", false);
+			check(b, "AB", false);
+		}
+		{
+			vector<vector<char>> b = {
+					{ 'A', 'B' },
+					{ 'B', 'A' }
+			};
+			print(b);
+			check(b, "A", true);
+			check(b, "B", true);
+			check(b, "AA", false);
+			check(b, "AB", true);
+			check(b, "ABA", true);
+			check(b, "BAB", true);
+			check(b, "ABAB", true);
+			check(b, "ABBA", false);
+			check(b, "BAAB", false);
+			check(b, "BABA", true);
+		}
+		{
+			vector<vector<char>> b = {
+					{ 'A', 'A' },
+					{ 'A', 'A' }
+			};
+			print(b);
+			check(b, "A", true);
+			check(b, "B", false);
+			check(b, "AA", true);
+			check(b, "AAA", true);
+			check(b, "AAAA", true);
+			check(b, "AAAAA", false);
+		}
+		{
+			vector<vector<char>> b = {
+					{ 'A', 'B', 'C', 'E' },
+					{ 'S', 'F', 'C', 'S' },
+					{ 'A', 'D', 'E', 'E' }
+			};
+			print(b);
+			check(b, "ABCCED", true);
+			check(b, "SEE", true);
+			check(b, "ABCB", false);
+		}
+		{
+			vector<vector<char>> b = {
+					{ 'A', 'B', 'C', 'E' },
+					{ 'S', 'F', 'E', 'S' },
+					{ 'A', 'D', 'E', 'E' }
+			};
+			print(b);
+			check(b, "ABCEFSADEESE", true);
+		}
+	});
+
+	Add("Combinations", [&](){
+		auto print = [&](vector<vector<int>> & sets) {
+			for_each (sets.begin(), sets.end(), [&](vector<int> & v){
+				Logger().WriteInformation("  {");
+				for (size_t i = 0; i < v.size(); i++) {
+					if (i != 0) Logger().WriteInformation(", ");
+					Logger().WriteInformation("%d", v[i]);
+				}
+				Logger().WriteInformation("}\n");
+			});
+		};
+		auto check = [&](int n, int k){
+			vector<vector<int>> sets = Test::LeetCode::Combinations(n, k);
+			vector<vector<int>> sets2 = Test::LeetCode::Combinations2(n, k);
+			Logger().WriteInformation("Choose(%d, %d):\n", n, k);
+			print(sets);
+			Logger().WriteInformation("Choose(%d, %d):\n", n, k);
+			print(sets2);
+			ASSERT1(sets.size() == sets2.size());
+		};
+
+		check(1, 1);
+		check(2, 1);
+		check(2, 2);
+		check(3, 1);
+		check(3, 2);
+		check(3, 3);
+		check(4, 1);
+		check(4, 2);
+		check(4, 3);
+		check(4, 4);
+		check(5, 1);
+		check(5, 2);
+		check(5, 3);
+		check(5, 4);
+		check(5, 5);
+	});
 }

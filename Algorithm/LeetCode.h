@@ -4,6 +4,7 @@
 #include <functional>
 #include <iostream>
 #include <map>
+#include <set>
 #include <stack>
 #include <sstream>
 #include <unordered_map>
@@ -1319,6 +1320,161 @@ namespace Test {
 			}
 
 			return i+1;
+		}
+
+		// Given a 2D board and a word, find if the word exists in the grid.
+		// The word can be constructed from letters of sequentially adjacent cell,
+		// where "adjacent" cells are those horizontally or vertically neighboring.
+		// The same letter cell may not be used more than once.
+		// For example,
+		// Given board =
+		// [
+		//  ["ABCE"],
+		//  ["SFCS"],
+		//  ["ADEE"]
+		// ]
+		// word = "ABCCED", -> returns true,
+		// word = "SEE", -> returns true,
+		// word = "ABCB", -> returns false.
+		static bool SearchWord(vector<vector<char>> & board, const string & word)
+		{
+			if (board.size() == 0 || board[0].size() == 0) return false;
+
+			function<bool(vector<vector<char>> &, int, int, const string &, set<pair<int,int>> &)>
+			search = [&](vector<vector<char>> & b, int i, int j, const string & s, set<pair<int,int>> & v)->bool{
+				if (s.length() == 0) return true;
+				if (i < 0 || i >= (int)b.size() || j < 0 || j >= (int)b[0].size()) return false;
+				pair<int, int> p = make_pair(i, j);
+				if (v.find(p) != v.end()) return false;
+				if (b[i][j] != s[0]) return false;
+				v.insert(p);
+				if (search(b, i, j+1, s.substr(1), v)) return true;
+				if (search(b, i+1, j, s.substr(1), v)) return true;
+				if (search(b, i, j-1, s.substr(1), v)) return true;
+				if (search(b, i-1, j, s.substr(1), v)) return true;
+				v.erase(p);
+				return false;
+			};
+
+			for (int i = 0; i < (int)board.size(); i++) {
+				for (int j = 0; j < (int)board[0].size(); j++) {
+					set<pair<int,int>> visited;
+					if (search(board, i, j, word, visited)) return true;
+				}
+			}
+
+			return false;
+		}
+
+		// Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
+		// For example,
+		// If n = 4 and k = 2, a solution is:
+		// [
+		//  [2,4],
+		//  [3,4],
+		//  [2,3],
+		//  [1,2],
+		//  [1,3],
+		//  [1,4],
+		// ]
+		// Let s(i, j) be the solution of choosing j numbers out of {1, 2, ..., i}
+		// then we need s(n, k).
+		// s(n, k) = s(n-1, k-1) + s(n-1, k)
+		static vector<vector<int>> Combinations(int n, int k)
+		{
+			if (n < k) return vector<vector<int>> { { } };
+			function<void(int, int, map<pair<int, int>, vector<vector<int>>> &)>
+			combine = [&](int i, int j, map<pair<int, int>, vector<vector<int>>> & s){
+				pair<int, int> p = make_pair(i, j);
+				s[p] = vector<vector<int>> { };
+
+				if (i <= 0 || j <= 0 || i < j) {
+					s[p].push_back(vector<int> { });
+					return;
+				}
+
+				if (i == j) {
+					vector<int> v;
+					for (int k = 1; k <= j; k++) {
+						v.push_back(k);
+					}
+					s[p].push_back(v);
+					return;
+				}
+
+				pair<int, int> q1 = make_pair(i-1, j-1);
+				if (s.find(q1) == s.end()) combine(i-1, j-1, s);
+				for_each (s[q1].begin(), s[q1].end(), [&](vector<int> & v){
+					vector<int> ex(v.begin(), v.end());
+					ex.push_back(i);
+					s[p].push_back(ex);
+				});
+
+				pair<int, int> q2 = make_pair(i-1, j);
+				if (s.find(q2) == s.end()) combine(i-1, j, s);
+				for_each (s[q2].begin(), s[q2].end(), [&](vector<int> & v){
+					s[p].push_back(v);
+				});
+			};
+
+			map<pair<int, int>, vector<vector<int>>> sets;
+			combine(n, k, sets);
+			pair<int, int> p = make_pair(n, k);
+			return sets[p];
+		}
+
+		// Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
+		// For example,
+		// If n = 4 and k = 2, a solution is:
+		// [
+		//  [2,4],
+		//  [3,4],
+		//  [2,3],
+		//  [1,2],
+		//  [1,3],
+		//  [1,4],
+		// ]
+		// Let s(i, j) be the solution of choosing j numbers out of {1, 2, ..., i}
+		// then we need s(n, k).
+		// s(n, k) = s(n-1, k-1) + s(n-1, k)
+		//
+		// s(1,1)
+		// s(2,1)     s(2,2)
+		// s(3,1)     s(3,2)     s(3,3)
+		// s(4,1)     s(4,2)     s(4,3)     s(4,4)
+		// ......     ......     ......     ......
+		// ......     ......     ......     ......  ......
+		// ......     ......     ......     ......  ...... ......
+		// ......     ......     ......     ......  ...... s(k,k-1)   s(k,k)
+		// ......     ......     ......     ......  ...... s(k+1,k-1) s(k+1,k)
+		// ......     ......     ......     ......  ...... ......     ......
+		// ......     ......     ......     ......  ...... ......     ......
+		// s(n-k+1,1) s(n-k+1,2) ......     ......  ...... ......     ......
+		//            s(n-k+2,2) ......     ......  ...... ......     ......
+		//                       s(n-k+2,3) ......  ...... ......     ......
+		//                                  ......  ...... ......     ......
+		//                                          ...... ......     ......
+		//                                                 s(n-1,k-1) s(n-1,k)
+		//                                                            s(n,k)
+		static vector<vector<int>> Combinations2(int n, int k)
+		{
+			if (n <= 0 || k <= 0 || n < k) return vector<vector<int>> { { } };
+
+			vector<vector<vector<int>>> s(n-k+1, vector<vector<int>> { { } });
+
+			for (int j = 1; j <= k; j++) {
+				s[0][0].push_back(j);
+				for (int i = 1; i <= n-k; i++) {
+					for_each (s[i].begin(), s[i].end(), [&](vector<int> & v){
+						v.push_back(i+j);
+					});
+					for_each (s[i-1].begin(), s[i-1].end(), [&](vector<int> & v){
+						s[i].push_back(v);
+					});
+				}
+			}
+
+			return s[n-k];
 		}
 	};
 }
