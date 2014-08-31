@@ -2517,4 +2517,85 @@ void LeetCodeTest::Init(void)
 			check(m, 60, false);
 		}
 	});
+
+	Add("MinDistance1", [&](){
+		auto check = [&](const string & w1, const string & w2, int e){
+			Logger().WriteInformation("Source:   %s\n", w1.c_str());
+			Logger().WriteInformation("Target:   %s\n", w2.c_str());
+			int a = Test::LeetCode::MinDistance(w1, w2);
+			int b = Test::LeetCode::MinDistance2(w1, w2);
+			Logger().WriteInformation("Distance: %d, %d\n", a, b);
+			ASSERT1(a == e);
+			ASSERT1(b == e);
+		};
+		check("", "", 0);
+		check("a", "", 1);
+		check("ab", "", 2);
+		check("", "b", 1);
+		check("", "bc", 2);
+		check("a", "a", 0);
+		check("a", "b", 1);
+		check("aa", "a", 1);
+		check("aa", "b", 2);
+		check("a", "bb", 2);
+		check("b", "bb", 1);
+		check("aa", "bb", 2);
+		check("aa", "ab", 1);
+		check("aa", "ba", 1);
+		check("ab", "bb", 1);
+		check("ba", "bb", 1);
+		check("bb", "bb", 0);
+		check("aaa", "a", 2);
+		check("aaa", "b", 3);
+		check("aaa", "aa", 1);
+		check("aaa", "ab", 2);
+		check("aaa", "ba", 2);
+		check("aaa", "bc", 3);
+		check("aaa", "abc", 2);
+		check("aaa", "bac", 2);
+		check("aaa", "bca", 2);
+		check("aaa", "aab", 1);
+		check("aaa", "aba", 1);
+		check("aaa", "baa", 1);
+		check("aaa", "bcd", 3);
+		check("aaa", "aaa", 0);
+		check("a", "aaa", 2);
+		check("b", "aaa", 3);
+		check("aa", "aaa", 1);
+		check("ab", "aaa", 2);
+		check("ba", "aaa", 2);
+		check("bc", "aaa", 3);
+		check("abc", "aaa", 2);
+		check("bac", "aaa", 2);
+		check("bca", "aaa", 2);
+		check("aab", "aaa", 1);
+		check("aba", "aaa", 1);
+		check("baa", "aaa", 1);
+		check("bcd", "aaa", 3);
+		check("aaa", "aaa", 0);
+		check("e", "dhwjmfxritzebjkoqvtm", 19);
+	});
+
+	Add("MinDistance2", [&](){
+		for (int i = 0; i < 100; i++) {
+			int len1 = 1 + Test::Random::Next(100);
+			string w1;
+			for (int j = 0; j < len1; j++) {
+				char c = 'a' + (Test::Random::Next(100) % 26);
+				w1.append(1, c);
+			}
+			int len2 = 1 + Test::Random::Next(100);
+			string w2;
+			for (int j = 0; j < len2; j++) {
+				char c = 'a' + (Test::Random::Next(100) % 26);
+				w2.append(1, c);
+			}
+			Logger().WriteInformation("Source:   %s\n", w1.c_str());
+			Logger().WriteInformation("Target:   %s\n", w2.c_str());
+			int d1 = Test::LeetCode::MinDistance(w1, w2);
+			int d2 = Test::LeetCode::MinDistance2(w1, w2);
+			Logger().WriteInformation("Distance: %d %s %d\n", d1, d1 == d2 ? "==" : "!=", d2);
+			ASSERT1(d1 == d2);
+		}
+	});
 }
