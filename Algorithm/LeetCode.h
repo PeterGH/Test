@@ -1664,5 +1664,64 @@ namespace Test {
 
 			return false;
 		}
+
+		// Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
+		static void SetMatrixZeroes(vector<vector<int> > & matrix)
+		{
+			if (matrix.size() == 0 || matrix[0].size() == 0) return;
+
+			bool firstRowHasZero = false;
+			for (int j = 0; j < (int)matrix[0].size(); j++) {
+				if (matrix[0][j] == 0) {
+					firstRowHasZero = true;
+					break;
+				}
+			}
+
+			bool firstColumnHasZero = false;
+			for (int i = 0; i < (int)matrix.size(); i++) {
+				if (matrix[i][0] == 0) {
+					firstColumnHasZero = true;
+					break;
+				}
+			}
+
+			for (int i = 1; i < (int)matrix.size(); i++) {
+				for (int j = 1; j < (int)matrix[i].size(); j++) {
+					if (matrix[i][j] == 0) {
+						matrix[i][0] = 0;
+						matrix[0][j] = 0;
+					}
+				}
+			}
+
+			for (int i = 1; i < (int)matrix.size(); i++) {
+				if (matrix[i][0] == 0) {
+					for (int j = 1; j < (int)matrix[i].size(); j++) {
+						matrix[i][j] = 0;
+					}
+				}
+			}
+
+			for (int j = 1; j < (int)matrix[0].size(); j++) {
+				if (matrix[0][j] == 0) {
+					for (int i = 1; i < (int)matrix.size(); i++) {
+						matrix[i][j] = 0;
+					}
+				}
+			}
+
+			if (firstRowHasZero) {
+				for (int j = 0; j < (int)matrix[0].size(); j++) {
+					matrix[0][j] = 0;
+				}
+			}
+
+			if (firstColumnHasZero) {
+				for (int i = 0; i < (int)matrix.size(); i++) {
+					matrix[i][0] = 0;
+				}
+			}
+		}
 	};
 }
