@@ -1612,5 +1612,57 @@ namespace Test {
 				}
 			}
 		}
+
+		// Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+		//   Integers in each row are sorted from left to right.
+		//   The first integer of each row is greater than the last integer of the previous row.
+		// For example,
+		// Consider the following matrix:
+		// [
+		//  [1,   3,  5,  7],
+		//  [10, 11, 16, 20],
+		//  [23, 30, 34, 50]
+		// ]
+		// Given target = 3, return true.
+		static bool SearchMatrix(vector<vector<int>> & matrix, int target)
+		{
+			if (matrix.size() == 0 || matrix[0].size() == 0) return false;
+
+			int l = 0;
+			int h = matrix.size() - 1;
+			int m;
+			while (l <= h) {
+				m = l + ((h - l) >> 1);
+				if (target == matrix[m][0]) return true;
+				if (target < matrix[m][0]) {
+					if (l == m) return false;
+					h = m - 1;
+				} else {
+					if (l == m) {
+						if (target >= matrix[h][0]) m = h;
+						break;
+					}
+
+					l = m;
+				}
+			}
+
+			l = 0;
+			h = matrix[m].size() - 1;
+			int n;
+			while (l <= h) {
+				n = l + ((h - l) >> 1);
+				if (target == matrix[m][n]) return true;
+				if (target < matrix[m][n]) {
+					if (l == n) break;
+					h = n - 1;
+				} else {
+					if (n == h) break;
+					l = n + 1;
+				}
+			}
+
+			return false;
+		}
 	};
 }

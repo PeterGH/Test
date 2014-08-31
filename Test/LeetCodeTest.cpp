@@ -2467,4 +2467,54 @@ void LeetCodeTest::Init(void)
 			}
 		}
 	});
+
+	Add("SearchMatrix", [&](){
+		auto print = [&](vector<vector<int>> & m) {
+			Logger().WriteInformation("Matrix:\n");
+			for_each (m.begin(), m.end(), [&](vector<int> & v){
+				Logger().WriteInformation("  ");
+				for (size_t i = 0; i < v.size(); i++) {
+					if (i != 0) Logger().WriteInformation(" ");
+					Logger().WriteInformation("%d", v[i]);
+				}
+				Logger().WriteInformation("\n");
+			});
+		};
+		auto check = [&](vector<vector<int>> & m, int t, bool e){
+			bool a = Test::LeetCode::SearchMatrix(m, t);
+			Logger().WriteInformation("%d is %sfound\n", t, a ? "" : "not ");
+			ASSERT1(a == e);
+		};
+		{
+			vector<vector<int>> m = {
+					{1,   3,  5,  7},
+					{10, 11, 16, 20},
+					{23, 30, 34, 50}
+			};
+			print(m);
+			check(m, 1, true);
+			check(m, 2, false);
+			check(m, 3, true);
+			check(m, 4, false);
+			check(m, 5, true);
+			check(m, 6, false);
+			check(m, 7, true);
+			check(m, 8, false);
+			check(m, 10, true);
+			check(m, 11, true);
+			check(m, 12, false);
+			check(m, 16, true);
+			check(m, 18, false);
+			check(m, 20, true);
+			check(m, 21, false);
+			check(m, 23, true);
+			check(m, 25, false);
+			check(m, 30, true);
+			check(m, 32, false);
+			check(m, 34, true);
+			check(m, 40, false);
+			check(m, 50, true);
+			check(m, 60, false);
+		}
+	});
 }
