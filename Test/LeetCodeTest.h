@@ -1,4 +1,5 @@
 #pragma once
+#include <math.h>
 #include "..\Algorithm\LeetCode.h"
 #include "..\Algorithm\Random.h"
 #include "..\Algorithm\TestClass.h"

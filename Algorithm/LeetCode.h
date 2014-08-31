@@ -1877,5 +1877,32 @@ namespace Test {
 			}
 			return output;
 		}
+
+		// Compute and return the square root of x.
+		static int Sqrt(int x)
+		{
+			if (x < 0) throw invalid_argument("x cannot be negative");
+			if (x < 2) return x;
+			long long l = 1;
+			long long h = (x >> 1) + 1;
+			while (l <= h) {
+				long long m = l + ((h - l) >> 1);
+				long long s = m * m;
+				if (x == s) return (int)m;
+				else if (x < s) {
+					if (l == m) break;
+					h = m;
+				} else {
+					if (l == m) {
+						s = h * h;
+						if (x == s) return (int)h;
+						return (int)m;
+					} else {
+						l = m;
+					}
+				}
+			}
+			throw runtime_error("sqrt(x) cannot be found");
+		}
 	};
 }

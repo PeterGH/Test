@@ -2761,4 +2761,39 @@ void LeetCodeTest::Init(void)
 		check("/a/../b", "/b");
 		check("/../a/./b", "/a/b");
 	});
+
+	Add("Sqrt", [&](){
+		auto check = [&](int x){
+			Logger().WriteInformation("sqrt(%d) = ", x);
+			int a = Test::LeetCode::Sqrt(x);
+			int b = (int)sqrt(x);
+			Logger().WriteInformation("%d, %d\n", a, b);
+			ASSERT1(a == b);
+		};
+		check(0);
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(INT_MAX - 9);
+		check(INT_MAX - 8);
+		check(INT_MAX - 7);
+		check(INT_MAX - 6);
+		check(INT_MAX - 5);
+		check(INT_MAX - 4);
+		check(INT_MAX - 3);
+		check(INT_MAX - 2);
+		check(INT_MAX - 1);
+		check(INT_MAX);
+		for (int i = 0; i < 100; i++) {
+			int v = Test::Random::Next();
+			check(v);
+		}
+	});
 }
