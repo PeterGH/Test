@@ -2598,4 +2598,167 @@ void LeetCodeTest::Init(void)
 			ASSERT1(d1 == d2);
 		}
 	});
+
+	Add("SimplifyPath", [&](){
+		auto check = [&](const string & p, const string e) {
+			Logger().WriteInformation("Input:  %s\n", p.c_str());
+			string a = Test::LeetCode::SimplifyPath(p);
+			Logger().WriteInformation("Output: %s\n", a.c_str());
+			ASSERT1(a == e);
+		};
+
+		check("", "");
+
+		check("/", "/");
+		check(".", "/");
+		check("a", "/a");
+
+		check("//", "/");
+		check("..", "/");
+		check("ab", "/ab");
+
+		check("/.", "/");
+		check("./", "/");
+
+		check("/a", "/a");
+		check("a/", "/a");
+
+		check(".a", "/.a");
+		check("a.", "/a.");
+
+		check("///", "/");
+		check("...", "/...");
+		check("abc", "/abc");
+
+		check("/..", "/");
+		check("../", "/");
+		check("./.", "/");
+
+		check(".//", "/");
+		check("/./", "/");
+		check("//.", "/");
+
+		check("/ab", "/ab");
+		check("a/b", "/a/b");
+		check("ab/", "/ab");
+
+		check("a//", "/a");
+		check("/a/", "/a");
+		check("//a", "/a");
+
+		check("/a.", "/a.");
+		check("/.a", "/.a");
+		check("./a", "/a");
+		check(".a/", "/.a");
+		check("a/.", "/a");
+		check("a./", "/a.");
+
+		check(".ab", "/.ab");
+		check("a.b", "/a.b");
+		check("ab.", "/ab.");
+
+		check("a..", "/a..");
+		check(".a.", "/.a.");
+		check("..a", "/..a");
+
+		check("////", "/");
+		check("....", "/....");
+		check("abcd", "/abcd");
+
+		check(".///", "/");
+		check("/.//", "/");
+		check("//./", "/");
+		check("///.", "/");
+
+		check("..//", "/");
+		check("././", "/");
+		check(".//.", "/");
+		check("/../", "/");
+		check("/./.", "/");
+		check("//..", "/");
+
+		check("/...", "/...");
+		check("./..", "/");
+		check("../.", "/");
+		check(".../", "/...");
+
+		check("./a/", "/a");
+		check(".//a", "/a");
+		check(".a//", "/.a");
+		check("/.a/", "/.a");
+		check("/./a", "/a");
+		check("/a./", "/a.");
+		check("/a/.", "/a");
+		check("//.a", "/.a");
+		check("//a.", "/a.");
+		check("a.//", "/a.");
+		check("a/./", "/a");
+		check("a//.", "/a");
+
+		check("../a", "/a");
+		check("..a/", "/..a");
+		check("./.a", "/.a");
+		check("./a.", "/a.");
+		check(".a/.", "/.a");
+		check(".a./", "/.a.");
+		check("/a..", "/a..");
+		check("/.a.", "/.a.");
+		check("/..a", "/..a");
+		check("a/..", "/");
+		check("a./.", "/a.");
+		check("a../", "/a..");
+
+		check("//ab", "/ab");
+		check("/a/b", "/a/b");
+		check("/ab/", "/ab");
+
+		check("./ab", "/ab");
+		check(".a/b", "/.a/b");
+		check(".ab/", "/.ab");
+		check("/.ab", "/.ab");
+		check("/a.b", "/a.b");
+		check("/ab.", "/ab.");
+		check("a./b", "/a./b");
+		check("a.b/", "/a.b");
+		check("a/.b", "/a/.b");
+		check("a/b.", "/a/b.");
+		check("ab./", "/ab.");
+		check("ab/.", "/ab");
+
+		check("..ab", "/..ab");
+		check(".a.b", "/.a.b");
+		check(".ab.", "/.ab.");
+		check("a..b", "/a..b");
+		check("a.b.", "/a.b.");
+		check("ab..", "/ab..");
+
+		check(".abc", "/.abc");
+		check("a.bc", "/a.bc");
+		check("ab.c", "/ab.c");
+		check("abc.", "/abc.");
+
+		check("/abc", "/abc");
+		check("a/bc", "/a/bc");
+		check("ab/c", "/ab/c");
+		check("abc/", "/abc");
+
+		check("/....", "/....");
+		check("./...", "/...");
+		check("../..", "/");
+		check(".../.", "/...");
+		check("..../", "/....");
+
+		check("//...", "/...");
+		check("/./..", "/");
+		check("/../.", "/");
+		check("/.../", "/...");
+
+		check("/a/b/c", "/a/b/c");
+		check("//ab/c", "/ab/c");
+		check("///abc", "/abc");
+		check("/a/./..", "/");
+		check("/a/b/..", "/a");
+		check("/a/../b", "/b");
+		check("/../a/./b", "/a/b");
+	});
 }

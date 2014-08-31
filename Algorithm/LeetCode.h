@@ -1828,5 +1828,54 @@ namespace Test {
 
 			return d[0][0];
 		}
+
+		// Given an absolute path for a file (Unix-style), simplify it.
+		// For example,
+		// path = "/home/", => "/home"
+		// path = "/a/./b/../../c/", => "/c"
+		static string SimplifyPath(string path)
+		{
+			int len = path.length();
+			if (len == 0) return "";
+			vector<string> tokens;
+			int i = 0;
+			while (i < len) {
+				while (i < len && path[i] == '/') i++;
+				if (i == len) break;
+				if (path[i] == '.') {
+					if (i + 1 == len) break;
+					if (path[i+1] == '/') {
+						i += 2;
+						continue;
+					} else if (path[i+1] == '.') {
+						if (i + 2 == len ||	path[i+2] == '/') {
+							if (!tokens.empty()) {
+								tokens.pop_back();
+							}
+							i += 3;
+							continue;
+						}
+					}
+				}
+				string token;
+				int j = i;
+				while (j < len && path[j] != '/') {
+					token.append(1, path[j]);
+					j++;
+				}
+				tokens.push_back(token);
+				i = j;
+			}
+			string output;
+			if (tokens.size() == 0) {
+				output.append(1, '/');
+			} else {
+				for_each (tokens.begin(), tokens.end(), [&](string & t){
+					output.append(1, '/');
+					output.append(t.begin(), t.end());
+				});
+			}
+			return output;
+		}
 	};
 }
