@@ -3062,4 +3062,75 @@ void LeetCodeTest::Init(void)
 			}
 		}
 	});
+
+	Add("RotateRight", [&](){
+		auto check = [&](vector<int> & v, int k){
+			Logger().WriteInformation("Right rotate list by %d\n", k);
+			Test::LeetCode::ListNode * l = Test::LeetCode::ToList(v);
+			Test::LeetCode::Print(l);
+			l = Test::LeetCode::RotateRight(l, k);
+			Test::LeetCode::Print(l);
+			Test::LeetCode::DeleteList(l);
+		};
+		{
+			vector<int> v = { 0 };
+			check(v, 0);
+			check(v, 1);
+			check(v, 2);
+		}
+		{
+			vector<int> v = { 0, 1 };
+			check(v, 0);
+			check(v, 1);
+			check(v, 2);
+			check(v, 3);
+			check(v, 4);
+			check(v, 5);
+		}
+		{
+			vector<int> v = { 0, 1, 2 };
+			check(v, 0);
+			check(v, 1);
+			check(v, 2);
+			check(v, 3);
+			check(v, 4);
+			check(v, 5);
+			check(v, 6);
+			check(v, 7);
+			check(v, 8);
+		}
+	});
+
+	Add("GetPermutation", [&](){
+		auto fact = [&](int n)-> int {
+			int m = 1;
+			for ( int i = 1; i <= n; i++) {
+				m *= i;
+			}
+			return m;
+		};
+		auto print = [&](int n){
+			for (int i = 1; i <= n; i++) {
+				Logger().WriteInformation("%c", '0' + i);
+			}
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](int n){
+			print(n);
+			int m = fact(n);
+			for (int i = 1; i <= m; i++) {
+				string p = Test::LeetCode::GetPermutation(n, i);
+				Logger().WriteInformation("  %d  %s\n", i, p.c_str());
+			}
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+	});
 }

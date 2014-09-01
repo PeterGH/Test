@@ -2145,5 +2145,202 @@ namespace Test {
 
 			return head;
 		}
+
+		// Given a m x n grid filled with non-negative numbers, find a path from top left to
+		// bottom right which minimizes the sum of all numbers along its path.
+		// Note: You can only move either down or right at any point in time.
+		static int MinPathSum(vector<vector<int>> & grid)
+		{
+			if (grid.size() == 0 && grid[0].size() == 0) return 0;
+			vector<vector<int>> sum(grid.size(), vector<int>(grid[0].size(), 0));
+			sum[0][0] = grid[0][0];
+			int i = 0;
+			int j = 0;
+			for (j = 1; j < (int)grid[0].size(); j++) {
+				sum[0][j] = sum[0][j-1] + grid[0][j];
+			}
+			for (i = 1; i < (int)grid.size(); i++) {
+				sum[i][0] = sum[i-1][0] + grid[i][0];
+			}
+			for (i = 1; i < (int)grid.size(); i++) {
+				for (j = 1; j < (int)grid[i].size(); j++) {
+					sum[i][j] = grid[i][j] + min(sum[i][j-1], sum[i-1][j]);
+				}
+			}
+			return sum[i-1][j-1];
+		}
+
+		// Given a m x n grid filled with non-negative numbers, find a path from top left to
+		// bottom right which minimizes the sum of all numbers along its path.
+		// Note: You can only move either down or right at any point in time.
+		static int MinPathSum2(vector<vector<int>> & grid)
+		{
+			if (grid.size() == 0 && grid[0].size() == 0) return 0;
+			vector<int> sum(grid[0].size(), 0);
+			sum[0] = grid[0][0];
+			int i = 0;
+			int j = 0;
+			for (j = 1; j < (int)grid[0].size(); j++) {
+				sum[j] = sum[j-1] + grid[0][j];
+			}
+			for (i = 1; i < (int)grid.size(); i++) {
+				sum[0] = sum[0] + grid[i][0];
+				for (j = 1; j < (int)grid[i].size(); j++) {
+					sum[j] = grid[i][j] + min(sum[j-1], sum[j]);
+				}
+			}
+			return sum[j-1];
+		}
+
+		// A robot is located at the top-left corner of a m x n grid.
+		// The robot can only move either down or right at any point in time. The robot is trying to
+		// reach the bottom-right corner of the grid.
+		// How many possible unique paths are there?
+		static int UniquePaths(int m, int n)
+		{
+			if (m <= 0 || n <= 0) return 0;
+			vector<int> sum(n, 1);
+			for (int i = m - 2; i >= 0; i--) {
+				for (int j = n - 2; j >= 0; j--) {
+					sum[j] += sum[j+1];
+				}
+			}
+			return sum[0];
+		}
+
+		// A robot is located at the top-left corner of a m x n grid.
+		// The robot can only move either down or right at any point in time. The robot is trying to
+		// reach the bottom-right corner of the grid.
+		// Some obstacles are added to the grids.
+		// An obstacle and empty space is marked as 1 and 0 respectively in the grid.
+		// How many possible unique paths are there?
+		static int UniquePathsWithObstacles(vector<vector<int> > & obstacleGrid)
+		{
+			int m = obstacleGrid.size();
+			if (m == 0) return 0;
+			int n = obstacleGrid[0].size();
+			if (n == 0) return 0;
+			if (obstacleGrid[m-1][n-1] == 1) return 0;
+			vector<int> sum(n, 0);
+			sum[n-1] = 1;
+			for (int j = n-2; j >= 0; j--) {
+				sum[j] = obstacleGrid[m-1][j] == 1 ? 0 : sum[j+1];
+			}
+			for (int i = m - 2; i >= 0; i--) {
+				sum[n-1] = obstacleGrid[i][n-1] == 1 ? 0 : sum[n-1];
+				for (int j = n - 2; j >= 0; j--) {
+					sum[j] = obstacleGrid[i][j] == 1 ? 0 : (sum[j] + sum[j+1]);
+				}
+			}
+			return sum[0];
+		}
+
+		// Given a list, rotate the list to the right by k places, where k is non-negative. For example:
+		// Given 1->2->3->4->5->NULL and k = 2,
+		// return 4->5->1->2->3->NULL.
+		static ListNode * RotateRight(ListNode * head, int k)
+		{
+			if (head == nullptr || k <= 0) return head;
+			ListNode * p = head;
+			ListNode * q = head;
+			int i = 0;
+			while (i < k && q->next != nullptr) {
+				q = q->next;
+				i++;
+			}
+			if (q->next == nullptr) {
+				int l = i + 1;
+				k = k % l;
+				if (k == 0) return head;
+				i = 0;
+				q = head;
+				while (i < k && q->next != nullptr) {
+					q = q->next;
+					i++;
+				}
+			}
+			while (q->next != nullptr) {
+				q = q->next;
+				p = p->next;
+			}
+			q->next = head;
+			head = p->next;
+			p->next = nullptr;
+			return head;
+		}
+
+		// The set [1,2,3,бн,n] contains a total of n! unique permutations.
+		// By listing and labeling all of the permutations in order,
+		// We get the following sequence (ie, for n = 3):
+		// 1."123"
+		// 2."132"
+		// 3."213"
+		// 4."231"
+		// 5."312"
+		// 6."321"
+		// Given n and k, return the k-th permutation sequence.
+		// Note: Given n will be between 1 and 9 inclusive.
+		static string GetPermutation(int n, int k)
+		{
+			if (n <= 0 || k <= 0) return string();
+			int i = 1; // Count number of digits
+			int m = 1; // Count number of permutations of i digits, i.e. i!
+			while (m < k && i < n) {
+				i++;
+				m *= i;
+			}
+			if (m < k) return string(); // k > n!
+			// 1 2 3 ...... n-i n-i+1 n-i+2 ...... n-1 n
+			// ~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
+			//     not permute         permute
+			string output;
+			for (int j = 1; j <= n - i; j++) {
+				output.append(1, '0' + j);
+			}
+
+			vector<int> permute;
+			for (int j = n-i+1; j <= n; j++) {
+				permute.push_back(j);
+			}
+
+			while (i > 0) {
+				if (i == 1) {
+					// k = 1 since k <= m = i! = 1
+					output.append(1, '0' + permute[permute.size()-1]);
+					break;
+				} else if (i == 2) {
+					if (k == 1) {
+						output.append(1, '0' + permute[permute.size()-2]);
+						output.append(1, '0' + permute[permute.size()-1]);
+					} else { // k = 2
+						output.append(1, '0' + permute[permute.size()-1]);
+						output.append(1, '0' + permute[permute.size()-2]);
+					}
+					break;
+				}
+				// Permute 1 2 3 4 5 ...... i-1 i, will get i ranges determined by the first digit
+				//   1 ......
+				//   1 ......
+				//   2 ......
+				//   2 ......
+				//   ......
+				//   ......
+				//   i-1 ......
+				//   i-1 ......
+				//   i ......
+				//   i ......
+				m = m / i; // Count permutations per range
+				int j = (k - 1) / m + 1; // Get the range index which k falls into
+				// 1 2 3 4 5 ... j-1 j j+1 ... i-1 i
+				// j 1 2 3 4 5 ... j-1 j+1 ... i-1 i
+				int t = permute[j-1];
+				permute.erase(permute.begin() + j - 1);
+				output.append(1, '0' + t);
+				i--; // Get the i-th range
+				k = ((k - 1) % m) + 1; // Get the index in the i-th range
+			}
+
+			return output;
+		}
 	};
 }
