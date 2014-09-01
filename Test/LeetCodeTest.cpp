@@ -3133,4 +3133,158 @@ void LeetCodeTest::Init(void)
 		check(8);
 		check(9);
 	});
+
+	Add("SpiralOrder1", [&](){
+		auto print = [&](vector<vector<int>> & m) {
+			Logger().WriteInformation("Matrix:\n");
+			for_each (m.begin(), m.end(), [&](vector<int> & v){
+				Logger().WriteInformation("  ");
+				for (size_t i = 0; i < v.size(); i++) {
+					if (i != 0) Logger().WriteInformation(" ");
+					Logger().WriteInformation("%d", v[i]);
+				}
+				Logger().WriteInformation("\n");
+			});
+		};
+		auto check = [&](vector<vector<int>> m){
+			print(m);
+			vector<int> o = Test::LeetCode::SpiralOrder(m);
+			Logger().WriteInformation("  ");
+			for (size_t i = 0; i < o.size(); i++) {
+				if (i != 0) Logger().WriteInformation(" ");
+				Logger().WriteInformation("%d", o[i]);
+			}
+			Logger().WriteInformation("\n");
+			for (size_t i = 0; i < o.size(); i++) {
+				ASSERT1(o[i] == i);
+			}
+		};
+		{
+			vector<vector<int>> m = {
+					{ 0 }
+			};
+			check(m);
+		}
+		{
+			vector<vector<int>> m = {
+					{ 0, 1 }
+			};
+			check(m);
+		}
+		{
+			vector<vector<int>> m = {
+					{ 0, 1, 2 }
+			};
+			check(m);
+		}
+		{
+			vector<vector<int>> m = {
+					{ 0 },
+					{ 1 }
+			};
+			check(m);
+		}
+		{
+			vector<vector<int>> m = {
+					{ 0 },
+					{ 1 },
+					{ 2 }
+			};
+			check(m);
+		}
+		{
+			vector<vector<int>> m = {
+					{ 0, 1 },
+					{ 3, 2 }
+			};
+			check(m);
+		}
+		{
+			vector<vector<int>> m = {
+					{ 0, 1, 2 },
+					{ 5, 4, 3 }
+			};
+			check(m);
+		}
+		{
+			vector<vector<int>> m = {
+					{ 0, 1 },
+					{ 5, 2 },
+					{ 4, 3 }
+			};
+			check(m);
+		}
+		{
+			vector<vector<int>> m = {
+					{ 0, 1, 2 },
+					{ 7, 8, 3 },
+					{ 6, 5, 4 }
+			};
+			check(m);
+		}
+		{
+			vector<vector<int>> m = {
+					{ 0, 1,  2,  3 },
+					{ 9, 10, 11, 4 },
+					{ 8, 7,  6,  5 }
+			};
+			check(m);
+		}
+		{
+			vector<vector<int>> m = {
+					{ 0, 1,  2 },
+					{ 9, 10, 3 },
+					{ 8, 11, 4 },
+					{ 7, 6,  5 }
+			};
+			check(m);
+		}
+		{
+			vector<vector<int>> m = {
+					{ 0,  1,  2,  3 },
+					{ 11, 12, 13, 4 },
+					{ 10, 15, 14, 5 },
+					{ 9,  8,  7,  6 }
+			};
+			check(m);
+		}
+	});
+
+	Add("SpiralOrder2", [&](){
+		auto print = [&](vector<vector<int>> & m) {
+			for_each (m.begin(), m.end(), [&](vector<int> & v){
+				Logger().WriteInformation("  ");
+				for (size_t i = 0; i < v.size(); i++) {
+					if (i != 0) Logger().WriteInformation(" ");
+					Logger().WriteInformation("%d", v[i]);
+				}
+				Logger().WriteInformation("\n");
+			});
+		};
+		auto check = [&](int n){
+			Logger().WriteInformation("%dX%d matrix:\n", n, n);
+			vector<vector<int>> m = Test::LeetCode::SpiralOrderMatrix(n);
+			print(m);
+			vector<int> o = Test::LeetCode::SpiralOrder(m);
+			Logger().WriteInformation("  ");
+			for (size_t i = 0; i < o.size(); i++) {
+				if (i != 0) Logger().WriteInformation(" ");
+				Logger().WriteInformation("%d", o[i]);
+			}
+			Logger().WriteInformation("\n");
+			for (size_t i = 0; i < o.size(); i++) {
+				ASSERT1(o[i] == i + 1);
+			}
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+	});
 }

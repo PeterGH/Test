@@ -2342,5 +2342,119 @@ namespace Test {
 
 			return output;
 		}
+
+		// Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+		// For example,
+		// Given the following matrix:
+		// [
+		//  [ 1, 2, 3 ],
+		//  [ 4, 5, 6 ],
+		//  [ 7, 8, 9 ]
+		// ]
+		// You should return [1,2,3,6,9,8,7,4,5].
+		static vector<int> SpiralOrder(vector<vector<int>> & matrix)
+		{
+			vector<int> o;
+			int v = matrix.size();
+			if (v == 0) return o;
+			int h = matrix[0].size();
+			if (h == 0) return o;
+			int i = 0;
+			int j = -1;
+			int d = 0;
+			while (h > 0 && v > 0) {
+				d = d % 4;
+				if (d == 0) {
+					for (int k = 1; k <= h; k++) {
+						j++;
+						o.push_back(matrix[i][j]);
+					}
+					v--;
+					d++;
+				} else if (d == 1) {
+					for (int k = 1; k <= v; k++) {
+						i++;
+						o.push_back(matrix[i][j]);
+					}
+					h--;
+					d++;
+				} else if (d == 2) {
+					for (int k = 1; k <= h; k++) {
+						j--;
+						o.push_back(matrix[i][j]);
+					}
+					v--;
+					d++;
+				} else {
+					for (int k = 1; k <= v; k++) {
+						i--;
+						o.push_back(matrix[i][j]);
+					}
+					h--;
+					d++;
+				}
+			}
+			return o;
+		}
+
+		// Given an integer n, generate a square matrix filled with elements from 1 to n2 in spiral order.
+		// For example,
+		// Given n = 3,
+		// You should return the following matrix:
+		// [
+		//  [ 1, 2, 3 ],
+		//  [ 8, 9, 4 ],
+		//  [ 7, 6, 5 ]
+		// ]
+		static vector<vector<int>> SpiralOrderMatrix(int n)
+		{
+			if (n == 0) return vector<vector<int>>();
+			if (n < 0) n = -n;
+			vector<vector<int>> o(n, vector<int>(n, 0));
+			int h = n;
+			int v = n;
+			int i = 0;
+			int j = -1;
+			int t = 1;
+			int d = 0;
+			while (h > 0 && v > 0) {
+				d = d % 4;
+				switch (d) {
+				case 0:
+					for (int k = 1; k <= h; k++) {
+						j++;
+						o[i][j] = t++;
+					}
+					v--;
+					d++;
+					break;
+				case 1:
+					for (int k = 1; k <= v; k++) {
+						i++;
+						o[i][j] = t++;
+					}
+					h--;
+					d++;
+					break;
+				case 2:
+					for (int k = 1; k <= h; k++) {
+						j--;
+						o[i][j] = t++;
+					}
+					v--;
+					d++;
+					break;
+				default:
+					for (int k = 1; k <= v; k++) {
+						i--;
+						o[i][j] = t++;
+					}
+					h--;
+					d++;
+					break;
+				}
+			}
+			return o;
+		}
 	};
 }
