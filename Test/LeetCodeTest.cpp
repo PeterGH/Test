@@ -2931,4 +2931,135 @@ void LeetCodeTest::Init(void)
 		check(".1e.1", false);
 		check(".1e0.1", false);
 	});
+
+	Add("AddBinaryString", [&](){
+		auto check = [&](const string & a, const string & b, const string & e){
+			int width = 1 + max(a.length(), b.length());
+			Logger().WriteInformation("\n   %s%s\n", string(width - a.length(), ' ').c_str(), a.c_str());
+			Logger().WriteInformation(" + %s%s\n", string(width - b.length(), ' ').c_str(), b.c_str());
+			string c = Test::LeetCode::AddBinaryString(a, b);
+			Logger().WriteInformation(" = %s%s\n", string(width - c.length(), ' ').c_str(), c.c_str());
+			ASSERT1(c == e);
+		};
+		check("0", "0", "0");
+		check("0", "1", "1");
+		check("1", "0", "1");
+		check("1", "1", "10");
+		check("00", "00", "00");
+		check("01", "01", "10");
+		check("01", "10", "11");
+		check("00", "11", "11");
+		check("11", "01", "100");
+		check("11", "10", "101");
+		check("11", "11", "110");
+		check("11", "1", "100");
+		check("1110", "10", "10000");
+		check("101", "11101", "100010");
+	});
+
+	Add("MergeSortedLists", [&](){
+		auto check = [&](vector<int> & v1, vector<int> & v2){
+			Logger().WriteInformation("Merge:\n");
+			Test::LeetCode::ListNode * l1 = Test::LeetCode::ToList(v1);
+			Test::LeetCode::ListNode * l2 = Test::LeetCode::ToList(v2);
+			Test::LeetCode::Print(l1);
+			Test::LeetCode::Print(l2);
+			Test::LeetCode::ListNode * l3 = Test::LeetCode::MergeSortedLists(l1, l2);
+			Test::LeetCode::Print(l3);
+			Test::LeetCode::ListNode * p = l3;
+			Test::LeetCode::ListNode * q = p->next;
+			bool sorted = true;
+			while (q != nullptr) {
+				if (p->val > q->val) sorted = false;
+				p = q;
+				q = p->next;
+			}
+			Test::LeetCode::DeleteList(l3);
+			ASSERT1(sorted == true);
+		};
+		{
+			vector<int> v1 { 0 };
+			vector<int> v2 { 0 };
+			check(v1, v2);
+		}
+		{
+			vector<int> v1 { 0 };
+			vector<int> v2 { 1 };
+			check(v1, v2);
+		}
+		{
+			vector<int> v1 { 1 };
+			vector<int> v2 { 0 };
+			check(v1, v2);
+		}
+		{
+			vector<int> v1 { 0 };
+			vector<int> v2 { 0, 1 };
+			check(v1, v2);
+		}
+		{
+			vector<int> v1 { 0, 1 };
+			vector<int> v2 { 0 };
+			check(v1, v2);
+		}
+		{
+			vector<int> v1 { 0 };
+			vector<int> v2 { 1, 2 };
+			check(v1, v2);
+		}
+		{
+			vector<int> v1 { 1, 2 };
+			vector<int> v2 { 0 };
+			check(v1, v2);
+		}
+		{
+			vector<int> v1 { 1 };
+			vector<int> v2 { 0, 1 };
+			check(v1, v2);
+		}
+		{
+			vector<int> v1 { 0, 1 };
+			vector<int> v2 { 1 };
+			check(v1, v2);
+		}
+		{
+			vector<int> v1 { 2 };
+			vector<int> v2 { 0, 1 };
+			check(v1, v2);
+		}
+		{
+			vector<int> v1 { 0, 1 };
+			vector<int> v2 { 2 };
+			check(v1, v2);
+		}
+		{
+			vector<int> v1 { 1 };
+			vector<int> v2 { 0, 2 };
+			check(v1, v2);
+		}
+		{
+			vector<int> v1 { 0, 2 };
+			vector<int> v2 { 1 };
+			check(v1, v2);
+		}
+		{
+			for (int i = 0; i < 100; i++) {
+				int len1 = 1 + Test::Random::Next(100);
+				vector<int> v1;
+				for (int i = 0; i < len1; i++) {
+					int v = Test::Random::Next();
+					v1.push_back(v);
+				}
+				sort(v1.begin(), v1.end());
+				int len2 = 1 + Test::Random::Next(100);
+				vector<int> v2;
+				for (int i = 0; i < len2; i++) {
+					int v = Test::Random::Next();
+					v2.push_back(v);
+				}
+				sort(v2.begin(), v2.end());
+				check(v1, v2);
+			}
+		}
+	});
 }

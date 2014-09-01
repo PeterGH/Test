@@ -2046,5 +2046,104 @@ namespace Test {
 			if (*s == '\0') return true;
 			else return false;
 		}
+
+		// Given two binary strings, return their sum (also a binary string). For example,
+		// a = "11"
+		// b = "1"
+		// Return "100".
+		static string AddBinaryString(const string & a, const string & b)
+		{
+			if (a.length() == 0) return b;
+			if (b.length() == 0) return a;
+			int i = a.length() - 1;
+			int j = b.length() - 1;
+			int carry = 0;
+			string c;
+			while (i >= 0 && j >= 0) {
+				if (a[i] == '0' && b[j] == '0') {
+					if (carry == 0) {
+						c.insert(0, 1, '0');
+					} else {
+						c.insert(0, 1, '1');
+						carry = 0;
+					}
+				} else if (a[i] == '0' && b[j] == '1' || a[i] == '1' && b[j] == '0') {
+					c.insert(0, 1, carry == 0 ? '1' : '0');
+				} else if (a[i] == '1' && b[j] == '1') {
+					if (carry == 0) {
+						c.insert(0, 1, '0');
+						carry = 1;
+					} else {
+						c.insert(0, 1, '1');
+					}
+				}
+				i--;
+				j--;
+			}
+			while (i >= 0) {
+				if (carry == 0) {
+					c.insert(0, a, 0, i+1);
+					break;
+				} else {
+					if (a[i] == '0') {
+						c.insert(0, 1, '1');
+						carry = 0;
+					} else {
+						c.insert(0, 1, '0');
+					}
+					i--;
+				}
+			}
+			while (j >= 0) {
+				if (carry == 0) {
+					c.insert(0, b, 0, j+1);
+					break;
+				} else {
+					if (b[j] == '0') {
+						c.insert(0, 1, '1');
+						carry = 0;
+					} else {
+						c.insert(0, 1, '0');
+					}
+					j--;
+				}
+			}
+
+			if (carry == 1) c.insert(0, 1, '1');
+			return c;
+		}
+
+		static ListNode * MergeSortedLists(ListNode * l1, ListNode * l2)
+		{
+			if (l1 == nullptr) return l2;
+			if (l2 == nullptr) return l1;
+
+			ListNode * head = l1;
+			if (l1->val > l2->val) {
+				head = l2;
+				l2 = l2->next;
+			} else {
+				l1 = l1->next;
+			}
+
+			ListNode * p = head;
+
+			while (l1 != nullptr && l2 != nullptr) {
+				if (l1->val <= l2->val) {
+					if (p->next != l1) p->next = l1;
+					p = l1;
+					l1 = p->next;
+				} else {
+					if (p->next != l2) p->next = l2;
+					p = l2;
+					l2 = p->next;
+				}
+			}
+
+			ListNode * q = l1 == nullptr ? l2 : l1;
+			if (q != nullptr && p->next != q) p->next = q;
+
+			return head;
+		}
 	};
 }
