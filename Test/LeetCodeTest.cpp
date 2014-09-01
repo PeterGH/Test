@@ -2796,4 +2796,78 @@ void LeetCodeTest::Init(void)
 			check(v);
 		}
 	});
+
+	Add("TextJustification", [&](){
+		auto print = [&](vector<string> words){
+			Logger().WriteInformation("Words:");
+			for_each (words.begin(), words.end(), [&](string & w){
+				Logger().WriteInformation(" %s", w.c_str());
+			});
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](vector<string> words, int l){
+			vector<string> text = Test::LeetCode::TextJustification(words, l);
+			Logger().WriteInformation("Format with width %d:\n", l);
+			for_each (text.begin(), text.end(), [&](string & w){
+				Logger().WriteInformation("  \"%s\"\n", w.c_str());
+			});
+			Logger().WriteInformation("\n");
+		};
+		{
+			vector<string> w = { "This" };
+			print(w);
+			check(w, 4);
+			check(w, 5);
+			check(w, 6);
+		}
+		{
+			vector<string> w = { "This", "is" };
+			print(w);
+			for (int i = 4; i < 10; i++) {
+				check(w, i);
+			}
+		}
+		{
+			vector<string> w = { "This", "is", "an" };
+			print(w);
+			for (int i = 4; i < 12; i++) {
+				check(w, i);
+			}
+		}
+		{
+			vector<string> w = { "This", "is", "an", "example", "of", "text", "justification." };
+			print(w);
+			for (int i = 14; i < 60; i++) {
+				check(w, i);
+			}
+		}
+	});
+
+	Add("PlusOne", [&](){
+		auto number = [&](vector<int> & digits)->int{
+			int s = 0;
+			for_each (digits.begin(), digits.end(), [&](int n){
+				s = 10 * s + n;
+			});
+			return s;
+		};
+		auto check = [&](vector<int> & digits){
+			int a = number(digits);
+			Logger().WriteInformation("%d + 1 = ", a);
+			vector<int> output = Test::LeetCode::PlusOne(digits);
+			int b = number(output);
+			Logger().WriteInformation("%d\n", b);
+			ASSERT1(a + 1 == b);
+		};
+		check(vector<int> { 0 });
+		check(vector<int> { 9 });
+		check(vector<int> { 1, 0 });
+		check(vector<int> { 1, 9 });
+		check(vector<int> { 9, 9 });
+		check(vector<int> { 1, 0, 0 });
+		check(vector<int> { 1, 0, 9 });
+		check(vector<int> { 1, 9, 0 });
+		check(vector<int> { 1, 9, 9 });
+		check(vector<int> { 9, 9, 9 });
+	});
 }

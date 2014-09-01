@@ -1904,5 +1904,100 @@ namespace Test {
 			}
 			throw runtime_error("sqrt(x) cannot be found");
 		}
+
+		// Given an array of words and a length L, format the text such that each line has exactly L characters
+		// and is fully (left and right) justified.
+		// You should pack your words in a greedy approach; that is, pack as many words as you can in each line.
+		// Pad extra spaces ' ' when necessary so that each line has exactly L characters.
+		// Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line do not
+		// divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+		// For the last line of text, it should be left justified and no extra space is inserted between words.
+		// For example,
+		// words: ["This", "is", "an", "example", "of", "text", "justification."]
+		// L: 16.
+		// Return the formatted lines as:
+		// [
+		//   "This    is    an",
+		//   "example  of text",
+		//   "justification.  "
+		// ]
+		// Note: Each word is guaranteed not to exceed L in length.
+		// Corner Cases:
+		// A line other than the last line might contain only one word. What should you do in this case?
+		// In this case, that line should be left-justified.
+		static vector<string> TextJustification(vector<string> & words, int L)
+		{
+			if (words.size() == 0) return vector<string> { };
+			vector<string> output;
+			int i = 0;
+			int j = 0;
+			int count = (int)words.size();
+			int len = 0;
+			while (i < count && j < count) {
+				while (j < count && len + (int)words[j].length() + j - i <= L) {
+					len += words[j].length();
+					j++;
+				}
+				if (j == count) {
+					// last line with words[i..j-1]
+					string line;
+					for (int k = i; k < j; k++) {
+						if (k != i) line.append(1, ' ');
+						line.append(words[k]);
+					}
+					int extra = L - len - (j - 1 - i);
+					if (extra > 0) line.append(extra, ' ');
+					output.push_back(line);
+					break;
+				} else {
+					// one line with words[i..j-1]
+					string line(words[i]);
+					int totalSpaces = L - len;
+					int intervals = j - 1 - i;
+					if (intervals == 0) {
+						line.append(totalSpaces, ' ');
+					} else {
+						int spaces = totalSpaces / intervals;
+						int extra = totalSpaces % intervals;
+						for (int k = i + 1; k <= i + extra; k++) {
+							line.append(spaces + 1, ' ');
+							line.append(words[k]);
+						}
+						for (int k = i + extra + 1; k < j; k++) {
+							line.append(spaces, ' ');
+							line.append(words[k]);
+						}
+					}
+					output.push_back(line);
+					i = j;
+					len = 0;
+				}
+			}
+			return output;
+		}
+
+		// Given a non-negative number represented as an array of digits, plus one to the number.
+		// The digits are stored such that the most significant digit is at the head of the list.
+		static vector<int> PlusOne(vector<int> & digits)
+		{
+			vector<int> output = { };
+			int len = digits.size();
+			if (len == 0) return output;
+			int carry = 0;
+			int d = (digits[len-1] + 1) % 10;
+			if (d == 0) carry = 1;
+			output.insert(output.begin(), d);
+			for (int i = digits.size() - 2; i >= 0; i--) {
+				d = digits[i];
+				if (carry == 1) {
+					d = (d + 1) % 10;
+					if (d == 0) carry = 1;
+					else carry = 0;
+				}
+				output.insert(output.begin(), d);
+			}
+			if (carry == 1) output.insert(output.begin(), 1);
+			return output;
+		}
 	};
 }
