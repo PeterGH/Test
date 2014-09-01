@@ -1999,5 +1999,52 @@ namespace Test {
 			if (carry == 1) output.insert(output.begin(), 1);
 			return output;
 		}
+
+		// Validate if a given string is numeric. Some examples:
+		// "0" => true
+		// " 0.1 " => true
+		// "abc" => false
+		// "1 a" => false
+		// "2e10" => true
+		static bool IsNumber(const char * s)
+		{
+			if (s == nullptr || *s == '\0') return false;
+			while (*s == ' ') s++;
+			if (*s == '\0') return false;
+			if (*s != '+' && *s != '-' && *s != '.' && (*s < '0' || *s > '9')) return false;
+			if ((*s == '+' || *s == '-') && *(s+1) == '.' && (*(s+2) == '\0' || *(s+2) == ' ')) return false;
+			bool foundDot = *s == '.';
+			if (foundDot && (*(s+1) < '0' || *(s+1) > '9')) return false;
+			bool foundE = false;
+			s++;
+			while (*s != '\0' && *s != ' ') {
+				switch (*s) {
+				case '+':
+				case '-':
+					if (*(s-1) != 'e' && *(s-1) != 'E') return false;
+					if (*(s+1) < '0' || *(s+1) > '9') return false;
+					break;
+				case '.':
+					if (foundE || foundDot) return false;
+					foundDot = true;
+					if (*(s+1) != '\0' && *(s+1) != ' ' && *(s+1) != 'e'  && *(s+1) != 'E' && (*(s+1) < '0' || *(s+1) > '9')) return false;
+					break;
+				case 'e':
+				case 'E':
+					if (foundE) return false;
+					foundE = true;
+					if (*(s-1) != '.' && (*(s-1) < '0' || *(s-1) > '9')) return false;
+					if (*(s+1) != '+' && *(s+1) != '-' && (*(s+1) < '0' || *(s+1) > '9')) return false;
+					break;
+				default:
+					if (*s < '0' || *s > '9') return false;
+					break;
+				}
+				s++;
+			}
+			while (*s == ' ') s++;
+			if (*s == '\0') return true;
+			else return false;
+		}
 	};
 }
