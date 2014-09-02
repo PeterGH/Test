@@ -3287,4 +3287,60 @@ void LeetCodeTest::Init(void)
 		check(9);
 		check(10);
 	});
+
+	Add("MergeIntervals", [&](){
+		auto print = [&](vector<Test::LeetCode::Interval> it){
+			for_each(it.begin(), it.end(), [&](Test::LeetCode::Interval i){
+				Logger().WriteInformation(" [%d,%d]", i.start, i.end);
+			});
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](vector<Test::LeetCode::Interval> it){
+			Logger().WriteInformation("Input: ");
+			print(it);
+			vector<Test::LeetCode::Interval> o = Test::LeetCode::MergeIntervals(it);
+			Logger().WriteInformation("Output:");
+			print(o);
+		};
+		{
+			vector<Test::LeetCode::Interval> it = {
+				Test::LeetCode::Interval(74,78),
+				Test::LeetCode::Interval(61,63),
+				Test::LeetCode::Interval(46,50),
+				Test::LeetCode::Interval(51,54),
+				Test::LeetCode::Interval(50,50),
+				Test::LeetCode::Interval(60,64),
+				Test::LeetCode::Interval(39,42),
+				Test::LeetCode::Interval(25,27),
+				Test::LeetCode::Interval(91,95)
+			};
+			check(it);
+		}
+	});
+
+	Add("JumpGame", [&](){
+		auto check = [&](int a[], int n){
+			for (int i = 0; i < n; i++) {
+				Logger().WriteInformation(" %d", a[i]);
+			}
+			Logger().WriteInformation("\n");
+			bool j = Test::LeetCode::CanJump(a, n);
+			bool k = Test::LeetCode::CanJump2(a, n);
+			Logger().WriteInformation("Can %sjump\n", j ? "" : "not ");
+			Logger().WriteInformation("Can %sjump\n", k ? "" : "not ");
+			ASSERT1(j == k);
+		};
+		{
+			int a[] = { 0, 1 };
+			check(a, 2);
+		}
+		{
+			int a[] = { 2, 3, 1, 1, 4 };
+			check(a, 5);
+		}
+		{
+			int a[] = { 3, 2, 1, 0, 4 };
+			check(a, 5);
+		}
+	});
 }
