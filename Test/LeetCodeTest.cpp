@@ -3343,4 +3343,50 @@ void LeetCodeTest::Init(void)
 			check(a, 5);
 		}
 	});
+
+	Add("NQueens", [&](){
+		auto check = [&](int n){
+			Logger().WriteInformation("Solutions of %d-Queens problem:\n", n);
+			vector<vector<string>> solutions = Test::LeetCode::NQueens(n);
+			int count = Test::LeetCode::NQeensSolutionsCount(n);
+			for (size_t i = 0; i < solutions.size(); i++) {
+				Logger().WriteInformation("  Solution %d:\n", i);
+				for (size_t j = 0; j < solutions[i].size(); j++) {
+					Logger().WriteInformation("\t");
+					for (size_t k = 0; k < solutions[i][j].length(); k++) {
+						Logger().WriteInformation(" %c", solutions[i][j][k]);
+					}
+					Logger().WriteInformation("\n");
+				}
+			}
+			Logger().WriteInformation("  Total %d solutions\n", count);
+			ASSERT1((int)solutions.size() == count);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+	});
+
+	Add("Pow", [&](){
+		auto check = [&](double x, int n) {
+			double p = Test::LeetCode::Pow(x, n);
+			Logger().WriteInformation("%f^%s%d%s = %f\n", x, n < 0 ? "(" : "", n, n < 0 ? ")" : "", p);
+		};
+		for (int i = -10; i <= 10; i++) {
+			check(2, i);
+		}
+		check(-1, INT_MIN);
+		check(-1, INT_MAX);
+		check(-0.5, INT_MIN);
+		check(-0.5, INT_MAX);
+		check(0.5, INT_MIN);
+		check(0.5, INT_MAX);
+		check(1, INT_MIN);
+		check(1, INT_MAX);
+	});
 }

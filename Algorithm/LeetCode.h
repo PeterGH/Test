@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <algorithm>
 #include <array>
 #include <functional>
@@ -2270,7 +2270,7 @@ namespace Test {
 			return head;
 		}
 
-		// The set [1,2,3,��,n] contains a total of n! unique permutations.
+		// The set [1,2,3,…,n] contains a total of n! unique permutations.
 		// By listing and labeling all of the permutations in order,
 		// We get the following sequence (ie, for n = 3):
 		// 1."123"
@@ -2619,6 +2619,143 @@ namespace Test {
 				}
 			}
 			return lastTrue == 0;
+		}
+
+		// Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
+		// For example, given the array [−2,1,−3,4,−1,2,1,−5,4],
+		// the contiguous subarray [4,−1,2,1] has the largest sum = 6.
+		static int MaxSubArray(int A[], int n)
+		{
+			if (A == nullptr || n <= 0) throw invalid_argument("Invalid array");
+			int max = INT_MIN;
+			int maxSum = INT_MIN;
+			int sum = 0;
+			for (int i = 0; i < n; i++) {
+				if (A[i] > max) max = A[i];
+				sum += A[i];
+				if (sum < 0) sum = 0;
+				else if (sum > maxSum) maxSum = sum;
+			}
+			if (maxSum < 0) return max;
+			return maxSum;
+		}
+
+		// The n-queens puzzle is the problem of placing n queens on an n×n chessboard
+		// such that no two queens attack each other.
+		// Given an integer n, return all distinct solutions to the n-queens puzzle.
+		// Each solution contains a distinct board configuration of the n-queens' placement,
+		// where 'Q' and '.' both indicate a queen and an empty space respectively.
+		// For example,
+		// There exist two distinct solutions to the 4-queens puzzle:
+		// [
+		//  [".Q..",  // Solution 1
+		//   "...Q",
+		//   "Q...",
+		//   "..Q."],
+		//  ["..Q.",  // Solution 2
+		//   "Q...",
+		//   "...Q",
+		//   ".Q.."]
+		// ]
+		static vector<vector<string>> NQueens(int n)
+		{
+			if (n <= 0) return  vector<vector<string>> { };
+
+			function<void(vector<string> &, int, vector<vector<string>> &)>
+			solve = [&](vector<string> & board, size_t line, vector<vector<string>> & solutions) {
+				for (size_t i = 0; i < board[line].size(); i++) {
+					if (board[line][i] == '.') {
+						vector<string> next(board);
+						next[line][i] = 'Q';
+						if (line == board.size() - 1) {
+							for_each (next.begin(), next.end(), [&](string & l){
+								for (size_t j = 0; j < l.length(); j++) {
+									if (l[j] == 'X') l[j] = '.';
+								}
+							});
+							solutions.push_back(next);
+						} else {
+							int a = i;
+							int b = i;
+							for (size_t j = line + 1; j < board.size(); j++) {
+								a--;
+								if (a >= 0) next[j][a] = 'X';
+								next[j][i] = 'X';
+								b++;
+								if (b < (int)next[j].size()) next[j][b] = 'X';
+							}
+							solve(next, line + 1, solutions);
+						}
+					}
+				}
+			};
+
+			vector<vector<string>> solutions;
+			vector<string> board(n, string(n, '.'));
+			solve(board, 0, solutions);
+			return solutions;
+		}
+
+		static int NQeensSolutionsCount(int n)
+		{
+			if (n <= 0) return 0;
+
+			function<int(vector<vector<bool>> &, int)>
+			count = [&](vector<vector<bool>> & board, int line) -> int {
+				int c = 0;
+				for (size_t i = 0; i < board[line].size(); i++) {
+					if (board[line][i] == true) {
+						if (line == board.size() - 1) c++;
+						else {
+							vector<vector<bool>> next(board);
+							next[line][i] = false;
+							int a = i;
+							int b = i;
+							bool proceed = false;
+							for (size_t j = line + 1; j < board.size(); j++) {
+								a--;
+								if (a >= 0) next[j][a] = false;
+								next[j][i] = false;
+								b++;
+								if (b < (int)next[j].size()) next[j][b] = false;
+								proceed = false;
+								for (size_t k = 0; k < next[j].size(); k++) {
+									if (next[j][k] == true) {
+										proceed = true;
+										break;
+									}
+								}
+								if (proceed == false) break;
+							}
+							if (proceed) c += count(next, line + 1);
+						}
+					}
+				}
+				return c;
+			};
+
+			vector<vector<bool>> board(n, vector<bool>(n, true));
+			return count(board, 0);
+		}
+
+		static double Pow(double x, int n)
+		{
+			if (x == 0) return 0;
+			if (n == 0) return 1;
+			bool negative = n < 0;
+			if (negative) n = -n;
+			double m = x;
+			double p = (n & 0x1) == 1 ? x : 1;
+			n = n >> 1;
+			while (n > 0) {
+				m = m * m;
+				if ((n & 0x1) == 1) {
+					p = p * m;
+				}
+				n = n >> 1;
+			}
+			if (negative) p = 1 / p;
+			return p;
 		}
 	};
 }
