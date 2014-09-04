@@ -3389,4 +3389,26 @@ void LeetCodeTest::Init(void)
 		check(1, INT_MIN);
 		check(1, INT_MAX);
 	});
+
+	Add("PermuteUnique", [&](){
+		auto print = [&](vector<int> & n){
+			for (size_t i = 0; i < n.size(); i++) {
+				Logger().WriteInformation("%s%d", i == 0 ? "" : ", ", n[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](vector<int> & n) {
+			Logger().WriteInformation("Permute: ");
+			print(n);
+			vector<vector<int>> p = Test::LeetCode::PermuteUnique(n);
+			for_each (p.begin(), p.end(), [&](vector<int> & i){
+				print(i);
+			});
+		};
+		check(vector<int> { 1, 1 });
+		check(vector<int> { 1, 1, 1 });
+		check(vector<int> { 1, 1, 2 });
+		check(vector<int> { 1, 1, 2, 2 });
+		check(vector<int> { 1, 2, 3, 1, 2, 3 });
+	});
 }

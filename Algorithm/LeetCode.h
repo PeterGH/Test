@@ -10,6 +10,7 @@
 #include <stack>
 #include <sstream>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 using namespace std;
 namespace Test {
@@ -2621,6 +2622,33 @@ namespace Test {
 			return lastTrue == 0;
 		}
 
+		// Jump Game
+		// Given an array of non-negative integers, you are initially positioned at the first index of the array.
+		// Each element in the array represents your maximum jump length at that position.
+		// Your goal is to reach the last index in the minimum number of jumps.
+		// For example:
+		// Given array A = [2,3,1,1,4]
+		// The minimum number of jumps to reach the last index is 2.
+		// (Jump 1 step from index 0 to 1, then 3 steps to the last index.)
+		// Note: The array is designed such that no element is 0.
+		static int Jump(int A[], int n)
+		{
+			if (A == nullptr || n <= 1) return 0;
+			vector<int> steps(n, 0);
+			for (int i = n - 2; i >= 0; i--) {
+				int j = i + A[i];
+				if (j >= n - 1) steps[i] = 1;
+				else {
+					int m = steps[j];
+					for (int k = j - 1; k > i; k--) {
+						if (steps[k] < m) m = steps[k];
+					}
+					steps[i] = 1 + m;
+				}
+			}
+			return steps[0];
+		}
+
 		// Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
 		// For example, given the array [−2,1,−3,4,−1,2,1,−5,4],
 		// the contiguous subarray [4,−1,2,1] has the largest sum = 6.
@@ -2756,6 +2784,140 @@ namespace Test {
 			}
 			if (negative) p = 1 / p;
 			return p;
+		}
+
+		static vector<string> Anagrams(vector<string> & strs)
+		{
+			vector<string> anagrams;
+			if (strs.size() == 0) return anagrams;
+			unordered_map<string, string> group;
+			unordered_map<string, int> count;
+			for_each (strs.begin(), strs.end(), [&](string & s){
+				string a(s);
+				sort(a.begin(), a.end());
+				if (group.find(s) == group.end()) {
+					group[s] = a;
+				}
+				if (count.find(a) == count.end()) {
+					count[a] = 1;
+				} else {
+					count[a] += 1;
+				}
+			});
+			for_each (strs.begin(), strs.end(), [&](string & s){
+				if (count[group[s]] > 1) {
+					anagrams.push_back(s);
+				}
+			});
+			return anagrams;
+		}
+
+		// You are given an n x n 2D matrix representing an image.
+		// Rotate the image by 90 degrees (clockwise) in-place
+		//   0        1
+		// 7 +--------+ 2
+		//   |        |
+		//   |        |
+		//   |        |
+		// 6 +--------+ 3
+		//   5        4
+		//
+		//   7        6
+		// 0 +--------+ 5
+		//   |        |
+		//   |        |
+		//   |        |
+		// 1 +--------+ 4
+		//   2        3
+		//
+		//   6        7
+		// 5 +--------+ 0
+		//   |        |
+		//   |        |
+		//   |        |
+		// 4 +--------+ 1
+		//   3        2
+		static void RotateMatrix(vector<vector<int>> & matrix)
+		{
+			int n = matrix.size();
+			for (int i = 0; i < n; i++) {
+				for (int j = i + 1; j < n; j++) {
+					int t = matrix[i][j];
+					matrix[i][j] = matrix[j][i];
+					matrix[j][i] = t;
+				}
+			}
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n / 2; j++) {
+					int t = matrix[i][j];
+					matrix[i][j] = matrix[i][n-1-j];
+					matrix[i][n-1-j] = t;
+				}
+			}
+		}
+
+		// Given a collection of numbers, return all possible permutations.
+		// For example,
+		// [1,2,3] have the following permutations:
+		// [1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], and [3,2,1].
+		static vector<vector<int>> Permute(vector<int> & num)
+		{
+			if (num.size() == 0) return vector<vector<int>> { };
+
+			function<void(vector<int> &, size_t, vector<vector<int>> &)>
+			p = [&](vector<int> & n, size_t i, vector<vector<int>> & o) {
+				if (i == n.size() - 1) {
+					o.push_back(n);
+					return;
+				}
+				for (size_t j = i; j < n.size(); j++) {
+					vector<int> m(n);
+					if (j != i) {
+						int t = m[j];
+						m.erase(m.begin() + j);
+						m.insert(m.begin() + i, t);
+					}
+					p(m, i + 1, o);
+				}
+			};
+
+			vector<vector<int>> output;
+			p(num, 0, output);
+			return output;
+		}
+
+		// Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+		// For example,
+		// [1,1,2] have the following unique permutations:
+		// [1,1,2], [1,2,1], and [2,1,1].
+		static vector<vector<int>> PermuteUnique(vector<int> & num)
+		{
+			if (num.size() == 0) return vector<vector<int>> { };
+
+			function<void(vector<int> &, size_t, vector<vector<int>> &)>
+			p = [&](vector<int> & n, size_t i, vector<vector<int>> & o) {
+				if (i == n.size() - 1) {
+					o.push_back(n);
+					return;
+				}
+				unordered_set<int> swapped;
+				swapped.insert(n[i]);
+				for (size_t j = i; j < n.size(); j++) {
+					if (j != i && swapped.find(n[j]) != swapped.end()) continue;
+					swapped.insert(n[j]);
+					vector<int> m(n);
+					if (j != i) {
+						int t = m[j];
+						m.erase(m.begin() + j);
+						m.insert(m.begin() + i, t);
+					}
+					p(m, i + 1, o);
+				}
+			};
+
+			vector<vector<int>> output;
+			p(num, 0, output);
+			return output;
 		}
 	};
 }
