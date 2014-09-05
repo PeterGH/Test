@@ -2649,6 +2649,26 @@ namespace Test {
 			return steps[0];
 		}
 
+		static int Jump2(int A[], int n)
+		{
+			if (A == nullptr || n <= 1) return 0;
+			map<int, int> step;
+			map<int, int>::iterator it;
+			step[0] = n - 1;
+			for (int i = n - 2; i >= 0; i--) {
+				int j = i + A[i];
+				for (it = step.begin(); it != step.end(); it++) {
+					if (j >= it->second) {
+						int s = it->first + 1;
+						if (i == 0) return s;
+						else step[s] = i;
+						break;
+					}
+				}
+			}
+			return 0;
+		}
+
 		// Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
 		// For example, given the array [−2,1,−3,4,−1,2,1,−5,4],
 		// the contiguous subarray [4,−1,2,1] has the largest sum = 6.
@@ -2918,6 +2938,70 @@ namespace Test {
 			vector<vector<int>> output;
 			p(num, 0, output);
 			return output;
+		}
+
+		// Implement wildcard pattern matching with support for '?' and '*'.
+		// '?' Matches any single character.
+		// '*' Matches any sequence of characters (including the empty sequence).
+		// The matching should cover the entire input string (not partial).
+		// The function prototype should be:
+		// bool isMatch(const char *s, const char *p)
+		// Some examples:
+		// isMatch("aa","a") false
+		// isMatch("aa","aa") true
+		// isMatch("aaa","aa") false
+		// isMatch("aa", "*") true
+		// isMatch("aa", "a*") true
+		// isMatch("ab", "?*") true
+		// isMatch("aab", "c*a*b") false
+		static int length(const char * s)
+		{
+			int i = 0;
+			const char * p = s;
+			while (*p != '\0') {
+				if (*p != '*') i++;
+				p++;
+			}
+			return i;
+		}
+
+		static bool isMatchInternal(const char * s, const char * p, map<pair<const char *, const char *>, bool> & m)
+		{
+			pair<const char *, const char *> c = make_pair(s, p);
+			if (m.find(c) != m.end()) return m[c];
+
+			m[c] = false;
+
+			int i = length(s);
+			int j = length(p);
+			if (i < j) return false;
+
+			while (*s != '\0' && *p != '\0' && (*s == *p || *p == '?')) {
+				++s;
+				++p;
+			}
+			if (*s == '\0' && *p == '\0') {
+				m[c] = true;
+				return true;
+			}
+			if (*p == '\0' || *p != '*') return false;
+			while (*p == '*') p++;
+			while (*s != '\0' && i >= j) {
+				if ((*s == *p || *p == '?') && isMatchInternal(s+1, p+1, m)) {
+					m[c] = true;
+					return true;
+				}
+				s++;
+				i--;
+			}
+			m[c] = (*s == *p) && (i >= j);
+			return m[c];
+		}
+
+		static bool isMatch(const char * s, const char * p)
+		{
+			map<pair<const char *, const char *>, bool> m;
+			return isMatchInternal(s, p, m);
 		}
 	};
 }

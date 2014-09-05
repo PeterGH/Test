@@ -3411,4 +3411,24 @@ void LeetCodeTest::Init(void)
 		check(vector<int> { 1, 1, 2, 2 });
 		check(vector<int> { 1, 2, 3, 1, 2, 3 });
 	});
+
+	Add("WildcharMatch", [&](){
+		auto check = [&](const char * s, const char * p){
+			bool e = Test::LeetCode::isMatch(s, p);
+			Logger().WriteInformation("%s %s %s\n", s, e ? "==" : "!=", p);
+		};
+		check("aa","a");
+		check("aa","aa");
+		check("aaa","aa");
+		check("aa", "*");
+		check("aa", "a*");
+		check("ab", "?*");
+		check("aab", "c*a*b");
+		check(
+			"abbbaaaaaaaabbbabaaabbabbbaabaabbbbaabaabbabaabbabbaabbbaabaabbabaabaabbbbaabbbaabaaababbbbabaaababbaaa",
+			"ab**b*bb*ab**ab***b*abaa**b*a*aaa**bba*aa*a*abb*a*a");
+		check(
+			"abbabaaabbabbaababbabbbbbabbbabbbabaaaaababababbbabababaabbababaabbbbbbaaaabababbbaabbbbaabbbbababababbaabbaababaabbbababababbbbaaabbbbbabaaaabbababbbbaababaabbababbbbbababbbabaaaaaaaabbbbbaabaaababaaaabb",
+			"**aa*****ba*a*bb**aa*ab****a*aaaaaa***a*aaaa**bbabb*b*b**aaaaaaaaa*a********ba*bbb***a*ba*bb*bb**a*b*bb");
+	});
 }
