@@ -3446,4 +3446,57 @@ void LeetCodeTest::Init(void)
 		check("222", "11");
 		check("1111", "22222");
 	});
+
+	Add("TrapWater", [&](){
+		auto check = [&](int a[], int n){
+			for (int i = 0; i < n; i++) {
+				Logger().WriteInformation("%s %d", i == 0 ? "" : ",", a[i]);
+			}
+			Logger().WriteInformation("\n");
+			int s = Test::LeetCode::TrapWater(a, n);
+			// int s2 = Test::LeetCode::TrapWater2(a, n);
+			Logger().WriteInformation("  Trapped water: %d\n", s);
+			// ASSERT1(s == s2);
+		};
+		{
+			int a[] = { 1 };
+			check(a, 1);
+		}
+		{
+			int a[] = { 1, 2 };
+			check(a, 2);
+		}
+		{
+			int a[] = { 2, 1 };
+			check(a, 2);
+		}
+		{
+			int a[] = { 1, 2, 3 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 3, 2, 1 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 2, 1, 3 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 3, 1, 2 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 2, 0, 2, 1, 3 };
+			check(a, 5);
+		}
+		{
+			int a[] = { 0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1 };
+			check(a, 12);
+		}
+		{
+			int a[] = { 5, 2, 1, 2, 1, 5 };
+			check(a, 6);
+		}
+	});
 }

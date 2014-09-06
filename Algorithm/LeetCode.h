@@ -3052,5 +3052,93 @@ namespace Test {
 
 			return m;
 		}
+
+		// Given n non-negative integers representing an elevation map where the width of each bar is 1,
+		// compute how much water it is able to trap after raining. For example,
+		// Given [0,1,0,2,1,0,1,3,2,1,2,1], return 6.
+		static int TrapWater(int A[], int n)
+		{
+			if (A == nullptr || n <= 2) return 0;
+
+			function<int(int[], int, int)>
+			count = [&](int a[], int i, int j) -> int {
+				int m = min(a[i], a[j]);
+				int s = 0;
+				for (int k = i + 1; k < j; k++) {
+					s += (m - a[k]);
+				}
+				return s;
+			};
+
+			stack<int> tips;
+			tips.push(0);
+			int i;
+			int v = 0;
+			for (int j = 1; j < n; j++) {
+				while (!tips.empty() && A[j] > A[tips.top()]) {
+					i = tips.top();
+					tips.pop();
+				}
+				if (tips.empty() && j - i > 1) {
+					v += count(A, i, j);
+				}
+				tips.push(j);
+			}
+
+			if (tips.size() == 1) return v;
+
+			int j = tips.top();
+			tips.pop();
+			while (!tips.empty()) {
+				i = tips.top();
+				if (j - i > 1) {
+					v += count(A, i, j);
+				}
+				j = i;
+				tips.pop();
+			}
+
+			return v;
+		}
+
+		// This algorithm is wrong.
+		// Not every tip is a valid tip.
+		// If a tip is trapped between two higher tips, then it should be removed.
+		static int TrapWater2(int A[], int n)
+		{
+			if (A == nullptr || n <= 2) return 0;
+
+			stack<int> tips;
+			if (A[0] > A[1]) tips.push(0);
+			for (int i = 1; i < n; i++) {
+				if (A[i-1] < A[i] && (i == n - 1 || A[i] >= A[i+1])) {
+					while (tips.size() > 1 && A[tips.top()] < A[i]) {
+						tips.pop();
+					}
+					tips.push(i);
+				}
+			}
+
+			if (tips.size() == 1) return 0;
+
+			int v = 0;
+			int j = tips.top();
+			tips.pop();
+			while (!tips.empty()) {
+				int i = tips.top();
+				if (j - i > 1) {
+					int m = min(A[i], A[j]);
+					for (int k = i+1; k < j; k++) {
+						if (A[k] < m) {
+							v += (m - A[k]);
+						}
+					}
+				}
+				j = i;
+				tips.pop();
+			}
+
+			return v;
+		}
 	};
 }
