@@ -3431,4 +3431,19 @@ void LeetCodeTest::Init(void)
 			"abbabaaabbabbaababbabbbbbabbbabbbabaaaaababababbbabababaabbababaabbbbbbaaaabababbbaabbbbaabbbbababababbaabbaababaabbbababababbbbaaabbbbbabaaaabbababbbbaababaabbababbbbbababbbabaaaaaaaabbbbbaabaaababaaaabb",
 			"**aa*****ba*a*bb**aa*ab****a*aaaaaa***a*aaaa**bbabb*b*b**aaaaaaaaa*a********ba*bbb***a*ba*bb*bb**a*b*bb");
 	});
+
+	Add("Multiply", [&](){
+		auto check = [&](const string & n1, const string & n2) {
+			string o = Test::LeetCode::Multiply(n1, n2);
+			Logger().WriteInformation("%s X %s = %s\n", n1.c_str(), n2.c_str(), o.c_str());
+		};
+		check("0", "0");
+		check("1", "1");
+		check("2", "2");
+		check("5", "5");
+		check("10", "5");
+		check("11", "11");
+		check("222", "11");
+		check("1111", "22222");
+	});
 }

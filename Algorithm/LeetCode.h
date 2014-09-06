@@ -3003,5 +3003,54 @@ namespace Test {
 			map<pair<const char *, const char *>, bool> m;
 			return isMatchInternal(s, p, m);
 		}
+
+		// Given two numbers represented as strings, return multiplication of the numbers as a string.
+		// Note: The numbers can be arbitrarily large and are non-negative.
+		static string Multiply(const string & num1, const string & num2)
+		{
+			if (num1 == "0" || num2 == "0") return "0";
+
+			function<string(const string &, char)>
+			mulChar = [&](const string & i, char c)->string{
+				string o;
+				char carry = '0';
+				for (int j = i.length() - 1; j >= 0; j--) {
+					char d = i[j];
+					int m = (d - '0') * (c - '0') + (carry - '0');
+					carry = '0' + m / 10;
+					o.insert(0, 1, '0' + (m % 10));
+				}
+				if (carry != '0') {
+					o.insert(0, 1, carry);
+				}
+				return o;
+			};
+
+			function<string(const string &, const string &)>
+			add = [&](const string & n1, const string & n2)->string{
+				string o;
+				int i = n1.length() - 1;
+				int j = n2.length() - 1;
+				char carry = '0';
+				for (; i >= 0 || j >= 0; i--, j--) {
+					int s = (carry - '0');
+					if (i >= 0) s += (n1[i] - '0');
+					if (j >= 0) s += (n2[j] - '0');
+					carry = '0' + s / 10;
+					o.insert(0, 1, '0' + (s % 10));
+				}
+				if (carry != '0') {
+					o.insert(0, 1, carry);
+				}
+				return o;
+			};
+
+			string m = mulChar(num1, num2[0]);
+			for (size_t i = 1; i < num2.length(); i++) {
+				m = add(m.append(1, '0'), mulChar(num1, num2[i]));
+			}
+
+			return m;
+		}
 	};
 }
