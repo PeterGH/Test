@@ -3499,4 +3499,57 @@ void LeetCodeTest::Init(void)
 			check(a, 6);
 		}
 	});
+
+	Add("FirstMissingPositive", [&](){
+		auto check = [&](int a[], int n){
+			for (int i = 0; i < n; i++) {
+				Logger().WriteInformation("%s %d", i == 0 ? "" : ",", a[i]);
+			}
+			Logger().WriteInformation("\n");
+			int s = Test::LeetCode::FirstMissingPositive(a, n);
+			Logger().WriteInformation("  first missing positive: %d\n", s);
+		};
+		{
+			int a[] = { 1, 2, 0 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 3, 4, -1, 1 };
+			check(a, 4);
+		}
+		{
+			int a[] = { 3, 4, 2 };
+			check(a, 3);
+		}
+		{
+			int a[] = { 4, 3, 2, 1 };
+			check(a, 4);
+		}
+		{
+			int a[] = { 1, 1 };
+			check(a, 2);
+		}
+	});
+
+	Add("CombinationSum", [&](){
+		auto print = [&](vector<int> c){
+			Logger().WriteInformation("  [");
+			for (int i = 0; i < (int)c.size(); i++) {
+				Logger().WriteInformation("%s%d", i == 0 ? "" : ", ", c[i]);
+			}
+			Logger().WriteInformation("]\n");
+		};
+		auto check = [&](vector<int> & c, int t){
+			Logger().WriteInformation("Candidates:");
+			print(c);
+			Logger().WriteInformation("Target: %d\n", t);
+			vector<vector<int>> s = Test::LeetCode::CombinationSum(c, t);
+			Logger().WriteInformation("Solutions:\n");
+			for_each (s.begin(), s.end(), [&](vector<int> & t){
+				print(t);
+			});
+		};
+		check(vector<int> { 1, 2 }, 3);
+		check(vector<int> { 2, 3, 6, 7 }, 7);
+	});
 }

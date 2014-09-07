@@ -3140,5 +3140,140 @@ namespace Test {
 
 			return v;
 		}
+
+		// Given an unsorted integer array, find the first missing positive integer. For example,
+		// Given [1,2,0] return 3,
+		// and [3,4,-1,1] return 2.
+		// Your algorithm should run in O(n) time and uses constant space.
+		static int FirstMissingPositive(int A[], int n)
+		{
+			if (A == nullptr || n <= 0) return 1;
+			for (int i = 0; i < n; i++) {
+				while (A[i] > 0 && A[i] - 1 != i) {
+					int j = A[i] - 1;
+					if (j >= n) break;
+					if (A[i] == A[j]) break;
+					int t = A[j];
+					A[j] = A[i];
+					A[i] = t;
+				}
+			}
+			for (int i = 0; i < n; i++){
+				if (A[i] != i + 1) return i + 1;
+			}
+			return n + 1;
+		}
+
+		// Given a set of candidate numbers (C) and a target number (T),
+		// find all unique combinations in C where the candidate numbers sums to T.
+		// The same repeated number may be chosen from C unlimited number of times.
+		// Note:
+		//  All numbers (including target) will be positive integers.
+		//  Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+		//  The solution set must not contain duplicate combinations.
+		// For example, given candidate set 2,3,6,7 and target 7,
+		// A solution set is:
+		//  [7]
+		//  [2, 2, 3]
+		static vector<vector<int>> CombinationSum(vector<int> & candidates, int target)
+		{
+			if (candidates.size() == 0) return vector<vector<int>> { };
+
+			function<void(vector<int> &, int, int, vector<int> &, vector<vector<int>> &)>
+			solve = [&](vector<int> & c, int i, int t, vector<int> & s, vector<vector<int>> & m){
+				for (int j = i; j < (int)c.size(); j++){
+					vector<int> r(s);
+					if (t == c[j]) {
+						r.push_back(c[j]);
+						m.push_back(r);
+					} else if (t > c[j]) {
+						r.push_back(c[j]);
+						solve(c, j, t - c[j], r, m);
+					}
+				}
+			};
+
+			sort(candidates.begin(), candidates.end());
+			vector<vector<int>> m;
+			solve(candidates, 0, target, vector<int> { }, m);
+			return m;
+		}
+
+		static vector<vector<int>> CombinationSum2(vector<int> & candidates, int target)
+		{
+			if (candidates.size() == 0) return vector<vector<int>> { };
+
+			function<void(vector<int> &, int, int, map<int, vector<vector<int>>> &)>
+			solve = [&](vector<int> & c, int i, int t, map<int, vector<vector<int>>> & m){
+				if (m.find(t) != m.end()) return;
+				m[t] = vector<vector<int>> { };
+				for (int j = i; j < (int)c.size(); j++){
+					if (t == c[j]) m[t].push_back(vector<int> { c[j] });
+					else if (t > c[j]) {
+						solve(c, j, t - c[j], m);
+						for_each (m[t-c[j]].begin(), m[t-c[j]].end(), [&](vector<int> & s){
+							vector<int> r(s);
+							r.insert(r.begin(), c[j]);
+							m[t].push_back(r);
+						});
+					}
+				}
+			};
+
+			sort(candidates.begin(), candidates.end());
+			map<int, vector<vector<int>>> m;
+			solve(candidates, 0, target, m);
+			return m[target];
+		}
+
+		// Given a collection of candidate numbers (C) and a target number (T),
+		// find all unique combinations in C where the candidate numbers sums to T.
+		// Each number in C may only be used once in the combination.
+		// Note:
+		//  All numbers (including target) will be positive integers.
+		//  Elements in a combination (a1, a2, … , ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+		//  The solution set must not contain duplicate combinations.
+		// For example, given candidate set 10,1,2,7,6,1,5 and target 8,
+		// A solution set is:
+		// [1, 7]
+		// [1, 2, 5]
+		// [2, 6]
+		// [1, 1, 6]
+		static vector<vector<int>> CombinationSumUnique(vector<int> & candidates, int target)
+		{
+			if (candidates.size() == 0) return vector<vector<int>> { };
+
+			function<void(vector<int> &, int, int, vector<int> &, vector<vector<int>> &)>
+			solve = [&](vector<int> & c, int i, int t, vector<int> & s, vector<vector<int>> & m){
+				int j = i;
+				while (j < (int)c.size()) {
+					int k = j;
+					while (k + 1 < (int)c.size() && c[k+1] == c[k]) k++;
+					int a = 0;
+					for (int l = j; l <= k; l++) {
+						a += c[l];
+						if (t == a) {
+							vector<int> r(s);
+							r.insert(r.end(), l - j + 1, c[j]);
+							m.push_back(r);
+							break;
+						} else if (t > a) {
+							vector<int> r(s);
+							r.insert(r.end(), l - j + 1, c[j]);
+							solve(c, k + 1, t - a, r, m);
+						} else {
+							break;
+						}
+					}
+
+					j = k + 1;
+				}
+			};
+
+			sort(candidates.begin(), candidates.end());
+			vector<vector<int>> m;
+			solve(candidates, 0, target, vector<int> { }, m);
+			return m;
+		}
 	};
 }
