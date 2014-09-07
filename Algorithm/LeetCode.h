@@ -3275,5 +3275,36 @@ namespace Test {
 			solve(candidates, 0, target, vector<int> { }, m);
 			return m;
 		}
+
+		// The count-and-say sequence is the sequence of integers beginning as follows:
+		// 1, 11, 21, 1211, 111221, ...
+		// 1 is read off as "one 1" or 11.
+		// 11 is read off as "two 1s" or 21.
+		// 21 is read off as "one 2, then one 1" or 1211.
+		// Given an integer n, generate the nth sequence.
+		// Note: The sequence of integers will be represented as a string.
+		static string CountAndSay(int n)
+		{
+			if (n <= 0) return "";
+			string s = "1";
+			for (int i = 0; i < n - 1; i++) {
+				int j = 0;
+				string o;
+				while (j < (int)s.length()) {
+					int k = j;
+					while (k + 1 < (int)s.length() && s[k+1] == s[k]) k++;
+					int c = k - j + 1;
+					int m = o.length();
+					while (c > 0) {
+						o.insert(m, 1, '0' + (c % 10));
+						c = c / 10;
+					}
+					o.append(1, s[j]);
+					j = k + 1;
+				}
+				s = o;
+			}
+			return s;
+		}
 	};
 }
