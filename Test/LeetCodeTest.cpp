@@ -3552,4 +3552,36 @@ void LeetCodeTest::Init(void)
 		check(vector<int> { 1, 2 }, 3);
 		check(vector<int> { 2, 3, 6, 7 }, 7);
 	});
+
+	Add("Sudoku", [&](){
+		auto print = [&](vector<vector<char>> & b){
+			for (int i = 0; i < (int)b.size(); i++) {
+				for (int j = 0; j < (int)b[i].size(); j++) {
+					Logger().WriteInformation(" %c", b[i][j]);
+				}
+				Logger().WriteInformation("\n");
+			}
+		};
+		auto check = [&](vector<vector<char>> & b){
+			Logger().WriteInformation("Sudoku:\n");
+			print(b);
+			Test::LeetCode::Sudoku(b);
+			Logger().WriteInformation("Solution:\n");
+			print(b);
+		};
+		{
+			vector<vector<char>> b = {
+				{ '5', '3', '.', '.', '7', '.', '.', '.', '.' },
+				{ '6', '.', '.', '1', '9', '5', '.', '.', '.' },
+				{ '.', '9', '8', '.', '.', '.', '.', '6', '.' },
+				{ '8', '.', '.', '.', '6', '.', '.', '.', '3' },
+				{ '4', '.', '.', '8', '.', '3', '.', '.', '1' },
+				{ '7', '.', '.', '.', '2', '.', '.', '.', '6' },
+				{ '.', '6', '.', '.', '.', '.', '2', '8', '.' },
+				{ '.', '.', '.', '4', '1', '9', '.', '.', '5' },
+				{ '.', '.', '.', '.', '8', '.', '.', '7', '9' }
+			};
+			check(b);
+		}
+	});
 }

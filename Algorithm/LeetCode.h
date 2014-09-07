@@ -3306,5 +3306,101 @@ namespace Test {
 			}
 			return s;
 		}
+
+		// Write a program to solve a Sudoku puzzle by filling the empty cells.
+		// Empty cells are indicated by the character '.'.
+		// You may assume that there will be only one unique solution.
+		static void Sudoku(vector<vector<char>> & board)
+		{
+			function<void(int &, int, int &, int)>
+			oneStep = [&](int & i, int r, int & j, int c){
+				j++;
+				j = j % c;
+				if (j == 0) {
+					i++;
+					i = i % r;
+				}
+			};
+
+			function<bool(
+				vector<vector<char>> &,
+				int,
+				int,
+				vector<set<char>> &,
+				vector<set<char>> &,
+				vector<vector<set<char>>> &,
+				map<pair<int, int>, set<char>> &)>
+			solve = [&](
+				vector<vector<char>> & b,
+				int i,
+				int j,
+				vector<set<char>> & row,
+				vector<set<char>> & col,
+				vector<vector<set<char>>> cell,
+				map<pair<int, int>, set<char>> & m)->bool
+			{
+				while (i != (int)b.size() - 1 || j != (int)b[i].size() - 1) {
+					if (b[i][j] == '.') break;
+					oneStep(i, (int)b.size(), j, (int)b[i].size());
+				}
+				if (b[i][j] != '.') return true;
+				pair<int, int> p = make_pair(i, j);
+				for (set<char>::iterator it = m[p].begin(); it != m[p].end(); it++){
+					char c = *it;
+					if (row[i].find(c) == row[i].end()
+						&& col[j].find(c) == col[j].end()
+						&& cell[i/3][j/3].find(c) == cell[i/3][j/3].end()) {
+						b[i][j] = c;
+						row[i].insert(c);
+						col[j].insert(c);
+						cell[i/3][j/3].insert(c);
+						if (i == (int)b.size() - 1 && j == (int)b[i].size() - 1) return true;
+						int i1 = i;
+						int j1 = j;
+						oneStep(i1, (int)b.size(), j1, (int)b[i].size());
+						if (solve(b, i1, j1, row, col, cell, m)) return true;
+						b[i][j] = '.';
+						row[i].erase(c);
+						col[j].erase(c);
+						cell[i/3][j/3].erase(c);
+					}
+				}
+				return false;
+			};
+
+			if (board.size() == 0 || board[0].size() == 0) return;
+
+			vector<set<char>> row = vector<set<char>>(9, set<char>{ });
+			vector<set<char>> col = vector<set<char>>(9, set<char>{ });
+			vector<vector<set<char>>> cell = vector<vector<set<char>>> (3, vector<set<char>>(3, set<char> {}));
+			for (int i = 0; i < (int)board.size(); i++) {
+				for (int j = 0; j < (int)board[i].size(); j++) {
+					if (board[i][j] != '.') {
+						row[i].insert(board[i][j]);
+						col[j].insert(board[i][j]);
+						cell[i/3][j/3].insert(board[i][j]);
+					}
+				}
+			}
+			map<pair<int,int>, set<char>> m;
+			for (int i = 0; i < (int)board.size(); i++) {
+				for (int j = 0; j < (int)board[i].size(); j++) {
+					if (board[i][j] == '.') {
+						pair<int, int> p = make_pair(i, j);
+						m[p] = set<char> { };
+						for (char c = '1'; c <= '9'; c++) {
+							if (row[i].find(c) == row[i].end()
+								&& col[j].find(c) == col[j].end()
+								&& cell[i/3][j/3].find(c) == cell[i/3][j/3].end()) {
+								m[p].insert(c);
+							}
+						}
+					}
+				}
+			}
+
+			solve(board, 0, 0, row, col, cell, m);
+			return;
+		}
 	};
 }
