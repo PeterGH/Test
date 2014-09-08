@@ -3402,5 +3402,135 @@ namespace Test {
 			solve(board, 0, 0, row, col, cell, m);
 			return;
 		}
+
+		// Determine if a Sudoku is valid.
+		// The Sudoku board could be partially filled, where empty cells are filled with the character '.'.
+		// A valid Sudoku board (partially filled) is not necessarily solvable. Only the filled cells need to be validated.
+		static bool IsValidSudoku(vector<vector<char>> & board)
+		{
+			if (board.size() != 9 || board[0].size() != 9) return false;
+			vector<set<char>> row(9, set<char>{});
+			vector<set<char>> col(9, set<char>{});
+			vector<vector<set<char>>> cell(3, vector<set<char>>(3, set<char> {}));
+			for (int i = 0; i < (int)board.size(); i++) {
+				for (int j = 0; j < (int)board[i].size(); j++) {
+					if (board[i][j] != '.') {
+						if (board[i][j] < '1' || board[i][j] > '9') return false;
+						if (row[i].find(board[i][j]) != row[i].end()) return false;
+						if (col[j].find(board[i][j]) != col[j].end()) return false;
+						if (cell[i/3][j/3].find(board[i][j]) != cell[i/3][j/3].end()) return false;
+						row[i].insert(board[i][j]);
+						col[j].insert(board[i][j]);
+						cell[i/3][j/3].insert(board[i][j]);
+					}
+				}
+			}
+			return true;
+		}
+
+		// Given a sorted array and a target value, return the index if the target is found.
+		// If not, return the index where it would be if it were inserted in order.
+		// You may assume no duplicates in the array.
+		// Here are few examples.
+		// [1,3,5,6], 5 → 2
+		// [1,3,5,6], 2 → 1
+		// [1,3,5,6], 7 → 4
+		// [1,3,5,6], 0 → 0
+		static int SearchInsert(int A[], int n, int target)
+		{
+			if (A == nullptr || n <= 0) return 0;
+			int l = 0;
+			int h = n - 1;
+			int m;
+			while (l <= h) {
+				m = l + ((h - l) >> 1);
+				if (A[m] == target) return m;
+				else if (A[m] < target) {
+					if (m == h) return h + 1;
+					l = m + 1;
+				} else {
+					if (l == m) return l;
+					h = m - 1;
+				}
+			}
+			return m;
+		}
+
+		// Given a sorted array of integers, find the starting and ending position of a given target value.
+		// Your algorithm's runtime complexity must be in the order of O(log n).
+		// If the target is not found in the array, return [-1, -1].
+		// For example,
+		// Given [5, 7, 7, 8, 8, 10] and target value 8,
+		// return [3, 4].
+		static vector<int> SearchRange(int A[], int n, int target)
+		{
+			vector<int> r = { -1, -1 };
+			if (A == nullptr || n <= 0) return r;
+			int l = 0;
+			int h = n - 1;
+			int m;
+			while (l <= h) {
+				m = l + ((h-l) >> 1);
+				if (target < A[m]) {
+					if (l == m) break;
+					h = m - 1;
+				} else if (A[m] < target) {
+					if (m == h) break;
+					l = m + 1;
+				} else {
+					r[0] = m;
+					r[1] = m;
+					while (r[0] - 1 >= 0 && A[r[0] - 1] == A[r[0]]) r[0]--;
+					while (r[1] + 1 < n && A[r[1] + 1] == A[r[1]]) r[1]++;
+					break;
+				}
+			}
+			return r;
+		}
+
+		static vector<int> SearchRange2(int A[], int n, int target)
+		{
+			vector<int> r = { -1, -1 };
+			if (A == nullptr || n <= 0) return r;
+			int l = 0;
+			int h = n - 1;
+			int m;
+			while (l <= h) {
+				m = l + ((h-l) >> 1);
+				if (target < A[m]) {
+					if (l == m) break;
+					h = m - 1;
+				} else if (A[m] < target) {
+					if (m == h) break;
+					l = m + 1;
+				} else {
+					if (l == m || A[m - 1] != A[m]) {
+						r[0] = m;
+						break;
+					}
+					h = m - 1;
+				}
+			}
+			l = 0;
+			h = n - 1;
+			while (l <= h) {
+				m = l + ((h-l) >> 1);
+				if (target < A[m]) {
+					if (l == m) break;
+					h = m - 1;
+				} else if (A[m] < target) {
+					if (m == h) break;
+					l = m + 1;
+				} else {
+					if (m == h || A[m] != A[m + 1]) {
+						r[1] = m;
+						break;
+					}
+					l = m + 1;
+				}
+			}
+
+			return r;
+		}
 	};
 }
