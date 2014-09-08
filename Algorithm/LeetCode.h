@@ -3645,5 +3645,38 @@ namespace Test {
 
 			return m;
 		}
+
+		// Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+		// If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+		// The replacement must be in-place, do not allocate extra memory.
+		// Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
+		// 1,2,3 → 1,3,2
+		// 3,2,1 → 1,2,3
+		// 1,1,5 → 1,5,1
+		static void NextPermutation(vector<int> & num)
+		{
+			if (num.size() <= 1) return;
+			int i = num.size() - 1;
+			while (i - 1 >= 0 && num[i-1] >= num[i]) i--;
+
+			int j = i;
+			int k = num.size() - 1;
+			int t;
+			while (j < k) {
+				t = num[j];
+				num[j] = num[k];
+				num[k] = t;
+				j++;
+				k--;
+			}
+
+			if (i != 0) {
+				j = i - 1;
+				while (num[j] >= num[i]) i++;
+				t = num[j];
+				num[j] = num[i];
+				num[i] = t;
+			}
+		}
 	};
 }
