@@ -3584,4 +3584,17 @@ void LeetCodeTest::Init(void)
 			check(b);
 		}
 	});
+
+	Add("LongestValidParentheses", [&](){
+		auto check = [&](const string & s){
+			int l = Test::LeetCode::LongestValidParentheses(s);
+			int l2 = Test::LeetCode::LongestValidParentheses2(s);
+			Logger().WriteInformation("%s: %d, %d\n", s.c_str(), l, l2);
+			ASSERT1(l == l2);
+		};
+		check("()");
+		check("()()");
+		check("(())");
+		check("(()())");
+	});
 }

@@ -3532,5 +3532,118 @@ namespace Test {
 
 			return r;
 		}
+
+		// Given a string containing just the characters '(' and ')',
+		// find the length of the longest valid (well-formed) parentheses substring.
+		// For "(()", the longest valid parentheses substring is "()", which has length = 2.
+		// Another example is ")()())", where the longest valid parentheses substring is "()()", which has length = 4.
+		static int LongestValidParentheses(const string & s)
+		{
+			int len = s.length();
+			if (len == 0) return 0;
+
+			vector<pair<int, int>> p;
+			int i = 0;
+			while (i + 1 < len) {
+				if (s[i] == '(' && s[i+1] == ')') {
+					int j = i;
+					int k = i + 1;
+					while (j >= 0 && k < len && s[j] == '(' && s[k] == ')') {
+						j--;
+						k++;
+					}
+					p.push_back(make_pair(j+1, k-1));
+					i = k;
+				} else i++;
+			}
+
+			if (p.size() == 0) return 0;
+
+			vector<pair<int, int>>::iterator it = p.begin();
+			while (it + 1 != p.end()) {
+				if (it->second + 1 == (it + 1)->first) {
+					it->second = (it + 1)->second;
+					p.erase(it + 1);
+				} else {
+					it++;
+				}
+			}
+
+			bool stop = false;
+			while (!stop) {
+				stop = true;
+				for (int j = 0; j < (int)p.size(); j++) {
+					int l = p[j].first - 1;
+					int r = p[j].second + 1;
+					while (l >= 0 && r < len && s[l] == '(' && s[r] == ')') {
+						stop = false;
+						p[j].first = l;
+						p[j].second = r;
+						l--;
+						r++;
+					}
+				}
+				it = p.begin();
+				while (it + 1 != p.end()) {
+					if (it->second + 1 == (it + 1)->first) {
+						stop = false;
+						it->second = (it + 1)->second;
+						p.erase(it + 1);
+					} else {
+						it++;
+					}
+				}
+			}
+
+			int m = 0;
+			for (int j = 0; j < (int)p.size(); j++) {
+				if (p[j].second - p[j].first + 1 > m) {
+					m = p[j].second - p[j].first + 1;
+				}
+			}
+
+			return m;
+		}
+
+		static int LongestValidParentheses2(const string & s)
+		{
+			int len = s.length();
+			if (len == 0) return 0;
+
+			function<bool(int &, int &)>
+			expand = [&](int & j, int & k)->bool{
+				bool e = false;
+				while (j-1 >= 0 && k+1 < len && s[j-1] == '(' && s[k+1] == ')') {
+					e = true;
+					j--;
+					k++;
+				}
+				return e;
+			};
+
+			int m = 0;
+			stack<pair<int, int>> p;
+			int i = 0;
+			while (i + 1 < len) {
+				if (s[i] == '(' && s[i+1] == ')') {
+					int j = i;
+					int k = i + 1;
+					expand(j, k);
+
+					while (!p.empty() && p.top().second + 1 == j) {
+						j = p.top().first;
+						p.pop();
+
+						if (!expand(j, k)) break;
+					}
+
+					if (k - j + 1 > m) m = k - j + 1;
+					p.push(make_pair(j, k));
+					i = k + 1;
+				} else i++;
+			}
+
+			return m;
+		}
 	};
 }
