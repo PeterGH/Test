@@ -3830,5 +3830,52 @@ namespace Test {
 			if (negative) r = -r;
 			return (int)r;
 		}
+
+		static char * StrStr(char * haystack, char * needle)
+		{
+			if (*needle == '\0') return haystack;
+			if (*haystack == '\0') return '\0';
+			int lh = 0;
+			char * h = haystack;
+			while (*h != '\0') {
+				lh++;
+				h++;
+			}
+			int ln = 0;
+			char * n = needle;
+			while (*n != '\0') {
+				ln++;
+				n++;
+			}
+			if (lh < ln) return '\0';
+			for (int i = 0; i <= lh - ln; i++, haystack++) {
+				if (*haystack == *needle) {
+					h = haystack;
+					n = needle;
+					while (*h != '\0' && *n != '\0' && *n == *h) {
+						h++;
+						n++;
+					}
+					if (*n == '\0') return haystack;
+				}
+			}
+			return '\0';
+		}
+
+		// Given an array and a value, remove all instances of that value in place and return the new length.
+		// The order of elements can be changed. It doesn't matter what you leave beyond the new length.
+		static int RemoveElement(int A[], int n, int elem)
+		{
+			if (A == nullptr || n <= 0) return 0;
+			int i = 0;
+			while (i < n) {
+				while (i < n && A[i] == elem) {
+					A[i] = A[n-1];
+					n--;
+				}
+				i++;
+			}
+			return n;
+		}
 	};
 }
