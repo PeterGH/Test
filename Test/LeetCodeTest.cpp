@@ -3597,4 +3597,51 @@ void LeetCodeTest::Init(void)
 		check("(())");
 		check("(()())");
 	});
+
+	Add("Divide", [&](){
+		auto check = [&](int e, int r) {
+			int s = Test::LeetCode::Divide(e, r);
+			int s2 = Test::LeetCode::Divide2(e, r);
+			int s3 = (long long)e / (long long)r;
+			Logger().WriteInformation(" %d / %d = %d, %d, %d\n", e, r, s, s2, s3);
+			ASSERT1(s == s2);
+			ASSERT1(s == s3);
+		};
+		check(5, 2);
+		check(-5, 2);
+		check(5, -2);
+		check(-5, -2);
+		check(7, 3);
+		check(-7, 3);
+		check(7, -3);
+		check(-7, -3);
+		check(1, 3);
+		check(-1, 3);
+		check(1, -3);
+		check(-1, -3);
+		check(INT_MAX, 1);
+		check(INT_MIN, 1);
+		check(INT_MAX, 2);
+		check(INT_MIN, 2);
+		check(INT_MAX, 3);
+		check(INT_MIN, 3);
+		check(INT_MAX, 4);
+		check(INT_MIN, 4);
+		check(INT_MAX, -1);
+		check(INT_MIN, -1);
+		check(INT_MAX, -2);
+		check(INT_MIN, -2);
+		check(INT_MAX, -3);
+		check(INT_MIN, -3);
+		check(INT_MAX, -4);
+		check(INT_MIN, -4);
+		for (int i = 0; i < 10000; i++) {
+			int e = rand();
+			if (e == 0) e = 1;
+			int r = rand();
+			if (r == 0) r = 1;
+			if (e < r) swap(e, r);
+			check(e, r);
+		}
+	});
 }

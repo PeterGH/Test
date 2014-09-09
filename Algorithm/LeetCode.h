@@ -3678,5 +3678,157 @@ namespace Test {
 				num[i] = t;
 			}
 		}
+
+		// You are given a string, S, and a list of words, L, that are all of the same length.
+		// Find all starting indices of substring(s) in S that is a concatenation of each word in L
+		// exactly once and without any intervening characters.
+		// For example, given:
+		//  S: "barfoothefoobarman"
+		//  L: ["foo", "bar"]
+		// You should return the indices: [0,9]. (order does not matter).
+		static vector<int> SubstringOfConcatenation(const string & S, vector<string> & L)
+		{
+			vector<int> result;
+			int len = S.length();
+			if (len == 0 || L.size() == 0) return result;
+			int sl = L.size() * L[0].length();
+			if (len < sl) return result;
+			map<string, int> m;
+			for_each (L.begin(), L.end(), [&](string & s){
+				if (m.find(s) == m.end()) {
+					m[s] = 1;
+				} else {
+					m[s] += 1;
+				}
+			});
+			for (int i = 0; i <= len - sl; i++) {
+				string s = S.substr(i, L[0].length());
+				if (m.find(s) != m.end()) {
+					map<string, int> n(m);
+					for (int j = i; j < i + sl; j += L[0].length()) {
+						s = S.substr(j, L[0].length());
+						if (n.find(s) == n.end()) break;
+						if (n[s] == 1) n.erase(s);
+						else n[s]--;
+					}
+					if (n.size() == 0) result.push_back(i);
+				}
+			}
+			return result;
+		}
+
+		// Divide two integers without using multiplication, division and mod operator.
+		static int Divide(int dividend, int divisor)
+		{
+			if (divisor == 0) throw invalid_argument("divided by zero");
+			if (dividend == 0) return 0;
+			if (divisor == 1) return dividend;
+			if (divisor == -1) return -dividend;
+
+			long long de = dividend;
+			long long ds = divisor;
+
+			bool negative = false;
+			if (de > 0 && ds < 0) {
+				negative = true;
+				ds = -ds;
+			} else if (de < 0 && ds > 0) {
+				negative = true;
+				de = -de;
+			} else if (de < 0 && ds < 0) {
+				de = -de;
+				ds = -ds;
+			}
+
+			long long r = 0;
+			while (de >= ds) {
+				long long d = ds;
+				long long i = 1;
+				while (de >= d) {
+					d = d << 1;
+					i = i << 1;
+				}
+				d = d >> 1;
+				i = i >> 1;
+				de -= d;
+				r += i;
+			}
+
+			if (negative) r = -r;
+			return (int)r;
+		}
+
+		static int Divide2(int dividend, int divisor)
+		{
+			if (divisor == 0) throw invalid_argument("divided by zero");
+			if (dividend == 0) return 0;
+
+			long long de = dividend;
+			long long ds = divisor;
+
+			bool negative = false;
+			if (de > 0 && ds < 0) {
+				negative = true;
+				ds = -ds;
+			} else if (de < 0 && ds > 0) {
+				negative = true;
+				de = -de;
+			} else if (de < 0 && ds < 0) {
+				de = -de;
+				ds = -ds;
+			}
+
+			if (de < ds) return 0;
+			if (de == ds) return negative ? -1 : 1;
+
+			long long r = 0;
+			long long d = ds;
+			long long i = 1;
+			vector<long long> v(1, d);
+			while (de >= d) {
+				d = d << 1;
+				i = i << 1;
+				v.push_back(d);
+			}
+			d = d >> 1;
+			i = i >> 1;
+			de -= d;
+			v.pop_back();
+			r += i;
+
+			while (de >= ds) {
+				int j = 0;
+				int k = v.size() - 1;
+				while (j <= k) {
+					int m = j + ((k-j) >> 1);
+					if (de < v[m]) {
+						if (j == m) {
+							if (m > 0) {
+								r += (long long)(1 << (m - 1));
+								de -= v[m - 1];
+							}
+							while ((int)v.size() > m) v.pop_back();
+							break;
+						}
+						k = m - 1;
+					} else if (v[m] < de) {
+						if (m == k) {
+							r += (long long)(1 << m);
+							de -= v[m];
+							while ((int)v.size() > m + 1) v.pop_back();
+							break;
+						}
+						j = m + 1;
+					} else {
+						r += (long long)(1 << m);
+						de -= v[m];
+						break;
+					}
+				}
+			}
+
+			if (negative) r = -r;
+			return (int)r;
+		}
 	};
 }
