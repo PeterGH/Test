@@ -3644,4 +3644,75 @@ void LeetCodeTest::Init(void)
 			check(e, r);
 		}
 	});
+
+	Add("ReverseKGroup", [&](){
+		auto check = [&](vector<int> & v, int k){
+			Logger().WriteInformation("Reverse %d-group:\n", k);
+			Test::LeetCode::ListNode * l = Test::LeetCode::ToList(v);
+			Test::LeetCode::Print(l);
+			l = Test::LeetCode::ReverseKGroup(l, k);
+			Test::LeetCode::Print(l);
+			Test::LeetCode::DeleteList(l);
+		};
+		{
+			vector<int> v = {1, 2, 3, 4, 5};
+			check(v, 2);
+			check(v, 3);
+			check(v, 4);
+			check(v, 5);
+			check(v, 6);
+		}
+		{
+			vector<int> v = {1, 2, 3, 4, 5, 6};
+			check(v, 2);
+			check(v, 3);
+			check(v, 4);
+			check(v, 5);
+			check(v, 6);
+			check(v, 7);
+		}
+	});
+
+	Add("SwapPairs", [&](){
+		auto check = [&](vector<int> & v){
+			Logger().WriteInformation("Swap pairs:\n");
+			Test::LeetCode::ListNode * l = Test::LeetCode::ToList(v);
+			Test::LeetCode::Print(l);
+			l = Test::LeetCode::SwapPairs(l);
+			Test::LeetCode::Print(l);
+			Test::LeetCode::DeleteList(l);
+		};
+		check(vector<int> {1, 2});
+		check(vector<int> {1, 2, 3});
+		check(vector<int> {1, 2, 3, 4});
+		check(vector<int> {1, 2, 3, 4, 5});
+		check(vector<int> {1, 2, 3, 4, 5, 6});
+	});
+
+	Add("MergeKLists", [&](){
+		auto print = [&](vector<Test::LeetCode::ListNode *> v){
+			for (int i = 0; i < (int)v.size(); i++) {
+				if (v[i] == nullptr) Logger().WriteInformation(" null");
+				else Logger().WriteInformation(" %d", v[i]->val);
+			}
+			Logger().WriteInformation("\n");
+		};
+
+		vector<Test::LeetCode::ListNode *> v;
+		for (int i = 0; i < 10; i++) {
+			if (i % 3 == 0) v.push_back(nullptr);
+			else v.push_back(new Test::LeetCode::ListNode(rand()));
+		}
+		print(v);
+		make_heap(v.begin(), v.end(), Test::LeetCode::Greater);
+		print(v);
+		for (int i = 0; i < 10; i++) {
+			pop_heap(v.begin(), v.end(), Test::LeetCode::Greater);
+			print(v);
+			if (v.back() != nullptr) {
+				delete v.back();
+				v.back() = nullptr;
+			}
+		}
+	});
 }

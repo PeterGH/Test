@@ -3877,5 +3877,130 @@ namespace Test {
 			}
 			return n;
 		}
+
+		// Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.
+		// If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.
+		// You may not alter the values in the nodes, only nodes itself may be changed.
+		// Only constant memory is allowed.
+		// For example,
+		// Given this linked list: 1->2->3->4->5
+		// For k = 2, you should return: 2->1->4->3->5
+		// For k = 3, you should return: 3->2->1->4->5
+		static ListNode * ReverseKGroup(ListNode * head, int k)
+		{
+			if (head == nullptr || k <= 1) return head;
+
+			ListNode * begin = head;
+			ListNode * prev = begin;
+			while (begin != nullptr) {
+				ListNode * end = begin;
+				int i = 1;
+				while (i < k && end != nullptr) {
+					end = end->next;
+					i++;
+				}
+				if (end == nullptr) return head;
+
+				ListNode * f = begin;
+				ListNode * s = f->next;
+				ListNode * t = nullptr;
+				begin->next = end->next;
+
+				while (f != end) {
+					t = s->next;
+					s->next = f;
+					f = s;
+					s = t;
+				}
+
+				if (head == begin) head = end;
+				else prev->next = end;
+
+				prev = begin;
+				begin = begin->next;
+			}
+			return head;
+		}
+
+		// Given a linked list, swap every two adjacent nodes and return its head. For example,
+		// Given 1->2->3->4, you should return the list as 2->1->4->3.
+		// Your algorithm should use only constant space. You may not modify the values in the list,
+		// only nodes itself can be changed.
+		static ListNode * SwapPairs(ListNode * head)
+		{
+			if (head == nullptr || head->next == nullptr) return head;
+
+			ListNode * f = head;
+			ListNode * s = f->next;
+
+			f->next = s->next;
+			s->next = f;
+			head = s;
+
+			ListNode * p = f;
+			f = f->next;
+			while (f != nullptr) {
+				s = f->next;
+				if (s == nullptr) break;
+				f->next = s->next;
+				s->next = f;
+				p->next = s;
+				p = f;
+				f = f->next;
+			}
+			return head;
+		}
+
+		// Merge k sorted linked lists and return it as one sorted list.
+		static ListNode * MergeKLists(vector<ListNode *> & lists)
+		{
+			if (lists.size() == 0) return nullptr;
+			ListNode * list = nullptr;
+			ListNode * tail = list;
+			while (true) {
+				ListNode * mp = nullptr;
+				int mi = 0;
+				for (int i = 0; i < (int)lists.size(); i++) {
+					if (lists[i] != nullptr) {
+						if (mp == nullptr || lists[i]->val < mp->val) {
+							mp = lists[i];
+							mi = i;
+						}
+					}
+				}
+				if (mp == nullptr) break;
+				if (list == nullptr) list = mp;
+				else tail->next = mp;
+				tail = mp;
+				lists[mi] = mp->next;
+			}
+			return list;
+		}
+
+		static bool Greater(ListNode * first, ListNode * second)
+		{
+			if (first == nullptr && second == nullptr) return false;
+			if (first == nullptr && second != nullptr) return true;
+			if (first != nullptr && second == nullptr) return false;
+			if (first->val > second->val) return true;
+			else return false;
+		}
+
+		static ListNode * MergeKLists2(vector<ListNode *> & lists)
+		{
+			if (lists.size() == 0) return nullptr;
+			ListNode * list = nullptr;
+			ListNode * tail = list;
+			make_heap(lists.begin(), lists.end(), Greater);
+			while (lists.front() != nullptr) {
+				pop_heap(lists.begin(), lists.end(), Greater);
+				if (list == nullptr) list = lists.back();
+				else tail->next = lists.back();
+				tail = lists.back();
+				lists.back() = lists.back()->next;
+				push_heap(lists.begin(), lists.end(), Greater);
+			}
+			return list;
+		}
 	};
 }
