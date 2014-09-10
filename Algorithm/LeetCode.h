@@ -4002,5 +4002,24 @@ namespace Test {
 			}
 			return list;
 		}
+
+		static ListNode * MergeKLists3(vector<ListNode *> & lists)
+		{
+			if (lists.size() == 0) return nullptr;
+			ListNode * list = nullptr;
+			ListNode * tail = list;
+			make_heap(lists.begin(), lists.end(), Greater);
+			while (lists.size() > 0) {
+				pop_heap(lists.begin(), lists.end(), Greater);
+				if (lists.back() == nullptr) break;
+				if (list == nullptr) list = lists.back();
+				else tail->next = lists.back();
+				tail = lists.back();
+				lists.back() = lists.back()->next;
+				if (lists.back() == nullptr) lists.pop_back();
+				else push_heap(lists.begin(), lists.end(), Greater);
+			}
+			return list;
+		}
 	};
 }
