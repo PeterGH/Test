@@ -3715,4 +3715,25 @@ void LeetCodeTest::Init(void)
 			}
 		}
 	});
+
+	Add("GenerateParentheses", [&](){
+		auto check = [&](int n) {
+			Logger().WriteInformation("%d pairs of parentheses:\n", n);
+			vector<string> pa = Test::LeetCode::GenerateParentheses(n);
+			vector<string> pa2 = Test::LeetCode::GenerateParentheses2(n);
+			sort(pa.begin(), pa.end());
+			sort(pa2.begin(), pa2.end());
+			ASSERT1(pa.size() == pa2.size());
+			for (int i = 0; i < (int)pa.size(); i++) {
+				Logger().WriteInformation(" %s %s %s\n", pa[i].c_str(), pa[i] == pa2[i] ? "==" : "!=", pa2[i].c_str());
+			}
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+	});
 }

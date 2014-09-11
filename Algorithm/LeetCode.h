@@ -4021,5 +4021,116 @@ namespace Test {
 			}
 			return list;
 		}
+
+		// Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+		// For example, given n = 3, a solution set is:
+		// "((()))", "(()())", "(())()", "()(())", "()()()"
+		static vector<string> GenerateParentheses(int n)
+		{
+			if (n <= 0) return vector<string> { };
+
+			function<void(int, int, map<pair<int, int>, vector<string>> &)>
+			solve = [&](
+				int l,	// count '(' needed
+				int r,  // count ')' needed
+				map<pair<int, int>, vector<string>> & m){
+				pair<int, int> p = make_pair(l, r);
+				m[p] = vector<string> { };
+				string s;
+				for (int i = 1; i < l; i++) {
+					s.append(1, '(');
+					string t(s);
+					for (int j = 1; j <= r - l + i; j++) {
+						t.append(1, ')');
+						pair<int, int> q = make_pair(l - i, r - j);
+						if (m.find(q) == m.end()) solve(l - i, r - j, m);
+						for_each (m[q].begin(), m[q].end(), [&](string & u){
+							string v(t);
+							v.append(u);
+							m[p].push_back(v);
+						});
+					}
+				}
+				s.append(1, '(');
+				s.append(r, ')');
+				m[p].push_back(s);
+			};
+
+			map<pair<int, int>, vector<string>> m;
+			solve(n, n, m);
+			pair<int, int> p = make_pair(n, n);
+			return m[p];
+		}
+
+		static vector<string> GenerateParentheses2(int n)
+		{
+			if (n <= 0) return vector<string> { };
+			if (n == 1) return vector<string> { "()" };
+
+			function<void(string, int, int, int, vector<string> &)>
+			solve = [&](
+				string s,
+				int l,	// count '(' in s
+				int r,  // count ')' in s
+				int n,
+				vector<string> & o){
+				for (int i = 1; i < n - l; i++) {
+					s.append(1, '(');
+					string t(s);
+					for (int j = 1; j <= l - r + i; j++) {
+						t.append(1, ')');
+						solve(t, l + i, r + j, n, o);
+					}
+				}
+				s.append(1, '(');
+				s.append(n - r, ')');
+				o.push_back(s);
+			};
+
+			vector<string> result;
+			string s;
+			solve(s, 0, 0, n, result);
+			return result;
+		}
+
+		// This algorithm is wrong
+		static vector<string> GenerateParentheses3(int n)
+		{
+			vector<string> result;
+			if (n <= 0) return result;
+			result.push_back("()");
+			if (n == 1) return result;
+			for (int i = 2; i <= n; i++) {
+				int j = result.size();
+				for (int k = 0; k < j; k++) {
+					string s = result.front();
+					result.erase(result.begin());
+					string o = s;
+					o.append("()");
+					result.push_back(o);
+					bool symmetric = true;
+					int a = 0;
+					int b = o.length() - 1;
+					while (a < b) {
+						if (o[a] == o[b]) {
+							symmetric = false;
+							break;
+						}
+						a++;
+						b--;
+					}
+					if (!symmetric) {
+						o = "()";
+						o.append(s);
+						result.push_back(o);
+					}
+					o = "(";
+					o.append(s);
+					o.append(")");
+					result.push_back(o);
+				}
+			}
+			return result;
+		}
 	};
 }
