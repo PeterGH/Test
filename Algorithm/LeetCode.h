@@ -4132,5 +4132,217 @@ namespace Test {
 			}
 			return result;
 		}
+
+		// Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+		// The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+		static bool IsValidParentheses(const string & s)
+		{
+			if (s.length() == 0) return true;
+			stack<char> p;
+			for (int i = 0; i < (int)s.length(); i++) {
+				char c = s[i];
+				switch (c) {
+				case '(':
+				case '{':
+				case '[':
+					p.push(c);
+					break;
+				case ')':
+					if (p.empty() || p.top() != '(') return false;
+					p.pop();
+					break;
+				case '}':
+					if (p.empty() || p.top() != '{') return false;
+					p.pop();
+					break;
+				case ']':
+					if (p.empty() || p.top() != '[') return false;
+					p.pop();
+					break;
+				default:
+					break;
+				}
+			}
+			return p.empty();
+		}
+
+		// Given a linked list, remove the nth node from the end of list and return its head.
+		// For example,
+		// Given linked list: 1->2->3->4->5, and n = 2.
+		// After removing the second node from the end, the linked list becomes 1->2->3->5.
+		static ListNode * RemoveNthFromEnd(ListNode * head, int n)
+		{
+			if (head == nullptr || n <= 0) return head;
+			ListNode * q = head;
+			int i = 0;
+			while (i < n && q->next != nullptr) {
+				q = q->next;
+				i++;
+			}
+			if (i < n - 1) return head;
+			ListNode * p = head;
+			if (i == n - 1) {
+				head = p->next;
+				delete p;
+				return head;
+			}
+			while (q->next != nullptr) {
+				p = p->next;
+				q = q->next;
+			}
+			q = p->next;
+			p->next = q->next;
+			delete q;
+			return head;
+		}
+
+		// Given a phone digit string, return all possible letter combinations that the number could represent.
+		// A mapping of digit to letters (just like on the telephone buttons) is given below.
+		//  0  { ' ' }
+		//  1  { '#' }
+		//  2  { 'a', 'b', 'c' }
+		//  3  { 'd', 'e', 'f' }
+		//  4  { 'g', 'h', 'i' }
+		//  5  { 'j', 'k', 'l' }
+		//  6  { 'm', 'n', 'o' }
+		//  7  { 'p', 'q', 's' }
+		//  8  { 't', 'u', 'v' }
+		//  9  { 'w', 'x', 'y', 'z' }
+		// Input:Digit string "23"
+		// Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+		static vector<string> LetterCombinationsOfPhoneNumbers(const string & digits)
+		{
+			if (digits.length() == 0) return vector<string> { };
+
+			function<void(const string &, int i, const string &, map<char, vector<char>> &, vector<string> &)>
+			combine = [&](const string & s, int i, const string & r, map<char, vector<char>> & m, vector<string> & o){
+				if (i == (int)s.length()) {
+					o.push_back(r);
+					return;
+				}
+				if (m.find(s[i]) == m.end()) {
+					combine(s, i + 1, r, m, o);
+					return;
+				}
+				for_each (m[s[i]].begin(), m[s[i]].end(), [&](char c){
+					string t(r);
+					t.append(1, c);
+					combine(s, i + 1, t, m, o);
+				});
+			};
+
+			map<char, vector<char>> m;
+			m['0'] = { ' ' };
+			m['1'] = { '#' };
+			m['2'] = { 'a', 'b', 'c' };
+			m['3'] = { 'd', 'e', 'f' };
+			m['4'] = { 'g', 'h', 'i' };
+			m['5'] = { 'j', 'k', 'l' };
+			m['6'] = { 'm', 'n', 'o' };
+			m['7'] = { 'p', 'q', 'r', 's' };
+			m['8'] = { 't', 'u', 'v' };
+			m['9'] = { 'w', 'x', 'y', 'z' };
+
+			vector<string> o;
+			combine(digits, 0, "", m, o);
+			return o;
+		}
+
+		// Given an array S of n integers, are there elements a, b, c, and d in S
+		// such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
+		// Note:
+		//  Elements in a quadruplet (a,b,c,d) must be in non-descending order. (ie, a ≤ b ≤ c ≤ d)
+		//  The solution set must not contain duplicate quadruplets.
+		// For example, given array S = {1 0 -1 0 -2 2}, and target = 0.
+		// A solution set is:
+		// (-1,  0, 0, 1)
+		// (-2, -1, 1, 2)
+		// (-2,  0, 0, 2)
+		static vector<vector<int>> FourSum(vector<int> & num, int target)
+		{
+			if (num.size() < 4) return vector<vector<int>> { };
+			sort(num.begin(), num.end());
+
+			function<void(vector<int> &, int, int, vector<int> &, vector<vector<int>> &)>
+			solve = [&](vector<int> & n, int i, int t, vector<int> & s, vector<vector<int>> & o) {
+				if (s.size() == 3) {
+					int l = i;
+					int h = n.size() - 1;
+					int m;
+					while (l <= h) {
+						m = l + ((h-l) >> 1);
+						if (t < n[m]) {
+							if (l == m) break;
+							h = m - 1;
+						} else if (n[m] < t) {
+							if (m == h) break;
+							l = m + 1;
+						} else {
+							vector<int> v(s);
+							v.push_back(n[m]);
+							o.push_back(v);
+							break;
+						}
+					}
+					return;
+				}
+				while (i <= (int)n.size() - 4 + (int)s.size() && n[i] <= t) {
+					int j = i;
+					while (j + 1 < (int)n.size() && n[j+1] == n[j]) j++;
+					int k = i;
+					int u = n[k];
+					vector<int> v(s);
+					while (k <= j) {
+						v.push_back(n[k]);
+						if (v.size() == 4) {
+							if (u == t) o.push_back(v);
+							break;
+						} else {
+							solve(n, j + 1, t - u, v, o);
+						}
+						k++;
+						u += n[k];
+					}
+					i = j + 1;
+				}
+			};
+			vector<vector<int>> o;
+			solve(num, 0, target, vector<int> { }, o);
+			return o;
+		}
+
+		static vector<vector<int>> FourSum2(vector<int> & num, int target)
+		{
+			if (num.size() < 4) return vector<vector<int>> { };
+			sort(num.begin(), num.end());
+
+			function<void(vector<int> &, int, int, int, vector<int> &, vector<vector<int>> &)>
+			solve = [&](vector<int> & n, int i, int r, int t, vector<int> & s, vector<vector<int>> & o) {
+				while (r > 0 && i <= (int)n.size() - r && n[i] <= t) {
+					int j = i;
+					while (j + 1 < (int)n.size() && n[j+1] == n[j]) j++;
+					int k = i;
+					int u = n[k];
+					int c = 1;
+					vector<int> v(s);
+					while (k <= j && u <= t && c <= r) {
+						v.push_back(n[k]);
+						if (c == r) {
+							if (u == t) o.push_back(v);
+							break;
+						} else {
+							solve(n, j + 1, r - c, t - u, v, o);
+						}
+						k++;
+						u += n[k];
+						c++;
+					}
+					i = j + 1;
+				}
+			};
+			vector<vector<int>> o;
+			solve(num, 0, 4, target, vector<int> { }, o);
+			return o;
+		}
 	};
 }

@@ -3736,4 +3736,39 @@ void LeetCodeTest::Init(void)
 		check(6);
 		check(7);
 	});
+
+	Add("LetterCombinationsOfPhoneDigits", [&](){
+		auto check = [&](const string & s){
+			Logger().WriteInformation("Digits %s\n", s.c_str());
+			vector<string> o = Test::LeetCode::LetterCombinationsOfPhoneNumbers(s);
+			for_each (o.begin(), o.end(), [&](string & r){
+				Logger().WriteInformation("  %s\n", r.c_str());
+			});
+		};
+		check("2");
+	});
+
+	Add("FourSum", [&](){
+		auto print = [&](vector<int> & n){
+			for_each (n.begin(), n.end(), [&](int r){
+				Logger().WriteInformation("  %d", r);
+			});
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](vector<int> & n, int t){
+			Logger().WriteInformation("Input:");
+			print(n);
+			Logger().WriteInformation("Target: %d\n", t);
+			vector<vector<int>> o = Test::LeetCode::FourSum(n, t);
+			for_each (o.begin(), o.end(), [&](vector<int> & v){
+				print(v);
+			});
+		};
+		check(vector<int> { 1, 0, -1, 0, -2, 2 }, 0);
+		{
+			vector<int> v = {-463,-428,-392,-386,-348,-312,-280,-248,-247,-244,-224,-216,-198,-195,-195,-189,-175,-173,-167,-155,-111,-96,-36,-28,-3,10,15,22,25,44,44,49,50,68,84,88,104,107,111,116,171,208,233,304,309,313,318,323,330,331,331,358,364,365,388,396,403,425,449};
+			check(v, 2110);
+			check(v, 1284);
+		}
+	});
 }
