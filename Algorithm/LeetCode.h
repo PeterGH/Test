@@ -4262,6 +4262,34 @@ namespace Test {
 		{
 			if (num.size() < 4) return vector<vector<int>> { };
 			sort(num.begin(), num.end());
+			unordered_map<int, set<pair<int, int>>> twosum;
+			set<vector<int>> ans;
+			for (int i = 0; i < (int)num.size() - 1; i++) {
+				for (int j = i + 1; j < (int)num.size(); j++) {
+					int s = num[i] + num[j];
+					int t = target - s;
+					if (twosum.find(t) != twosum.end()) {
+						for_each (twosum[t].begin(), twosum[t].end(), [&](pair<int, int> p){
+							vector<int> a = { p.first, p.second, num[i], num[j] };
+							ans.insert(a);
+						});
+					}
+				}
+				for (int j = 0; j < i; j++) {
+					int s = num[j] + num[i];
+					if (twosum.find(s) == twosum.end()) {
+						twosum[s] = set<pair<int,int>> { };
+					}
+					twosum[s].insert(make_pair(num[j], num[i]));
+				}
+			}
+			return vector<vector<int>>(ans.begin(), ans.end());
+		}
+
+		static vector<vector<int>> FourSum2(vector<int> & num, int target)
+		{
+			if (num.size() < 4) return vector<vector<int>> { };
+			sort(num.begin(), num.end());
 
 			function<void(vector<int> &, int, int, vector<int> &, vector<vector<int>> &)>
 			solve = [&](vector<int> & n, int i, int t, vector<int> & s, vector<vector<int>> & o) {
@@ -4311,7 +4339,7 @@ namespace Test {
 			return o;
 		}
 
-		static vector<vector<int>> FourSum2(vector<int> & num, int target)
+		static vector<vector<int>> FourSum3(vector<int> & num, int target)
 		{
 			if (num.size() < 4) return vector<vector<int>> { };
 			sort(num.begin(), num.end());
@@ -4343,6 +4371,378 @@ namespace Test {
 			vector<vector<int>> o;
 			solve(num, 0, 4, target, vector<int> { }, o);
 			return o;
+		}
+
+		// Given an array S of n integers, are there elements a, b, c in S
+		// such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
+		// Note:
+		//  Elements in a triplet (a,b,c) must be in non-descending order. (ie, a ≤ b ≤ c)
+		//  The solution set must not contain duplicate triplets.
+		// For example, given array S = {-1 0 1 2 -1 -4},
+		// A solution set is:
+		//  (-1, 0, 1)
+		//  (-1, -1, 2)
+		static vector<vector<int>> ThreeSum(vector<int> & num)
+		{
+			vector<vector<int>> ans;
+			int n = num.size();
+			if (n < 3) return ans;
+			sort(num.begin(), num.end());
+			if (num[0] > 0 || num[n - 1] < 0) return ans;
+			int i = 0;
+			while (i <= n - 3) {
+				if (num[i] > 0) break;
+				int j = i + 1;
+				int k = n - 1;
+				while (j < k) {
+					int s = num[j] + num[k];
+					if (s == -num[i]) {
+						ans.push_back(vector<int> { num[i], num[j], num[k] });
+					}
+					if (s <= -num[i]) {
+						while (j + 1 < k && num[j + 1] == num[j]) j++;
+						j++;
+					}
+					if (s >= -num[i]) {
+						while (j < k - 1 && num[k - 1] == num[k]) k--;
+						k--;
+					}
+				}
+				while (i + 1 <= n - 3 && num[i + 1] == num[i]) i++;
+				i++;
+			}
+			return ans;
+		}
+
+		static vector<vector<int>> ThreeSum2(vector<int> & num)
+		{
+			vector<vector<int>> ans;
+			int n = num.size();
+			if (n < 3) return ans;
+			sort(num.begin(), num.end());
+			if (num[0] > 0 || num[n - 1] < 0) return ans;
+			int i = 0;
+			while (i <= n - 3) {
+				if (num[i] > 0) break;
+				int j = i + 1;
+				while (j <= n - 2) {
+					int s = num[i] + num[j];
+					if (s > 0) break;
+					int t = -s;
+					int l = j + 1;
+					int h = n - 1;
+					int m;
+					while (l <= h) {
+						m = l + ((h - l) >> 1);
+						if (t < num[m]) {
+							if (l == m) break;
+							h = m - 1;
+						} else if (num[m] < t) {
+							if (m == h) break;
+							l = m + 1;
+						} else {
+							ans.push_back(vector<int> { num[i], num[j], num[m] });
+							break;
+						}
+					}
+					while (j + 1 <= n - 2 && num[j + 1] == num[j]) j++;
+					j++;
+				}
+				while (i + 1 <= n - 3 && num[i + 1] == num[i]) i++;
+				i++;
+			}
+			return ans;
+		}
+
+		// Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target.
+		// Return the sum of the three integers. You may assume that each input would have exactly one solution.
+		// For example, given array S = {-1 2 1 -4}, and target = 1.
+		// The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+		static int ThreeSumClosest(vector<int> & num, int target)
+		{
+			int n = num.size();
+			sort(num.begin(), num.end());
+			int i = 0;
+			int d = INT_MAX;
+			int t = target;
+			while (i <= n - 3) {
+				int j = i + 1;
+				int k = n - 1;
+				while (j < k) {
+					int s = num[i] + num[j] + num[k];
+					if (s < target) {
+						if (target - s <= d) {
+							d = target - s;
+							t = s;
+						}
+						while (j + 1 < k && num[j + 1] == num[j]) j++;
+						j++;
+					} else if (s > target) {
+						if (s - target <= d) {
+							d = s - target;
+							t = s;
+						}
+						while (j < k - 1 && num[k - 1] == num[k]) k--;
+						k--;
+					} else {
+						return s;
+					}
+				}
+				while (i + 1 <= n - 3 && num[i + 1] == num[i]) i++;
+				i++;
+			}
+			return t;
+		}
+
+		// Find the longest common prefix string amongst an array of strings
+		static string LongestCommonPrefix(vector<string> & strs)
+		{
+			string p;
+			int n = strs.size();
+			if (n == 0) return p;
+			int i = 0;
+			while (i < (int)strs[0].size()) {
+				char c = strs[0][i];
+				for (int j = 1; j < n; j++) {
+					if (i == (int)strs[j].length() || strs[j][i] != c) return p;
+				}
+				p.append(1, c);
+				i++;
+			}
+			return p;
+		}
+
+		// Given a roman numeral, convert it to an integer.
+		// Input is guaranteed to be within the range from 1 to 3999.
+		//  I can be placed before V and X to make 4 units (IV) and 9 units (IX) respectively
+		//  X can be placed before L and C to make 40 (XL) and 90 (XC) respectively
+		//  C can be placed before D and M to make 400 (CD) and 900 (CM) according to the same pattern
+		static int RomanToInt(const string & s)
+		{
+			int n = s.length();
+			if (n == 0) return 0;
+			int i = 0;
+			int r = 0;
+			while (i < n) {
+				switch (s[i]) {
+				case 'I': // 1
+					if (i + 1 < n && s[i+1] == 'V') {
+						r += 4;
+						i += 2;
+					} else if (i + 1 < n && s[i+1] == 'X') {
+						r += 9;
+						i += 2;
+					} else {
+						r += 1;
+						i++;
+					}
+					break;
+				case 'V': // 5
+					r += 5;
+					i++;
+					break;
+				case 'X': // 10
+					if (i + 1 < n && s[i+1] == 'L') {
+						r += 40;
+						i += 2;
+					} else if (i + 1 < n && s[i+1] == 'C') {
+						r += 90;
+						i += 2;
+					} else {
+						r += 10;
+						i++;
+					}
+					break;
+				case 'L': // 50
+					r += 50;
+					i++;
+					break;
+				case 'C': // 100
+					if (i + 1 < n && s[i+1] == 'D') {
+						r += 400;
+						i += 2;
+					} else if (i + 1 < n && s[i+1] == 'M') {
+						r += 900;
+						i += 2;
+					} else {
+						r += 100;
+						i++;
+					}
+					break;
+				case 'D': // 500
+					r += 500;
+					i++;
+					break;
+				case 'M': // 1,000
+					r += 1000;
+					i++;
+					break;
+				default:
+					i++;
+					break;
+				}
+			}
+			return r;
+		}
+
+		// Given an integer, convert it to a roman numeral.
+		// Input is guaranteed to be within the range from 1 to 3999.
+		static string IntToRomain(int num)
+		{
+			string s;
+			if (num <= 0) return s;
+			int d = num / 1000;
+			if (d > 0) s.append(d, 'M');
+			num = num % 1000;
+			if (num == 0) return s;
+			if (num >= 900) {
+				s.append(1, 'C');
+				s.append(1, 'M');
+				num -= 900;
+			} else if (num >= 500) {
+				s.append(1, 'D');
+				num -= 500;
+				if (num == 0) return s;
+				d = num / 100;
+				if (d > 0) s.append(d, 'C');
+				num = num % 100;
+			} else if (num >= 400) {
+				s.append(1, 'C');
+				s.append(1, 'D');
+				num -= 400;
+			} else {
+				d = num / 100;
+				if (d > 0) s.append(d, 'C');
+				num = num % 100;
+			}
+			if (num == 0) return s;
+			if (num >= 90) {
+				s.append(1, 'X');
+				s.append(1, 'C');
+				num -= 90;
+			} else if (num >= 50) {
+				s.append(1, 'L');
+				num -= 50;
+				if (num == 0) return s;
+				d = num / 10;
+				if (d > 0) s.append(d, 'X');
+				num = num % 10;
+			} else if (num >= 40) {
+				s.append(1, 'X');
+				s.append(1, 'L');
+				num -= 40;
+			} else {
+				d = num / 10;
+				if (d > 0) s.append(d, 'X');
+				num = num % 10;
+			}
+			if (num == 0) return s;
+			if (num == 9) {
+				s.append(1, 'I');
+				s.append(1, 'X');
+			} else if (num >= 5) {
+				s.append(1, 'V');
+				num -= 5;
+				s.append(num, 'I');
+			} else if (num == 4) {
+				s.append(1, 'I');
+				s.append(1, 'V');
+			} else {
+				s.append(num, 'I');
+			}
+			return s;
+		}
+
+		// Container With Most Water
+		// Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai).
+		// n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0).
+		// Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+		// Note: You may not slant the container.
+		static int MaxContainerArea(vector<int> & height)
+		{
+			int n = height.size();
+			if (n <= 1) return 0;
+			int l = 0;
+			int h = n - 1;
+			int a = 0;
+			while (l < h) {
+				a = max(a, (h - l) * min(height[l], height[h]));
+				if (height[l] < height[h]) l++;
+				else h--;
+			}
+			return a;
+		}
+
+		static int MaxContainerArea2(vector<int> & height)
+		{
+			int n = height.size();
+			if (n <= 1) return 0;
+			vector<int> begin = { 0 };
+			for (int i = 1; i < n; i++) {
+				if (height[i] > height[begin.back()]) begin.push_back(i);
+			}
+			vector<int> end = { n - 1 };
+			for (int i = n - 2; i >= 0; i--) {
+				if (height[i] > height[end.front()]) end.insert(end.begin(), i);
+			}
+			int a = 0;
+			for (int j = 0; j < (int)end.size(); j++) {
+				int i = 0;
+				while (i < (int)begin.size() && begin[i] < end[j]) {
+					int b = (end[j] - begin[i]) * min(height[begin[i]], height[end[j]]);
+					if (b > a) a = b;
+					i++;
+				}
+			}
+			return a;
+		}
+
+		// Implement regular expression matching with support for '.' and '*'.
+		// '.' Matches any single character.
+		// '*' Matches zero or more of the preceding element.
+		// The matching should cover the entire input string (not partial).
+		// The function prototype should be:
+		// bool isMatch(const char *s, const char *p)
+		// Some examples:
+		// isMatch("aa","a") → false
+		// isMatch("aa","aa") → true
+		// isMatch("aaa","aa") → false
+		// isMatch("aa", "a*") → true
+		// isMatch("aa", ".*") → true
+		// isMatch("ab", ".*") → true
+		// isMatch("aab", "c*a*b") → true
+		static bool RegExpMatch(const char * s, const char * p)
+		{
+			while (*p == '*') p++;
+			if (*s == '\0' && *p == '\0') return true;
+			if (*p == '\0') return false;
+			if (*(p+1) != '*') {
+				if (*s != '\0' && (*s == *p || *p == '.')) return RegExpMatch(++s, ++p);
+				else return false;
+			}
+			while (*s != '\0' && (*s == *p || *p == '.')) {
+				if (RegExpMatch(s, p + 2)) return true;
+				s++;
+			}
+			return RegExpMatch(s, p + 2);
+		}
+
+		// Determine whether an integer is a palindrome. Do this without extra space
+		static bool IsPalindrome(int x)
+		{
+			if (x < 0) return false;
+			int d = 1;
+			while (x / d >= 10 ) {
+				d *= 10;
+			}
+			while (d > 1) {
+				int h = x / d;
+				int l = x % 10;
+				if (h != l) return false;
+				x = (x % d) / 10;
+				d /= 100;
+			}
+			return true;
 		}
 	};
 }

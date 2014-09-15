@@ -3765,10 +3765,101 @@ void LeetCodeTest::Init(void)
 			});
 		};
 		check(vector<int> { 1, 0, -1, 0, -2, 2 }, 0);
+		check(vector<int> { 1, 1, 1, 1, 1, 1 }, 4);
 		{
 			vector<int> v = {-463,-428,-392,-386,-348,-312,-280,-248,-247,-244,-224,-216,-198,-195,-195,-189,-175,-173,-167,-155,-111,-96,-36,-28,-3,10,15,22,25,44,44,49,50,68,84,88,104,107,111,116,171,208,233,304,309,313,318,323,330,331,331,358,364,365,388,396,403,425,449};
 			check(v, 2110);
 			check(v, 1284);
 		}
+	});
+
+	Add("ThreeSum", [&](){
+		auto print = [&](vector<int> & n){
+			for_each (n.begin(), n.end(), [&](int r){
+				Logger().WriteInformation("  %d", r);
+			});
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](vector<int> & n){
+			Logger().WriteInformation("Input:");
+			print(n);
+			vector<vector<int>> o = Test::LeetCode::ThreeSum(n);
+			for_each (o.begin(), o.end(), [&](vector<int> & v){
+				print(v);
+			});
+		};
+		check(vector<int> { -1, 0, 1, 0, -1, 1 });
+		check(vector<int> { 1, 0, -1, 0, -2, 2 });
+		check(vector<int> { 1, 1, 1, 1, 1, 1 });
+		{
+			vector<int> v = {-463,-428,-392,-386,-348,-312,-280,-248,-247,-244,-224,-216,-198,-195,-195,-189,-175,-173,-167,-155,-111,-96,-36,-28,-3,10,15,22,25,44,44,49,50,68,84,88,104,107,111,116,171,208,233,304,309,313,318,323,330,331,331,358,364,365,388,396,403,425,449};
+			check(v);
+		}
+	});
+
+	Add("ContainerArea", [&](){
+		auto print = [&](vector<int> & n){
+			for_each (n.begin(), n.end(), [&](int r){
+				Logger().WriteInformation("  %d", r);
+			});
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](vector<int> & h){
+			print(h);
+			int a = Test::LeetCode::MaxContainerArea(h);
+			int a2 = Test::LeetCode::MaxContainerArea2(h);
+			Logger().WriteInformation("  Max container area: %d, %d\n", a, a2);
+			ASSERT1(a == a2);
+		};
+		check(vector<int> { 14, 0, 12, 3, 8, 3, 13, 5, 14, 8 });
+		for (int i = 0; i < 100; i++) {
+			int len = 1 + Test::Random::Next(100);
+			vector<int> h;
+			for (int j = 0; j < len; j++) {
+				h.push_back(Test::Random::Next());
+			}
+			Logger().WriteInformation("Input %d:", i);
+			check(h);
+		}
+	});
+
+	Add("RegExpMatch", [&](){
+		auto check = [&](const char * s, const char * p, bool e){
+			Logger().WriteInformation("Input:   %s\n", s);
+			Logger().WriteInformation("Pattern: %s\n", p);
+			bool m = Test::LeetCode::RegExpMatch(s, p);
+			Logger().WriteInformation("Match:   %s\n", m ? "true" : "false");
+			ASSERT1(m == e);
+		};
+		check("aa","a", false);
+		check("aa","aa", true);
+		check("aaa","aa", false);
+		check("a", "a*a", true);
+		check("a", "a*a*", true);
+		check("a", "a*a*a", true);
+		check("aa", "a*", true);
+		check("aa", ".*", true);
+		check("ab", ".*", true);
+		check("aab", "c*a*b", true);
+		check("bbbba", ".*a*a", true);
+		check("", "c*c*", true);
+		check("a", ".*..a*", false);
+	});
+
+	Add("IsPalindrome", [&](){
+		auto check= [&](int x, bool e){
+			bool a = Test::LeetCode::IsPalindrome(x);
+			Logger().WriteInformation("%d is %spalindrome.\n", x, a ? "" : "not ");
+			ASSERT1(a == e);
+		};
+		check(1, true);
+		check(10, false);
+		check(12, false);
+		check(22, true);
+		check(100, false);
+		check(123, false);
+		check(232, true);
+		check(2345, false);
+		check(5445, true);
 	});
 }
