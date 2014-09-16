@@ -3862,4 +3862,39 @@ void LeetCodeTest::Init(void)
 		check(2345, false);
 		check(5445, true);
 	});
+
+	Add("atoi", [&](){
+		auto check = [&](const char * s, int n){
+			int a = Test::LeetCode::AToI(s);
+			Logger().WriteInformation("%s = %d\n", s, a);
+			ASSERT1(a == n);
+		};
+		check("   0  ", 0);
+		check("		010 ", 10);
+		check("  023 54  ", 23);
+		check("   012324356376455674685768967  ", INT_MAX);
+		check("   -012324356376455674685768967  ", INT_MIN);
+		Logger().WriteInformation("INT_MAX = %d\n", INT_MAX);
+		Logger().WriteInformation("-INT_MAX = %d\n", -INT_MAX);
+		Logger().WriteInformation("INT_MIN = %d\n", INT_MIN);
+		Logger().WriteInformation("-INT_MIN = %d\n", -INT_MIN);
+		Logger().WriteInformation("-(INT_MIN + 1) = %d\n", -(INT_MIN + 1));
+	});
+
+	Add("LongestPalindrome", [&](){
+		auto check = [&](const string & s){
+			Logger().WriteInformation("Input:  %s\n", s.c_str());
+			string p = Test::LeetCode::LongestPalindrome(s);
+			Logger().WriteInformation("Output: %s\n", p.c_str());
+		};
+		check("a");
+		check("aa");
+		check("ab");
+		check("aaa");
+		check("aba");
+		check("abc");
+		check("aab");
+		check("abb");
+		check("aabbcccddcddasdfcccdd");
+	});
 }

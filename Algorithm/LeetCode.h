@@ -4744,5 +4744,152 @@ namespace Test {
 			}
 			return true;
 		}
+
+		// Implement atoi to convert a string to an integer.
+		// Requirements for atoi:
+		// The function first discards as many whitespace characters as necessary until the first non-whitespace character is found.
+		// Then, starting from this character, takes an optional initial plus or minus sign followed by as many numerical digits
+		// as possible, and interprets them as a numerical value.
+		// The str can contain additional characters after those that form the integral number,
+		// which are ignored and have no effect on the behavior of this function.
+		// If the first sequence of non-whitespace characters in str is not a valid integral number,
+		// or if no such sequence exists because either str is empty or it contains only whitespace characters,
+		// no conversion is performed.
+		// If no valid conversion could be performed, a zero value is returned.
+		// If the correct value is out of the range of representable values, INT_MAX (2147483647) or INT_MIN (-2147483648)
+		// is returned.
+		static int AToI(const char * str)
+		{
+			while (*str == ' ' || *str == '\t' || *str == '\r' || *str == '\n') str++;
+			bool positive = true;
+			if (*str == '+') str++;
+			else if (*str == '-') {
+				positive = false;
+				str++;
+			}
+			if (*str == '\0' || *str < '0' || *str > '9') return 0;
+			long long s = 0;
+			while (*str != '\0' && '0' <= *str && *str <= '9') {
+				s = s * 10 + (*str - '0');
+				if (positive && s >= INT_MAX) return INT_MAX;
+				if (!positive && -s <= INT_MIN) return INT_MIN;
+				str++;
+			}
+			return positive ? (int)s : -(int)s;
+		}
+
+		// Reverse digits of an integer.
+		// Example1: x = 123, return 321
+		// Example2: x = -123, return -321
+		static int ReverseInteger(int x)
+		{
+			// -INT_MIN = INT_MIN
+			if (x == INT_MIN) throw runtime_error("overflow while reversing INT_MIN");
+			bool negative = false;
+			if (x < 0) {
+				negative = true;
+				x = -x;
+			}
+			long long y = 0;
+			while (x > 0) {
+				int d = x % 10;
+				y = y * 10 + d;
+				if (!negative && y > INT_MAX || negative && -y < INT_MIN) throw runtime_error("overflow while reversing x");
+				x /= 10;
+			}
+			return negative ? -(int)y : (int)y;
+		}
+
+		// The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this:
+		//   P   A   H   N
+		//   A P L S I I G
+		//   Y   I   R
+		// and then read line by line: "PAHNAPLSIIGYIR"
+		// Write the code that will take a string and make this conversion given a number of rows:
+		// string convert(string text, int nRows);
+		// convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR".
+		static string ConvertZigZag(const string & s, int nRows)
+		{
+			int n = s.length();
+			string r;
+			if (n == 0 || nRows <= 0) return r;
+			if (nRows == 1) return s;
+			int d = (nRows << 1) - 2;
+			int j = 0;
+			while (j < n) {
+				r.append(1, s[j]);
+				j += d;
+			}
+			for (int i = 1; i < nRows - 1; i++) {
+				int j = 0;
+				int k;
+				while (j < n) {
+					k = j + i;
+					if (k < n) r.append(1, s[k]);
+					k = j + d - i;
+					if (k < n) r.append(1, s[k]);
+					j += d;
+				}
+			}
+			j = nRows - 1;
+			while (j < n) {
+				r.append(1, s[j]);
+				j += d;
+			}
+			return r;
+		}
+
+		// Given a string S, find the longest palindromic substring in S.
+		// You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
+		static string LongestPalindrome(const string & s)
+		{
+			auto getChar = [&](const string & s, int i)->char{
+				if (i % 2 == 0) return '#';
+				else return s[i >> 1];
+			};
+			auto expand = [&](const string & s, int c, int & l){
+				int n = (s.length() << 1) + 1;
+				while (true) {
+					int i = c - l;
+					int j = c + l;
+					if (i - 1 >= 0 && j + 1 < n && getChar(s, i - 1) == getChar(s, j + 1)) l++;
+					else break;
+				}
+			};
+			string p;
+			if (s.length() == 0) return p;
+			int n = (s.length() << 1) + 1;
+			vector<int> l(n, 0);
+			int c = 0;
+			int r = 0;
+			int mi = 0;
+			int ml = 0;
+			int i = 0;
+			while (i < n) {
+				if (i < r) {
+					int j = (c << 1) - i;
+					l[i] = min(l[j], r - i);
+					if (i + l[i] < r) {
+						i++;
+						continue;
+					}
+				}
+				expand(s, i, l[i]);
+				if (i + l[i] >= r) {
+					c = i;
+					r = i + l[i];
+				}
+				if (l[i] > ml) {
+					mi = i;
+					ml = l[i];
+				}
+				i++;
+			}
+			for (int j = mi - ml; j <= mi + ml; j++) {
+				char c = getChar(s, j);
+				if (c != '#') p.append(1, c);
+			}
+			return p;
+		}
 	};
 }
