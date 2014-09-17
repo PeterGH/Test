@@ -4891,5 +4891,222 @@ namespace Test {
 			}
 			return p;
 		}
+
+		// You are given two linked lists representing two non-negative numbers.
+		// The digits are stored in reverse order and each of their nodes contain a single digit.
+		// Add the two numbers and return it as a linked list.
+		// Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+		// Output: 7 -> 0 -> 8
+		static ListNode * AddTwoNumbers(ListNode * l1, ListNode * l2)
+		{
+			if (l1 == nullptr) return l2;
+			if (l2 == nullptr) return l1;
+			ListNode * head = l1;
+			ListNode * p;
+			int c = 0;
+			int d;
+			while (l1->next != nullptr && l2->next != nullptr) {
+				d = l1->val + l2->val + c;
+				if (d >= 10) {
+					c = 1;
+					d -= 10;
+				} else c = 0;
+				l1->val = d;
+				l1 = l1->next;
+				p = l2;
+				l2 = l2->next;
+				delete p;
+			}
+			d = l1->val + l2->val + c;
+			if (d >= 10) {
+				c = 1;
+				d -= 10;
+			} else c = 0;
+			l1->val = d;
+			if (l1->next == nullptr) {
+				l1->next = l2->next;
+			}
+			delete l2;
+			while (c == 1) {
+				if (l1->next != nullptr) {
+					l1 = l1->next;
+					d = l1->val + c;
+					if (d >= 10) {
+						c = 1;
+						d -= 10;
+					} else c = 0;
+					l1->val = d;
+				} else {
+					l1->next = new ListNode(c);
+					c = 0;
+				}
+			}
+			return head;
+		}
+
+		// Given a string, find the length of the longest substring without repeating characters.
+		// For example, the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3.
+		// For "bbbbb" the longest substring is "b", with the length of 1.
+		static int LengthOfLongestSubstringWithoutRepeatingChars(const string & s)
+		{
+			if (s.length() == 0) return 0;
+			unordered_set<char> chars;
+			int i = 0;
+			int l = 0;
+			for (int j = 0; j < (int)s.length(); j++) {
+				if (chars.find(s[j]) == chars.end()) {
+					chars.insert(s[j]);
+					if (j - i + 1 > l) l = j - i + 1;
+				} else {
+					while (s[i] != s[j]) {
+						chars.erase(s[i]);
+						i++;
+					}
+					i++;
+				}
+			}
+			return l;
+		}
+
+		// There are two sorted arrays A and B of size m and n respectively.
+		// Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
+		static double FindMedianSortedArrays(int A[], int m, int B[], int n)
+		{
+			if (m < 0) throw invalid_argument("m is negative");
+			if (n < 0) throw invalid_argument("n is negative");
+			if (m == 0 && n == 0) throw invalid_argument("m and n are zeros");
+			// If m + n is even, then the median is computed from the t-th and (t+1)-th elements
+			// If m + n is odd, then the median is the t-th element
+			bool even = ((m + n) % 2) == 0;
+			int t = (m + n + 1) >> 1;
+			if (m == 0 || A[m-1] <= B[0]) {
+				if (m < t) {
+					if (even) return (double)(B[t-m-1] + B[t-m]) / 2;
+					else return B[t-m-1];
+				} else if (m == t) {
+					if (even) return (double)(A[m-1] + B[0]) / 2;
+					else return A[m-1];
+				} else {
+					if (even) return (double)(A[t-1] + A[t]) / 2;
+					else return A[t-1];
+				}
+			} else if (n == 0 || B[n-1] <= A[0]) {
+				if (n < t) {
+					if (even) return (double)(A[t-n-1] + A[t-n]) / 2;
+					else return A[t-n-1];
+				} else if (n == t) {
+					if (even) return (double)(B[n-1] + A[0]) / 2;
+					else return B[n-1];
+				} else {
+					if (even) return (double)(B[t-1] + B[t]) / 2;
+					else return B[t-1];
+				}
+			}
+
+			int a = 0;
+			int b = m - 1;
+			int c;
+			int i = 0;
+			int j = n - 1;
+			int k;
+			while (a <= b && i <= j) {
+				c = a + ((b - a) >> 1);
+				k = i + ((j - i) >> 1);
+				if (c + 1 + k + 1 < t) {
+					if (A[c] < B[k]) {
+						if (c == b) i = k + 1;
+						else a = c + 1;
+					} else {
+						if (k == j) a = c + 1;
+						else i = k + 1;
+					}
+				} else if (c + 1 + k + 1 == t) {
+					if (A[c] < B[k]) {
+						if (c == m - 1 || A[c+1] >= B[k]) {
+							if (even) {
+								if (c == m - 1)	return (double)(B[k] + B[k+1]) / 2;
+								else return (double)(B[k] + min(A[c+1], B[k+1])) / 2;
+							} else return B[k];
+						} else if (k == 0 || A[c+1] >= B[k-1]) {
+							if (even) {
+								if (c + 1 == m - 1) return (double)(A[c+1] + B[k]) / 2;
+								else return (double) (A[c+1] + min(A[c+2], B[k])) / 2;
+							} else return A[c+1];
+						} else {
+							a = c;
+							j = k;
+						}
+					} else {
+						if (k == n - 1 || A[c] <= B[k+1]) {
+							if (even) {
+								if (k == n - 1) return (double)(A[c] + A[c+1]) / 2;
+								else return (double)(A[c] + min(A[c+1], B[k+1])) / 2;
+							} else return A[c];
+						} else if (c == 0 || A[c-1] <= B[k+1]) {
+							if (even) {
+								if (k + 1 == n - 1) return (double)(A[c] + B[k+1]) / 2;
+								else return (double)(min(A[c], B[k+2]) + B[k+1]) / 2;
+							} else return B[k+1];
+						} else {
+							b = c;
+							i = k;
+						}
+					}
+				} else if (c + 1 + k + 1 == t + 1) {
+					if (A[c] < B[k]) {
+						if (c == m - 1 || A[c+1] >= B[k]) {
+							if (even) {
+								if (k == 0) return (double)(A[c] + B[k]) / 2;
+								else return (double)(max(A[c], B[k-1]) + B[k]) / 2;
+							} else {
+								if (k == 0) return A[c];
+								else return min(A[c], B[k-1]);
+							}
+						} else if (k == 0 || A[c+1] >= B[k-1]) {
+							if (even) {
+								if (k == 0) return (double) (A[c] + A[c+1]) / 2;
+								else return (double) (max(A[c], B[k-1]) + A[c+1]) / 2;
+							} else {
+								if (k == 0) return A[c];
+								else return max(A[c], B[k-1]);
+							}
+						} else {
+							a = c;
+							j = k;
+						}
+					} else {
+						if (k == n - 1 || A[c] <= B[k+1]) {
+							if (even) {
+								if (c == 0) return (double)(A[c] + B[k]) / 2;
+								else return (double)(A[c] + max(A[c-1], B[k])) / 2;
+							} else {
+								if (c == 0) return B[k];
+								else return min(A[c-1], B[k]);
+							}
+						} else if (c == 0 || A[c-1] <= B[k+1]) {
+							if (even) {
+								if (c == 0) return (double)(B[k] + B[k+1]) / 2;
+								else return (double)(max(A[c-1], B[k]) + B[k+1]) / 2;
+							} else {
+								if (c == 0) return B[k];
+								else return max(A[c-1], B[k]);
+							}
+						} else {
+							b = c;
+							i = k;
+						}
+					}
+				} else {
+					if (A[c] > B[k]) {
+						if (a == c) j = k - 1;
+						else b = c - 1;
+					} else {
+						if (i == k) b = c - 1;
+						else j = k - 1;
+					}
+				}
+			}
+			throw runtime_error("median is not found");
+		}
 	};
 }

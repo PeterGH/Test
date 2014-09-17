@@ -3897,4 +3897,92 @@ void LeetCodeTest::Init(void)
 		check("abb");
 		check("aabbcccddcddasdfcccdd");
 	});
+
+	Add("MedianTwoSortedArrays", [&](){
+		auto print = [&](int a[], int m){
+			for (int i = 0; i < m; i++) {
+				Logger().WriteInformation(" %d", a[i]);
+			}
+			Logger().WriteInformation("\n");
+		};
+		auto check = [&](int a[], int m, int b[], int n, double e) {
+			Logger().WriteInformation("Array1:");
+			print(a, m);
+			Logger().WriteInformation("Array2:");
+			print(b, n);
+			double d = Test::LeetCode::FindMedianSortedArrays(a, m, b, n);
+			Logger().WriteInformation("Median: %f\n", d);
+			ASSERT1(d == e);
+		};
+		{
+			int a[] = { 3 };
+			int b[] = { 2, 4 };
+			check(a, 1, b, 2, 3);
+		}
+		{
+			int a[] = { 1, 3 };
+			int b[] = { 2 };
+			check(a, 2, b, 1, 2);
+		}
+		{
+			int a[] = { 1, 3 };
+			int b[] = { 2, 4 };
+			check(a, 2, b, 2, 2.5);
+		}
+		{
+			int a[] = { 2, 3 };
+			int b[] = { 1, 4, 5 };
+			check(a, 2, b, 3, 3);
+		}
+		{
+			int a[] = { 3, 5 };
+			int b[] = { 2, 4, 6 };
+			check(a, 2, b, 3, 4);
+		}
+		{
+			int a[] = { 1, 3, 5 };
+			int b[] = { 2, 4 };
+			check(a, 3, b, 2, 3);
+		}
+		{
+			int a[] = { 1, 3, 6 };
+			int b[] = { 2, 4, 5 };
+			check(a, 3, b, 3, 3.5);
+		}
+		{
+			int a[] = { 1, 3, 5 };
+			int b[] = { 2, 4, 6 };
+			check(a, 3, b, 3, 3.5);
+		}
+		{
+			int a[] = { 3 };
+			int b[] = { 2, 4, 5 };
+			check(a, 1, b, 3, 3.5);
+		}
+		{
+			int a[] = { 1, 3, 6 };
+			int b[] = { 2 };
+			check(a, 3, b, 1, 2.5);
+		}
+		{
+			int a[] = { 1, 3, 6 };
+			int b[] = { 5 };
+			check(a, 3, b, 1, 4);
+		}
+		{
+			int a[] = { 1, 7, 8 };
+			int b[] = { 2, 4, 5 };
+			check(a, 3, b, 3, 4.5);
+		}
+		{
+			int a[] = { 3, 4, 5 };
+			int b[] = { 1, 2, 7 };
+			check(a, 3, b, 3, 3.5);
+		}
+		{
+			int a[] = { 1, 3 };
+			int b[] = { 2, 4, 5, 6, 7, 8, 9 };
+			check(a, 2, b, 7, 5);
+		}
+	});
 }
