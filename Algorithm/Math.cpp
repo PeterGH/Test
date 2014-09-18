@@ -44,6 +44,36 @@ namespace Test {
 		return code;
 	}
 
+	// http://leetcode.com/2010/04/multiplication-of-numbers.html
+	// There is an array A[N] of N numbers. You have to compose an array Output[N] such that Output[i]
+	// will be equal to multiplication of all the elements of A[N] except A[i]. Solve it without division operator and in O(n).
+	// For example Output[0] will be multiplication of A[1] to A[N-1]
+	// and Output[1] will be multiplication of A[0] and from A[2] to A[N-1].
+	// Example:
+	// A: {4, 3, 2, 1, 2}
+	// OUTPUT: {12, 16, 24, 48, 24}
+	// Let M[i..j] = I[i] * I[i+1] * ... * I[j]
+	// I[i]  I[0]      I[1]      I[2]      ...... I[i]        ...... I[n-1]
+	// L[i]  1         M[0..0]   M[0..1]   ...... M[0..i-1]   ...... M[0..n-2]
+	// R[i]  M[1..n-1] M[2..n-1] M[3..n-1] ...... M[i+1..n-1] ...... 1
+	// O[i] = L[i] * R[i]
+	void Math::ExclusiveMultiplication(const int * input, int length, long long * output)
+	{
+		for (int i = 0; i < length; i++) {
+			output[i] = 1;
+		}
+		long long left = 1;
+		long long right = 1;
+		for (int i = 0; i < length; i++) {
+			// At loop i, output[i] = left = multiplication of input[0..i-1]
+			// At loop length - 1 - i, output[i] *= right = multiplication of input[i+1..length-1]
+			output[i] *= left;
+			output[length - 1 - i] *= right;
+			left *= input[i];
+			right *= input[length - 1 - i];
+		}
+	}
+
 	// Evaluate the value of an arithmetic expression in Reverse Polish Notation.
 	int Math::EvalRPNExpression(vector<string> & tokens)
 	{

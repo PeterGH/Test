@@ -1,330 +1,110 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClInclude Include="Argument.h" />
+    <ClInclude Include="Array.h" />
+    <ClInclude Include="Array2D.h" />
+    <ClInclude Include="AVLTree.h" />
+    <ClInclude Include="BinaryIterator.h" />
+    <ClInclude Include="BinaryNode.h" />
+    <ClInclude Include="BinaryNodeWithParent.h" />
+    <ClInclude Include="BinaryNodeWithRightSibling.h" />
+    <ClInclude Include="BinarySearch.h" />
+    <ClInclude Include="BinarySearchTree.h" />
+    <ClInclude Include="BinaryTree.h" />
+    <ClInclude Include="BitSet.h" />
+    <ClInclude Include="BreakString.h" />
+    <ClInclude Include="CircularSingleLinkList.h" />
+    <ClInclude Include="CoinChange.h" />
+    <ClInclude Include="CoinSelect.h" />
+    <ClInclude Include="ColumnSort.h" />
+    <ClInclude Include="CompleteBinaryTree.h" />
+    <ClInclude Include="CountingSort.h" />
+    <ClInclude Include="DoubleNode.h" />
+    <ClInclude Include="DynamicProgramming.h" />
+    <ClInclude Include="FiniteAutomation.h" />
+    <ClInclude Include="Geometry.h" />
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="GraphSearchTree.h" />
+    <ClInclude Include="Heap.h" />
+    <ClInclude Include="HeapSort.h" />
+    <ClInclude Include="InOrderBinaryIterator.h" />
+    <ClInclude Include="InOrderBinaryIteratorWithOutStack.h" />
+    <ClInclude Include="InsertionSort.h" />
+    <ClInclude Include="KMP.h" />
+    <ClInclude Include="Knapsack.h" />
+    <ClInclude Include="LeetCode.h" />
+    <ClInclude Include="ListGraph.h" />
+    <ClInclude Include="Log.h" />
+    <ClInclude Include="LongestCommonSubsequence.h" />
+    <ClInclude Include="LongestIncreasingSubsequence.h" />
+    <ClInclude Include="LRUCache.h" />
+    <ClInclude Include="Math.h" />
+    <ClInclude Include="MatrixChain.h" />
+    <ClInclude Include="MatrixGraph.h" />
+    <ClInclude Include="Maze.h" />
+    <ClInclude Include="MergeSort.h" />
+    <ClInclude Include="MRInteger.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="Node1.h" />
+    <ClInclude Include="Node2.h" />
+    <ClInclude Include="NodeGraph.h" />
+    <ClInclude Include="Palindrome.h" />
+    <ClInclude Include="Partition.h" />
+    <ClInclude Include="Permutation.h" />
+    <ClInclude Include="PostOrderBinaryIterator.h" />
+    <ClInclude Include="PostOrderBinaryIteratorWithOutStack.h" />
+    <ClInclude Include="PreOrderBinaryIterator.h" />
+    <ClInclude Include="PreOrderBinaryIteratorWithOutStack.h" />
+    <ClInclude Include="Queue.h" />
+    <ClInclude Include="QuickSort.h" />
+    <ClInclude Include="RadixSort.h" />
+    <ClInclude Include="Random.h" />
+    <ClInclude Include="RedBlackTree.h" />
+    <ClInclude Include="RodCut.h" />
+    <ClInclude Include="SeamCarving.h" />
+    <ClInclude Include="SingleLinkList.h" />
+    <ClInclude Include="SingleNode.h" />
+    <ClInclude Include="SortedCircularSingleLinkList.h" />
+    <ClInclude Include="SortedSingleLinkList.h" />
+    <ClInclude Include="Stack.h" />
+    <ClInclude Include="String.h" />
+    <ClInclude Include="TestClass.h" />
+    <ClInclude Include="TestSuite.h" />
+    <ClInclude Include="UnitTimeTaskScheduler.h" />
+    <ClInclude Include="YoungTableau.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="String.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TestClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TestSuite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Argument.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BitSet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Array.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ColumnSort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Heap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MergeSort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Random.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QuickSort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Partition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BinarySearch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SingleLinkList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SortedSingleLinkList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CircularSingleLinkList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SortedCircularSingleLinkList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InsertionSort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MRInteger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RadixSort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Permutation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HeapSort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="YoungTableau.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CountingSort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Queue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BinaryTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RedBlackTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AVLTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RodCut.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MatrixChain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LongestCommonSubsequence.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LongestIncreasingSubsequence.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Palindrome.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Array2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SeamCarving.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BreakString.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Knapsack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UnitTimeTaskScheduler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoinChange.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ListGraph.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graph.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MatrixGraph.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphSearchTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FiniteAutomation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="KMP.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NodeGraph.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Geometry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BinaryNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BinaryNodeWithParent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BinarySearchTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CompleteBinaryTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BinaryIterator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PreOrderBinaryIterator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InOrderBinaryIterator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PostOrderBinaryIterator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PreOrderBinaryIteratorWithOutStack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InOrderBinaryIteratorWithOutStack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PostOrderBinaryIteratorWithOutStack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CoinSelect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Maze.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Node1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Node2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DoubleNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BinaryNodeWithRightSibling.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DynamicProgramming.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Math.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SingleNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LRUCache.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LeetCode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="String.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TestClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TestSuite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Log.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BitSet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Random.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Array.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MRInteger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RadixSort.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Permutation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HeapSort.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CountingSort.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RodCut.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MatrixChain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LongestCommonSubsequence.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LongestIncreasingSubsequence.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Palindrome.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BreakString.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Knapsack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitTimeTaskScheduler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CoinChange.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphSearchTree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FiniteAutomation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KMP.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NodeGraph.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Geometry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CoinSelect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Maze.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DynamicProgramming.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Math.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LRUCache.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="Array.cpp" />
+    <ClCompile Include="BitSet.cpp" />
+    <ClCompile Include="BreakString.cpp" />
+    <ClCompile Include="CoinChange.cpp" />
+    <ClCompile Include="CoinSelect.cpp" />
+    <ClCompile Include="CountingSort.cpp" />
+    <ClCompile Include="DynamicProgramming.cpp" />
+    <ClCompile Include="FiniteAutomation.cpp" />
+    <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="GraphSearchTree.cpp" />
+    <ClCompile Include="HeapSort.cpp" />
+    <ClCompile Include="KMP.cpp" />
+    <ClCompile Include="Knapsack.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="LongestCommonSubsequence.cpp" />
+    <ClCompile Include="LongestIncreasingSubsequence.cpp" />
+    <ClCompile Include="LRUCache.cpp" />
+    <ClCompile Include="Math.cpp" />
+    <ClCompile Include="MatrixChain.cpp" />
+    <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="MRInteger.cpp" />
+    <ClCompile Include="NodeGraph.cpp" />
+    <ClCompile Include="Palindrome.cpp" />
+    <ClCompile Include="Permutation.cpp" />
+    <ClCompile Include="RadixSort.cpp" />
+    <ClCompile Include="Random.cpp" />
+    <ClCompile Include="RodCut.cpp" />
+    <ClCompile Include="String.cpp" />
+    <ClCompile Include="TestClass.cpp" />
+    <ClCompile Include="TestSuite.cpp" />
+    <ClCompile Include="UnitTimeTaskScheduler.cpp" />
   </ItemGroup>
 </Project>

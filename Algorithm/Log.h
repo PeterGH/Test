@@ -27,6 +27,18 @@ namespace Test {
 		__declspec(dllexport) void WriteWarning(const char * format, ...);
 		__declspec(dllexport) void WriteInformation(const char * format, ...);
 		__declspec(dllexport) void WriteVerbose(const char * format, ...);
+
+		template<class T> __declspec(dllexport) void Print(T a[], int n, const char * format = "%d", const char * sep = ", ");
 	};
+
+	template<class T> void Log::Print(T a[], int n, const char * format, const char * sep)
+	{
+		WriteInformation("[");
+		for (int i = 0; i < n; i++) {
+			if (i != 0) WriteInformation(sep);
+			WriteInformation(format, a[i]);
+		}
+		WriteInformation("]\n");
+	}
 }
 

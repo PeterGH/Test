@@ -48,6 +48,31 @@ void MathTest::Init(void)
 		}
 	});
 
+	Add("ExclusiveMultiplication", [&](){
+		auto check = [&](int * input, int length, long long * output, long long * expect) {
+			Math::ExclusiveMultiplication(input, length, output);
+			Logger().WriteInformation("Input:  ");
+			Logger().Print<int>(input, length, "%4d", " ");
+			Logger().WriteInformation("Output: ");
+			Logger().Print<long long>(output, length, "%4ld", " ");
+			for (int i = 0; i < length; i++) {
+				ASSERT1(output[i] == expect[i]);
+			}
+		};
+		{
+			int A[] = { 4, 3, 2, 1, 2 };
+			long long B[5];
+			long long C[] = { 12, 16, 24, 48, 24 };
+			check(A, 5, B, C);
+		}
+		{
+			int A[] = { 4, 3, 2, 1, 2, 3 };
+			long long B[6];
+			long long C[] = { 36, 48, 72, 144, 72, 48 };
+			check(A, 6, B, C);
+		}
+	});
+
 	Add("RPN", [&](){
 		auto check = [&](vector<string> & tokens, int expect) {
 			Logger().WriteInformation("Expression:");

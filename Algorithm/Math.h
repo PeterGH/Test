@@ -18,6 +18,9 @@ namespace Test {
 		__declspec(dllexport) static unsigned long long ExcelDecode(const string & input);
 		__declspec(dllexport) static string ExcelEncode(unsigned long long input);
 
+		// For each element input[i] compute multiplication of the other elements in input.
+		__declspec(dllexport) static void ExclusiveMultiplication(const int * input, int length, long long * output);
+
 		__declspec(dllexport) static int EvalRPNExpression(vector<string> & tokens);
 
 		__declspec(dllexport) static int FindSingleNumber(int input[], int lenth);

@@ -46,7 +46,7 @@ namespace Test {
 		bool Has(unsigned int index) const { return index < this->indexed.size(); }
 
 		// Get a named argument value
-		const basic_string<T> & operator[](const basic_string<T> & name);
+		const basic_string<T> & operator[](const basic_string<T> & key);
 
 		// Get an indexed argument value
 		const basic_string<T> & operator[](unsigned int index);
@@ -60,8 +60,9 @@ namespace Test {
 
 	template<class T> void Argument<T>::Parse(int argc, T * argv[])
 	{
+		if (argc <= 0 || argv == nullptr) return;
 		int i = 0;
-		do {
+		while (i < argc) {
 			if (argv[i][0] == T('-')) {
 				basic_string<T> key = basic_string<T>(&argv[i][1]);
 				if (i + 1 < argc && argv[i + 1][0] != T('-')) {
@@ -80,7 +81,7 @@ namespace Test {
 				this->indexed.push_back(value);
 				i++;
 			}
-		} while (i < argc);
+		}
 	}
 
 	template<class T> bool Argument<T>::Has(const basic_string<T> & key)
