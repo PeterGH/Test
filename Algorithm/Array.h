@@ -14,21 +14,23 @@ namespace Test {
 	class __declspec(dllexport) Array {
 	public:
 
+		// Given an array of stock prices. Buy on one day and sell later. Maximize the profit.
+		// Return the indices of buy day and sell day and the profit.
+		template<class T> static void BuySellStock(const T * input, int length, int & buy, int & sell, T & profit);
+		template<class T> static void BuySellStock2(const T * input, int length, int & buy, int & sell, T & profit);
+		// Multiple transactions. But two transactions cannot overlap, i.e., must sell before buy again.
+		template<class T> static void BuySellStock(const T * input, int length, vector<int> & buy, vector<int> & sell, vector<T> & profit);
+		template<class T> static void BuySellStock2(const T * input, int length, vector<int> & buy, vector<int> & sell, vector<T> & profit);
+		// At most two transactions. But two transactions cannot overlap, i.e., must sell before buy again.
+		template<class T> static void BuySellStock2Transactions(const T * input, int length, vector<int> & buy, vector<int> & sell, vector<T> & profit);
+
 		// Find a subarray of contiguous elements whose sum is maximized
 		// If array contains both positive and negative numbers, return the maximum subarray
 		// If array contains positive numbers, return entire array A
 		// If array contains non-positive numbers, return the maximum number
 		// Parameter sum is the summation of the returned subarray
 		// Parameters start and end are the start and end indices of the returned subarray
-		static void MaxSubArray(const int * input, int length, int & start, int & end, long & sum);
-
-		// Buy on one day and sell later. Maximize the profit.
-		static void BuySellStock(const int * input, int length, int & buy, int & sell, int & profit);
-		static void BuySellStock2(const int * input, int length, int & buy, int & sell, int & profit);
-		// Multiple transactions. But two transactions cannot overlap, i.e., must sell before buy again.
-		static void BuySellStock(const int * input, int length, vector<int> & buy, vector<int> & sell, vector<int> & profit);
-		// At most two transactions. But two transactions cannot overlap, i.e., must sell before buy again.
-		static void BuySellStock2(const int * input, int length, vector<int> & buy, vector<int> & sell, vector<int> & profit);
+		template<class T> static void MaxSubArray(const T * input, int length, int & start, int & end, T & sum);
 
 		// An inversion is a pair (i, j) such that i < j and I[i] > I[j].
 		// Find an inversion such that j - i is maximized.
@@ -73,6 +75,233 @@ namespace Test {
 		// Transpose columns to rows for a two dimensional matrix in place. Not change the dimensions.
 		template<class T> static void TransposeColumnsToRows(T * input, const int length, const int columns);
 	};
+
+	// Buy on one day and sell later. Maximize the profit.
+	template<class T> void Array::BuySellStock(const T * input, int length, int & buy, int & sell, T & profit)
+	{
+		int min = 0;
+		buy = 0;
+		sell = 0;
+		profit = 0;
+		for (int i = 1; i < length; i++) {
+			if (input[i] < input[min]) {
+				min = i;
+			} else {
+				T diff = input[i] - input[min];
+				if (diff > profit) {
+					buy = min;
+					sell = i;
+					profit = diff;
+				}
+			}
+		}
+	}
+
+	// Buy on one day and sell later. Maximize the profit.
+	template<class T> void Array::BuySellStock2(const T * input, int length, int & buy, int & sell, T & profit)
+	{
+		buy = 0;
+		sell = 0;
+		profit = 0;
+		stack<int> sellCandidates; // track the increasing values from end to beginning
+		sellCandidates.push(length - 1);
+		for (int i = length - 2; i > 0; i--) {
+			if (input[i] >= input[sellCandidates.top()]) {
+				// i is the possible sell date, because
+				// other dates later than i have less stock values
+				sellCandidates.push(i);
+			}
+		}
+		int min = 0;
+		for (int i = 0; i < length - 1; i++) {
+			if (i == 0 || input[i] < input[min]) {
+				min = i;
+				while (min >= sellCandidates.top()) {
+					// i may be way later than top candidates
+					sellCandidates.pop();
+				}
+				T diff = input[sellCandidates.top()] - input[min];
+				if (diff > profit) {
+					buy = min;
+					sell = sellCandidates.top();
+					profit = diff;
+				}
+			}
+		}
+	}
+
+	// Multiple transactions. But two transactions cannot overlap, i.e., must sell before buy again.
+	// However, sell and buy can happen on the same day.
+	template<class T> void Array::BuySellStock(const T * input, int length, vector<int> & buy, vector<int> & sell, vector<T> & profit)
+	{
+		if (input == nullptr || length < 2) return;
+		for (int i = 1; i < length; i++) {
+			if (input[i] > input[i-1]) {
+				buy.push_back(i-1);
+				sell.push_back(i);
+				profit.push_back(input[i] - input[i-1]);
+			}
+		}
+	}
+
+	// Multiple transactions. But two transactions cannot overlap, i.e., must sell before buy again.
+	// However, sell and buy can happen on the same day.
+	// Use as less transactions as possible.
+	template<class T> void Array::BuySellStock2(const T * input, int length, vector<int> & buy, vector<int> & sell, vector<T> & profit)
+	{
+		if (input == nullptr || length < 2) return;
+		int i = 0;
+		int j = 0;
+		while (j < length) {
+			while (j + 1 < length && input[j+1] >= input[j]) j++;
+			if (i < j) {
+				// input[i..j] is increasing
+				buy.push_back(i);
+				sell.push_back(j);
+				profit.push_back(input[j] - input[i]);
+			}
+			i = j + 1;
+			j++;
+		}
+	}
+
+	// At most two transactions. But two transactions cannot overlap, i.e., must sell before buy again.
+	// However, sell and buy can happen on the same day.
+	template<class T> void Array::BuySellStock2Transactions(const T * input, int length, vector<int> & buy, vector<int> & sell, vector<T> & profit)
+	{
+		if (input == nullptr || length < 2) return;
+		// Find one transaction during input[begin..end]
+		auto maxProfit = [&](int begin, int end, int & buy, int & sell, int & profit){
+			int min = begin;
+			buy = begin;
+			sell = begin;
+			profit = 0;
+			if (end == begin) return;
+			for (int i = begin + 1; i <= end; i++) {
+				if (input[i] < input[min]) {
+					min = i;
+				} else {
+					if (input[i] - input[min] > profit) {
+						buy = min;
+						sell = i;
+						profit = input[i] - input[min];
+					}
+				}
+			}
+		};
+
+		int buy1 = 0;
+		int sell1 = 0;
+		int profit1 = 0;
+		int buy2 = 0;
+		int sell2 = 0;
+		int profit2 = 0;
+
+		int b1 = 0;
+		int s1 = 0;
+		int p1 = 0;
+		int b2 = 0;
+		int s2 = 0;
+		int p2 = 0;
+		int i = 0;
+		while (i < length - 1) {
+			// Increase i so that [0..i] contains one more increasing subarray
+			while (i < length - 1 && input[i+1] <= input[i]) i++;
+			if (i == length - 1) break;
+			while (i < length - 1 && input[i+1] > input[i]) i++;
+
+			// Find the max transaction before i
+			maxProfit(b1, i, b1, s1, p1);
+
+			// Find the max transaction after i
+			if (i > b2)	{
+				// If i <= b2, then no need to reevaluate because b2/s2 is already maximum after i
+				maxProfit(i, length - 1, b2, s2, p2);
+			}
+
+			if (p1 + p2 > profit1 + profit2) {
+				buy1 = b1;
+				sell1 = s1;
+				profit1 = p1;
+				buy2 = b2;
+				sell2 = s2;
+				profit2 = p2;
+			}
+
+			i++;
+		}
+
+		int b3;
+		int s3;
+		int p3;
+		maxProfit(0, length - 1, b3, s3, p3);
+		if (p3 > profit1 + profit2) {
+			buy.push_back(b3);
+			sell.push_back(s3);
+			profit.push_back(p3);
+		} else {
+			buy.push_back(buy1);
+			sell.push_back(sell1);
+			profit.push_back(profit1);
+			buy.push_back(buy2);
+			sell.push_back(sell2);
+			profit.push_back(profit2);
+		}
+	}
+
+	// This is a solution to the buy-sell-stock problem in Introduction to Algorithms
+	template<class T> void Array::MaxSubArray(const T * input, int length, int & start, int & end, T & sum)
+	{
+		start = -1;
+		end = -1;
+		sum = 0;
+
+		if (input == nullptr || length <= 0) return;
+
+		// Track the last maximum sum so far
+		start = 0;
+		end = 0;
+		sum = 0;
+
+		// Track the current streak
+		// Beginning
+		int l = 0;
+		// Cumulative sum up to current element
+		T c = 0;
+		// The index of the maximum element seen so far
+		int max = 0;
+
+		for (int i = 0; i < length; i++) {
+			// Add current element
+			c += input[i];
+
+			if (c > sum) {
+				// Current element is positive,
+				// and the current sum is larger than the last one.
+				// Update the last seen maximum sum
+				start = l;
+				end = i;
+				sum = c;
+			} else if (c <= 0) {
+				// Current element is negative
+				// and everything cancel out
+				// Reset and start from the next element
+				l = i + 1;
+				c = 0;
+			}
+
+			// Record the max element so far
+			if (input[i] > input[max]) max = i;
+		}
+
+		if (sum <= 0) {
+			// All elements are zero or negative
+			// Return the maximum element
+			start = max;
+			end = max;
+			sum = input[max];
+		}
+	}
 
 	template<class T> void Array::MinMax(const T * input, const int length, int & minIndex, int & maxIndex)
 	{

@@ -2669,25 +2669,6 @@ namespace Test {
 			return 0;
 		}
 
-		// Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
-		// For example, given the array [−2,1,−3,4,−1,2,1,−5,4],
-		// the contiguous subarray [4,−1,2,1] has the largest sum = 6.
-		static int MaxSubArray(int A[], int n)
-		{
-			if (A == nullptr || n <= 0) throw invalid_argument("Invalid array");
-			int max = INT_MIN;
-			int maxSum = INT_MIN;
-			int sum = 0;
-			for (int i = 0; i < n; i++) {
-				if (A[i] > max) max = A[i];
-				sum += A[i];
-				if (sum < 0) sum = 0;
-				else if (sum > maxSum) maxSum = sum;
-			}
-			if (maxSum < 0) return max;
-			return maxSum;
-		}
-
 		// The n-queens puzzle is the problem of placing n queens on an n×n chessboard
 		// such that no two queens attack each other.
 		// Given an integer n, return all distinct solutions to the n-queens puzzle.

@@ -652,96 +652,54 @@ void ArrayTest::Init(void)
 	Add("MaxSubArray", [&](){
 		int A1[] = { 13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7 };
 		int L = sizeof(A1) / sizeof(A1[0]);
-		int l, r;
-		long sum;
 
-		auto check = [&](int el, int er, int es) -> void {
+		auto check = [&](int a[], int n, int el, int er, int es) -> void {
+			int l, r, sum;
+			Array::MaxSubArray<int>(a, n, l, r, sum);
 			ASSERT1(el == l);
 			ASSERT1(er == r);
-			ASSERT1(es == (int)sum);
+			ASSERT1(es == sum);
 		};
 
-		Test::Array::MaxSubArray(A1, L, l, r, sum);
-		check(7, 10, 43);
-
-		Test::Array::MaxSubArray(A1, 1, l, r, sum);
-		check(0, 0, 13);
-
-		Test::Array::MaxSubArray(A1, 2, l, r, sum);
-		check(0, 0, 13);
-
-		Test::Array::MaxSubArray(A1, 3, l, r, sum);
-		check(0, 0, 13);
-
-		Test::Array::MaxSubArray(A1, 4, l, r, sum);
-		check(3, 3, 20);
-
-		Test::Array::MaxSubArray(A1, 5, l, r, sum);
-		check(3, 3, 20);
-
-		Test::Array::MaxSubArray(A1, 8, l, r, sum);
-		check(3, 3, 20);
+		check(A1, L, 7, 10, 43);
+		check(A1, 1, 0, 0, 13);
+		check(A1, 2, 0, 0, 13);
+		check(A1, 3, 0, 0, 13);
+		check(A1, 4, 3, 3, 20);
+		check(A1, 5, 3, 3, 20);
+		check(A1, 8, 3, 3, 20);
 
 		int A2[] = { 13, 3, 25, 20, 3, 16, 23, 18, 20, 7, 12, 5, 22, 15, 4, 7 };
-		Test::Array::MaxSubArray(A2, L, l, r, sum);
-		check(0, L - 1, 213);
-
-		Test::Array::MaxSubArray(A2, 1, l, r, sum);
-		check(0, 0, 13);
-
-		Test::Array::MaxSubArray(A2, 2, l, r, sum);
-		check(0, 1, 16);
-
-		Test::Array::MaxSubArray(A2, 3, l, r, sum);
-		check(0, 2, 41);
+		check(A2, L, 0, L - 1, 213);
+		check(A2, 1, 0, 0, 13);
+		check(A2, 2, 0, 1, 16);
+		check(A2, 3, 0, 2, 41);
 
 		int A3[] = { -13, -3, -25, -20, -3, -16, -23, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
-		Test::Array::MaxSubArray(A3, L, l, r, sum);
-		check(1, 1, -3);
-
-		Test::Array::MaxSubArray(A3, 1, l, r, sum);
-		check(0, 0, -13);
-
-		Test::Array::MaxSubArray(A3, 2, l, r, sum);
-		check(1, 1, -3);
+		check(A3, L, 1, 1, -3);
+		check(A3, 1, 0, 0, -13);
+		check(A3, 2, 1, 1, -3);
 
 		int A4[] = { 0, 0, -25, -20, -3, -16, -23, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
-		Test::Array::MaxSubArray(A4, L, l, r, sum);
-		check(0, 0, 0);
-
-		Test::Array::MaxSubArray(A4, 1, l, r, sum);
-		check(0, 0, 0);
+		check(A4, L, 0, 0, 0);
+		check(A4, 1, 0, 0, 0);
 
 		int A5[] = { 0, 0, 25, 20, 3, 16, 23, 18, 20, 7, 12, 5, 22, 15, 0, 0 };
-		Test::Array::MaxSubArray(A5, L, l, r, sum);
-		check(2, 13, 186);
-
-		Test::Array::MaxSubArray(A5, 1, l, r, sum);
-		check(0, 0, 0);
+		check(A5, L, 2, 13, 186);
+		check(A5, 1, 0, 0, 0);
 
 		int A6[] = { -25, -20, -3, 0, 0, -16, -23, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
-		Test::Array::MaxSubArray(A6, L, l, r, sum);
-		check(3, 3, 0);
-
-		Test::Array::MaxSubArray(A6, 1, l, r, sum);
-		check(0, 0, -25);
-
-		Test::Array::MaxSubArray(A6, 2, l, r, sum);
-		check(1, 1, -20);
-
-		Test::Array::MaxSubArray(A6, 5, l, r, sum);
-		check(3, 3, 0);
+		check(A6, L, 3, 3, 0);
+		check(A6, 1, 0, 0, -25);
+		check(A6, 2, 1, 1, -20);
+		check(A6, 5, 3, 3, 0);
 
 		int A7[] = { 1, 1, 1, -1, -1, -1, -1, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
-		Test::Array::MaxSubArray(A7, L, l, r, sum);
-		check(0, 2, 3);
-
-		Test::Array::MaxSubArray(A7, 6, l, r, sum);
-		check(0, 2, 3);
+		check(A7, L, 0, 2, 3);
+		check(A7, 6, 0, 2, 3);
 
 		int A8[] = { 1, 1, 1, -1, -1, -1, -1, -18, -20, -7, -12, -5, -22, -15, -4, 7 };
-		Test::Array::MaxSubArray(A8, L, l, r, sum);
-		check(L - 1, L - 1, 7);
+		check(A8, L, L - 1, L - 1, 7);
 	});
 
 	Add("MaxInversionDistance", [&](){
@@ -1020,24 +978,17 @@ void ArrayTest::Init(void)
 		}
 	});
 
-	Add("BuySellStock", [&](){
-		auto print = [&](int * input, int length) {
-			for (int i = 0; i < length; i++) {
-				Logger().WriteInformation("  %d", input[i]);
-			}
-			Logger().WriteInformation("\n");
-		};
+	Add("BuySellStockOneTransaction", [&](){
 		auto check = [&](int * input, int length) {
-			print(input, length);
-
+			Logger().Print(input, length);
 			int buy;
 			int sell;
 			int profit;
-			Test::Array::BuySellStock(input, length, buy, sell, profit);
+			Array::BuySellStock(input, length, buy, sell, profit);
 			int buy2;
 			int sell2;
 			int profit2;
-			Test::Array::BuySellStock2(input, length, buy2, sell2, profit2);
+			Array::BuySellStock2(input, length, buy2, sell2, profit2);
 			Logger().WriteInformation("\t%d\t%d\t%ld\n", buy, sell, profit);
 			Logger().WriteInformation("\t%d\t%d\t%ld\n", buy2, sell2, profit2);
 			ASSERT1(buy == buy2);
@@ -1138,25 +1089,29 @@ void ArrayTest::Init(void)
 	});
 
 	Add("BuySellStockMultipleTransactions", [&](){
-		auto print = [&](int * input, int length) {
-			for (int i = 0; i < length; i++) {
-				Logger().WriteInformation("  %d", input[i]);
-			}
-			Logger().WriteInformation("\n");
-		};
 		auto check = [&](int * input, int length) {
-			print(input, length);
-
+			Logger().Print(input, length);
 			vector<int> buy;
 			vector<int> sell;
 			vector<int> profit;
-			Test::Array::BuySellStock(input, length, buy, sell, profit);
+			Array::BuySellStock(input, length, buy, sell, profit);
 			int total = 0;
 			for (size_t i = 0; i < buy.size(); i++) {
 				total += profit[i];
 				Logger().WriteInformation("\t%d\t%d\t%ld\n", buy[i], sell[i], profit[i]);
 			}
 			Logger().WriteInformation("\tTotal: %d\n", total);
+			vector<int> buy2;
+			vector<int> sell2;
+			vector<int> profit2;
+			Array::BuySellStock2(input, length, buy2, sell2, profit2);
+			int total2 = 0;
+			for (size_t i = 0; i < buy2.size(); i++) {
+				total2 += profit2[i];
+				Logger().WriteInformation("\t%d\t%d\t%ld\n", buy2[i], sell2[i], profit2[i]);
+			}
+			Logger().WriteInformation("\tTotal: %d\n", total2);
+			ASSERT1(total == total2);
 		};
 		{
 			int A[] = { 1 };
@@ -1249,19 +1204,12 @@ void ArrayTest::Init(void)
 	});
 
 	Add("BuySellStockTwoTransactions", [&](){
-		auto print = [&](int * input, int length) {
-			for (int i = 0; i < length; i++) {
-				Logger().WriteInformation("  %d", input[i]);
-			}
-			Logger().WriteInformation("\n");
-		};
 		auto check = [&](int * input, int length) {
-			print(input, length);
-
+			Logger().Print(input, length);
 			vector<int> buy;
 			vector<int> sell;
 			vector<int> profit;
-			Test::Array::BuySellStock2(input, length, buy, sell, profit);
+			Array::BuySellStock2Transactions(input, length, buy, sell, profit);
 			int total = 0;
 			for (size_t i = 0; i < buy.size(); i++) {
 				total += profit[i];
