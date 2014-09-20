@@ -23,6 +23,7 @@ namespace Test {
 		template<class T> static void BuySellStock2(const T * input, int length, vector<int> & buy, vector<int> & sell, vector<T> & profit);
 		// At most two transactions. But two transactions cannot overlap, i.e., must sell before buy again.
 		template<class T> static void BuySellStock2Transactions(const T * input, int length, vector<int> & buy, vector<int> & sell, vector<T> & profit);
+		template<class T> static void BuySellStock2Transactions2(const T * input, int length, vector<int> & buy, vector<int> & sell, vector<T> & profit);
 
 		// Find a subarray of contiguous elements whose sum is maximized
 		// If array contains both positive and negative numbers, return the maximum subarray
@@ -246,6 +247,93 @@ namespace Test {
 			buy.push_back(buy2);
 			sell.push_back(sell2);
 			profit.push_back(profit2);
+		}
+	}
+
+	template<class T> void Array::BuySellStock2Transactions2(const T * input, int length, vector<int> & buy, vector<int> & sell, vector<T> & profit)
+	{
+		if (input == nullptr || length < 2) return;
+		int buy1 = 0;
+		int sell1 = 0;
+		int buy2 = 0;
+		int sell2 = 0;
+		int buym = 0;
+		int sellm = 0;
+		int i = 0;
+		int j = 0;
+		while (j < length) {
+			while (j + 1 < length && input[j] >= input[j+1]) j++;
+			if (i < sell2 || input[i] >= input[j]) {
+				// i is the minimal between sell2 and j
+				i = j;
+			}
+			while (j + 1 < length && input[j] < input[j+1]) j++;
+			if (i == j) {
+				j++;
+				continue;
+			}
+			// now input[i..j] is increasing
+			if (buy1 == sell1) {
+				// Get the first two increasing ranges
+				buy1 = buy2;
+				sell1 = sell2;
+				buy2 = i;
+				sell2 = j;
+			} else {
+				// Given [buy1, sell1], [buy2, sell2] and [i, j]
+				// Compute new [buy1, sell1] and [buy2, sell2]
+				// Need to compare following cases:
+				// 1. [buy1, sell1], [buy2, sell2]
+				// 2. [buy1, sell1], [buy2, j]
+				// 3. [buy1, sell1], [i, j]
+				// 4. [buy2, sell2], [i, j]
+				// 5. [buy1, sell2], [i, j]
+				int b1 = buy1;
+				int s1 = sell1;
+				int b2 = buy2;
+				int s2 = sell2;
+				if (input[j] > input[s2]) {
+					// Covered case 1 and 2
+					s2 = j;
+				}
+				if (input[j] - input[i] + input[sellm] - input[buym] >
+					input[s2] - input[b2] + input[s1] - input[b1]) {
+					// Covered case 3, 4 and 5
+					b1 = buym;
+					s1 = sellm;
+					b2 = i;
+					s2 = j;
+				}
+				buy1 = b1;
+				sell1 = s1;
+				buy2 = b2;
+				sell2 = s2;
+			}
+			if (input[sell1] - input[buy1] > input[sellm] - input[buym]) {
+				buym = buy1;
+				sellm = sell1;
+			}
+			if (input[sell2] - input[buy2] > input[sellm] - input[buym]) {
+				buym = buy2;
+				sellm = sell2;
+			}
+			if (input[sell2] - input[buy1] > input[sellm] - input[buym]) {
+				buym = buy1;
+				sellm = sell2;
+			}
+			j++;
+		}
+		if (input[sellm] - input[buym] >= input[sell2] - input[buy2] + input[sell1] - input[buy1]) {
+			buy.push_back(buym);
+			sell.push_back(sellm);
+			profit.push_back(input[sellm] - input[buym]);
+		} else {
+			buy.push_back(buy1);
+			sell.push_back(sell1);
+			profit.push_back(input[sell1] - input[buy1]);
+			buy.push_back(buy2);
+			sell.push_back(sell2);
+			profit.push_back(input[sell2] - input[buy2]);
 		}
 	}
 

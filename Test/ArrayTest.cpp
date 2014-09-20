@@ -1216,6 +1216,17 @@ void ArrayTest::Init(void)
 				Logger().WriteInformation("\t%d\t%d\t%ld\n", buy[i], sell[i], profit[i]);
 			}
 			Logger().WriteInformation("\tTotal: %d\n", total);
+			vector<int> buy2;
+			vector<int> sell2;
+			vector<int> profit2;
+			Array::BuySellStock2Transactions2(input, length, buy2, sell2, profit2);
+			int total2 = 0;
+			for (size_t i = 0; i < buy2.size(); i++) {
+				total2 += profit2[i];
+				Logger().WriteInformation("\t%d\t%d\t%ld\n", buy2[i], sell2[i], profit2[i]);
+			}
+			Logger().WriteInformation("\tTotal: %d\n", total2);
+			ASSERT1(total == total2);
 		};
 		{
 			int A[] = { 1 };
@@ -1304,6 +1315,17 @@ void ArrayTest::Init(void)
 		{
 			int A[] = { 6, 1, 3, 2, 4, 7 };
 			check(A, 6);
+		}
+		{
+			for (int i = 0; i < 100; i++) {
+				int len = 1 + Test::Random::Next(100);
+				unique_ptr<int[]> A(new int[len]);
+				for (int j = 0; j < len; j++) {
+					A[j] = Test::Random::Next();
+				}
+				Logger().WriteInformation("\nRun %d with %d elements\n", i, len);
+				check(A.get(), len);
+			}
 		}
 	});
 }
