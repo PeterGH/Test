@@ -29,6 +29,8 @@ namespace Test {
 		__declspec(dllexport) void WriteVerbose(const char * format, ...);
 
 		template<class T> __declspec(dllexport) void Print(T a[], int n, const char * format = "%d", const char * sep = ", ");
+
+		template<class T> __declspec(dllexport) void Print(const T * input, const int length, const int columns, const char * format = "%d", const char * sep = ", ");
 	};
 
 	template<class T> void Log::Print(T a[], int n, const char * format, const char * sep)
@@ -38,6 +40,34 @@ namespace Test {
 			if (i != 0) WriteInformation(sep);
 			WriteInformation(format, a[i]);
 		}
+		WriteInformation("]\n");
+	}
+
+	template<class T> void Log::Print(const T * input, const int length, const int columns, const char * format, const char * sep)
+	{
+		if (input == nullptr || length <= 0) return;
+		int rows = length / columns;
+		WriteInformation("[\n");
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				if (j == 0) WriteInformation(" ");
+				else WriteInformation(sep);
+				WriteInformation(format, *(input + i * columns + j));
+			}
+			WriteInformation("\n");
+		}
+
+		int remainders = length % columns;
+		if (remainders > 0) {
+			for (int j = 0; j < remainders; j++) {
+				if (j == 0) WriteInformation(" ");
+				else WriteInformation(sep);
+				WriteInformation(format, *(input + rows * columns + j));
+			}
+			WriteInformation("\n");
+		}
+
 		WriteInformation("]\n");
 	}
 }

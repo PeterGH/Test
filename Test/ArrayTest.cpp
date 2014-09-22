@@ -704,10 +704,7 @@ void ArrayTest::Init(void)
 
 	Add("MaxInversionDistance", [&](){
 		auto check = [&](int A[], int l, int f, int d) {
-			for (int i = 0; i < l; i++) {
-				Logger().WriteInformation("\t%d", A[i]);
-			}
-			Logger().WriteInformation("\n");
+			Logger().Print(A, l);
 			int first, first2;
 			int distance, distance2;
 			Test::Array::MaxInversionDistance(A, l, first, distance);
@@ -797,35 +794,11 @@ void ArrayTest::Init(void)
 	});
 
 	Add("MaxSlidingWindow", [&](){
-		auto printArray = [&](int A[], int l){
-			Logger().WriteInformation("Input:    ");
-			for (int i = 0; i < l; i++) {
-				Logger().WriteInformation("  %d", A[i]);
-			}
-			Logger().WriteInformation("\n");
-		};
-
-		auto printVector = [&](vector<int> & v, int w){
-			for (int i = 0; i < w - 1; i++) {
-				Logger().WriteInformation("   ");
-			}
-
-			for_each(v.begin(), v.end(), [&](int i){
-				Logger().WriteInformation("  %d", i);
-			});
-			Logger().WriteInformation("\n");
-		};
-
 		auto checkWindow = [&](int A[], int l, int w) {
 			vector<int> output;
 			vector<int> output2;
 			Test::Array::MaxSlidingWindow(A, l, w, output);
 			Test::Array::MaxSlidingWindow2(A, l, w, output2);
-			// Logger().WriteInformation("Output1:  ");
-			// printVector(output, w);
-			// Logger().WriteInformation("Output2:  ");
-			// printVector(output2, w);
-
 			ASSERT1(output.size() == output2.size());
 			for (unsigned int i = 0; i < output.size(); i++) {
 				ASSERT1(output[i] == output2[i]);
@@ -833,9 +806,7 @@ void ArrayTest::Init(void)
 		};
 
 		auto check = [&](int A[], int l) {
-			Logger().WriteInformation("\n");
-			printArray(A, l);
-
+			Logger().Print(A, l);
 			for (int w = 1; w <= l; w++) {
 				Logger().WriteInformation("Window:     %d\n", w);
 				checkWindow(A, l, w);

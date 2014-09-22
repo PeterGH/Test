@@ -449,7 +449,7 @@ namespace Test {
 
 	template<class T> Log & operator<<(Log & log, const YoungTableau<T> & tableau)
 	{
-		Array::Print(log, tableau.buffer, tableau.size, tableau.cols);
+		log.Print(tableau.buffer, tableau.size, tableau.cols);
 		return log;
 	}
 

@@ -10,10 +10,10 @@ void YoungTableauTest::Init(void)
 
 		Test::YoungTableau<int> yt(4, 5);
 		yt.SortRows(A, 20);
-		Test::Array::Print(Logger(), A, 20, yt.Columns());
+		Logger().Print(A, 20, yt.Columns());
 
 		yt.SortColumns(A, 20);
-		Test::Array::Print(Logger(), A, 20, yt.Columns());
+		Logger().Print(A, 20, yt.Columns());
 
 		ASSERT1(yt.Verify(A, 20));
 	});
@@ -34,7 +34,7 @@ void YoungTableauTest::Init(void)
 		ASSERT1(yt2.Verify());
 
 		yt2.Create(A, 20);
-		Test::Array::Print(Logger(), A, 20, yt2.Columns());
+		Logger().Print(A, 20, yt2.Columns());
 		ASSERT1(yt2.Verify(A, 20));
 	});
 

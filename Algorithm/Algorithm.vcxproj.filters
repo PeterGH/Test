@@ -75,7 +75,6 @@
     <ClInclude Include="YoungTableau.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Array.cpp" />
     <ClCompile Include="BitSet.cpp" />
     <ClCompile Include="BreakString.cpp" />
     <ClCompile Include="CoinChange.cpp" />

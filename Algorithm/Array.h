@@ -25,6 +25,16 @@ namespace Test {
 		template<class T> static void BuySellStock2Transactions(const T * input, int length, vector<int> & buy, vector<int> & sell, vector<T> & profit);
 		template<class T> static void BuySellStock2Transactions2(const T * input, int length, vector<int> & buy, vector<int> & sell, vector<T> & profit);
 
+		// An inversion is a pair (i, j) such that i < j and I[i] > I[j].
+		// Find an inversion such that j - i is maximized.
+		// Use parameter first to return value i and distance to return value j - i
+		template<class T> static void MaxInversionDistance(const T * input, int length, int & first, int & distance);
+		template<class T> static void MaxInversionDistance2(const T * input, int length, int & first, int & distance);
+
+		// Slide a window across an input, output the maximum on every move.
+		template<class T> static void MaxSlidingWindow(const T * input, int length, int window, vector<T> & output);
+		template<class T> static void MaxSlidingWindow2(const T * input, int length, int window, vector<T> & output);
+
 		// Find a subarray of contiguous elements whose sum is maximized
 		// If array contains both positive and negative numbers, return the maximum subarray
 		// If array contains positive numbers, return entire array A
@@ -32,16 +42,6 @@ namespace Test {
 		// Parameter sum is the summation of the returned subarray
 		// Parameters start and end are the start and end indices of the returned subarray
 		template<class T> static void MaxSubArray(const T * input, int length, int & start, int & end, T & sum);
-
-		// An inversion is a pair (i, j) such that i < j and I[i] > I[j].
-		// Find an inversion such that j - i is maximized.
-		// Use parameter first to return value i and distance to return value j - i
-		static void MaxInversionDistance(const int * input, int length, int & first, int & distance);
-		static void MaxInversionDistance2(const int * input, int length, int & first, int & distance);
-
-		// Slide a window across an input, output the maximum on every move.
-		static void MaxSlidingWindow(const int * input, int length, int window, vector<int> & output);
-		static void MaxSlidingWindow2(const int * input, int length, int window, vector<int> & output);
 
 		// Find the indices of min and max elements.
 		// minIndex will be the index of the minimum value (first index if there are more than on minimum value).
@@ -52,8 +52,6 @@ namespace Test {
 		// The permute function takes three parameters: index of the element to permute, number of rows and number of columns,
 		// and output the index of the new position of the element.
 		template<class T> static void Permute(T * input, const int length, const int columns, function<int(int, int, int)> & permute);
-
-		template<class T> static void Print(Log & log, const T * input, const int length, const int columns);
 
 		// Rotate an input array to the left by a distance. The elements rotated out are shifted into the right.
 		template<class T> static void RotateLeft(T * input, const int length, int distance);
@@ -337,6 +335,201 @@ namespace Test {
 		}
 	}
 
+	// An inversion is a pair (i, j) such that i < j and I[i] > I[j].
+	// Find an inversion such that j - i is maximized.
+	// Use parameter first to return value i and distance to return value j - i
+	// This is the same as http://leetcode.com/2011/05/a-distance-maximizing-problem.html
+	// with only difference is to find an inversion.
+	template<class T> void Array::MaxInversionDistance(const T * input, int length, int & first, int & distance)
+	{
+		first = 0;
+		distance = 0;
+		if (input == nullptr || length <= 1) return;
+
+		// Array firstIndices to contain the indices of a increasing subsequence of input
+		// Each element of firstIndices is a candidate for the first index of maximum inversion
+		//       firstIndices[0]  <       firstIndices[1]  <       firstIndices[2]  < ...
+		// input[firstIndices[0]] < input[firstIndices[1]] < input[firstIndices[2]] < ...
+		unique_ptr<int[]> firstIndices(new int[length]);
+		int index = 0;
+		firstIndices[index] = 0;
+		// Ignore input[length - 1]
+		for (int i = 1; i < length - 1; i++) {
+			if (input[i] > input[firstIndices[index]]) {
+				index++;
+				firstIndices[index] = i;
+			}
+		}
+
+		int prev;
+		// Ignore input[0]
+		for (int i = length - 1; i > 0; i--) {
+			if (i < length - 1 && input[i] >= prev) {
+				// if there is an inversion ending at i, then
+				// prev would extend it by one more position.
+				// So input[i] should be ignored.
+				continue;
+			}
+
+			prev = input[i];
+
+			while (i <= firstIndices[index]) index--;
+
+			int f =	BinarySearch::FindPositionToInsert<int,int>(
+				i,
+				firstIndices.get(),
+				index+1,
+				false,
+				[&](int i) -> int { return input[i]; });
+
+			if (f == index) {
+				// input[i] is equal or greater than all elements referenced by firstIndices
+				continue;
+			}
+
+			// firstIndices[f] < firstIndices[f + 1] < i
+			// input[firstIndices[f]] <= input[i] < input[firstIndices[f+1]]
+			int d = i - firstIndices[f + 1];
+			if (d > distance) {
+				distance = d;
+				first = firstIndices[f + 1];
+			}
+		}
+	}
+
+	// An inversion is a pair (i, j) such that i < j and I[i] > I[j].
+	// Find an inversion such that j - i is maximized.
+	// Use parameter first to return value i and distance to return value j - i
+	// This is the same as http://leetcode.com/2011/05/a-distance-maximizing-problem.html
+	// with only difference is to find an inversion.
+	template<class T> void Array::MaxInversionDistance2(const T * input, int length, int & first, int & distance)
+	{
+		first = 0;
+		distance = 0;
+		if (input == nullptr || length <= 1) return;
+
+		// Array firstIndices to contain the indices of a increasing subsequence of input
+		// Each element of firstIndices is a candidate for the first index of maximum inversion
+		//       firstIndices[0]  <       firstIndices[1]  <       firstIndices[2]  < ...
+		// input[firstIndices[0]] < input[firstIndices[1]] < input[firstIndices[2]] < ...
+		unique_ptr<int[]> firstIndices(new int[length]);
+		int index = 0;
+		firstIndices[index] = 0;
+		// Ignore input[length - 1]
+		for (int i = 1; i < length - 1; i++) {
+			if (input[i] > input[firstIndices[index]]) {
+				index++;
+				firstIndices[index] = i;
+			}
+		}
+
+		int prev;
+		// Ignore input[0]
+		for (int i = length - 1; i > 0; i--) {
+			if (i < length - 1 && input[i] >= prev) {
+				// if there is an inversion ending at i, then
+				// prev would extend it by one more position.
+				// So input[i] should be ignored.
+				continue;
+			}
+
+			prev = input[i];
+
+			while (i <= firstIndices[index]) index--;
+
+			if (prev >= input[firstIndices[index]]) {
+				// prev is greater than all possible first indices
+				continue;
+			}
+
+			while (index > 0 && input[firstIndices[index-1]] > prev) {
+				index--;
+			}
+
+			// Now firstIndices[index] is the first element greater than input[i]
+			int d = i - firstIndices[index];
+			if (d > distance) {
+				first = firstIndices[index];
+				distance = i - first;
+			}
+
+			if (index == 0) {
+				// All elements of firstIndices are examined
+				break;
+			}
+		}
+	}
+
+	// http://leetcode.com/2011/01/sliding-window-maximum.html
+	// Implement using a heap
+	template<class T> void Array::MaxSlidingWindow(const T * input, int length, int window, vector<T> & output)
+	{
+		if (input == nullptr) throw invalid_argument("input is a nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is invalid", length));
+		if (window <= 0 || window > length) throw invalid_argument(String::Format("window %d is out of range (0, %d]", window, length));
+
+		priority_queue<pair<T, int>> heap;
+
+		for (int i = 0; i < window; i++) {
+			heap.push(make_pair(input[i], i));
+		}
+
+		output.push_back(heap.top().first);
+
+		for (int i = window; i < length; i++) {
+			// The size of heap may be more than the window size.
+			// Consider one case where the input contains increasing numbers.
+			// But the top of heap is always the max within the current window.
+
+			while (!heap.empty() && heap.top().second <= i - window) {
+				heap.pop();
+			}
+
+			heap.push(make_pair(input[i], i));
+			output.push_back(heap.top().first);
+		}
+	}
+
+	// http://leetcode.com/2011/01/sliding-window-maximum.html
+	// Implement using a deque
+	template<class T> void Array::MaxSlidingWindow2(const T * input, int length, int window, vector<T> & output)
+	{
+		if (input == nullptr) throw invalid_argument("input is a nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is invalid", length));
+		if (window <= 0 || window > length) throw invalid_argument(String::Format("window %d is out of range (0, %d]", window, length));
+
+		deque<int> queue;
+
+		// Establish the baseline:
+		// 1. queue contains the latest k elements where k <= window
+		// 2. queue is sorted and the maximum is queue.front()
+		// 3. queue.back() is the latest element
+		// 4. queue.front() is the oldest element
+		// so effectively the queue contains a decreasing sequence between [max, i]
+		for (int i = 0; i < window; i++) {
+			while (!queue.empty() && input[i] >= input[queue.back()]) {
+				queue.pop_back();
+			}
+			queue.push_back(i);
+		}
+
+		output.push_back(input[queue.front()]);
+
+		for (int i = window; i < length; i++) {
+			while (!queue.empty() && input[i] >= input[queue.back()]) {
+				queue.pop_back();
+			}
+
+			while (!queue.empty() && queue.front() <= i - window) {
+				queue.pop_front();
+			}
+
+			queue.push_back(i);
+
+			output.push_back(input[queue.front()]);
+		}
+	}
+
 	// This is a solution to the buy-sell-stock problem in Introduction to Algorithms
 	template<class T> void Array::MaxSubArray(const T * input, int length, int & start, int & end, T & sum)
 	{
@@ -425,25 +618,36 @@ namespace Test {
 		}
 	}
 
-	template<class T> void Array::Swap(T * first, T * second, const int count)
+	template<class T> void Array::Permute(T * input, const int length, const int columns, function<int(int, int, int)> & permute)
 	{
-		if (first == nullptr) throw invalid_argument("first is nullptr");
-		if (second == nullptr) throw invalid_argument("second is nullptr");
+		if (input == nullptr) throw invalid_argument("input is nullptr");
+		if (length <= 0) throw invalid_argument(String::Format("length %d is not positive.", length));
+		if (columns <= 0) throw invalid_argument(String::Format("columns %d is not positive.", columns));
+		if (length % columns > 0) throw invalid_argument(String::Format("length %d is not multiple of columns %d.", length, columns));
 
-		T t;
-		for (int i = 0; i < count; i++) {
-			t = first[i];
-			first[i] = second[i];
-			second[i] = t;
-		}
-	}
+		int rows = length / columns;
 
-	template<class T> void Array::Swap(T * buffer, unsigned int position1, unsigned int position2)
-	{
-		if (position1 != position2) {
-			T t = buffer[position1];
-			buffer[position1] = buffer[position2];
-			buffer[position2] = t;
+		BitSet updated(length);
+
+		// ------+------------+--------------
+		//       j            k
+		//       s            t
+		for (int i = 0; i < length; i++) {
+			if (updated.Test(i)) continue;
+			int j = i;
+			T s = input[j];
+			int k = permute(j, rows, columns);
+			while (k != i) {
+				T t = input[k];
+				input[k] = s;
+				updated.Set(k);
+				j = k;
+				s = t;
+				k = permute(j, rows, columns);
+			}
+
+			input[i] = s;
+			updated.Set(i);
 		}
 	}
 
@@ -454,7 +658,6 @@ namespace Test {
 		if (distance < 0) throw invalid_argument(String::Format("distance %d is negative", distance));
 		distance = distance % length;
 		if (distance == 0) return;
-
 		int i = 0;
 		int j = length - 1;
 		int k = distance;
@@ -485,39 +688,51 @@ namespace Test {
 		if (distance < 0) throw invalid_argument(String::Format("distance %d is negative", distance));
 		distance = distance % length;
 		if (distance == 0) return;
-		RotateLeft(input, length, length - distance);
+		int i = 0;
+		int j = length - 1;
+		int k = j - distance + 1;
+		// input[i..k-1] and input[k..j];
+		while (i < k && k <= j) {
+			if (k - i < j - k + 1) {
+				// Left range is shorter
+				// input[i..k-1], input[k..j-(k-i)], input[j-(k-i)+1..j]
+				Swap(&input[i], &input[j - (k - i) + 1], k - i);
+				j = j - (k - i);
+			} else if (k - i > j - k + 1) {
+				// Right range is shorter
+				// input[i..i+(j-k)], input(i+(j-k)+1..k-1], input[k..j]
+				Swap(&input[i], &input[k], j - k + 1);
+				i = i + (j - k) + 1;
+			} else {
+				// Both ranges have the same length
+				Swap(&input[i], &input[k], k - i);
+				break;
+			}
+		}
 	}
 
-	template<class T> void Array::Permute(T * input, const int length, const int columns, function<int(int, int, int)> & permute)
+	// Swap two ranges. Expect the two ranges are not overlapping.
+	// If the two ranges overlap, swap whatever the values are
+	// in the overlapping range without any special treatment.
+	template<class T> void Array::Swap(T * first, T * second, const int count)
 	{
-		if (input == nullptr) throw invalid_argument("input is nullptr");
-		if (length <= 0) throw invalid_argument(String::Format("length %d is not positive.", length));
-		if (columns <= 0) throw invalid_argument(String::Format("columns %d is not positive.", columns));
-		if (length % columns > 0) throw invalid_argument(String::Format("length %d is not multiple of columns %d.", length, columns));
+		if (first == nullptr) throw invalid_argument("first is nullptr");
+		if (second == nullptr) throw invalid_argument("second is nullptr");
 
-		int rows = length / columns;
-		
-		BitSet updated(length);
+		T t;
+		for (int i = 0; i < count; i++) {
+			t = first[i];
+			first[i] = second[i];
+			second[i] = t;
+		}
+	}
 
-		// ------+------------+--------------
-		//       j            k
-		//       s            t
-		for (int i = 0; i < length; i++) {
-			if (updated.Test(i)) continue;
-			int j = i;
-			T s = input[j];
-			int k = permute(j, rows, columns);
-			while (k != i) {
-				T t = input[k];
-				input[k] = s;
-				updated.Set(k);
-				j = k;
-				s = t;
-				k = permute(j, rows, columns);
-			}
-
-			input[i] = s;
-			updated.Set(i);
+	template<class T> void Array::Swap(T * buffer, unsigned int position1, unsigned int position2)
+	{
+		if (position1 != position2) {
+			T t = buffer[position1];
+			buffer[position1] = buffer[position2];
+			buffer[position2] = t;
 		}
 	}
 
@@ -767,37 +982,6 @@ namespace Test {
 			Permute(input, length, columns, permute);
 		} else {
 			Transpose(input, length, columns);
-		}
-	}
-
-	template<class T> void Array::Print(Log & log, const T * input, const int length, const int columns)
-	{
-		if (input == nullptr || length <= 0) return;
-
-		for (int i = 0; i < columns; i++) {
-			log.WriteInformation("\t%d", i);
-		}
-
-		log.WriteInformation("\n");
-
-		int rows = length / columns;
-		for (int i = 0; i < rows; i++) {
-			log.WriteInformation("%d", i);
-			for (int j = 0; j < columns; j++) {
-				log.WriteInformation("\t%d", *(input + i * columns + j));
-			}
-
-			log.WriteInformation("\n");
-		}
-
-		int remainders = length % columns;
-		if (remainders > 0) {
-			log.WriteInformation("%d", rows);
-			for (int j = 0; j < remainders; j++) {
-				log.WriteInformation("\t%d", *(input + rows * columns + j));
-			}
-
-			log.WriteInformation("\n");
 		}
 	}
 }
