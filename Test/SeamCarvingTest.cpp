@@ -3,9 +3,9 @@
 void SeamCarvingTest::Init(void)
 {
 	Add("1", [&](){
-		Test::Array2D<int> input(1, 1);
+		Matrix<int> input(1, 1);
 		input(0, 0) = 2;
-		Test::Array2D<int> seams(1, 1);
+		Matrix<int> seams(1, 1);
 		Test::SeamCarving<int>::ComputeSeams(input, seams);
 		ASSERT1(seams(0, 0) == 2);
 		vector<pair<size_t, size_t>> seam;
@@ -16,10 +16,10 @@ void SeamCarvingTest::Init(void)
 	});
 
 	Add("2", [&](){
-		Test::Array2D<int> input(1, 2);
+		Matrix<int> input(1, 2);
 		input(0, 0) = 2;
 		input(0, 1) = 2;
-		Test::Array2D<int> seams(1, 2);
+		Matrix<int> seams(1, 2);
 		Test::SeamCarving<int>::ComputeSeams(input, seams);
 		ASSERT1(seams(0, 0) == 2);
 		ASSERT1(seams(0, 1) == 2);
@@ -31,10 +31,10 @@ void SeamCarvingTest::Init(void)
 	});
 
 	Add("3", [&](){
-		Test::Array2D<int> input(1, 2);
+		Matrix<int> input(1, 2);
 		input(0, 0) = 1;
 		input(0, 1) = 2;
-		Test::Array2D<int> seams(1, 2);
+		Matrix<int> seams(1, 2);
 		Test::SeamCarving<int>::ComputeSeams(input, seams);
 		ASSERT1(seams(0, 0) == 1);
 		ASSERT1(seams(0, 1) == 2);
@@ -46,10 +46,10 @@ void SeamCarvingTest::Init(void)
 	});
 
 	Add("4", [&](){
-		Test::Array2D<int> input(1, 2);
+		Matrix<int> input(1, 2);
 		input(0, 0) = 2;
 		input(0, 1) = 1;
-		Test::Array2D<int> seams(1, 2);
+		Matrix<int> seams(1, 2);
 		Test::SeamCarving<int>::ComputeSeams(input, seams);
 		ASSERT1(seams(0, 0) == 2);
 		ASSERT1(seams(0, 1) == 1);
@@ -61,10 +61,10 @@ void SeamCarvingTest::Init(void)
 	});
 
 	Add("5", [&](){
-		Test::Array2D<int> input(2, 1);
+		Matrix<int> input(2, 1);
 		input(0, 0) = 2;
 		input(1, 0) = 2;
-		Test::Array2D<int> seams(2, 1);
+		Matrix<int> seams(2, 1);
 		Test::SeamCarving<int>::ComputeSeams(input, seams);
 		ASSERT1(seams(0, 0) == 2);
 		ASSERT1(seams(1, 0) == 4);
@@ -78,12 +78,12 @@ void SeamCarvingTest::Init(void)
 	});
 
 	Add("6", [&](){
-		Test::Array2D<int> input(2, 2);
+		Matrix<int> input(2, 2);
 		input(0, 0) = 0;
 		input(0, 1) = 2;
 		input(1, 0) = 0;
 		input(1, 1) = 2;
-		Test::Array2D<int> seams(2, 2);
+		Matrix<int> seams(2, 2);
 		Test::SeamCarving<int>::ComputeSeams(input, seams);
 		ASSERT1(seams(0, 0) == 0);
 		ASSERT1(seams(0, 1) == 2);
@@ -99,12 +99,12 @@ void SeamCarvingTest::Init(void)
 	});
 
 	Add("7", [&](){
-		Test::Array2D<int> input(2, 2);
+		Matrix<int> input(2, 2);
 		input(0, 0) = 2;
 		input(0, 1) = 0;
 		input(1, 0) = 2;
 		input(1, 1) = 0;
-		Test::Array2D<int> seams(2, 2);
+		Matrix<int> seams(2, 2);
 		Test::SeamCarving<int>::ComputeSeams(input, seams);
 		ASSERT1(seams(0, 0) == 2);
 		ASSERT1(seams(0, 1) == 0);
@@ -120,12 +120,12 @@ void SeamCarvingTest::Init(void)
 	});
 
 	Add("8", [&](){
-		Test::Array2D<int> input(2, 2);
+		Matrix<int> input(2, 2);
 		input(0, 0) = 0;
 		input(0, 1) = 2;
 		input(1, 0) = 2;
 		input(1, 1) = 0;
-		Test::Array2D<int> seams(2, 2);
+		Matrix<int> seams(2, 2);
 		Test::SeamCarving<int>::ComputeSeams(input, seams);
 		ASSERT1(seams(0, 0) == 0);
 		ASSERT1(seams(0, 1) == 2);
@@ -141,12 +141,12 @@ void SeamCarvingTest::Init(void)
 	});
 
 	Add("9", [&](){
-		Test::Array2D<int> input(2, 2);
+		Matrix<int> input(2, 2);
 		input(0, 0) = 2;
 		input(0, 1) = 0;
 		input(1, 0) = 0;
 		input(1, 1) = 2;
-		Test::Array2D<int> seams(2, 2);
+		Matrix<int> seams(2, 2);
 		Test::SeamCarving<int>::ComputeSeams(input, seams);
 		ASSERT1(seams(0, 0) == 2);
 		ASSERT1(seams(0, 1) == 0);
@@ -162,16 +162,16 @@ void SeamCarvingTest::Init(void)
 	});
 
 	Add("10", [&](){
-		Test::Array2D<int> input(10, 10);
+		Matrix<int> input(10, 10);
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				input(i, j) = i * 10 + j;
 			}
 		}
 
-		Test::Array2D<int> seams(10, 10);
+		Matrix<int> seams(10, 10);
 		Test::SeamCarving<int>::ComputeSeams(input, seams);
-		seams.Print();
+		Logger().Print(seams);
 		vector<pair<size_t, size_t>> seam;
 		Test::SeamCarving<int>::MinSeam(input, seam);
 		ASSERT1(seam.size() == 10);
@@ -183,7 +183,7 @@ void SeamCarvingTest::Init(void)
 	});
 
 	Add("11", [&](){
-		Test::Array2D<int> input(10, 10);
+		Matrix<int> input(10, 10);
 		int v = 100;
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
@@ -191,9 +191,9 @@ void SeamCarvingTest::Init(void)
 			}
 		}
 
-		Test::Array2D<int> seams(10, 10);
+		Matrix<int> seams(10, 10);
 		Test::SeamCarving<int>::ComputeSeams(input, seams);
-		seams.Print();
+		Logger().Print(seams);
 		vector<pair<size_t, size_t>> seam;
 		Test::SeamCarving<int>::MinSeam(input, seam);
 		ASSERT1(seam.size() == 10);
@@ -205,16 +205,16 @@ void SeamCarvingTest::Init(void)
 	});
 
 	Add("12", [&](){
-		Test::Array2D<int> input(10, 10);
+		Matrix<int> input(10, 10);
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				input(i, j) = Test::Random::Next();
 			}
 		}
 
-		Test::Array2D<int> seams(10, 10);
+		Matrix<int> seams(10, 10);
 		Test::SeamCarving<int>::ComputeSeams(input, seams);
-		seams.Print();
+		Logger().Print(seams);
 		vector<pair<size_t, size_t>> seam;
 		Test::SeamCarving<int>::MinSeam(input, seam);
 		ASSERT1(seam.size() == 10);

@@ -1,9 +1,10 @@
 #pragma once
 #include "..\Algorithm\BreakString.h"
 #include "..\Algorithm\TestClass.h"
-class BreakStringTest : public Test::TestClass {
+using namespace Test;
+class BreakStringTest : public TestClass {
 public:
-	BreakStringTest(Test::Log & log) : Test::TestClass(log) {}
+	BreakStringTest(Log & log) : TestClass(log) {}
 	~BreakStringTest(void) {}
 	void Init(void);
 };

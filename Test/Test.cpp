@@ -36,6 +36,7 @@
 #include "MathTest.h"
 #include "MatrixChainTest.h"
 #include "MatrixGraphTest.h"
+#include "MatrixTest.h"
 #include "MazeTest.h"
 #include "MergeSortTest.h"
 #include "MRIntegerTest.h"
@@ -114,6 +115,7 @@ int main(int argc, char * argv[])
 	suite.Add(new MathTest(log));
 	suite.Add(new MatrixChainTest(log));
 	suite.Add(new MatrixGraphTest(log));
+	suite.Add(new MatrixTest(log));
 	suite.Add(new MazeTest(log));
 	suite.Add(new MergeSortTest(log));
 	suite.Add(new MRIntegerTest(log));

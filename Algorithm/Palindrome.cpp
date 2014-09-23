@@ -20,7 +20,7 @@ namespace Test {
 	// 7(e)    0       0       0       0       0       0       0       1       1
 	// 8(r)    0       0       0       0       0       0       0       0       1
 	//	
-	void Palindrome::LengthTable(string & input, Array2D<size_t> & length)
+	void Palindrome::LengthTable(string & input, Matrix<size_t> & length)
 	{
 		for (size_t i = 0; i < input.length(); i ++) {
 			// Set L_(i, i)
@@ -50,7 +50,7 @@ namespace Test {
 
 	void Palindrome::LongestSubsequenceByTable(string & input, string & output)
 	{
-		Array2D<size_t> length(input.length(), input.length());
+		Matrix<size_t> length(input.length(), input.length());
 
 		// Compute the length table
 		LengthTable(input, length);

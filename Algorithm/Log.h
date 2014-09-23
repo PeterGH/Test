@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdarg.h>
 #include <string>
+#include "Matrix.h"
 
 using namespace std;
 
@@ -30,7 +31,13 @@ namespace Test {
 
 		template<class T> __declspec(dllexport) void Print(T a[], int n, const char * format = "%d", const char * sep = ", ");
 
+		template<class T> __declspec(dllexport) void Print(vector<T> v, const char * format = "%d", const char * sep = ", ");
+		template<class T> __declspec(dllexport) void Print(vector<T> v, function<void(Log &, T &)> format, const char * sep = ", ");
+
 		template<class T> __declspec(dllexport) void Print(const T * input, const int length, const int columns, const char * format = "%d", const char * sep = ", ");
+
+		template<class T> __declspec(dllexport) void Print(Matrix<T> & matrix, const char * format = "%d", const char * sep = ", ");
+		template<class T> __declspec(dllexport) void Print(Matrix<T> & matrix, function<void(Log &, T &)> format, const char * sep = ", ");
 	};
 
 	template<class T> void Log::Print(T a[], int n, const char * format, const char * sep)
@@ -41,6 +48,26 @@ namespace Test {
 			WriteInformation(format, a[i]);
 		}
 		WriteInformation("]\n");
+	}
+
+	template<class T> void Log::Print(vector<T> v, const char * format, const char * sep)
+	{
+		WriteInformation("{");
+		for (size_t i = 0; i < v.size(); i++) {
+			if (i != 0) WriteInformation(sep);
+			WriteInformation(format, v[i]);
+		}
+		WriteInformation("}\n");
+	}
+
+	template<class T> void Log::Print(vector<T> v, function<void(Log &, T &)> format, const char * sep)
+	{
+		WriteInformation("{");
+		for (size_t i = 0; i < v.size(); i++) {
+			if (i != 0) WriteInformation(sep);
+			format(*this, v[i]);
+		}
+		WriteInformation("}\n");
 	}
 
 	template<class T> void Log::Print(const T * input, const int length, const int columns, const char * format, const char * sep)
@@ -68,6 +95,34 @@ namespace Test {
 			WriteInformation("\n");
 		}
 
+		WriteInformation("]\n");
+	}
+
+	template<class T> void Log::Print(Matrix<T> & matrix, const char * format, const char * sep)
+	{
+		WriteInformation("[\n");
+		for (size_t i = 0; i < matrix.Rows(); i++) {
+			for (size_t j = 0; j < matrix.Cols(); j++) {
+				if (j == 0) WriteInformation(" ");
+				else WriteInformation(sep);
+				WriteInformation(format, matrix(i, j));
+			}
+			WriteInformation("\n");
+		}
+		WriteInformation("]\n");
+	}
+
+	template<class T> void Log::Print(Matrix<T> & matrix, function<void(Log &, T &)> format, const char * sep)
+	{
+		WriteInformation("[\n");
+		for (size_t i = 0; i < matrix.Rows(); i++) {
+			for (size_t j = 0; j < matrix.Cols(); j++) {
+				if (j == 0) WriteInformation(" ");
+				else WriteInformation(sep);
+				format(*this, matrix(i, j));
+			}
+			WriteInformation("\n");
+		}
 		WriteInformation("]\n");
 	}
 }

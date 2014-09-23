@@ -78,7 +78,6 @@
   <ItemGroup>
     <ClInclude Include="Argument.h" />
     <ClInclude Include="Array.h" />
-    <ClInclude Include="Array2D.h" />
     <ClInclude Include="BinaryIterator.h" />
     <ClInclude Include="BinaryNode.h" />
     <ClInclude Include="BinaryNodeWithParent.h" />
@@ -115,6 +114,7 @@
     <ClInclude Include="LongestIncreasingSubsequence.h" />
     <ClInclude Include="LRUCache.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="MatrixChain.h" />
     <ClInclude Include="MatrixGraph.h" />
     <ClInclude Include="Maze.h" />

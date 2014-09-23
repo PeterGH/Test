@@ -18,7 +18,7 @@ namespace Test {
 	//                  ......
 	//                  c[i,j-2] + c[j-2,j],
 	//                  c[i,j-1] + c[j-1,j]},    if i+1 < j
-	void BreakString::ComputeCostTable(int * positions, int length, Array2D<pair<int, int>> & cost)
+	void BreakString::ComputeCostTable(int * positions, int length, Matrix<pair<int, int>> & cost)
 	{
 		if (positions == nullptr) throw invalid_argument("positions is nullptr");
 		if (length <= 0) throw invalid_argument(String::Format("Invalid length %d", length));
@@ -59,7 +59,7 @@ namespace Test {
 	{
 		if (positions == nullptr) throw invalid_argument("positions is nullptr");
 		if (length <= 0) throw invalid_argument(String::Format("Invalid length %d", length));
-		Array2D<pair<int, int>> cost(length, length);
+		Matrix<pair<int, int>> cost(length, length);
 		ComputeCostTable(positions, length, cost);
 
 		vector<pair<int, int>> range;

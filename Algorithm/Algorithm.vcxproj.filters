@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClInclude Include="Argument.h" />
     <ClInclude Include="Array.h" />
-    <ClInclude Include="Array2D.h" />
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="BinaryIterator.h" />
     <ClInclude Include="BinaryNode.h" />
@@ -73,6 +72,7 @@
     <ClInclude Include="TestSuite.h" />
     <ClInclude Include="UnitTimeTaskScheduler.h" />
     <ClInclude Include="YoungTableau.h" />
+    <ClInclude Include="Matrix.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BitSet.cpp" />

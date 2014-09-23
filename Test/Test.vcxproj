@@ -108,6 +108,7 @@
     <ClInclude Include="MathTest.h" />
     <ClInclude Include="MatrixChainTest.h" />
     <ClInclude Include="MatrixGraphTest.h" />
+    <ClInclude Include="MatrixTest.h" />
     <ClInclude Include="MazeTest.h" />
     <ClInclude Include="MergeSortTest.h" />
     <ClInclude Include="MRIntegerTest.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="MathTest.cpp" />
     <ClCompile Include="MatrixChainTest.cpp" />
     <ClCompile Include="MatrixGraphTest.cpp" />
+    <ClCompile Include="MatrixTest.cpp" />
     <ClCompile Include="MazeTest.cpp" />
     <ClCompile Include="MergeSortTest.cpp" />
     <ClCompile Include="MRIntegerTest.cpp" />

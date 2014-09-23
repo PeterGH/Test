@@ -4,23 +4,21 @@
 #include "String.h"
 using namespace std;
 namespace Test {
-	template<class T> class Array2D {
+	template<class T> class Matrix {
 	private:
 		T * buffer;
 		size_t rows;
 		size_t cols;
 	public:
-		Array2D(size_t rows, size_t cols);
-		~Array2D(void);
+		Matrix(size_t rows, size_t cols);
+		~Matrix(void);
 
 		T & operator()(size_t r, size_t c);
 		const size_t Rows(void) const { return this->rows; }
 		const size_t Cols(void) const { return this->cols; }
-		void Print(function<void(T&)> p);
-		void Print(void);
 	};
 
-	template<class T> Array2D<T>::Array2D(size_t rows, size_t cols)
+	template<class T> Matrix<T>::Matrix(size_t rows, size_t cols)
 	{
 		if (rows <= 0) throw invalid_argument(String::Format("Invalid rows %d", rows));
 		if (cols <= 0) throw invalid_argument(String::Format("Invalid cols %d", cols));
@@ -31,7 +29,7 @@ namespace Test {
 		memset(this->buffer, 0, c * sizeof(T));
 	}
 
-	template<class T> Array2D<T>::~Array2D(void)
+	template<class T> Matrix<T>::~Matrix(void)
 	{
 		if (this->buffer != nullptr) {
 			delete[] this->buffer;
@@ -41,37 +39,11 @@ namespace Test {
 		}
 	}
 
-	template<class T> T & Array2D<T>::operator()(size_t r, size_t c)
+	template<class T> T & Matrix<T>::operator()(size_t r, size_t c)
 	{
 		if (r < 0 || r >= this->rows) throw invalid_argument(String::Format("Invalid r %d not in [0, %d]", r, this->rows - 1));
 		if (c < 0 || c >= this->cols) throw invalid_argument(String::Format("Invalid c %d not in [0, %d]", c, this->cols - 1));
 		T & value = *(this->buffer + r * this->cols + c);
 		return value;
-	}
-
-	template<class T> void Array2D<T>::Print(function<void(T&)> p)
-	{
-		for (size_t i = 0; i < this->cols; i ++) {
-			cout << "\t" << i;
-		}
-
-		cout << endl;
-		
-		for (size_t i = 0; i < this->rows; i ++) {
-			cout << i;			
-			for (size_t j = 0; j < this->cols; j ++) {
-				cout << "\t";
-				p(this->operator()(i, j));
-			}
-
-			cout << endl;
-		}
-
-		cout << endl;
-	}
-
-	template<class T> void Array2D<T>::Print(void)
-	{
-		Print([&](T & e)->void{ cout << e; });
 	}
 }

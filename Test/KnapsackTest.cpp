@@ -7,7 +7,7 @@ void KnapsackTest::Init(void)
 		items.push_back(make_pair(60, 2));
 		items.push_back(make_pair(100, 4));
 		items.push_back(make_pair(120, 6));
-		Test::Array2D<int> values(3, 11);
+		Matrix<int> values(3, 11);
 		Test::Knapsack::PrintSolution(items, values);
 	});
 
@@ -16,7 +16,7 @@ void KnapsackTest::Init(void)
 		items.push_back(make_pair(60, 2));
 		items.push_back(make_pair(100, 2));
 		items.push_back(make_pair(120, 6));
-		Test::Array2D<int> values(3, 11);
+		Matrix<int> values(3, 11);
 		Test::Knapsack::ComputeValues(items, values);
 		Test::Knapsack::PrintSolution(items, values);
 	});

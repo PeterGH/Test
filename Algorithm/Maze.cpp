@@ -4,7 +4,7 @@ namespace Test {
 	// http://leetcode.com/2010/11/unique-paths.html
 	// Given a MxN maze, count the unique paths to travel
 	// from the top-left cell to the bottom-right cell.
-	double Maze::CountUniquePaths(int rows, int cols, Array2D<double> & count)
+	double Maze::CountUniquePaths(int rows, int cols, Matrix<double> & count)
 	{
 		if (rows <= 0) throw invalid_argument(String::Format("rows %d is invalid", rows));
 		if (cols <= 0) throw invalid_argument(String::Format("cols %d is invalid", cols));
@@ -47,7 +47,7 @@ namespace Test {
 		return countPaths(0, 0);
 	}
 
-	double Maze::CountUniquePaths2(int rows, int cols, Array2D<double> & count)
+	double Maze::CountUniquePaths2(int rows, int cols, Matrix<double> & count)
 	{
 		if (rows <= 0) throw invalid_argument(String::Format("rows %d is invalid", rows));
 		if (cols <= 0) throw invalid_argument(String::Format("cols %d is invalid", cols));

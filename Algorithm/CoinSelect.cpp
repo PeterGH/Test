@@ -5,7 +5,7 @@ namespace Test {
 	// Two players take turn to select a coin from one end of a line of coins.
 	// Compute the maximum value of coins the first palyer can get.
 	
-	void CoinSelect::GetIndices(Array2D<int> & v, int length, vector<int> & indices)
+	void CoinSelect::GetIndices(Matrix<int> & v, int length, vector<int> & indices)
 	{
 		int i = 0;
 		int j = length - 1;
@@ -51,8 +51,8 @@ namespace Test {
 	// V[i,j] = S[i,j] - min { V[i+1,j], V[i,j-1] }
 	int CoinSelect::MaxSelection(const int * input, int length, vector<int> & indices)
 	{
-		Array2D<int> v(length, length);
-		Array2D<int> s(length, length);
+		Matrix<int> v(length, length);
+		Matrix<int> s(length, length);
 
 		// S[i,i] = input[i]
 		// V[i,i] = input[i]
@@ -79,7 +79,7 @@ namespace Test {
 	//                input[j] + min { V[i+1,j-1], V[i,j-2] } }
 	int CoinSelect::MaxSelection2(const int * input, int length, vector<int> & indices)
 	{
-		Array2D<int> v(length, length);
+		Matrix<int> v(length, length);
 		
 		// V[i,i] = input[i]
 		for (int i = 0; i < length; i++) {

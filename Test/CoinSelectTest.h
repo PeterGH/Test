@@ -2,9 +2,10 @@
 #include "..\Algorithm\CoinSelect.h"
 #include "..\Algorithm\Random.h"
 #include "..\Algorithm\TestClass.h"
-class CoinSelectTest : public Test::TestClass {
+using namespace Test;
+class CoinSelectTest : public TestClass {
 public:
-	CoinSelectTest(Test::Log & log) : Test::TestClass(log) {}
+	CoinSelectTest(Log & log) : TestClass(log) {}
 	~CoinSelectTest(void) {}
 	void Init(void);
 };

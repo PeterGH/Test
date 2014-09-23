@@ -3,37 +3,26 @@
 void CoinSelectTest::Init()
 {
 	Add("1", [&](){
-		auto printArray = [&](int * input, int length){
-			Logger().WriteInformation("\nInput:");
-			for (int i = 0; i < length; i++) {
-				Logger().WriteInformation(" %d", input[i]);
-			}
-			Logger().WriteInformation("\n");
-		};
-
 		auto check = [&](int * input, int length){
-			printArray(input, length);
+			Logger().WriteInformation("Input:");
+			Logger().Print(input, length);
 
 			auto print = [&](int value, vector<int> & indices){
 				Logger().WriteInformation("\tMax value:\t  %d\n", value);
 				Logger().WriteInformation("\tIndices:\t");
-				for_each(indices.begin(), indices.end(), [&](int i){
-					Logger().WriteInformation("  %d", i);
-				});
-				Logger().WriteInformation("\n");
+				Logger().Print(indices);
 				Logger().WriteInformation("\tItems:\t");
-				for_each(indices.begin(), indices.end(), [&](int i){
-					Logger().WriteInformation("  %d", input[i]);
+				Logger().Print<int>(indices, [&](Log & l, int i){
+					l.WriteInformation("%d", input[i]);
 				});
-				Logger().WriteInformation("\n");
 			};
 
 			vector<int> indices;
 			vector<int> indices2;
-			int v = Test::CoinSelect::MaxSelection(input, length, indices);
+			int v = CoinSelect::MaxSelection(input, length, indices);
 			Logger().WriteInformation("Solution 1\n");
 			print(v, indices);
-			int v2 = Test::CoinSelect::MaxSelection(input, length, indices2);
+			int v2 = CoinSelect::MaxSelection2(input, length, indices2);
 			Logger().WriteInformation("Solution 2\n");
 			print(v2, indices2);
 

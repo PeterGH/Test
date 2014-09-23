@@ -1,8 +1,8 @@
 #pragma once
 
 #include <functional>
-#include "Array2D.h"
 #include "BinarySearch.h"
+#include "Matrix.h"
 #include "Random.h"
 
 using namespace std;
@@ -309,8 +309,8 @@ namespace Test {
 		if (indices == nullptr) throw invalid_argument("indices is nullptr");
 		if (partitions > length) throw invalid_argument(String::Format("length %d is less than partitions %d", length, partitions));
 
-		Array2D<T> S(length, partitions);
-		Array2D<int> I(length, partitions);
+		Matrix<T> S(length, partitions);
+		Matrix<int> I(length, partitions);
 
 		// Initialize column 0
 		S(0, 0) = input[0];

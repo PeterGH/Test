@@ -16,7 +16,7 @@ namespace Test {
 	//
 	// i=1  0 1 2 3 ...... w_0-1 w_0 w_0+1 ...... w_1-1 w_1 w_1+1 ...... w_0+w_1-1 w_0+w_1 w_0+w_1+1 ...... W
 	// v_1  0 0 0 0 ...... 0     v_0 v_0   ...... v_0 ......
-	void Knapsack::ComputeValues(vector<pair<int,int>> & items, Array2D<int> & values)
+	void Knapsack::ComputeValues(vector<pair<int,int>> & items, Matrix<int> & values)
 	{
 		int capacity = values.Cols() - 1;
 		if (capacity <= 0) throw invalid_argument(String::Format("Invalid capacit %d", capacity));
@@ -48,7 +48,7 @@ namespace Test {
 		}
 	}
 
-	void Knapsack::SelectItems(vector<pair<int,int>> & items, Array2D<int> & values, vector<pair<int,int>> & selected)
+	void Knapsack::SelectItems(vector<pair<int,int>> & items, Matrix<int> & values, vector<pair<int,int>> & selected)
 	{
 		ComputeValues(items, values);
 
@@ -64,7 +64,7 @@ namespace Test {
 		}
 	}
 
-	void Knapsack::PrintSolution(vector<pair<int,int>> & items, Array2D<int> & values)
+	void Knapsack::PrintSolution(vector<pair<int,int>> & items, Matrix<int> & values)
 	{
 		vector<pair<int,int>> selected;
 		SelectItems(items, values, selected);

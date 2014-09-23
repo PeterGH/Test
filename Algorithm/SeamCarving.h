@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Array2D.h"
+#include "Matrix.h"
 using namespace std;
 namespace Test {
 	// Give a matrix, a seam is a path from one side to the other such that
@@ -11,11 +11,11 @@ namespace Test {
 	public:
 		SeamCarving(void) {};
 		~SeamCarving(void) {};
-		static void ComputeSeams(Array2D<T> & input, Array2D<T> & seams);
-		static void MinSeam(Array2D<T> & input, vector<pair<size_t, size_t>> & seam);
+		static void ComputeSeams(Matrix<T> & input, Matrix<T> & seams);
+		static void MinSeam(Matrix<T> & input, vector<pair<size_t, size_t>> & seam);
 	};
 
-	template<class T> void SeamCarving<T>::ComputeSeams(Array2D<T> & input, Array2D<T> & seams)
+	template<class T> void SeamCarving<T>::ComputeSeams(Matrix<T> & input, Matrix<T> & seams)
 	{
 		int rows = input.Rows();
 		int cols = input.Cols();
@@ -42,11 +42,11 @@ namespace Test {
 		}
 	}
 
-	template<class T> void SeamCarving<T>::MinSeam(Array2D<T> & input, vector<pair<size_t, size_t>> & seam)
+	template<class T> void SeamCarving<T>::MinSeam(Matrix<T> & input, vector<pair<size_t, size_t>> & seam)
 	{
 		int rows = input.Rows();
 		int cols = input.Cols();
-		Array2D<T> seams(rows, cols);
+		Matrix<T> seams(rows, cols);
 		ComputeSeams(input, seams);
 		int j = 0;
 		T min = seams(rows - 1, 0);
