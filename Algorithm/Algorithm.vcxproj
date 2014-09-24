@@ -112,6 +112,7 @@
     <ClInclude Include="Log.h" />
     <ClInclude Include="LongestCommonSubsequence.h" />
     <ClInclude Include="LongestIncreasingSubsequence.h" />
+    <ClInclude Include="LowerTriangularMatrix.h" />
     <ClInclude Include="LRUCache.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="TestClass.h" />
     <ClInclude Include="TestSuite.h" />
     <ClInclude Include="UnitTimeTaskScheduler.h" />
+    <ClInclude Include="UpperTriangularMatrix.h" />
     <ClInclude Include="YoungTableau.h" />
   </ItemGroup>
   <ItemGroup>

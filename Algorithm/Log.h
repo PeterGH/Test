@@ -4,7 +4,8 @@
 #include <stdarg.h>
 #include <string>
 #include "Matrix.h"
-
+#include "LowerTriangularMatrix.h"
+#include "UpperTriangularMatrix.h"
 using namespace std;
 
 namespace Test {
@@ -38,6 +39,12 @@ namespace Test {
 
 		template<class T> __declspec(dllexport) void Print(Matrix<T> & matrix, const char * format = "%d", const char * sep = ", ");
 		template<class T> __declspec(dllexport) void Print(Matrix<T> & matrix, function<void(Log &, T &)> format, const char * sep = ", ");
+
+		template<class T> __declspec(dllexport) void Print(LowerTriangularMatrix<T> & matrix, const char * format = "%d", const char * sep = ", ");
+		template<class T> __declspec(dllexport) void Print(LowerTriangularMatrix<T> & matrix, function<void(Log &, T)> format, const char * sep = ", ");
+
+		template<class T> __declspec(dllexport) void Print(UpperTriangularMatrix<T> & matrix, const char * format = "%d", const char * sep = ", ");
+		template<class T> __declspec(dllexport) void Print(UpperTriangularMatrix<T> & matrix, function<void(Log &, T)> format, const char * sep = ", ");
 	};
 
 	template<class T> void Log::Print(T a[], int n, const char * format, const char * sep)
@@ -125,5 +132,60 @@ namespace Test {
 		}
 		WriteInformation("]\n");
 	}
-}
 
+	template<class T> void Log::Print(LowerTriangularMatrix<T> & matrix, const char * format, const char * sep)
+	{
+		WriteInformation("[\n");
+		for (size_t i = 0; i < matrix.Rows(); i++) {
+			for (size_t j = 0; j < matrix.Cols(); j++) {
+				if (j == 0) WriteInformation(" ");
+				else WriteInformation(sep);
+				WriteInformation(format, i < j ? 0 : matrix(i, j));
+			}
+			WriteInformation("\n");
+		}
+		WriteInformation("]\n");
+	}
+
+	template<class T> void Log::Print(LowerTriangularMatrix<T> & matrix, function<void(Log &, T)> format, const char * sep)
+	{
+		WriteInformation("[\n");
+		for (size_t i = 0; i < matrix.Rows(); i++) {
+			for (size_t j = 0; j < matrix.Cols(); j++) {
+				if (j == 0) WriteInformation(" ");
+				else WriteInformation(sep);
+				format(*this, i < j ? 0 : matrix(i, j));
+			}
+			WriteInformation("\n");
+		}
+		WriteInformation("]\n");
+	}
+
+	template<class T> void Log::Print(UpperTriangularMatrix<T> & matrix, const char * format, const char * sep)
+	{
+		WriteInformation("[\n");
+		for (size_t i = 0; i < matrix.Rows(); i++) {
+			for (size_t j = 0; j < matrix.Cols(); j++) {
+				if (j == 0) WriteInformation(" ");
+				else WriteInformation(sep);
+				WriteInformation(format, i > j ? 0 : matrix(i, j));
+			}
+			WriteInformation("\n");
+		}
+		WriteInformation("]\n");
+	}
+
+	template<class T> void Log::Print(UpperTriangularMatrix<T> & matrix, function<void(Log &, T)> format, const char * sep)
+	{
+		WriteInformation("[\n");
+		for (size_t i = 0; i < matrix.Rows(); i++) {
+			for (size_t j = 0; j < matrix.Cols(); j++) {
+				if (j == 0) WriteInformation(" ");
+				else WriteInformation(sep);
+				format(*this, i > j ? 0 : matrix(i, j));
+			}
+			WriteInformation("\n");
+		}
+		WriteInformation("]\n");
+	}
+}

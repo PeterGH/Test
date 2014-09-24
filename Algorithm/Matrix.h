@@ -5,15 +5,18 @@
 using namespace std;
 namespace Test {
 	template<class T> class Matrix {
-	private:
+	protected:
 		T * buffer;
 		size_t rows;
 		size_t cols;
+		// Default constructor for inheritance
+		Matrix(void) : rows(0), cols(0), buffer(nullptr) {}
 	public:
 		Matrix(size_t rows, size_t cols);
-		~Matrix(void);
+		virtual ~Matrix(void);
 
-		T & operator()(size_t r, size_t c);
+		virtual T & operator()(size_t r, size_t c);
+		virtual T operator()(size_t r, size_t c) const { return this->operator()(r, c); }
 		const size_t Rows(void) const { return this->rows; }
 		const size_t Cols(void) const { return this->cols; }
 	};

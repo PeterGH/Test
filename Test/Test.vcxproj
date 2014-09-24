@@ -76,7 +76,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Array2DTest.h" />
     <ClInclude Include="ArrayTest.h" />
     <ClInclude Include="AVLTreeTest.h" />
     <ClInclude Include="BinaryIteratorTest.h" />
@@ -135,7 +134,6 @@
     <ClInclude Include="YoungTableauTest.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Array2DTest.cpp" />
     <ClCompile Include="ArrayTest.cpp" />
     <ClCompile Include="AVLTreeTest.cpp" />
     <ClCompile Include="BinaryIteratorTest.cpp" />

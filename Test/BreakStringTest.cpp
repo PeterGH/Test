@@ -7,7 +7,7 @@ void BreakStringTest::Init(void)
 		Matrix<pair<int, int>> cost(5, 5);
 		BreakString::ComputeCostTable(positions, 5, cost);
 		Logger().Print(positions, 5);
-		auto print = [&](Log & l, pair<int,int> & p) {
+		auto print = [&](Log & l, pair<int,int> &p) {
 			l.WriteInformation("(%d, %d)", p.first, p.second);
 		};
 		Logger().Print<pair<int,int>>(cost, print);

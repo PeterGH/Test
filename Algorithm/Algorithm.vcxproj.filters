@@ -73,6 +73,8 @@
     <ClInclude Include="UnitTimeTaskScheduler.h" />
     <ClInclude Include="YoungTableau.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="UpperTriangularMatrix.h" />
+    <ClInclude Include="LowerTriangularMatrix.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BitSet.cpp" />
