@@ -51,7 +51,11 @@ namespace Test {
 	{
 		if (r < 0 || r >= this->rows) throw invalid_argument(String::Format("Invalid r %d not in [0, %d]", r, this->rows - 1));
 		if (c < 0 || c >= this->cols) throw invalid_argument(String::Format("Invalid c %d not in [0, %d]", c, this->cols - 1));
-		if (r < c) return (T)0;
+		if (r < c) {
+			T d;
+			memset(&d, 0, sizeof(T));
+			return d;
+		}
 		return this->operator()(r, c);
 	}
 }

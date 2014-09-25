@@ -1,41 +1,52 @@
 #pragma once
 #include <stdexcept>
-#include "Node1.h"
+#include "Node.h"
 using namespace std;
 namespace Test {
-	template<class T> class SingleNode : public Node1<T> {
+	template<class T> class SingleNode : public Node<T> {
 		template<class T> friend ostream & operator<<(ostream &, SingleNode<T> *);
 	public:
-		SingleNode(const T & v) : Node1(v) {}
+		SingleNode(const T & v) : Node<T>(v, 1) {}
 
-		virtual ~SingleNode(void) {}
-
-		// Get the reference of next node pointer
-		SingleNode * & Next(void) { return (SingleNode * &)this->first; }
-
-		// Set the next node pointer
-		void Next(SingleNode * next) { this->first = next; }
-
-		// Count list nodes
-		size_t Length(void);
-
-		// Insert a node or a list after this one
-		void InsertAfter(SingleNode * node);
-
-		// Insert a node or a list at the end of this list
-		void InsertAtEnd(SingleNode * node);
+		~SingleNode(void) {}
 
 		// Delete the first node with value v
 		void Delete(const T & v);
 
-		// Delete the list at this node;
+		// Delete the list at this node. This list may be a cycle or not.
 		void DeleteList(void);
+		static void DeleteList(SingleNode * node);
 
-		// Return the n-th node when this list contains (2n-1) or 2n nodes
+		// Find the beginning of cycle if exists
+		static SingleNode * FindCycle(SingleNode * node);
+
+		// Determine if the list has a cycle somewhere
+		static bool HasCycle(SingleNode * node);
+
+		// Insert a node or a list after this one. This list may be a cycle or not.
+		void InsertAfter(SingleNode * node);
+
+		// Insert a node or a list at the end of this list. This list may be a cycle or not.
+		void InsertAtEnd(SingleNode * node);
+
+		// Count list nodes. The list may be a cycle or not.
+		size_t Length(void);
+
+		// Return the n-th node when this list contains (2n-1) or 2n nodes.
+		// The list may be a cycle or not.
 		SingleNode * Middle(void);
 
-		// Reverse this node and return the head of new list
-		SingleNode * Reverse(void);
+		// Get the reference of next node pointer
+		SingleNode * & Next(void)
+		{
+			return (SingleNode * &)this->Neighbor(0);
+		}
+
+		// Set the next node pointer
+		void Next(SingleNode * next)
+		{
+			this->Neighbor(0) = next;
+		}
 
 		// Reorder single-link list
 		// (1)  0 -> 1 -> 2 -> ...... -> n-1 -> n -> n+1 -> ...... 2n-1 -> nullptr
@@ -44,21 +55,61 @@ namespace Test {
 		//      0 -> 2n -> 1 -> 2n-1 -> 2 -> ...... -> n+2 -> n-1 -> n+1 -> n -> nullptr
 		static void Reorder(SingleNode * node);
 
-		static bool HasCycle(SingleNode * node);
-
-		// Find the beginning of cycle if exists
-		static SingleNode * FindCycle(SingleNode * node);
+		// Reverse this node and return the head of new list.
+		// The list may be a cycle or not.
+		SingleNode * Reverse(void);
 	};
 
-	template<class T> size_t SingleNode<T>::Length(void)
+	template<class T> void SingleNode<T>::Delete(const T & v)
 	{
-		size_t s = 1;
-		SingleNode * p = this->Next();
-		while (p != nullptr && p != this) {
-			s++;
-			p = p->Next();
+		SingleNode * p = this;
+		if (p->Value() == v) {
+			// This node is what we are looking for, but
+			// we cannot delete itself. So we copy next node value into this one,
+			// which effectively "delete" this node.
+			if (p->Next() == nullptr) throw invalid_argument("A SingleNode cannot delete itself");
+			while (p->Next()->Next() != nullptr && p->Next()->Next() != this) {
+				p->Value() = p->Next()->Value();
+				p = p->Next();
+			}
+			p->Value() = p->Next()->Value();
+			// Now p->Next() is useless and can be deleted
+		} else {
+			while (p->Next() != nullptr && p->Next()->Value() != v) {
+				p = p->Next();
+			}
+			// Now p->Next() is what we are looking for
 		}
-		return s;
+
+		if (p->Next() != nullptr) {
+			SingleNode * q = p->Next();
+			p->Next() = q->Next();
+			delete q;
+		}
+	}
+
+	template<class T> void SingleNode<T>::DeleteList(void)
+	{
+		SingleNode<T> * p = this->Next();
+		while (p != nullptr && p != this) {
+			this->Next() = p->Next();
+			delete p;
+			p = this->Next();
+		}
+		this->Next() = p;
+	}
+
+	template<class T> void SingleNode<T>::DeleteList(SingleNode * node)
+	{
+		if (node == nullptr) return;
+		SingleNode<T> * p = node->Next();
+		while (p != nullptr && p != node) {
+			node->Next() = p->Next();
+			delete p;
+			p = node->Next();
+		}
+		node->Next() = nullptr;
+		delete node;
 	}
 
 	template<class T> void SingleNode<T>::InsertAfter(SingleNode * node)
@@ -104,43 +155,15 @@ namespace Test {
 		p->Next() = node;
 	}
 
-	template<class T> void SingleNode<T>::Delete(const T & v)
+	template<class T> size_t SingleNode<T>::Length(void)
 	{
-		SingleNode * p = this;
-		if (p->Value() == v) {
-			// This node is what we are looking for, but
-			// we cannot delete itself. So we copy next node value into this one,
-			// which effectively "delete" this node.
-			if (p->Next() == nullptr) throw invalid_argument("A SingleNode cannot delete itself");
-			while (p->Next()->Next() != nullptr && p->Next()->Next() != this) {
-				p->Value() = p->Next()->Value();
-				p = p->Next();
-			}
-			p->Value() = p->Next()->Value();
-			// Now p->Next() is useless and can be deleted
-		} else {
-			while (p->Next() != nullptr && p->Next()->Value() != v) {
-				p = p->Next();
-			}
-			// Now p->Next() is what we are looking for
-		}
-
-		if (p->Next() != nullptr) {
-			SingleNode * q = p->Next();
-			p->Next() = q->Next();
-			delete q;
-		}
-	}
-
-	template<class T> void SingleNode<T>::DeleteList(void)
-	{
-		SingleNode<T> * p = this->Next();
+		size_t s = 1;
+		SingleNode * p = this->Next();
 		while (p != nullptr && p != this) {
-			this->Next() = p->Next();
-			delete p;
-			p = this->Next();
+			s++;
+			p = p->Next();
 		}
-		this->Next() = p;
+		return s;
 	}
 
 	// The middle node is the n-th node, no matter if the list contain (2n-1) nodes or 2n nodes.
@@ -178,39 +201,6 @@ namespace Test {
 		return m;
 	}
 
-	template<class T> ostream & operator<<(ostream & os, SingleNode<T> * list)
-	{
-		SingleNode<T> * p = list;
-		cout << "head";
-		string s = to_string(p->Value());
-		cout << "->" << s;
-		int i = 6 + s.length();
-		p = p->Next();
-		while (p != nullptr && p != list) {
-			s = to_string(p->Value());
-			cout << "->" << s;
-			i = i + 2 + s.length();
-			p = p->Next();
-		}
-
-		if (p != list) {
-			cout << "->nullptr" << endl;
-		} else {
-			auto printChar = [&](int n, char c) {
-				string chars(n, c);
-				cout << chars;
-			};
-
-			cout << "-|" << endl;
-			i++;
-			printChar(5, ' ');
-			cout << "|";
-			printChar(i-6, '_');
-			cout << "|" << endl;
-		}
-		return os;
-	}
-
 	// Reorder single-link list
 	// (1)  0 -> 1 -> 2 -> ...... -> n-1 -> n -> n+1 -> ...... 2n-1 -> nullptr
 	//      0 -> 2n-1 -> 1 -> 2n-2 -> 2 -> ...... -> n-2 -> n+1 -> n-1 -> n -> nullptr
@@ -232,6 +222,8 @@ namespace Test {
 			// Only one node or two nodes
 			return;
 		}
+
+		// m's index is (n-1) or n, depending on whether the list has 2n or 2n+1 nodes
 
 		// Break the list at the middle
 		SingleNode * second = m->Next();
@@ -262,21 +254,6 @@ namespace Test {
 			 m->Next() = p;
 			 m = p->Next();
 		}
-	}
-
-	template<class T> bool SingleNode<T>::HasCycle(SingleNode * node)
-	{
-		if (node == nullptr) return false;
-
-		SingleNode * p = node;
-		SingleNode * q = node;
-		while (q->Next() != nullptr && q->Next()->Next() != nullptr) {
-			p = p->Next();
-			q = q->Next()->Next();
-			if (p == q) return true;
-		}
-
-		return false;
 	}
 
 	template<class T> SingleNode<T> * SingleNode<T>::FindCycle(SingleNode * node)
@@ -316,5 +293,53 @@ namespace Test {
 		}
 
 		return p;
+	}
+
+	template<class T> bool SingleNode<T>::HasCycle(SingleNode * node)
+	{
+		if (node == nullptr) return false;
+
+		SingleNode * p = node;
+		SingleNode * q = node;
+		while (q->Next() != nullptr && q->Next()->Next() != nullptr) {
+			p = p->Next();
+			q = q->Next()->Next();
+			if (p == q) return true;
+		}
+
+		return false;
+	}
+
+	template<class T> ostream & operator<<(ostream & os, SingleNode<T> * list)
+	{
+		SingleNode<T> * p = list;
+		cout << "head";
+		string s = to_string(p->Value());
+		cout << "->" << s;
+		int i = 6 + s.length();
+		p = p->Next();
+		while (p != nullptr && p != list) {
+			s = to_string(p->Value());
+			cout << "->" << s;
+			i = i + 2 + s.length();
+			p = p->Next();
+		}
+
+		if (p != list) {
+			cout << "->nullptr" << endl;
+		} else {
+			auto printChar = [&](int n, char c) {
+				string chars(n, c);
+				cout << chars;
+			};
+
+			cout << "-|" << endl;
+			i++;
+			printChar(5, ' ');
+			cout << "|";
+			printChar(i-6, '_');
+			cout << "|" << endl;
+		}
+		return os;
 	}
 }

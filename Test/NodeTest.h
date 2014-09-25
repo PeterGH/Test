@@ -5,9 +5,10 @@
 #include "..\Algorithm\DoubleNode.h"
 #include "..\Algorithm\SingleNode.h"
 #include "..\Algorithm\TestClass.h"
-class NodeTest : public Test::TestClass {
+using namespace Test;
+class NodeTest : public TestClass {
 public:
-	NodeTest(Test::Log & log) : Test::TestClass(log) {}
+	NodeTest(Log & log) : TestClass(log) {}
 	~NodeTest(void) {}
 	void Init(void);
 };
