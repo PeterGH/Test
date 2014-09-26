@@ -13,24 +13,29 @@ namespace Test {
 		// Delete the first node with value v
 		void Delete(const T & v);
 
-		// Delete the list at this node. This list may be a cycle or not.
+		// Delete the list rooted at the node. This list may contain a cycle or not.
 		void DeleteList(void);
-		static void DeleteList(SingleNode * node);
+
+		// Delete the list. This list may contain a cycle or not.
+		static void DeleteList(SingleNode * list);
 
 		// Find the beginning of cycle if exists
-		static SingleNode * FindCycle(SingleNode * node);
+		static SingleNode * FindCycle(SingleNode * list);
 
 		// Determine if the list has a cycle somewhere
-		static bool HasCycle(SingleNode * node);
+		static bool HasCycle(SingleNode * list);
 
-		// Insert a node or a list after this one. This list may be a cycle or not.
+		// Insert a node or a list after this one. This list may contain a cycle or not.
 		void InsertAfter(SingleNode * node);
 
-		// Insert a node or a list at the end of this list. This list may be a cycle or not.
+		// Insert a node or a list at the end of this list. This list may contain a cycle or not.
 		void InsertAtEnd(SingleNode * node);
 
-		// Count list nodes. The list may be a cycle or not.
+		// Count list nodes. The list may contain a cycle or not.
 		size_t Length(void);
+
+		// Count list nodes. The list may contain a cycle or not.
+		static size_t Length(SingleNode * list);
 
 		// Return the n-th node when this list contains (2n-1) or 2n nodes.
 		// The list may be a cycle or not.
@@ -58,6 +63,9 @@ namespace Test {
 		// Reverse this node and return the head of new list.
 		// The list may be a cycle or not.
 		SingleNode * Reverse(void);
+
+		// Return the last node. The list may contain a cycle or not.
+		static SingleNode * Tail(SingleNode * list);
 	};
 
 	template<class T> void SingleNode<T>::Delete(const T & v)
@@ -90,41 +98,67 @@ namespace Test {
 
 	template<class T> void SingleNode<T>::DeleteList(void)
 	{
-		SingleNode<T> * p = this->Next();
-		while (p != nullptr && p != this) {
-			this->Next() = p->Next();
-			delete p;
-			p = this->Next();
+		SingleNode<T> * p = Tail(this);
+		if (p != nullptr) {
+			// Break the cycle if there is one
+			p->Next() = nullptr;
 		}
-		this->Next() = p;
+		while (this->Next() != nullptr) {
+			p = this->Next();
+			this->Next() = p->Next();
+			p->Next() = nullptr;
+			delete p;
+		}
 	}
 
-	template<class T> void SingleNode<T>::DeleteList(SingleNode * node)
+	template<class T> void SingleNode<T>::DeleteList(SingleNode * list)
 	{
-		if (node == nullptr) return;
-		SingleNode<T> * p = node->Next();
-		while (p != nullptr && p != node) {
-			node->Next() = p->Next();
-			delete p;
-			p = node->Next();
+		if (list == nullptr) return;
+		SingleNode<T> * p = Tail(list);
+		if (p != nullptr) {
+			// Break the cycle if there is one
+			p->Next() = nullptr;
 		}
-		node->Next() = nullptr;
-		delete node;
+		while (list != nullptr) {
+			p = list;
+			list = list->Next();
+			p->Next() = nullptr;
+			delete p;
+		}
+	}
+
+	template<class T> SingleNode<T> * SingleNode<T>::FindCycle(SingleNode * list)
+	{
+		if (list == nullptr) return nullptr;
+
+		SingleNode * t = Tail(list);
+		if (t == nullptr) return nullptr;
+		return t->Next();
+	}
+
+	template<class T> bool SingleNode<T>::HasCycle(SingleNode * list)
+	{
+		if (list == nullptr) return false;
+
+		SingleNode * p = list;
+		SingleNode * q = list;
+		while (q->Next() != nullptr && q->Next()->Next() != nullptr) {
+			p = p->Next();
+			q = q->Next()->Next();
+			if (p == q) return true;
+		}
+
+		return false;
 	}
 
 	template<class T> void SingleNode<T>::InsertAfter(SingleNode * node)
 	{
 		if (node == nullptr) throw invalid_argument("node is nullptr");
 
-		SingleNode * p = node;
-		while (p->Next() != nullptr && p->Next() != node) {
-			p = p->Next();
-		}
-
-		// p->Next() == nullptr, if node is not circular
-		// p->Next() == node, if node is circular
-
-		// If node is circular, it will be broken
+		SingleNode * p = Tail(node);
+		// p->Next() == nullptr, if node contains no cycle
+		// p->Next() != nullptr, if node contains a cycle
+		// If node contains a cycle, it will be broken
 		p->Next() = this->Next();
 		this->Next() = node;
 	}
@@ -133,24 +167,16 @@ namespace Test {
 	{
 		if (node == nullptr) throw invalid_argument("node is nullptr");
 
-		SingleNode * p = this;
-		while (p->Next() != nullptr && p->Next() != this) {
-			p = p->Next();
-		}
+		SingleNode * p = Tail(this);
+		// p->Next() == nullptr, if this list contains no cycle
+		// p->Next() != nullptr, if this list contains a cycle
 
-		// p->Next() == nullptr, if this list is not circular
-		// p->Next() == this, if this list is circular
+		SingleNode * q = Tail(node);
+		// q->Next() == nullptr, if node contains no cycle
+		// q->Next() != nullptr, if node contains a cycle
 
-		SingleNode * q = node;
-		while (q->Next() != nullptr && q->Next() != node) {
-			q = q->Next();
-		}
-
-		// q->Next() == nullptr, if node is not circular
-		// q->Next() == node, if node is circular
-
-		// If node is circular, it will be broken
-		// If this list is circular, it will be maintained
+		// If node contains a cycle, it will be broken
+		// If this list contains a cycle, it will be maintained
 		q->Next() = p->Next();
 		p->Next() = node;
 	}
@@ -158,12 +184,56 @@ namespace Test {
 	template<class T> size_t SingleNode<T>::Length(void)
 	{
 		size_t s = 1;
-		SingleNode * p = this->Next();
-		while (p != nullptr && p != this) {
+		SingleNode * t = Tail(this);
+		SingleNode * p = this;
+		while (p != t) {
 			s++;
 			p = p->Next();
 		}
 		return s;
+	}
+
+	template<class T> size_t SingleNode<T>::Length(SingleNode * list)
+	{
+		if (list == nullptr) return 0;
+
+		SingleNode * p = list;
+		size_t m = 0;
+		SingleNode * q = list;
+		size_t n = 0;
+		while (q->Next() != nullptr && q->Next()->Next() != nullptr) {
+			p = p->Next();
+			m++;
+			q = q->Next()->Next();
+			n += 2;
+			if (p == q) break;
+		}
+
+		if (q->Next() == nullptr) return n + 1;
+		if (q->Next()->Next() == nullptr) return n + 2;
+
+		// Multiple of cycle length
+		m = n - m;
+
+		p = list;
+		q = list;
+		for (size_t i = 0; i < m - 1; i++) {
+			q = q->Next();
+		}
+
+		n = 0;
+		while (p != q->Next()) {
+			p = p->Next();
+			q = q->Next();
+			n++;
+		}
+
+		while (p != q) {
+			p = p->Next();
+			n++;
+		}
+
+		return n + 1;
 	}
 
 	// The middle node is the n-th node, no matter if the list contain (2n-1) nodes or 2n nodes.
@@ -256,58 +326,40 @@ namespace Test {
 		}
 	}
 
-	template<class T> SingleNode<T> * SingleNode<T>::FindCycle(SingleNode * node)
+	template<class T> SingleNode<T> * SingleNode<T>::Tail(SingleNode * list)
 	{
-		if (node == nullptr) return nullptr;
+		if (list == nullptr) return nullptr;
 
-		bool hasCycle = false;
-		SingleNode * p = node;
+		SingleNode * p = list;
 		size_t m = 0;
-		SingleNode * q = node;
+		SingleNode * q = list;
 		size_t n = 0;
 		while (q->Next() != nullptr && q->Next()->Next() != nullptr) {
 			p = p->Next();
 			m++;
 			q = q->Next()->Next();
 			n += 2;
-			if (p == q) {
-				hasCycle = true;
-				break;
-			}
+			if (p == q) break;
 		}
 
-		if (!hasCycle) return nullptr;
+		if (q->Next() == nullptr) return q;
+		if (q->Next()->Next() == nullptr) return q->Next();
 
 		// Multiple of cycle length
 		m = n - m;
 
-		p = node;
-		q = node;
-		for (size_t i = 0; i < m; i++) {
+		p = list;
+		q = list;
+		for (size_t i = 0; i < m - 1; i++) {
 			q = q->Next();
 		}
 
-		while (p != q) {
+		while (p != q->Next()) {
 			p = p->Next();
 			q = q->Next();
 		}
 
-		return p;
-	}
-
-	template<class T> bool SingleNode<T>::HasCycle(SingleNode * node)
-	{
-		if (node == nullptr) return false;
-
-		SingleNode * p = node;
-		SingleNode * q = node;
-		while (q->Next() != nullptr && q->Next()->Next() != nullptr) {
-			p = p->Next();
-			q = q->Next()->Next();
-			if (p == q) return true;
-		}
-
-		return false;
+		return q;
 	}
 
 	template<class T> ostream & operator<<(ostream & os, SingleNode<T> * list)

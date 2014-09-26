@@ -55,8 +55,7 @@ void NodeTest::Init(void)
 			cout << "Middle: " << n1->Middle()->Value() << endl;
 			ASSERT1(2 == n1->Middle()->Value());
 
-			n1->DeleteList();
-			delete n1;
+			SingleNode<int>::DeleteList(n1);
 		}
 		{
 			SingleNode<int> * n1 = new SingleNode<int>(1);
@@ -69,8 +68,7 @@ void NodeTest::Init(void)
 
 			cout << n1 << endl;
 
-			n1->DeleteList();
-			delete n1;
+			SingleNode<int>::DeleteList(n1);
 		}
 	});
 
@@ -89,8 +87,7 @@ void NodeTest::Init(void)
 
 			cout << "Middle: " << n1->Middle()->Value() << endl;
 
-			n1->DeleteList();
-			delete n1;
+			SingleNode<int>::DeleteList(n1);
 		}
 	});
 
@@ -128,8 +125,44 @@ void NodeTest::Init(void)
 				n = n->Reverse();
 				cout << "Reverse: " << endl << n << endl;
 			}
-			n->DeleteList();
-			delete n;
+			SingleNode<int>::DeleteList(n);
+		}
+	});
+
+	Add("SingleNode6", [&](){
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			SingleNode<int> * n3 = new SingleNode<int>(3);
+			SingleNode<int> * n4 = new SingleNode<int>(4);
+			n1->Next() = n2;
+			n2->Next() = n3;
+			n3->Next() = n4;
+			n4->Next() = n1;
+
+			cout << n1 << endl;
+
+			SingleNode<int> * p = SingleNode<int>::Tail(n1);
+			cout << "Tail: " << p->Value() << endl;
+			ASSERT1(4 == p->Value());
+			SingleNode<int>::DeleteList(n1);
+		}
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			SingleNode<int> * n3 = new SingleNode<int>(3);
+			SingleNode<int> * n4 = new SingleNode<int>(4);
+			n1->Next() = n2;
+			n2->Next() = n3;
+			n3->Next() = n4;
+			n4->Next() = n2;
+
+			// cout << n1 << endl;
+
+			SingleNode<int> * p = SingleNode<int>::Tail(n1);
+			cout << "Tail: " << p->Value() << endl;
+			ASSERT1(4 == p->Value());
+			SingleNode<int>::DeleteList(n1);
 		}
 	});
 
@@ -148,8 +181,7 @@ void NodeTest::Init(void)
 				p = p->Next();
 				i++;
 			}
-			node->DeleteList();
-			delete node;
+			SingleNode<int>::DeleteList(node);
 		};
 		{
 			SingleNode<int> * n = new SingleNode<int>(0);
@@ -192,29 +224,21 @@ void NodeTest::Init(void)
 
 	Add("SingleNodeCycle", [&](){
 		auto check = [&](SingleNode<int> * node, int beginning){
+			size_t l1 = node->Length();
+			size_t l2 = SingleNode<int>::Length(node);
 			bool hasCycle = SingleNode<int>::HasCycle(node);
 			if (hasCycle) {
 				SingleNode<int> * cycle = SingleNode<int>::FindCycle(node);
 				Logger().WriteInformation("Has cycle at %d\n", cycle->Value());
 				int v = cycle->Value();
-				if (cycle != node) {
-					SingleNode<int> * p = node;
-					while (p->Next() != cycle) {
-						p = p->Next();
-					}
-					p->Next() = nullptr;
-					node->DeleteList();
-					delete node;
-				}
-				cycle->DeleteList();
-				delete cycle;
+				SingleNode<int>::DeleteList(node);;
 				ASSERT1(beginning == v);
 			} else {
 				Logger().WriteInformation("No cycle\n");
-				node->DeleteList();
-				delete node;
+				SingleNode<int>::DeleteList(node);
 				ASSERT1(beginning == -1);
 			}
+			ASSERT1(l1 == l2);
 		};
 		{
 			SingleNode<int> * n = new SingleNode<int>(0);
