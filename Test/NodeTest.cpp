@@ -25,19 +25,38 @@ void NodeTest::Init(void)
 	});
 
 	Add("SingleNode1", [&](){
-		SingleNode<int> node(1);
-		cout << &node << endl;
-		cout << "Count: " << node.CountNeighbors() << endl;
-		ASSERT1(1 == node.CountNeighbors());
-		cout << "Middle: " << node.Middle()->Value() << endl;
-		ASSERT1(1 == node.Middle()->Value());
-		SingleNode<int> * r = node.Reverse();
-		cout << "Reverse: " << r << endl;
-		ASSERT1(1 == r->Value());
-		r = nullptr;
-		r = new SingleNode<int>(2);
-		cout << r << endl;
-		delete r;
+		{
+			SingleNode<int> node(1);
+			cout << &node;
+			cout << "Count: " << node.CountNeighbors() << endl;
+			ASSERT1(1 == node.CountNeighbors());
+			cout << "Middle: " << node.Middle()->Value() << endl;
+			ASSERT1(1 == node.Middle()->Value());
+			SingleNode<int> * r = node.Reverse();
+			cout << "Reverse:" << endl << r;
+			ASSERT1(1 == r->Value());
+			r = nullptr;
+			r = new SingleNode<int>(2);
+			cout << r;
+			delete r;
+		}
+		{
+			SingleNode<int> node(1);
+			node.Next() = &node;
+			cout << &node;
+			cout << "Count: " << node.CountNeighbors() << endl;
+			ASSERT1(1 == node.CountNeighbors());
+			cout << "Middle: " << node.Middle()->Value() << endl;
+			ASSERT1(1 == node.Middle()->Value());
+			SingleNode<int> * r = node.Reverse();
+			cout << "Reverse:" << endl << r;
+			ASSERT1(1 == r->Value());
+			r = nullptr;
+			r = new SingleNode<int>(2);
+			r->Next() = r;
+			cout << r;
+			delete r;
+		}
 	});
 
 	Add("SingleNode2", [&](){
@@ -66,9 +85,13 @@ void NodeTest::Init(void)
 			n2->Next(n3);
 			n3->Next(n4);
 
-			cout << n1 << endl;
+			cout << n1;
 
-			SingleNode<int>::DeleteList(n1);
+			SingleNode<int> * n = SingleNode<int>::Reverse(n1);
+			cout << "Reverse:" << endl;
+			cout << n;
+
+			SingleNode<int>::DeleteList(n);
 		}
 	});
 
@@ -87,7 +110,11 @@ void NodeTest::Init(void)
 
 			cout << "Middle: " << n1->Middle()->Value() << endl;
 
-			SingleNode<int>::DeleteList(n1);
+			SingleNode<int> * n = SingleNode<int>::Reverse(n1);
+			cout << "Reverse:" << endl;
+			cout << n;
+
+			SingleNode<int>::DeleteList(n);
 		}
 	});
 
@@ -96,7 +123,7 @@ void NodeTest::Init(void)
 			SingleNode<int> n1(0);
 			for (int i = 1; i < 10; i++) {
 				n1.InsertAtEnd(new SingleNode<int>(i));
-				cout << &n1 << endl;
+				cout << &n1;
 				int m = n1.Middle()->Value();
 				cout << "Middle: " << m << endl;
 				ASSERT1(m == i >> 1);
@@ -107,7 +134,7 @@ void NodeTest::Init(void)
 			SingleNode<int> n1(0);
 			for (int i = 9; i > 0; i--) {
 				n1.InsertAfter(new SingleNode<int>(i));
-				cout << &n1 << endl;
+				cout << &n1;
 			}
 			int m = n1.Middle()->Value();
 			cout << "Middle: " << m << endl;
@@ -121,9 +148,20 @@ void NodeTest::Init(void)
 			SingleNode<int> * n = new SingleNode<int>(0);
 			for (int i = 1; i < 10; i++) {
 				n->InsertAtEnd(new SingleNode<int>(i));
-				cout << n << endl;
+				cout << n;
 				n = n->Reverse();
-				cout << "Reverse: " << endl << n << endl;
+				cout << "Reverse: " << endl << n;
+			}
+			SingleNode<int>::DeleteList(n);
+		}
+		{
+			SingleNode<int> * n = new SingleNode<int>(0);
+			n->Next() = n;
+			for (int i = 1; i < 10; i++) {
+				n->InsertAtEnd(new SingleNode<int>(i));
+				cout << n;
+				n = n->Reverse();
+				cout << "Reverse: " << endl << n;
 			}
 			SingleNode<int>::DeleteList(n);
 		}
@@ -140,11 +178,19 @@ void NodeTest::Init(void)
 			n3->Next() = n4;
 			n4->Next() = n1;
 
-			cout << n1 << endl;
+			cout << n1;
 
 			SingleNode<int> * p = SingleNode<int>::Tail(n1);
 			cout << "Tail: " << p->Value() << endl;
 			ASSERT1(4 == p->Value());
+
+			n1 = SingleNode<int>::Reverse(n1);
+			cout << n1;
+
+			p = SingleNode<int>::Tail(n1);
+			cout << "Tail: " << p->Value() << endl;
+			ASSERT1(1 == p->Value());
+
 			SingleNode<int>::DeleteList(n1);
 		}
 		{
@@ -157,12 +203,330 @@ void NodeTest::Init(void)
 			n3->Next() = n4;
 			n4->Next() = n2;
 
-			// cout << n1 << endl;
+			cout << n1;
 
 			SingleNode<int> * p = SingleNode<int>::Tail(n1);
 			cout << "Tail: " << p->Value() << endl;
 			ASSERT1(4 == p->Value());
+
+			n1 = SingleNode<int>::Reverse(n1);
+			cout << n1;
+
+			p = SingleNode<int>::Tail(n1);
+			cout << "Tail: " << p->Value() << endl;
+			ASSERT1(1 == p->Value());
+
 			SingleNode<int>::DeleteList(n1);
+		}
+	});
+
+	Add("SingleNode7", [&](){
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			n1->Next() = n1;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+	});
+
+	Add("SingleNode8", [&](){
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			n1->Next() = n2;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 2:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 2);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			n1->Next() = n2;
+			n2->Next() = n1;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 2:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 2);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			n1->Next() = n2;
+			n2->Next() = n2;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 2:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 2);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			n1->Next() = n2;
+			n2->Next() = n2;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 2:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 2);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+	});
+
+	Add("SingleNode9", [&](){
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			SingleNode<int> * n3 = new SingleNode<int>(3);
+			n1->Next() = n2;
+			n2->Next() = n3;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 2:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 2);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 3:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 3);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			SingleNode<int> * n3 = new SingleNode<int>(3);
+			n1->Next() = n2;
+			n2->Next() = n3;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 2:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 2);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 3:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 3);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+	});
+
+	Add("SingleNode10", [&](){
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			SingleNode<int> * n3 = new SingleNode<int>(3);
+			n1->Next() = n2;
+			n2->Next() = n3;
+			n3->Next() = n1;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 2:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 2);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 3:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 3);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			SingleNode<int> * n3 = new SingleNode<int>(3);
+			n1->Next() = n2;
+			n2->Next() = n3;
+			n3->Next() = n1;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 2:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 2);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 3:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 3);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			SingleNode<int> * n3 = new SingleNode<int>(3);
+			n1->Next() = n2;
+			n2->Next() = n3;
+			n3->Next() = n1;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 3:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 3);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 2:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 2);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			SingleNode<int> * n3 = new SingleNode<int>(3);
+			n1->Next() = n2;
+			n2->Next() = n3;
+			n3->Next() = n2;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 2:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 2);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 3:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 3);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			SingleNode<int> * n3 = new SingleNode<int>(3);
+			n1->Next() = n2;
+			n2->Next() = n3;
+			n3->Next() = n2;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 3:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 3);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 2:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 2);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
+		}
+		{
+			SingleNode<int> * n1 = new SingleNode<int>(1);
+			SingleNode<int> * n2 = new SingleNode<int>(2);
+			SingleNode<int> * n3 = new SingleNode<int>(3);
+			n1->Next() = n2;
+			n2->Next() = n3;
+			n3->Next() = n3;
+			cout << n1;
+			cout << "Delete 0:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 0);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 2:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 2);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 3:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 3);
+			cout << n1;
+			ASSERT1(n1 != nullptr);
+			cout << "Delete 1:" << endl;
+			n1 = SingleNode<int>::Delete(n1, 1);
+			cout << n1;
+			ASSERT1(n1 == nullptr);
 		}
 	});
 
@@ -224,6 +588,7 @@ void NodeTest::Init(void)
 
 	Add("SingleNodeCycle", [&](){
 		auto check = [&](SingleNode<int> * node, int beginning){
+			cout << node;
 			size_t l1 = node->Length();
 			size_t l2 = SingleNode<int>::Length(node);
 			bool hasCycle = SingleNode<int>::HasCycle(node);
@@ -231,14 +596,25 @@ void NodeTest::Init(void)
 				SingleNode<int> * cycle = SingleNode<int>::FindCycle(node);
 				Logger().WriteInformation("Has cycle at %d\n", cycle->Value());
 				int v = cycle->Value();
-				SingleNode<int>::DeleteList(node);;
 				ASSERT1(beginning == v);
 			} else {
 				Logger().WriteInformation("No cycle\n");
-				SingleNode<int>::DeleteList(node);
 				ASSERT1(beginning == -1);
 			}
+			node = SingleNode<int>::Reverse(node);
+			Logger().WriteInformation("Reverse:\n");
+			cout << node;
+			hasCycle = SingleNode<int>::HasCycle(node);
+			if (hasCycle) {
+				SingleNode<int> * cycle = SingleNode<int>::FindCycle(node);
+				Logger().WriteInformation("Has cycle at %d\n", cycle->Value());
+			} else {
+				Logger().WriteInformation("No cycle\n");
+			}
+			size_t l3 = SingleNode<int>::Length(node);
+			SingleNode<int>::DeleteList(node);
 			ASSERT1(l1 == l2);
+			ASSERT1(l1 == l3);
 		};
 		{
 			SingleNode<int> * n = new SingleNode<int>(0);

@@ -13,6 +13,9 @@ namespace Test {
 		// Delete the first node with value v
 		void Delete(const T & v);
 
+		// Delete the first node with value v
+		static SingleNode * Delete(SingleNode * list, const T & v);
+
 		// Delete the list rooted at the node. This list may contain a cycle or not.
 		void DeleteList(void);
 
@@ -38,8 +41,12 @@ namespace Test {
 		static size_t Length(SingleNode * list);
 
 		// Return the n-th node when this list contains (2n-1) or 2n nodes.
-		// The list may be a cycle or not.
+		// The list may contain a cycle or not.
 		SingleNode * Middle(void);
+
+		// Return the n-th node when this list contains (2n-1) or 2n nodes.
+		// The list may contain a cycle or not.
+		static SingleNode * Middle(SingleNode * list);
 
 		// Get the reference of next node pointer
 		SingleNode * & Next(void)
@@ -63,6 +70,10 @@ namespace Test {
 		// Reverse this node and return the head of new list.
 		// The list may be a cycle or not.
 		SingleNode * Reverse(void);
+
+		// Reverse this node and return the head of new list.
+		// The list may contain a cycle or not.
+		static SingleNode * Reverse(SingleNode * list);
 
 		// Return the last node. The list may contain a cycle or not.
 		static SingleNode * Tail(SingleNode * list);
@@ -94,6 +105,67 @@ namespace Test {
 			p->Next() = q->Next();
 			delete q;
 		}
+	}
+
+	template<class T> SingleNode<T> * SingleNode<T>::Delete(SingleNode * list, const T & v)
+	{
+		if (list == nullptr) return nullptr;
+		if (list->Value() == v && (list->Next() == nullptr || list->Next() == list)) {
+			// list->v->null, or
+			// list->v-|
+			//      |__|
+			delete list;
+			return nullptr;
+		}
+
+		SingleNode * t = Tail(list);
+
+		if (list->Value() == v) {
+			if (t->Next() == list) {
+				// list->v->...->t-|
+				//      |__________|
+				t->Next() = list->Next();
+			}
+			t = list->Next();
+			delete list;
+			return t;
+		}
+
+		SingleNode * p = list;
+		while (p != t && p->Next()->Value() != v) p = p->Next();
+
+		if (p == t) {
+			// Not found
+			return list;
+		}
+
+		if (p->Next() == t->Next()) {
+			if (t->Next() == t) {
+				// list->...->p->v-|
+				//              |__|
+				p->Next() = nullptr;
+				delete t;
+			} else {
+				// list->...->p->v->...->t-|
+				//              |__________|
+				p->Next() = t->Next()->Next();
+				p = t->Next();
+				t->Next() = p->Next();
+				delete p;
+			}
+		} else {
+			// list->...->p->v->...->x->...->t-|
+			//                      |__________|
+			// list->...->x->...->p->v->...->t-|
+			//           |_____________________|
+			// list->x->...->p->v-|
+			//      |_____________|
+			// list->x->...->p->v->null
+			t = p->Next();
+			p->Next() = t->Next();
+			delete t;
+		}
+		return list;
 	}
 
 	template<class T> void SingleNode<T>::DeleteList(void)
@@ -236,15 +308,23 @@ namespace Test {
 		return n + 1;
 	}
 
-	// The middle node is the n-th node, no matter if the list contain (2n-1) nodes or 2n nodes.
 	template<class T> SingleNode<T> * SingleNode<T>::Middle(void)
 	{
-		// Start from the first (1-th) node.
-		SingleNode * middle = this;
-		SingleNode * p = this;
+		return Middle(this);
+	}
 
-		while (p->Next() != nullptr && p->Next() != this
-			&& p->Next()->Next() != nullptr && p->Next()->Next() != this) {
+	template<class T> SingleNode<T> * SingleNode<T>::Middle(SingleNode * list)
+	{
+		if (list == nullptr) return nullptr;
+
+		SingleNode * t = Tail(list);
+		if (t == nullptr) return nullptr;
+
+		// Start from the first (1-th) node.
+		SingleNode * middle = list;
+		SingleNode * p = list;
+
+		while (p != t && p->Next() != t) {
 			// p visits the (2n-1)-th node.
 			p = p->Next()->Next();
 			// middle visits the n-th node.
@@ -254,21 +334,29 @@ namespace Test {
 		return middle;
 	}
 
-	template<class T> SingleNode<T> * SingleNode<T>::Reverse(void)
+	template<class T> SingleNode<T> * SingleNode<T>::Reverse(SingleNode * list)
 	{
-		if (this->Next() == nullptr || this->Next() == this) return this;
-		SingleNode * p = this;
-		SingleNode * m = this->Next();
+		if (list == nullptr || list->Next() == nullptr) return list;
+		SingleNode * t = Tail(list);
+		if (t == nullptr) return list;
+
+		SingleNode * p = list;
+		SingleNode * m = list->Next();
 		SingleNode * n = m->Next();
-		while (n != nullptr && n != this) {
+		while (m != t) {
 			m->Next() = p;
 			p = m;
 			m = n;
 			n = n->Next();
 		}
 		m->Next() = p;
-		this->Next() = n == this ? m : nullptr;
+		list->Next() = n == list ? m : nullptr;
 		return m;
+	}
+
+	template<class T> SingleNode<T> * SingleNode<T>::Reverse(void)
+	{
+		return Reverse(this);
 	}
 
 	// Reorder single-link list
@@ -364,34 +452,47 @@ namespace Test {
 
 	template<class T> ostream & operator<<(ostream & os, SingleNode<T> * list)
 	{
-		SingleNode<T> * p = list;
 		cout << "head";
-		string s = to_string(p->Value());
-		cout << "->" << s;
-		int i = 6 + s.length();
-		p = p->Next();
-		while (p != nullptr && p != list) {
+		if (list == nullptr) {
+			cout << "->nullptr" << endl;
+			return os;
+		}
+
+		SingleNode<T> * c = SingleNode<T>::FindCycle(list);
+		SingleNode<T> * p = list;
+		string s;
+		int i = 4;
+		while (p != c) {
 			s = to_string(p->Value());
 			cout << "->" << s;
 			i = i + 2 + s.length();
 			p = p->Next();
 		}
 
-		if (p != list) {
+		if (p == nullptr) {
 			cout << "->nullptr" << endl;
-		} else {
-			auto printChar = [&](int n, char c) {
-				string chars(n, c);
-				cout << chars;
-			};
-
-			cout << "-|" << endl;
-			i++;
-			printChar(5, ' ');
-			cout << "|";
-			printChar(i-6, '_');
-			cout << "|" << endl;
+			return os;
 		}
+
+		int j = i;
+		do {
+			s = to_string(p->Value());
+			cout << "->" << s;
+			j = j + 2 + s.length();
+			p = p->Next();
+		} while (p != c);
+
+		auto printChar = [&](int n, char c) {
+			string chars(n, c);
+			cout << chars;
+		};
+
+		cout << "-|" << endl;
+		j++;
+		printChar(i+1, ' ');
+		cout << "|";
+		printChar(j-i-2, '_');
+		cout << "|" << endl;
 		return os;
 	}
 }
