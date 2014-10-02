@@ -83,11 +83,11 @@ namespace Test {
 				N<T> * current = this->root;
 				for (int h = 1; h < height; h++) {
 					if (!branch.Test(h)) {
-						if (current->left != nullptr) current = (N<T>*)current->left;
-						else current->left = node;
+						if (current->Left() != nullptr) current = (N<T>*)current->Left();
+						else current->Left() = node;
 					} else if (branch.Test(h)) {
-						if (current->right != nullptr) current = (N<T>*)current->right;
-						else current->right = node;
+						if (current->Right() != nullptr) current = (N<T>*)current->Right();
+						else current->Right() = node;
 					}
 				}
 

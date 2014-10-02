@@ -272,21 +272,21 @@ namespace Test {
 		stack<BinaryNode<unsigned int> *> path;
 		map<BinaryNode<unsigned int> *, unsigned long long> number;
 		unsigned long long sum = 0;
-		number[node] = node->content;
+		number[node] = node->Value();
 		path.push(node);
 		while (!path.empty()) {
 			node = path.top();
 			path.pop();
-			if (node->left == nullptr && node->right == nullptr) {
+			if (node->Left() == nullptr && node->Right() == nullptr) {
 				sum += number[node];
 			}
-			if (node->right != nullptr) {
-				number[node->right] = 10 * number[node] + node->right->content;
-				path.push(node->right);
+			if (node->Right() != nullptr) {
+				number[node->Right()] = 10 * number[node] + node->Right()->Value();
+				path.push(node->Right());
 			}
-			if (node->left != nullptr) {
-				number[node->left] = 10 * number[node] + node->left->content;
-				path.push(node->left);
+			if (node->Left() != nullptr) {
+				number[node->Left()] = 10 * number[node] + node->Left()->Value();
+				path.push(node->Left());
 			}
 		}
 		return sum;
@@ -311,10 +311,10 @@ namespace Test {
 			maxPath.clear();
 			if (node == nullptr) return;
 
-			if (node->left == nullptr && node->right == nullptr) {
-				currentSum = node->content;
+			if (node->Left() == nullptr && node->Right() == nullptr) {
+				currentSum = node->Value();
 				currentPath.push_back(node);
-				maxSum = node->content;
+				maxSum = node->Value();
 				maxPath.push_back(node);
 				return;
 			}
@@ -323,59 +323,59 @@ namespace Test {
 			vector<BinaryNode<int> *> leftPath;
 			long long leftMaxSum;
 			vector<BinaryNode<int> *> leftMaxPath;
-			search(node->left, leftSum, leftPath, leftMaxSum, leftMaxPath);
+			search(node->Left(), leftSum, leftPath, leftMaxSum, leftMaxPath);
 
 			long long rightSum;
 			vector<BinaryNode<int> *> rightPath;
 			long long rightMaxSum;
 			vector<BinaryNode<int> *> rightMaxPath;
-			search(node->right, rightSum, rightPath, rightMaxSum, rightMaxPath);
+			search(node->Right(), rightSum, rightPath, rightMaxSum, rightMaxPath);
 
-			if (node->left != nullptr && node->right == nullptr) {
+			if (node->Left() != nullptr && node->Right() == nullptr) {
 				maxSum = leftMaxSum;
 				maxPath.insert(maxPath.begin(), leftMaxPath.begin(), leftMaxPath.end());
 
 				if (leftSum <= 0) {
-					currentSum = node->content;
+					currentSum = node->Value();
 					currentPath.push_back(node);
 
-					if (node->content > maxSum) {
-						maxSum = node->content;
+					if (node->Value() > maxSum) {
+						maxSum = node->Value();
 						maxPath.clear();
 						maxPath.push_back(node);
 					}
 				} else {
-					currentSum = leftSum + node->content;
+					currentSum = leftSum + node->Value();
 					currentPath.push_back(node);
 					currentPath.insert(currentPath.end(), leftPath.begin(), leftPath.end());
 
-					if (leftSum + node->content > maxSum) {
-						maxSum = leftSum + node->content;
+					if (leftSum + node->Value() > maxSum) {
+						maxSum = leftSum + node->Value();
 						maxPath.clear();
 						maxPath.insert(maxPath.end(), leftPath.rbegin(), leftPath.rend());
 						maxPath.push_back(node);
 					}
 				}
-			} else if (node->left == nullptr && node->right != nullptr) {
+			} else if (node->Left() == nullptr && node->Right() != nullptr) {
 				maxSum = rightMaxSum;
 				maxPath.insert(maxPath.begin(), rightMaxPath.begin(), rightMaxPath.end());
 
 				if (rightSum <= 0) {
-					currentSum = node->content;
+					currentSum = node->Value();
 					currentPath.push_back(node);
 
-					if (node->content > maxSum) {
-						maxSum = node->content;
+					if (node->Value() > maxSum) {
+						maxSum = node->Value();
 						maxPath.clear();
 						maxPath.push_back(node);
 					}
 				} else {
-					currentSum = node->content + rightSum;
+					currentSum = node->Value() + rightSum;
 					currentPath.push_back(node);
 					currentPath.insert(currentPath.end(), rightPath.begin(), rightPath.end());
 
-					if (node->content + rightSum > maxSum) {
-						maxSum = node->content + rightSum;
+					if (node->Value() + rightSum > maxSum) {
+						maxSum = node->Value() + rightSum;
 						maxPath.clear();
 						maxPath.push_back(node);
 						maxPath.insert(maxPath.end(), rightPath.begin(), rightPath.end());
@@ -391,49 +391,49 @@ namespace Test {
 				}
 
 				if (leftSum <= 0 && rightSum <= 0) {
-					currentSum = node->content;
+					currentSum = node->Value();
 					currentPath.push_back(node);
 
-					if (node->content > maxSum) {
-						maxSum = node->content;
+					if (node->Value() > maxSum) {
+						maxSum = node->Value();
 						maxPath.clear();
 						maxPath.push_back(node);
 					}
 				} else if (leftSum > 0 && rightSum <= 0) {
-					currentSum = leftSum + node->content;
+					currentSum = leftSum + node->Value();
 					currentPath.push_back(node);
 					currentPath.insert(currentPath.end(), leftPath.begin(), leftPath.end());
 
-					if (leftSum + node->content > maxSum) {
-						maxSum = leftSum + node->content;
+					if (leftSum + node->Value() > maxSum) {
+						maxSum = leftSum + node->Value();
 						maxPath.clear();
 						maxPath.insert(maxPath.end(), leftPath.rbegin(), leftPath.rend());
 						maxPath.push_back(node);
 					}
 				} else if (leftSum <= 0 && rightSum > 0) {
-					currentSum = node->content + rightSum;
+					currentSum = node->Value() + rightSum;
 					currentPath.push_back(node);
 					currentPath.insert(currentPath.end(), rightPath.begin(), rightPath.end());
 
-					if (node->content + rightSum > maxSum) {
-						maxSum = node->content + rightSum;
+					if (node->Value() + rightSum > maxSum) {
+						maxSum = node->Value() + rightSum;
 						maxPath.clear();
 						maxPath.push_back(node);
 						maxPath.insert(maxPath.end(), rightPath.begin(), rightPath.end());
 					}
 				} else {
 					if (leftSum >= rightSum) {
-						currentSum = leftSum + node->content;
+						currentSum = leftSum + node->Value();
 						currentPath.push_back(node);
 						currentPath.insert(currentPath.end(), leftPath.begin(), leftPath.end());
 					} else {
-						currentSum = node->content + rightSum;
+						currentSum = node->Value() + rightSum;
 						currentPath.push_back(node);
 						currentPath.insert(currentPath.end(), rightPath.begin(), rightPath.end());
 					}
 
-					if (leftSum + node->content + rightSum > maxSum) {
-						maxSum = leftSum + node->content + rightSum;
+					if (leftSum + node->Value() + rightSum > maxSum) {
+						maxSum = leftSum + node->Value() + rightSum;
 						maxPath.clear();
 						maxPath.insert(maxPath.end(), leftPath.rbegin(), leftPath.rend());
 						maxPath.push_back(node);

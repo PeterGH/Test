@@ -30,11 +30,11 @@ namespace Test {
 			while (!this->path.empty() || this->current != nullptr) {
 				if (this->current != nullptr) {
 					path.push(this->current);
-					this->current = (N<T>*)this->current->left;
+					this->current = (N<T>*)this->current->Left();
 				} else {
 					this->pointer = this->path.top();
 					this->path.pop();
-					this->current = (N<T>*)this->pointer->right;
+					this->current = (N<T>*)this->pointer->Right();
 					break;
 				}
 			}

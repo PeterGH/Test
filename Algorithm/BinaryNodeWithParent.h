@@ -1,184 +1,184 @@
 #pragma once
-#include "BinaryNode.h"
 #include <set>
+#include "BinaryNode.h"
 using namespace std;
 namespace Test {
 	template<class T> class BinaryNodeWithParent : public BinaryNode<T> {
 	public:
-		BinaryNodeWithParent * parent;
-
-		BinaryNodeWithParent(const T & content) : BinaryNode(content), parent(nullptr) {}
-
-		virtual ~BinaryNodeWithParent(void)
+		BinaryNodeWithParent(const T & v) : BinaryNode<T>(v)
 		{
-			// Base destructor is called implicitly
-			// BinaryNode::~BinaryNode();
-			this->parent = nullptr;
+			this->Neighbor(2) = nullptr;
 		}
+
+		virtual ~BinaryNodeWithParent(void) {}
+
+		// Get the reference of parent pointer
+		BinaryNodeWithParent * & Parent(void) { return (BinaryNodeWithParent * &)this->Neighbor(2); }
+		// Set the parent pointer
+		void Parent(BinaryNode * p) { this->Neighbor(2) = p; }
 
 		// Non-recursive without stack
-		static void PreOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f)
-		{
-			if (node == nullptr || f == nullptr) return;
-			BinaryNodeWithParent * prev = node;
-			while (node != nullptr) {
-				if (prev == node->right) {
-					prev = node;
-					node = node->parent;
-				} else if (node->left != nullptr && prev != node->left) {
-					f(node->content);
-					prev = node;
-					node = (BinaryNodeWithParent<T> *)node->left;
-				} else {
-					if (node->left == nullptr) {
-						f(node->content);
-					}
-					
-					prev = node;
-					if (node->right != nullptr) {
-						node = (BinaryNodeWithParent<T> *)node->right;
-					} else {
-						node = node->parent;
-					}
-				}
-			}
-		}
-
+		static void PreOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f);
 		void PreOrderWalkWithOutStack(function<void(T)> f) { PreOrderWalkWithOutStack(this, f); }
 
 		// Non-recursive without stack
-		static void InOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f)
-		{
-			if (node == nullptr || f == nullptr) return;
-			BinaryNodeWithParent * prev = node;
-			while (node != nullptr) {
-				if (prev == node->right) {
-					prev = node;
-					node = node->parent;
-				} else if (node->left != nullptr && prev != node->left) {
-					prev = node;
-					node = (BinaryNodeWithParent<T> *)node->left;
-				} else {
-					f(node->content);
-					prev = node;
-					if (node->right != nullptr) {
-						node = (BinaryNodeWithParent<T> *)node->right;
-					} else {
-						node = node->parent;
-					}
-				}
-			}
-		}
-
+		static void InOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f);
 		void InOrderWalkWithOutStack(function<void(T)> f) { InOrderWalkWithOutStack(this, f); }
 
 		// Non-recursive without stack
-		static void PostOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f)
-		{
-			if (node == nullptr || f == nullptr) return;
-			BinaryNodeWithParent * prev = node;
-			while (node != nullptr) {
-				if (prev == node->right) {
-					f(node->content);
-					prev = node;
-					node = node->parent;
-				} else if (node->left != nullptr && prev != node->left) {
-					prev = node;
-					node = (BinaryNodeWithParent<T> *)node->left;
-				} else {
-					prev = node;
-					if (node->right != nullptr) {
-						node = (BinaryNodeWithParent<T> *)node->right;
-					} else {
-						f(node->content);
-						node = node->parent;
-					}
-				}
-			}
-		}
-
+		static void PostOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f);
 		void PostOrderWalkWithOutStack(function<void(T)> f) { PostOrderWalkWithOutStack(this, f); }
 
 		// Count height of tree rooted at node
 		// Non-recursive
-		static int Height2(BinaryNodeWithParent * node)
-		{
-			if (node == nullptr) return 0;
-			BinaryNodeWithParent * prev = node;
-			// Track the maximum height while traversing the tree
-			int max = 0;
-			// Track the height of current node
-			int h = 0;
-			while (node != nullptr) {
-				if (prev == node->right) {
-					// h is the height of right
+		static int Height2(BinaryNodeWithParent * node);
+		int Height2(void) { return Height2(this); }
+
+		// Count the distance of node from the root
+		static int Depth(BinaryNodeWithParent * node);
+		int Depth(void) { return Depth(this); }
+
+		static BinaryNodeWithParent * Clone(BinaryNode * node);
+		BinaryNodeWithParent * Clone(void) { return Clone(this); }
+	};
+
+	// Non-recursive without stack
+	template<class T> void BinaryNodeWithParent<T>::PreOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f)
+	{
+		if (node == nullptr || f == nullptr) return;
+		BinaryNodeWithParent * prev = node;
+		while (node != nullptr) {
+			if (prev == node->Right()) {
+				prev = node;
+				node = node->Parent();
+			} else if (node->Left() != nullptr && node->Left() != prev) {
+				f(node->Value());
+				prev = node;
+				node = (BinaryNodeWithParent<T> *)node->Left();
+			} else {
+				if (node->Left() == nullptr) f(node->Value());
+				prev = node;
+				if (node->Right() == nullptr) node = node->Parent();
+				else node = (BinaryNodeWithParent<T> *)node->Right();
+			}
+		}
+	}
+
+	// Non-recursive without stack
+	template<class T> void BinaryNodeWithParent<T>::InOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f)
+	{
+		if (node == nullptr || f == nullptr) return;
+		BinaryNodeWithParent * prev = node;
+		while (node != nullptr) {
+			if (prev == node->Right()) {
+				prev = node;
+				node = node->Parent();
+			} else if (node->Left() != nullptr && node->Left() != prev) {
+				prev = node;
+				node = (BinaryNodeWithParent<T> *)node->Left();
+			} else {
+				f(node->Value());
+				prev = node;
+				if (node->Right() == nullptr) node = node->Parent();
+				else node = (BinaryNodeWithParent<T> *)node->Right();
+			}
+		}
+	}
+
+	template<class T> void BinaryNodeWithParent<T>::PostOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f)
+	{
+		if (node == nullptr || f == nullptr) return;
+		BinaryNodeWithParent * prev = node;
+		while (node != nullptr) {
+			if (prev == node->Right()) {
+				f(node->Value());
+				prev = node;
+				node = node->Parent();
+			} else if (node->Left() != nullptr && node->Left() != prev) {
+				prev = node;
+				node = (BinaryNodeWithParent<T> *)node->Left();
+			} else {
+				prev = node;
+				if (node->Right() == nullptr) {
+					f(node->Value());
+					node = node->Parent();
+				} else {
+					node = (BinaryNodeWithParent<T> *)node->Right();
+				}
+			}
+		}
+	}
+
+	// Count height of tree rooted at node
+	// Non-recursive
+	template<class T> int BinaryNodeWithParent<T>::Height2(BinaryNodeWithParent * node)
+	{
+		if (node == nullptr) return 0;
+		BinaryNodeWithParent * prev = node;
+		// Track the maximum height while traversing the tree
+		int max = 0;
+		// Track the height of current node
+		int h = 0;
+		while (node != nullptr) {
+			if (prev == node->Right()) {
+				// h is the height of right
+				// Minus one to get the height of node
+				h--;
+				prev = node;
+				node = node->Parent();
+			} else if (node->Left() != nullptr && node->Left() != prev) {
+				// h is the height of node
+				// Plus one to get the height of left child
+				h++;
+				if (h > max) max = h;
+				prev = node;
+				node = (BinaryNodeWithParent *)node->Left();
+			} else {
+				if (node->Left() == prev) {
+					// h is the height of left
 					// Minus one to get the height of node
 					h--;
-					prev = node;
-					node = node->parent;
-				} else if (node->left != nullptr && prev != node->left) {
+				} else if (node->Left() == nullptr) {
 					// h is the height of parent
 					// Plus one to get the height of node
 					h++;
 					if (h > max) max = h;
-					prev = node;
-					node = (BinaryNodeWithParent *)node->left;
-				} else {
-					if (prev == node->left) {
-						// h is the height of left
-						// Minus one to get the height of node
-						h--;
-					} else if (node->left == nullptr) {
-						// h is the height of parent
-						// Plus one to get the height of node
-						h++;
-						if (h > max) max = h;
-					}
-					
-					prev = node;
-					if (node->right == nullptr) {
-						node = node->parent;
-					} else {
-						node = (BinaryNodeWithParent *)node->right;
-					}
 				}
+
+				prev = node;
+				if (node->Right() == nullptr) node = node->Parent();
+				else node = (BinaryNodeWithParent *)node->Right();
 			}
-			
-			return max;
 		}
+		return max;
+	}
 
-		int Height(void) { return Height2(this); }
-
-		// Count the distance of node from the root
-		static int Depth(BinaryNodeWithParent * node)
-		{
-			int d = 0;
-			while (node != nullptr) {
-				d++;
-				node = node->parent;
-			}
-			return d;
+	// Count the distance of node from the root
+	template<class T> int BinaryNodeWithParent<T>::Depth(BinaryNodeWithParent * node)
+	{
+		int d = 0;
+		while (node != nullptr) {
+			d++;
+			node = node->Parent();
 		}
+		return d;
+	}
 
-		int Depth(void) { return Depth(this); }
-
-		static BinaryNodeWithParent * Clone(BinaryNode * node)
-		{
-			if (node == nullptr) return nullptr;
-			BinaryNodeWithParent * newNode = new BinaryNodeWithParent(node->content);
-			BinaryNodeWithParent * left = Clone(node->left);
-			if (left != nullptr) {
-				newNode->left = left;
-				left->parent = newNode;
-			}
-			BinaryNodeWithParent * right = Clone(node->right);
-			if (right != nullptr) {
-				newNode->right = right;
-				right->parent = newNode;
-			}
-			return newNode;
+	template<class T> BinaryNodeWithParent<T> * BinaryNodeWithParent<T>::Clone(BinaryNode<T> * node)
+	{
+		if (node == nullptr) return nullptr;
+		BinaryNodeWithParent * newNode = new BinaryNodeWithParent(node->Value());
+		BinaryNodeWithParent * left = Clone(node->Left());
+		if (left != nullptr) {
+			newNode->Left() = left;
+			left->Parent() = newNode;
 		}
+		BinaryNodeWithParent * right = Clone(node->Right());
+		if (right != nullptr) {
+			newNode->Right() = right;
+			right->Parent() = newNode;
+		}
+		return newNode;
+	}
 
-		BinaryNodeWithParent * Clone(void) { return Clone(this); }
-	};
 }

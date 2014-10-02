@@ -59,6 +59,20 @@ namespace Test {
 			return ToWString(s);
 		}
 
+		template<class T> static string ToString(const T & v)
+		{
+			ostringstream ss;
+			ss << v;
+			return ss.str();
+		}
+
+		template<class T> static wstring ToWString(const T & v)
+		{
+			wostringstream ss;
+			ss << v;
+			return ss.str();
+		}
+
 		// Check if string input1 starts with string input2
 		template<class T> __declspec(dllexport) static bool StartsWith(const basic_string<T> & input1, const basic_string<T> & input2)
 		{

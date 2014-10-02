@@ -27,10 +27,10 @@ namespace Test {
 				if (this->current != nullptr) {
 					this->pointer = this->current;
 					path.push(this->current);
-					this->current = (N<T>*)this->current->left;
+					this->current = (N<T>*)this->current->Left();
 					break;
 				} else {
-					this->current = (N<T>*)this->path.top()->right;
+					this->current = (N<T>*)this->path.top()->Right();
 					this->path.pop();
 				}
 			}

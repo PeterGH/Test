@@ -36,6 +36,8 @@ namespace Test {
 			}
 		}
 
+		T Value(void) const { return this->value; }
+
 		T & Value(void) { return this->value; }
 
 		void Value(const T & v) { this->value = v; }

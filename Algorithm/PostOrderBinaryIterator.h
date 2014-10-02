@@ -31,10 +31,10 @@ namespace Test {
 			while (!this->path.empty() || this->current != nullptr) {
 				if (this->current != nullptr) {
 					this->path.push(this->current);
-					this->current = (N<T>*)this->current->left;
+					this->current = (N<T>*)this->current->Left();
 				} else {
-					if (this->path.top()->right != nullptr && this->path.top()->right != this->prev) {
-						this->current = (N<T>*)this->path.top()->right;
+					if (this->path.top()->Right() != nullptr && this->path.top()->Right() != this->prev) {
+						this->current = (N<T>*)this->path.top()->Right();
 					} else {
 						this->pointer = this->path.top();
 						this->path.pop();

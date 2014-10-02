@@ -28,21 +28,21 @@ namespace Test {
 			}
 
 			while (this->current != nullptr) {
-				if (this->prev == this->current->right) {
+				if (this->prev == this->current->Right()) {
 					this->pointer = this->current;
 					this->prev = this->current;
-					this->current = this->current->parent;
+					this->current = this->current->Parent();
 					break;
-				} else if (this->current->left != nullptr && this->prev != this->current->left) {
+				} else if (this->current->Left() != nullptr && this->prev != this->current->Left()) {
 					this->prev = this->current;
-					this->current = (BinaryNodeWithParent<T> *)this->current->left;
+					this->current = (BinaryNodeWithParent<T> *)this->current->Left();
 				} else {
 					this->prev = this->current;
-					if (this->current->right != nullptr) {
-						this->current = (BinaryNodeWithParent<T> *)this->current->right;
+					if (this->current->Right() != nullptr) {
+						this->current = (BinaryNodeWithParent<T> *)this->current->Right();
 					} else {
 						this->pointer = this->current;
-						this->current = this->current->parent;
+						this->current = this->current->Parent();
 						break;
 					}
 				}

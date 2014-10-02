@@ -433,21 +433,21 @@ void MathTest::Init(void)
 		{
 			Test::BinaryNode<unsigned int> n1(1);
 			Test::BinaryNode<unsigned int> n2(2);
-			n1.left = &n2;
+			n1.Left() = &n2;
 			check(&n1, 12);
 		}
 		{
 			Test::BinaryNode<unsigned int> n1(1);
 			Test::BinaryNode<unsigned int> n2(2);
-			n1.right = &n2;
+			n1.Right() = &n2;
 			check(&n1, 12);
 		}
 		{
 			Test::BinaryNode<unsigned int> n1(1);
 			Test::BinaryNode<unsigned int> n2(2);
 			Test::BinaryNode<unsigned int> n3(3);
-			n1.left = &n2;
-			n1.right = &n3;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
 			check(&n1, 25);
 		}
 		{
@@ -455,9 +455,9 @@ void MathTest::Init(void)
 			Test::BinaryNode<unsigned int> n2(2);
 			Test::BinaryNode<unsigned int> n3(3);
 			Test::BinaryNode<unsigned int> n4(4);
-			n1.left = &n2;
-			n1.right = &n3;
-			n2.left = &n4;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
+			n2.Left() = &n4;
 			check(&n1, 137);
 		}
 	});
@@ -470,7 +470,7 @@ void MathTest::Init(void)
 			Logger().WriteInformation("Sum %lld %s %lld\n", sum, sum == expect ? "==" : "!=", expect);
 			Logger().WriteInformation("Path:");
 			for_each (path.begin(), path.end(), [&](Test::BinaryNode<int> * n){
-				Logger().WriteInformation("  %d", n->content);
+				Logger().WriteInformation("  %d", n->Value());
 			});
 			Logger().WriteInformation("\n");
 			ASSERT1(sum == expect);
@@ -487,121 +487,121 @@ void MathTest::Init(void)
 		{
 			Test::BinaryNode<int> n1(1);
 			Test::BinaryNode<int> n2(2);
-			n1.left = &n2;
+			n1.Left() = &n2;
 			check(&n1, 3);
 		}
 		{
 			Test::BinaryNode<int> n1(-1);
 			Test::BinaryNode<int> n2(2);
-			n1.left = &n2;
+			n1.Left() = &n2;
 			check(&n1, 2);
 		}
 		{
 			Test::BinaryNode<int> n1(1);
 			Test::BinaryNode<int> n2(-2);
-			n1.left = &n2;
+			n1.Left() = &n2;
 			check(&n1, 1);
 		}
 		{
 			Test::BinaryNode<int> n1(-1);
 			Test::BinaryNode<int> n2(-2);
-			n1.left = &n2;
+			n1.Left() = &n2;
 			check(&n1, -1);
 		}
 		{
 			Test::BinaryNode<int> n1(1);
 			Test::BinaryNode<int> n2(2);
-			n1.right = &n2;
+			n1.Right() = &n2;
 			check(&n1, 3);
 		}
 		{
 			Test::BinaryNode<int> n1(-1);
 			Test::BinaryNode<int> n2(2);
-			n1.right = &n2;
+			n1.Right() = &n2;
 			check(&n1, 2);
 		}
 		{
 			Test::BinaryNode<int> n1(1);
 			Test::BinaryNode<int> n2(-2);
-			n1.right = &n2;
+			n1.Right() = &n2;
 			check(&n1, 1);
 		}
 		{
 			Test::BinaryNode<int> n1(-1);
 			Test::BinaryNode<int> n2(-2);
-			n1.right = &n2;
+			n1.Right() = &n2;
 			check(&n1, -1);
 		}
 		{
 			Test::BinaryNode<int> n1(1);
 			Test::BinaryNode<int> n2(2);
 			Test::BinaryNode<int> n3(3);
-			n1.left = &n2;
-			n1.right = &n3;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
 			check(&n1, 6);
 		}
 		{
 			Test::BinaryNode<int> n1(-1);
 			Test::BinaryNode<int> n2(2);
 			Test::BinaryNode<int> n3(3);
-			n1.left = &n2;
-			n1.right = &n3;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
 			check(&n1, 4);
 		}
 		{
 			Test::BinaryNode<int> n1(1);
 			Test::BinaryNode<int> n2(-2);
 			Test::BinaryNode<int> n3(3);
-			n1.left = &n2;
-			n1.right = &n3;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
 			check(&n1, 4);
 		}
 		{
 			Test::BinaryNode<int> n1(1);
 			Test::BinaryNode<int> n2(2);
 			Test::BinaryNode<int> n3(-3);
-			n1.left = &n2;
-			n1.right = &n3;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
 			check(&n1, 3);
 		}
 		{
 			Test::BinaryNode<int> n1(-2);
 			Test::BinaryNode<int> n2(2);
 			Test::BinaryNode<int> n3(3);
-			n1.left = &n2;
-			n1.right = &n3;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
 			check(&n1, 3);
 		}
 		{
 			Test::BinaryNode<int> n1(-2);
 			Test::BinaryNode<int> n2(3);
 			Test::BinaryNode<int> n3(2);
-			n1.left = &n2;
-			n1.right = &n3;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
 			check(&n1, 3);
 		}
 		{
 			Test::BinaryNode<int> n1(1);
 			Test::BinaryNode<int> n2(-2);
 			Test::BinaryNode<int> n3(-3);
-			n1.left = &n2;
-			n1.right = &n3;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
 			check(&n1, 1);
 		}
 		{
 			Test::BinaryNode<int> n1(-4);
 			Test::BinaryNode<int> n2(-2);
 			Test::BinaryNode<int> n3(-3);
-			n1.left = &n2;
-			n1.right = &n3;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
 			check(&n1, -2);
 		}
 		{
 			Test::BinaryNode<int> n1(-4);
 			Test::BinaryNode<int> n2(-4);
 			Test::BinaryNode<int> n3(-3);
-			n1.left = &n2;
-			n1.right = &n3;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
 			check(&n1, -3);
 		}
 		{
@@ -609,9 +609,9 @@ void MathTest::Init(void)
 			Test::BinaryNode<int> n2(2);
 			Test::BinaryNode<int> n3(3);
 			Test::BinaryNode<int> n4(4);
-			n1.left = &n2;
-			n1.right = &n3;
-			n2.left = &n4;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
+			n2.Left() = &n4;
 			check(&n1, 10);
 		}
 		{
@@ -619,9 +619,9 @@ void MathTest::Init(void)
 			Test::BinaryNode<int> n2(-2);
 			Test::BinaryNode<int> n3(3);
 			Test::BinaryNode<int> n4(4);
-			n1.left = &n2;
-			n1.right = &n3;
-			n2.left = &n4;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
+			n2.Left() = &n4;
 			check(&n1, 6);
 		}
 		{
@@ -629,9 +629,9 @@ void MathTest::Init(void)
 			Test::BinaryNode<int> n2(-4);
 			Test::BinaryNode<int> n3(3);
 			Test::BinaryNode<int> n4(4);
-			n1.left = &n2;
-			n1.right = &n3;
-			n2.left = &n4;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
+			n2.Left() = &n4;
 			check(&n1, 4);
 		}
 		{
@@ -639,9 +639,9 @@ void MathTest::Init(void)
 			Test::BinaryNode<int> n2(2);
 			Test::BinaryNode<int> n3(3);
 			Test::BinaryNode<int> n4(-4);
-			n1.left = &n2;
-			n1.right = &n3;
-			n2.left = &n4;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
+			n2.Left() = &n4;
 			check(&n1, 6);
 		}
 		{
@@ -650,10 +650,10 @@ void MathTest::Init(void)
 			Test::BinaryNode<int> n3(3);
 			Test::BinaryNode<int> n4(4);
 			Test::BinaryNode<int> n5(3);
-			n1.left = &n2;
-			n1.right = &n3;
-			n2.left = &n4;
-			n2.right = &n5;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
+			n2.Left() = &n4;
+			n2.Right() = &n5;
 			check(&n1, 10);
 		}
 		{
@@ -662,10 +662,10 @@ void MathTest::Init(void)
 			Test::BinaryNode<int> n3(3);
 			Test::BinaryNode<int> n4(4);
 			Test::BinaryNode<int> n5(5);
-			n1.left = &n2;
-			n1.right = &n3;
-			n2.left = &n4;
-			n2.right = &n5;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
+			n2.Left() = &n4;
+			n2.Right() = &n5;
 			check(&n1, 11);
 		}
 		{
@@ -675,11 +675,11 @@ void MathTest::Init(void)
 			Test::BinaryNode<int> n4(4);
 			Test::BinaryNode<int> n5(5);
 			Test::BinaryNode<int> n6(6);
-			n1.left = &n2;
-			n1.right = &n3;
-			n2.left = &n4;
-			n2.right = &n5;
-			n3.left = &n6;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
+			n2.Left() = &n4;
+			n2.Right() = &n5;
+			n3.Left() = &n6;
 			check(&n1, 17);
 		}
 		{
@@ -689,11 +689,11 @@ void MathTest::Init(void)
 			Test::BinaryNode<int> n4(4);
 			Test::BinaryNode<int> n5(5);
 			Test::BinaryNode<int> n6(6);
-			n1.left = &n2;
-			n1.right = &n3;
-			n2.left = &n4;
-			n2.right = &n5;
-			n3.left = &n6;
+			n1.Left() = &n2;
+			n1.Right() = &n3;
+			n2.Left() = &n4;
+			n2.Right() = &n5;
+			n3.Left() = &n6;
 			check(&n1, 11);
 		}
 	});

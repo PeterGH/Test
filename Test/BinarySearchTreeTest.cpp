@@ -111,13 +111,13 @@ void BinarySearchTreeTest::Init(void)
 		cout << "Predecessor of 42: " << v << endl;
 		ASSERT1(v == 35);
 
-		v = tree.Search(3)->content;
+		v = tree.Search(3)->Value();
 		ASSERT1(v == 3);
 
-		v = tree.Search(42)->content;
+		v = tree.Search(42)->Value();
 		ASSERT1(v == 42);
 
-		v = tree.Search(8)->content;
+		v = tree.Search(8)->Value();
 		ASSERT1(v == 8);
 
 		Test::BinaryNodeWithParent<int> * pn = tree.Search(0);
@@ -419,8 +419,8 @@ void BinarySearchTreeTest::Init(void)
 			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(80);
 			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(70);
 			Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(100);
-			n1->left = n2;
-			n2->right = n3;
+			n1->Left() = n2;
+			n2->Right() = n3;
 			Test::BinaryTree<int, Test::BinaryNode> tree;
 			tree.Root(n1);
 			tree.Print();
@@ -430,8 +430,8 @@ void BinarySearchTreeTest::Init(void)
 			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(80);
 			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(80);
 			Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(70);
-			n1->left = n2;
-			n2->right = n3;
+			n1->Left() = n2;
+			n2->Right() = n3;
 			Test::BinaryTree<int, Test::BinaryNode> tree;
 			tree.Root(n1);
 			tree.Print();
@@ -441,8 +441,8 @@ void BinarySearchTreeTest::Init(void)
 			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(80);
 			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(80);
 			Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(70);
-			n1->left = n3;
-			n1->right = n2;
+			n1->Left() = n3;
+			n1->Right() = n2;
 			Test::BinaryTree<int, Test::BinaryNode> tree;
 			tree.Root(n1);
 			tree.Print();
@@ -573,9 +573,9 @@ void BinarySearchTreeTest::Init(void)
 				int c = 0;
 				Logger().WriteInformation("head");
 				do {
-					Logger().WriteInformation(" <=> %d", head->content);
+					Logger().WriteInformation(" <=> %d", head->Value());
 					c++;
-					head = head->right;
+					head = head->Right();
 				} while (head != nullptr);
 				Logger().WriteInformation(" <=> tail\n");
 				return c;
@@ -589,14 +589,14 @@ void BinarySearchTreeTest::Init(void)
 				vector<int>::iterator it = items.begin();
 				Test::BinaryNodeWithParent<int> * p = head;
 				do {
-					ASSERT1(*it == p->content);
+					ASSERT1(*it == p->Value());
 					it++;
-					p = (Test::BinaryNodeWithParent<int> *)p->right;
+					p = (Test::BinaryNodeWithParent<int> *)p->Right();
 				} while (it != items.end() && p != nullptr);
 
 				do {
 					p = head;
-					head = (Test::BinaryNodeWithParent<int> *)head->right;
+					head = (Test::BinaryNodeWithParent<int> *)head->Right();
 					delete p;
 				} while (head != nullptr);
 			}
@@ -666,12 +666,12 @@ void BinarySearchTreeTest::Init(void)
 		Test::BinaryNode<int> * n5 = new Test::BinaryNode<int>(60);
 		Test::BinaryNode<int> * n6 = new Test::BinaryNode<int>(85);
 		Test::BinaryNode<int> * n7 = new Test::BinaryNode<int>(75);
-		n1->left = n2;
-		n1->right = n3;
-		n3->left = n4;
-		n4->left = n5;
-		n5->right = n6;
-		n2->right = n7;
+		n1->Left() = n2;
+		n1->Right() = n3;
+		n3->Left() = n4;
+		n4->Left() = n5;
+		n5->Right() = n6;
+		n2->Right() = n7;
 
 		Test::BinaryTree<int, Test::BinaryNode> tree;
 		tree.Root(n1);
@@ -833,12 +833,12 @@ void BinarySearchTreeTest::Init(void)
 		Test::BinaryNode<int> * n5 = new Test::BinaryNode<int>(60);
 		Test::BinaryNode<int> * n6 = new Test::BinaryNode<int>(85);
 		Test::BinaryNode<int> * n7 = new Test::BinaryNode<int>(75);
-		n1->left = n2;
-		n1->right = n3;
-		n3->left = n4;
-		n4->left = n5;
-		n5->right = n6;
-		n2->right = n7;
+		n1->Left() = n2;
+		n1->Right() = n3;
+		n3->Left() = n4;
+		n4->Left() = n5;
+		n5->Right() = n6;
+		n2->Right() = n7;
 
 		Test::BinaryTree<int, Test::BinaryNode> tree;
 		tree.Root(n1);

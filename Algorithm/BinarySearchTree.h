@@ -20,20 +20,20 @@ namespace Test {
 			BinaryNodeWithParent<T> * current = node;
 			while (current != nullptr) {
 				parent = current;
-				if (newNode->content < current->content) current = (BinaryNodeWithParent<T> *)current->left;
-				else current = (BinaryNodeWithParent<T> *)current->right;
+				if (newNode->Value() < current->Value()) current = (BinaryNodeWithParent<T> *)current->Left();
+				else current = (BinaryNodeWithParent<T> *)current->Right();
 			}
 
-			newNode->parent = parent;
+			newNode->Parent() = parent;
 
 			if (parent == nullptr) {
 				// This means node is NULL, i.e. it is an empty tree.
 				// Return the new node as it is the first node of a tree.
 				return newNode;
-			} else if (newNode->content < parent->content) {
-				parent->left = newNode;
+			} else if (newNode->Value() < parent->Value()) {
+				parent->Left() = newNode;
 			} else {
-				parent->right = newNode;
+				parent->Right() = newNode;
 			}
 
 			return node;
@@ -47,19 +47,19 @@ namespace Test {
 
 		static BinaryNodeWithParent<T> * SearchRecursively(BinaryNodeWithParent<T> * node, const T & content)
 		{
-			if (node == nullptr || node->content == content) return node;
-			if (content < node->content) return SearchRecursively((BinaryNodeWithParent<T> *)node->left, content);
-			else return SearchRecursively((BinaryNodeWithParent<T> *)node->right, content);
+			if (node == nullptr || node->Value() == content) return node;
+			if (content < node->Value()) return SearchRecursively((BinaryNodeWithParent<T> *)node->Left(), content);
+			else return SearchRecursively((BinaryNodeWithParent<T> *)node->Right(), content);
 		}
 
 		static BinaryNodeWithParent<T> * SearchIteratively(BinaryNodeWithParent<T> * node, const T & content)
 		{
-			if (node == nullptr || node->content == content) return node;
-			while (node != nullptr && content != node->content) {
-				if (content < node->content)
-					node = (BinaryNodeWithParent<T> *)node->left;
+			if (node == nullptr || node->Value() == content) return node;
+			while (node != nullptr && content != node->Value()) {
+				if (content < node->Value())
+					node = (BinaryNodeWithParent<T> *)node->Left();
 				else
-					node = (BinaryNodeWithParent<T> *)node->right;
+					node = (BinaryNodeWithParent<T> *)node->Right();
 			}
 
 			return node;
@@ -79,7 +79,7 @@ namespace Test {
 						// Insert failed because the same element already exists
 						return true;
 					}
-					*p = (*p)->parent;
+					*p = (*p)->Parent();
 				}
 				return false;
 			};
@@ -108,13 +108,13 @@ namespace Test {
 			BinaryNodeWithParent<T> * h = df < ds ? first : second;
 			BinaryNodeWithParent<T> * l = df < ds ? second : first;
 			for (int i = 0; i < dd; i++) {
-				l = l->parent;
+				l = l->Parent();
 			}
 
 			while (h != nullptr && l != nullptr) {
 				if (h == l) return h;
-				h = h->parent;
-				l = l->parent;
+				h = h->Parent();
+				l = l->Parent();
 			}
 
 			return nullptr;
@@ -125,10 +125,10 @@ namespace Test {
 			if (node == nullptr) return nullptr;
 
 			while (node != nullptr) {
-				if (node->content > std::max(first, second))
-					node = (BinaryNodeWithParent<T> *)node->left;
-				else if (node->content < std::min(first, second))
-					node = (BinaryNodeWithParent<T> *)node->right;
+				if (node->Value() > std::max(first, second))
+					node = (BinaryNodeWithParent<T> *)node->Left();
+				else if (node->Value() < std::min(first, second))
+					node = (BinaryNodeWithParent<T> *)node->Right();
 				else
 					break;
 			}
@@ -139,14 +139,14 @@ namespace Test {
 		static BinaryNodeWithParent<T> * Min(BinaryNodeWithParent<T> * node)
 		{
 			if (node == nullptr) return node;
-			while (node->left != nullptr) node = (BinaryNodeWithParent<T> *)node->left;
+			while (node->Left() != nullptr) node = (BinaryNodeWithParent<T> *)node->Left();
 			return node;
 		}
 
 		static BinaryNodeWithParent<T> * Max(BinaryNodeWithParent<T> * node)
 		{
 			if (node == nullptr) return node;
-			while (node->right != nullptr) node = (BinaryNodeWithParent<T> *)node->right;
+			while (node->Right() != nullptr) node = (BinaryNodeWithParent<T> *)node->Right();
 			return node;
 		}
 
@@ -158,7 +158,7 @@ namespace Test {
 			//  / \
 			// () (B)
 			// The successor of A is the minimum node of subtree B
-			if (node->right != nullptr) return Min((BinaryNodeWithParent<T> *)node->right);
+			if (node->Right() != nullptr) return Min((BinaryNodeWithParent<T> *)node->Right());
 
 			//    (B)
 			//   /
@@ -170,10 +170,10 @@ namespace Test {
 			//      / \
 			//     () NULL
 			// The successor of A is the lowest ancestor B whose left child C contains A in its right substree
-			BinaryNodeWithParent<T> * parent = node->parent;
-			while (parent != nullptr && node == parent->right) {
+			BinaryNodeWithParent<T> * parent = node->Parent();
+			while (parent != nullptr && node == parent->Right()) {
 				node = parent;
-				parent = parent->parent;
+				parent = parent->Parent();
 			}
 
 			// parent could be NULL if node is the maximum node of tree, i.e.,
@@ -200,7 +200,7 @@ namespace Test {
 			//   /
 			// (B)
 			// The predecessor of A is the maximum node of subtree B
-			if (node->left != nullptr) return Max((BinaryNodeWithParent<T> *)node->left);
+			if (node->Left() != nullptr) return Max((BinaryNodeWithParent<T> *)node->Left());
 
 			//     (B)
 			//       \
@@ -212,10 +212,10 @@ namespace Test {
 			//   / \
 			// NULL ()
 			// The predecessor of A is the lowest ancestor B whose right child C contains A in its left substree
-			BinaryNodeWithParent<T> * parent = node->parent;
-			while (parent != nullptr && node == parent->left) {
+			BinaryNodeWithParent<T> * parent = node->Parent();
+			while (parent != nullptr && node == parent->Left()) {
 				node = parent;
-				parent = parent->parent;
+				parent = parent->Parent();
 			}
 
 			// parent could be NULL if node is the minimum node of tree, i.e.,
@@ -239,18 +239,18 @@ namespace Test {
 		{
 			if (dst == nullptr) return dst;
 
-			if (dst->parent == nullptr) {
+			if (dst->Parent() == nullptr) {
 				// src becomes the new root
-				if (src != nullptr) src->parent = nullptr;
+				if (src != nullptr) src->Parent() = nullptr;
 				return dst;
 			}
 
-			if (dst == dst->parent->left)
-				dst->parent->left = src;
+			if (dst == dst->Parent()->Left())
+				dst->Parent()->Left() = src;
 			else
-				dst->parent->right = src;
+				dst->Parent()->Right() = src;
 
-			if (src != nullptr) src->parent = dst->parent;
+			if (src != nullptr) src->Parent() = dst->Parent();
 
 			return dst;
 		}
@@ -260,19 +260,19 @@ namespace Test {
 		{
 			if (node == nullptr || *node == nullptr) return;
 
-			if ((*node)->left == nullptr) {
+			if ((*node)->Left() == nullptr) {
 				//   ()
 				//    |
 				//   (A)
 				//   /  \
 				// NULL (B)
-				BinaryNodeWithParent<T> * r = (BinaryNodeWithParent<T> *)(*node)->right;
+				BinaryNodeWithParent<T> * r = (BinaryNodeWithParent<T> *)(*node)->Right();
 				Transplant((*node), r);
 
-				(*node)->right = nullptr;
+				(*node)->Right() = nullptr;
 				delete (*node);
 				*node = nullptr;
-				if (r != nullptr && r->parent == nullptr) {
+				if (r != nullptr && r->Parent() == nullptr) {
 					// r is the new root
 					*node = r;
 				}
@@ -280,19 +280,19 @@ namespace Test {
 				return;
 			}
 
-			if ((*node)->right == nullptr) {
+			if ((*node)->Right() == nullptr) {
 				//   ()
 				//    |
 				//   (A)
 				//   /  \
 				// (B) NULL
-				BinaryNodeWithParent<T> * l = (BinaryNodeWithParent<T> *)(*node)->left;
+				BinaryNodeWithParent<T> * l = (BinaryNodeWithParent<T> *)(*node)->Left();
 				Transplant((*node), l);
 
-				(*node)->left = nullptr;
+				(*node)->Left() = nullptr;
 				delete (*node);
 				*node = nullptr;
-				if (l != nullptr && l->parent == nullptr) {
+				if (l != nullptr && l->Parent() == nullptr) {
 					// l is the new root
 					*node = l;
 				}
@@ -300,9 +300,9 @@ namespace Test {
 				return;
 			}
 
-			BinaryNodeWithParent<T> * successor = Min((BinaryNodeWithParent<T> *)(*node)->right);
+			BinaryNodeWithParent<T> * successor = Min((BinaryNodeWithParent<T> *)(*node)->Right());
 
-			if (successor->parent != (*node)) {
+			if (successor->Parent() != (*node)) {
 				//     ()
 				//     |
 				//    (A)
@@ -314,7 +314,7 @@ namespace Test {
 				//      (B)
 				//      / \
 				//    NULL (C)
-				Transplant(successor, (BinaryNodeWithParent<T> *)successor->right);
+				Transplant(successor, (BinaryNodeWithParent<T> *)successor->Right());
 				//     ()
 				//     |
 				//    (A)
@@ -324,8 +324,8 @@ namespace Test {
 				//         ()
 				//        /
 				//      (C)           (B)
-				successor->right = (*node)->right;
-				((BinaryNodeWithParent<T> *)successor->right)->parent = successor;
+				successor->Right() = (*node)->Right();
+				((BinaryNodeWithParent<T> *)successor->Right())->Parent() = successor;
 				//     ()
 				//     |
 				//    (A)
@@ -341,15 +341,15 @@ namespace Test {
 			}
 
 			Transplant((*node), successor);
-			successor->left = (*node)->left;
-			((BinaryNodeWithParent<T> *)successor->left)->parent = successor;
+			successor->Left() = (*node)->Left();
+			((BinaryNodeWithParent<T> *)successor->Left())->Parent() = successor;
 
-			(*node)->left = nullptr;
-			(*node)->right = nullptr;
+			(*node)->Left() = nullptr;
+			(*node)->Right() = nullptr;
 			delete (*node);
 			*node = nullptr;
 
-			if (successor->parent == nullptr) {
+			if (successor->Parent() == nullptr) {
 				// successor is the new root
 				*node = successor;
 			}
@@ -382,7 +382,7 @@ namespace Test {
 		{
 			if (this->root == nullptr) {
 				this->root = new BinaryNodeWithParent<T>(content);
-				this->root->parent = nullptr;
+				this->root->Parent() = nullptr;
 			} else {
 				Insert(this->root, content);
 			}
@@ -401,7 +401,7 @@ namespace Test {
 			if (node == nullptr) {
 				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
 			}
-			return node->content;
+			return node->Value();
 		}
 
 		virtual const T & LowestCommonAncestor2(const T & first, const T & second)
@@ -412,7 +412,7 @@ namespace Test {
 			if (node == nullptr) {
 				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
 			}
-			return node->content;
+			return node->Value();
 		}
 
 		virtual const T & LowestCommonAncestor3(const T & first, const T & second)
@@ -421,18 +421,18 @@ namespace Test {
 			if (node == nullptr) {
 				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
 			}
-			return node->content;
+			return node->Value();
 		}
 
 		T & Min(void)
 		{
-			if (this->root != nullptr) return Min(this->root)->content;
+			if (this->root != nullptr) return Min(this->root)->Value();
 			else throw runtime_error("Tree is empty");
 		}
 
 		T & Max(void)
 		{
-			if (this->root != nullptr) return Max(this->root)->content;
+			if (this->root != nullptr) return Max(this->root)->Value();
 			else throw runtime_error("Tree is empty");
 		}
 
@@ -440,7 +440,7 @@ namespace Test {
 		{
 			if (this->root != nullptr) {
 				BinaryNodeWithParent<T> * p = SearchIteratively(this->root, content);
-				if (p != nullptr && ((p = Successor(p)) != nullptr)) return p->content;
+				if (p != nullptr && ((p = Successor(p)) != nullptr)) return p->Value();
 			}
 
 			throw runtime_error("No successor is found");
@@ -450,7 +450,7 @@ namespace Test {
 		{
 			if (this->root != nullptr) {
 				BinaryNodeWithParent<T> * p = SearchIteratively(this->root, content);
-				if (p != nullptr && ((p = Predecessor(p)) != nullptr)) return p->content;
+				if (p != nullptr && ((p = Predecessor(p)) != nullptr)) return p->Value();
 			}
 
 			throw runtime_error("No successor is found");
@@ -471,14 +471,14 @@ namespace Test {
 		static bool Verify(BinaryNode<T> * node)
 		{
 			if (node == nullptr) return true;
-			T min = BinaryTree<T, BinaryNode>::Min(node)->content;
-			T max = BinaryTree<T, BinaryNode>::Max(node)->content;
+			T min = BinaryTree<T, BinaryNode>::Min(node)->Value();
+			T max = BinaryTree<T, BinaryNode>::Max(node)->Value();
 			function<bool(BinaryNode<T> *, T, T)> verify = [&](BinaryNode<T> * c, T l, T h) -> bool {
 				if (c == nullptr) return true;
-				if (c->content < l || c->content > h) return false;
-				if (c->left != nullptr && c->left->content >= c->content) return false;
-				if (c->right != nullptr && c->right->content < c->content) return false;
-				return verify(c->left, l, c->content) && verify(c->right, c->content, h);
+				if (c->Value() < l || c->Value() > h) return false;
+				if (c->Left() != nullptr && c->Left()->Value() >= c->Value()) return false;
+				if (c->Right() != nullptr && c->Right()->Value() < c->Value()) return false;
+				return verify(c->Left(), l, c->Value()) && verify(c->Right(), c->Value(), h);
 			};
 
 			return verify(node, min, max);
@@ -510,9 +510,9 @@ namespace Test {
 				firstNodeLessThanOrEqual = [&](BinaryNodeWithParent<T> * n, T v) -> BinaryNodeWithParent<T> * {
 				BinaryNodeWithParent<T> * p = n;
 				while (p != nullptr) {
-					if (p->content <= v) return p;
-					if (p->left != nullptr) p = (BinaryNodeWithParent<T> *)p->left;
-					else p = (BinaryNodeWithParent<T> *)p->right;
+					if (p->Value() <= v) return p;
+					if (p->Left() != nullptr) p = (BinaryNodeWithParent<T> *)p->Left();
+					else p = (BinaryNodeWithParent<T> *)p->Right();
 				}
 				return p;
 			};
@@ -521,9 +521,9 @@ namespace Test {
 				firstNodeGreaterThan = [&](BinaryNodeWithParent<T> * n, T v) -> BinaryNodeWithParent<T> * {
 				BinaryNodeWithParent<T> * p = n;
 				while (p != nullptr) {
-					if (p->content > v) return p;
-					if (p->right != nullptr) p = (BinaryNodeWithParent<T> *)p->right;
-					else p = (BinaryNodeWithParent<T> *)p->left;
+					if (p->Value() > v) return p;
+					if (p->Right() != nullptr) p = (BinaryNodeWithParent<T> *)p->Right();
+					else p = (BinaryNodeWithParent<T> *)p->Left();
 				}
 				return p;
 			};
@@ -531,14 +531,14 @@ namespace Test {
 			function<void(BinaryNodeWithParent<T> * &, int &, BinaryNodeWithParent<T> *, int)>
 				mergeLeft = [&](BinaryNodeWithParent<T> * & node, int & count, BinaryNodeWithParent<T> * left, int leftCount) {
 				BinaryNodeWithParent<T> * clone = left->Clone();
-				BinaryNodeWithParent<T> * invalid = firstNodeGreaterThan(clone, node->content);
+				BinaryNodeWithParent<T> * invalid = firstNodeGreaterThan(clone, node->Value());
 				int invalidSize = invalid == nullptr ? 0 : invalid->Size();
-				node->left = clone;
-				clone->parent = node;
+				node->Left() = clone;
+				clone->Parent() = node;
 				count += (leftCount - invalidSize);
 				if (invalid != nullptr) {
-					BinaryNodeWithParent<T> * p = invalid->parent;
-					p->right = nullptr;
+					BinaryNodeWithParent<T> * p = invalid->Parent();
+					p->Right() = nullptr;
 					deleteTree(invalid);
 				}
 			};
@@ -546,21 +546,21 @@ namespace Test {
 			function<void(BinaryNodeWithParent<T> * &, int &, BinaryNodeWithParent<T> *, int)>
 				mergeRight = [&](BinaryNodeWithParent<T> * & node, int & count, BinaryNodeWithParent<T> * right, int rightCount) {
 				BinaryNodeWithParent<T> * clone = right->Clone();
-				BinaryNodeWithParent<T> * invalid = firstNodeLessThanOrEqual(clone, node->content);
+				BinaryNodeWithParent<T> * invalid = firstNodeLessThanOrEqual(clone, node->Value());
 				int invalidSize = invalid == nullptr ? 0 : invalid->Size();
-				node->right = clone;
-				clone->parent = node;
+				node->Right() = clone;
+				clone->Parent() = node;
 				count += (rightCount - invalidSize);
 				if (invalid != nullptr) {
-					BinaryNodeWithParent<T> * p = invalid->parent;
-					p->left = nullptr;
+					BinaryNodeWithParent<T> * p = invalid->Parent();
+					p->Left() = nullptr;
 					deleteTree(invalid);
 				}
 			};
 
-			function<void(const BinaryNode<T> *, BinaryNodeWithParent<T> * &, int &, BinaryNodeWithParent<T> * &, int &)>
+			function<void(BinaryNode<T> *, BinaryNodeWithParent<T> * &, int &, BinaryNodeWithParent<T> * &, int &)>
 				search = [&](
-				const BinaryNode<T> * node,          // current node from input binary tree
+				BinaryNode<T> * node,          // current node from input binary tree
 				BinaryNodeWithParent<T> * & current, // root of current search tree
 				int & currentCount,                  // node count of current search tree
 				BinaryNodeWithParent<T> * & last,    // root of last max search tree. can be current or different.
@@ -579,22 +579,22 @@ namespace Test {
 				int leftCount;
 				BinaryNodeWithParent<T> * leftLast;
 				int leftLastCount;
-				search(node->left, left, leftCount, leftLast, leftLastCount);
+				search(node->Left(), left, leftCount, leftLast, leftLastCount);
 
 				BinaryNodeWithParent<T> * right;
 				int rightCount;
 				BinaryNodeWithParent<T> * rightLast;
 				int rightLastCount;
-				search(node->right, right, rightCount, rightLast, rightLastCount);
+				search(node->Right(), right, rightCount, rightLast, rightLastCount);
 
-				current = new BinaryNodeWithParent<T>(node->content);
+				current = new BinaryNodeWithParent<T>(node->Value());
 				currentCount = 1;
 
-				if (left != nullptr && left->content <= current->content) {
+				if (left != nullptr && left->Value() <= current->Value()) {
 					mergeLeft(current, currentCount, left, leftCount);
 				}
 
-				if (right != nullptr && right->content > current->content) {
+				if (right != nullptr && right->Value() > current->Value()) {
 					mergeRight(current, currentCount, right, rightCount);
 				}
 
@@ -612,9 +612,9 @@ namespace Test {
 				}
 
 #ifdef DEBUG
-				cout << node->content << " current count " << currentCount << endl;
+				cout << node->Value() << " current count " << currentCount << endl;
 				current->Print();
-				cout << node->content << " last count " << lastCount << endl;
+				cout << node->Value() << " last count " << lastCount << endl;
 				last->Print();
 #endif
 
@@ -665,9 +665,9 @@ namespace Test {
 			T binaryTreeMin = binaryTree->Min();
 			T binaryTreeMax = binaryTree->Max();
 
-			function<void(const BinaryNode<T> *, T, T, BinaryNodeWithParent<T> * &, int &, BinaryNodeWithParent<T> * &, int &)>
+			function<void(BinaryNode<T> *, T, T, BinaryNodeWithParent<T> * &, int &, BinaryNodeWithParent<T> * &, int &)>
 				search = [&](
-				const BinaryNode<T> * node,          // current node from input binary tree
+				BinaryNode<T> * node,          // current node from input binary tree
 				T min,                               // lower bound of node value
 				T max,                               // upper bound of node value
 				BinaryNodeWithParent<T> * & current, // root of current search tree
@@ -684,31 +684,31 @@ namespace Test {
 					return;
 				}
 
-				if (min < node->content && node->content <= max) {
+				if (min < node->Value() && node->Value() <= max) {
 					BinaryNodeWithParent<T> * left;
 					int leftCount;
 					BinaryNodeWithParent<T> * leftLast;
 					int leftLastCount;
-					search(node->left, min, node->content, left, leftCount, leftLast, leftLastCount);
+					search(node->Left(), min, node->Value(), left, leftCount, leftLast, leftLastCount);
 
 					BinaryNodeWithParent<T> * right;
 					int rightCount;
 					BinaryNodeWithParent<T> * rightLast;
 					int rightLastCount;
-					search(node->right, node->content, max, right, rightCount, rightLast, rightLastCount);
+					search(node->Right(), node->Value(), max, right, rightCount, rightLast, rightLastCount);
 
-					current = new BinaryNodeWithParent<T>(node->content);
+					current = new BinaryNodeWithParent<T>(node->Value());
 					currentCount = 1;
 
 					if (left != nullptr) {
-						current->left = left;
-						left->parent = current;
+						current->Left() = left;
+						left->Parent() = current;
 						currentCount += leftCount;
 					}
 
 					if (right != nullptr) {
-						current->right = right;
-						right->parent = current;
+						current->Right() = right;
+						right->Parent() = current;
 						currentCount += rightCount;
 					}
 
@@ -725,11 +725,11 @@ namespace Test {
 						lastCount = currentCount;
 					}
 
-					if (left != current->left && left != last) {
+					if (left != current->Left() && left != last) {
 						deleteTree(left);
 					}
 
-					if (right != current->right && right != last) {
+					if (right != current->Right() && right != last) {
 						deleteTree(right);
 					}
 
@@ -775,9 +775,9 @@ namespace Test {
 				delete node;
 			};
 
-			function<void(const BinaryNode<T> *, BinaryNodeWithParent<T> * &, int &, T &, T &, BinaryNodeWithParent<T> * &, int &, T &, T &)>
+			function<void(BinaryNode<T> *, BinaryNodeWithParent<T> * &, int &, T &, T &, BinaryNodeWithParent<T> * &, int &, T &, T &)>
 				search = [&](
-				const BinaryNode<T> * node,          // current node from input binary tree
+				BinaryNode<T> * node,          // current node from input binary tree
 				BinaryNodeWithParent<T> * & current, // root of current search tree
 				int & currentCount,                  // node count of current search tree
 				T & currentMin,                      // min of current search tree
@@ -804,7 +804,7 @@ namespace Test {
 				int leftLastCount;
 				T leftLastMin;
 				T leftLastMax;
-				search(node->left, left, leftCount, leftMin, leftMax, leftLast, leftLastCount, leftLastMin, leftLastMax);
+				search(node->Left(), left, leftCount, leftMin, leftMax, leftLast, leftLastCount, leftLastMin, leftLastMax);
 
 				BinaryNodeWithParent<T> * right;
 				int rightCount;
@@ -814,30 +814,30 @@ namespace Test {
 				int rightLastCount;
 				T rightLastMin;
 				T rightLastMax;
-				search(node->right, right, rightCount, rightMin, rightMax, rightLast, rightLastCount, rightLastMin, rightLastMax);
+				search(node->Right(), right, rightCount, rightMin, rightMax, rightLast, rightLastCount, rightLastMin, rightLastMax);
 
-				current = new BinaryNodeWithParent<T>(node->content);
+				current = new BinaryNodeWithParent<T>(node->Value());
 				currentCount = 1;
-				currentMin = node->content;
-				currentMax = node->content;
+				currentMin = node->Value();
+				currentMax = node->Value();
 
-				if (left != nullptr && leftMax <= node->content) {
-					current->left = left;
-					left->parent = current;
+				if (left != nullptr && leftMax <= node->Value()) {
+					current->Left() = left;
+					left->Parent() = current;
 					currentCount += leftCount;
 					currentMin = leftMin;
 				} else {
-					// When leftMax > node->content, it is possible part
+					// When leftMax > node->Value(), it is possible part
 					// of left tree and node can form a valid search tree.
 				}
 
-				if (right != nullptr && node->content < rightMin) {
-					current->right = right;
-					right->parent = current;
+				if (right != nullptr && node->Value() < rightMin) {
+					current->Right() = right;
+					right->Parent() = current;
 					currentCount += rightCount;
 					currentMax = rightMax;
 				} else {
-					// When node->content >= rightMin, it is possible part
+					// When node->Value() >= rightMin, it is possible part
 					// of right tree and node can form a valid search tree.
 				}
 
@@ -861,17 +861,17 @@ namespace Test {
 				}
 
 #ifdef DEBUG
-				cout << node->content << " current" << endl;
+				cout << node->Value() << " current" << endl;
 				current->Print();
-				cout << node->content << " last" << endl;
+				cout << node->Value() << " last" << endl;
 				last->Print();
 #endif
 
-				if (left != current->left && left != last) {
+				if (left != current->Left() && left != last) {
 					deleteTree(left);
 				}
 
-				if (right != current->right && right != last) {
+				if (right != current->Right() && right != last) {
 					deleteTree(right);
 				}
 
@@ -930,30 +930,30 @@ namespace Test {
 					return;
 				}
 
-				BinaryNode<T> * leftChild = node->left;
+				BinaryNode<T> * leftChild = node->Left();
 				BinaryNodeWithParent<T> * left;
 				int leftCount;
 				T leftMin;
 				T leftMax;
 				search(leftChild, left, leftCount, leftMin, leftMax);
 
-				BinaryNode<T> * rightChild = node->right;
+				BinaryNode<T> * rightChild = node->Right();
 				BinaryNodeWithParent<T> * right;
 				int rightCount;
 				T rightMin;
 				T rightMax;
 				search(rightChild, right, rightCount, rightMin, rightMax);
 
-				if ((left == nullptr || (leftChild == node->left && leftMax <= node->content))
-					&& (right == nullptr || (rightChild == node->right && rightMin > node->content))) {
-					current = new BinaryNodeWithParent<T>(node->content);
-					current->left = left;
-					if (left != nullptr) left->parent = current;
-					current->right = right;
-					if (right != nullptr) right->parent = current;
+				if ((left == nullptr || (leftChild == node->Left() && leftMax <= node->Value()))
+					&& (right == nullptr || (rightChild == node->Right() && rightMin > node->Value()))) {
+					current = new BinaryNodeWithParent<T>(node->Value());
+					current->Left() = left;
+					if (left != nullptr) left->Parent() = current;
+					current->Right() = right;
+					if (right != nullptr) right->Parent() = current;
 					currentCount = 1 + leftCount + rightCount;
-					currentMin = left == nullptr ? node->content : leftMin;
-					currentMax = right == nullptr ? node->content : rightMax;
+					currentMin = left == nullptr ? node->Value() : leftMin;
+					currentMax = right == nullptr ? node->Value() : rightMax;
 				} else {
 					if (leftCount >= rightCount) {
 						node = leftChild;
@@ -997,8 +997,8 @@ namespace Test {
 			function<bool(BinaryNode<T> *, T &, T &, int &)> isSearchTree = [&](BinaryNode<T> * node, T & min, T & max, int & count) -> bool {
 				count = 0;
 				if (node == nullptr) return true;
-				min = node->content;
-				max = node->content;
+				min = node->Value();
+				max = node->Value();
 				if (subtrees.find(node) != subtrees.end()) {
 					count = subtrees[node];
 					return true;
@@ -1007,22 +1007,22 @@ namespace Test {
 				T leftMin;
 				T leftMax;
 				int leftCount;
-				bool leftTrue = isSearchTree(node->left, leftMin, leftMax, leftCount);
+				bool leftTrue = isSearchTree(node->Left(), leftMin, leftMax, leftCount);
 
 				T rightMin;
 				T rightMax;
 				int rightCount;
-				bool rightTrue = isSearchTree(node->right, rightMin, rightMax, rightCount);
+				bool rightTrue = isSearchTree(node->Right(), rightMin, rightMax, rightCount);
 
 				if (!leftTrue
 					|| !rightTrue
-					|| (node->left != nullptr && leftMax > node->content)
-					|| (node->right != nullptr && rightMin <= node->content)) {
+					|| (node->Left() != nullptr && leftMax > node->Value())
+					|| (node->Right() != nullptr && rightMin <= node->Value())) {
 					return false;
 				}
 
-				min = node->left == nullptr ? node->content : leftMin;
-				max = node->right == nullptr ? node->content : rightMax;
+				min = node->Left() == nullptr ? node->Value() : leftMin;
+				max = node->Right() == nullptr ? node->Value() : rightMax;
 				count += (1 + leftCount + rightCount);
 				subtrees[node] = count;
 
@@ -1051,11 +1051,11 @@ namespace Test {
 
 				BinaryNodeWithParent<T> * left;
 				int leftCount;
-				search(node->left, left, leftCount);
+				search(node->Left(), left, leftCount);
 
 				BinaryNodeWithParent<T> * right;
 				int rightCount;
-				search(node->right, right, rightCount);
+				search(node->Right(), right, rightCount);
 
 				if (leftCount >= rightCount) {
 					current = left;
@@ -1111,8 +1111,8 @@ namespace Test {
 					node = new BinaryNodeWithParent<T>(v);
 					input >> value;
 					if (input.good() && !input.eof()) {
-						deserialize(l, v, value, (BinaryNodeWithParent<T> * &)node->left);
-						deserialize(v, h, value, (BinaryNodeWithParent<T> * &)node->right);
+						deserialize(l, v, value, (BinaryNodeWithParent<T> * &)node->Left());
+						deserialize(v, h, value, (BinaryNodeWithParent<T> * &)node->Right());
 					}
 				}
 			};

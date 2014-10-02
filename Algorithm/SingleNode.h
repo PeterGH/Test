@@ -13,7 +13,7 @@ namespace Test {
 		// Delete the first node with value v
 		void Delete(const T & v);
 
-		// Delete the first node with value v
+		// Delete the first node with value v. This list may contain a cycle or not.
 		static SingleNode * Delete(SingleNode * list, const T & v);
 
 		// Delete the list rooted at the node. This list may contain a cycle or not.

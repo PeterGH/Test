@@ -13,7 +13,7 @@ void BinaryTreeTest::Init(void)
 
 		int v;
 		for (int i = 0; i < 20; i++) {
-			v = tree.Search(i)->content;
+			v = tree.Search(i)->Value();
 			ASSERT1(v == i);
 		}
 
@@ -61,7 +61,7 @@ void BinaryTreeTest::Init(void)
 
 		int v;
 		for (int i = 0; i < 20; i++) {
-			v = tree.Search(i)->content;
+			v = tree.Search(i)->Value();
 			ASSERT1(v == i);
 		}
 
@@ -681,9 +681,9 @@ void BinaryTreeTest::Init(void)
 				int c = 0;
 				Logger().WriteInformation("head");
 				do {
-					Logger().WriteInformation(" <=> %d", head->content);
+					Logger().WriteInformation(" <=> %d", head->Value());
 					c++;
-					head = head->right;
+					head = head->Right();
 				} while (head != nullptr);
 				Logger().WriteInformation(" <=> tail\n");
 				return c;
@@ -698,16 +698,16 @@ void BinaryTreeTest::Init(void)
 				Test::BinaryNode<int> * p = head;
 				Test::BinaryNodeWithParent<int> * p2 = head2;
 				do {
-					ASSERT1(p->content == p2->content);
-					p = p->right;
-					p2 = (Test::BinaryNodeWithParent<int> *)p2->right;
+					ASSERT1(p->Value() == p2->Value());
+					p = p->Right();
+					p2 = (Test::BinaryNodeWithParent<int> *)p2->Right();
 				} while (p != nullptr && p2 != nullptr);
 
 				do {
 					p = head;
 					p2 = head2;
-					head = head->right;
-					head2 = (Test::BinaryNodeWithParent<int> *)head2->right;
+					head = head->Right();
+					head2 = (Test::BinaryNodeWithParent<int> *)head2->Right();
 					delete p;
 					delete p2;
 				} while (head != nullptr && head2 != nullptr);
@@ -750,9 +750,9 @@ void BinaryTreeTest::Init(void)
 				int c = 0;
 				Logger().WriteInformation("head");
 				do {
-					Logger().WriteInformation(" <=> %d", n->content);
+					Logger().WriteInformation(" <=> %d", n->Value());
 					c++;
-					n = n->right;
+					n = n->Right();
 				} while (n != nullptr);
 				Logger().WriteInformation(" <=> tail\n");
 				return c;
@@ -765,14 +765,14 @@ void BinaryTreeTest::Init(void)
 				Test::BinaryNode<int> * p = head;
 				int i = 0;
 				do {
-					ASSERT1(p->content == v[i]);
-					p = p->right;
+					ASSERT1(p->Value() == v[i]);
+					p = p->Right();
 					i++;
 				} while (p != nullptr && i < c);
 
 				do {
 					p = head;
-					head = head->right;
+					head = head->Right();
 					delete p;
 				} while (head != nullptr);
 			}
@@ -814,9 +814,9 @@ void BinaryTreeTest::Init(void)
 				int c = 0;
 				Logger().WriteInformation("head");
 				do {
-					Logger().WriteInformation(" <=> %d", n->content);
+					Logger().WriteInformation(" <=> %d", n->Value());
 					c++;
-					n = n->right;
+					n = n->Right();
 				} while (n != nullptr);
 				Logger().WriteInformation(" <=> tail\n");
 				return c;
@@ -829,14 +829,14 @@ void BinaryTreeTest::Init(void)
 				Test::BinaryNode<int> * p = head;
 				int i = 0;
 				do {
-					ASSERT1(p->content == v[i]);
-					p = p->right;
+					ASSERT1(p->Value() == v[i]);
+					p = p->Right();
 					i++;
 				} while (p != nullptr && i < c);
 
 				do {
 					p = head;
-					head = head->right;
+					head = head->Right();
 					delete p;
 				} while (head != nullptr);
 			}
@@ -870,9 +870,9 @@ void BinaryTreeTest::Init(void)
 				int c = 0;
 				Logger().WriteInformation("head");
 				do {
-					Logger().WriteInformation(" <=> %d", n->content);
+					Logger().WriteInformation(" <=> %d", n->Value());
 					c++;
-					n = n->right;
+					n = n->Right();
 				} while (n != nullptr);
 				Logger().WriteInformation(" <=> tail\n");
 				return c;
@@ -883,14 +883,14 @@ void BinaryTreeTest::Init(void)
 				Test::BinaryNode<int> * p = node;
 				int i = 0;
 				do {
-					ASSERT1(p->content == v[i]);
-					p = p->right;
+					ASSERT1(p->Value() == v[i]);
+					p = p->Right();
 					i++;
 				} while (p != nullptr && i < c);
 
 				do {
 					p = node;
-					node = node->right;
+					node = node->Right();
 					delete p;
 				} while (node != nullptr);
 			}
@@ -898,13 +898,13 @@ void BinaryTreeTest::Init(void)
 		{
 			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
 			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(2);
-			n1->left = n2;
+			n1->Left() = n2;
 			check(n1);
 		}
 		{
 			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
 			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(2);
-			n1->right = n2;
+			n1->Right() = n2;
 			check(n1);
 		}
 	});
@@ -1014,22 +1014,22 @@ void BinaryTreeTest::Init(void)
 		Test::BinaryNode<int> * n14 = new Test::BinaryNode<int>(14);
 		Test::BinaryNode<int> * n15 = new Test::BinaryNode<int>(15);
 		Test::BinaryNode<int> * n16 = new Test::BinaryNode<int>(16);
-		n0->left = n1;
-		n0->right = n9;
-		n1->right = n2;
-		n2->left = n3;
-		n2->right = n5;
-		n3->right = n4;
-		n5->left = n6;
-		n5->right = n8;
-		n6->left = n7;
-		n9->left = n10;
-		n10->left = n11;
-		n10->right = n15;
-		n11->left = n12;
-		n11->right = n13;
-		n13->right = n14;
-		n15->left = n16;
+		n0->Left() = n1;
+		n0->Right() = n9;
+		n1->Right() = n2;
+		n2->Left() = n3;
+		n2->Right() = n5;
+		n3->Right() = n4;
+		n5->Left() = n6;
+		n5->Right() = n8;
+		n6->Left() = n7;
+		n9->Left() = n10;
+		n10->Left() = n11;
+		n10->Right() = n15;
+		n11->Left() = n12;
+		n11->Right() = n13;
+		n13->Right() = n14;
+		n15->Left() = n16;
 
 		Test::BinaryTree<int, Test::BinaryNode> tree;
 		tree.Root(n0);
@@ -1426,21 +1426,18 @@ void BinaryTreeTest::Init(void)
 		auto check = [&](Test::BinaryNode<int> * node){
 			bool b = node->IsBalanced();
 			bool b2 = node->IsBalanced2();
-			bool b3 = node->IsBalanced3();
 			Logger().WriteInformation("Is%sbalanced\n", b ? " " : " not ");
 			Logger().WriteInformation("Is%sbalanced\n", b2 ? " " : " not ");
-			Logger().WriteInformation("Is%sbalanced\n", b3 ? " " : " not ");
 			node->DeleteTree();
 			delete node;
 			ASSERT1(b == b2);
-			ASSERT1(b == b3);
 		};
 		{
 			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
 			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(2);
 			Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(3);
-			n1->right = n2;
-			n2->right = n3;
+			n1->Right() = n2;
+			n2->Right() = n3;
 			n1->Print2();
 			check(n1);
 		}
@@ -1472,32 +1469,32 @@ void BinaryTreeTest::Init(void)
 			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
 			Test::BinaryNode<int> * n21 = new Test::BinaryNode<int>(2);
 			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(2);
-			n1->left = n21;
-			n1->right = n22;
+			n1->Left() = n21;
+			n1->Right() = n22;
 			Test::BinaryNode<int> * n31 = new Test::BinaryNode<int>(3);
 			Test::BinaryNode<int> * n32 = new Test::BinaryNode<int>(3);
 			Test::BinaryNode<int> * n33 = new Test::BinaryNode<int>(3);
 			Test::BinaryNode<int> * n34 = new Test::BinaryNode<int>(3);
-			n21->left = n31;
-			n21->right = n32;
-			n22->left = n33;
-			n22->right = n34;
+			n21->Left() = n31;
+			n21->Right() = n32;
+			n22->Left() = n33;
+			n22->Right() = n34;
 			Test::BinaryNode<int> * n41 = new Test::BinaryNode<int>(4);
 			Test::BinaryNode<int> * n42 = new Test::BinaryNode<int>(4);
 			Test::BinaryNode<int> * n43 = new Test::BinaryNode<int>(4);
 			Test::BinaryNode<int> * n44 = new Test::BinaryNode<int>(4);
 			Test::BinaryNode<int> * n45 = new Test::BinaryNode<int>(4);
 			Test::BinaryNode<int> * n46 = new Test::BinaryNode<int>(4);
-			n31->left = n41;
-			n31->right = n42;
-			n32->left = n43;
-			n32->right = n44;
-			n33->left = n45;
-			n33->right = n46;
+			n31->Left() = n41;
+			n31->Right() = n42;
+			n32->Left() = n43;
+			n32->Right() = n44;
+			n33->Left() = n45;
+			n33->Right() = n46;
 			Test::BinaryNode<int> * n51 = new Test::BinaryNode<int>(5);
 			Test::BinaryNode<int> * n52 = new Test::BinaryNode<int>(5);
-			n41->left = n51;
-			n41->right = n52;
+			n41->Left() = n51;
+			n41->Right() = n52;
 			n1->Print2();
 			check(n1);
 		}
@@ -1521,14 +1518,14 @@ void BinaryTreeTest::Init(void)
 			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
 			Test::BinaryNode<int> * n21 = new Test::BinaryNode<int>(2);
 
-			n1->left = n21;
+			n1->Left() = n21;
 			check(n1, false);
 		}
 		{
 			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(1);
 			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(2);
 
-			n1->right = n22;
+			n1->Right() = n22;
 			check(n1, false);
 		}
 		{
@@ -1536,8 +1533,8 @@ void BinaryTreeTest::Init(void)
 			Test::BinaryNode<int> * n21 = new Test::BinaryNode<int>(2);
 			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(2);
 
-			n1->left = n21;
-			n1->right = n22;
+			n1->Left() = n21;
+			n1->Right() = n22;
 			check(n1, true);
 		}
 		{
@@ -1545,8 +1542,8 @@ void BinaryTreeTest::Init(void)
 			Test::BinaryNode<int> * n21 = new Test::BinaryNode<int>(2);
 			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(3);
 
-			n1->left = n21;
-			n1->right = n22;
+			n1->Left() = n21;
+			n1->Right() = n22;
 			check(n1, false);
 		}
 		{
@@ -1555,9 +1552,9 @@ void BinaryTreeTest::Init(void)
 			Test::BinaryNode<int> * n22 = new Test::BinaryNode<int>(2);
 			Test::BinaryNode<int> * n31 = new Test::BinaryNode<int>(3);
 
-			n1->left = n21;
-			n1->right = n22;
-			n21->left = n31;
+			n1->Left() = n21;
+			n1->Right() = n22;
+			n21->Left() = n31;
 			check(n1, false);
 		}
 		{
@@ -1567,10 +1564,10 @@ void BinaryTreeTest::Init(void)
 			Test::BinaryNode<int> * n31 = new Test::BinaryNode<int>(3);
 			Test::BinaryNode<int> * n34 = new Test::BinaryNode<int>(3);
 
-			n1->left = n21;
-			n1->right = n22;
-			n21->left = n31;
-			n22->right = n34;
+			n1->Left() = n21;
+			n1->Right() = n22;
+			n21->Left() = n31;
+			n22->Right() = n34;
 			check(n1, true);
 		}
 		{
@@ -1580,10 +1577,10 @@ void BinaryTreeTest::Init(void)
 			Test::BinaryNode<int> * n31 = new Test::BinaryNode<int>(3);
 			Test::BinaryNode<int> * n34 = new Test::BinaryNode<int>(3);
 
-			n1->left = n21;
-			n1->right = n22;
-			n21->right = n31;
-			n22->right = n34;
+			n1->Left() = n21;
+			n1->Right() = n22;
+			n21->Right() = n31;
+			n22->Right() = n34;
 			check(n1, false);
 		}
 		{
@@ -1595,12 +1592,12 @@ void BinaryTreeTest::Init(void)
 			Test::BinaryNode<int> * n33 = new Test::BinaryNode<int>(4);
 			Test::BinaryNode<int> * n34 = new Test::BinaryNode<int>(3);
 
-			n1->left = n21;
-			n1->right = n22;
-			n21->left = n31;
-			n21->right = n32;
-			n22->left = n33;
-			n22->right = n34;
+			n1->Left() = n21;
+			n1->Right() = n22;
+			n21->Left() = n31;
+			n21->Right() = n32;
+			n22->Left() = n33;
+			n22->Right() = n34;
 			check(n1, true);
 		}
 	});

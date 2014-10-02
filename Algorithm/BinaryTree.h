@@ -18,10 +18,10 @@ namespace Test {
 
 		static N<T> * Search(N<T> * node, const T & content)
 		{
-			if (node == nullptr || node->content == content) return node;
-			N<T> * left = Search((N<T> *)node->left, content);
+			if (node == nullptr || node->Value() == content) return node;
+			N<T> * left = Search((N<T> *)node->Left(), content);
 			if (left != nullptr) return left;
-			else return Search((N<T> *)node->right, content);
+			else return Search((N<T> *)node->Right(), content);
 		}
 
 		static N<T> * LowestCommonAncestor(N<T> * node, N<T> * first, N<T> * second)
@@ -31,23 +31,23 @@ namespace Test {
 
 			function<int(N<T> *, N<T> *, N<T> *)> hits = [&](N<T> * n, N<T> * f, N<T> * s) -> int {
 				if (n == nullptr) return 0;
-				int h = hits((N<T> *)n->left, f, s) + hits((N<T> *)n->right, f, s);
+				int h = hits((N<T> *)n->Left(), f, s) + hits((N<T> *)n->Right(), f, s);
 				if (n == f || n == s) return 1 + h;
 				else return h;
 			};
 
-			int h = hits((N<T> *)node->left, first, second);
+			int h = hits((N<T> *)node->Left(), first, second);
 			if (h == 1) return node;
-			else if (h == 2) return LowestCommonAncestor((N<T> *)node->left, first, second);
-			else return LowestCommonAncestor((N<T> *)node->right, first, second);
+			else if (h == 2) return LowestCommonAncestor((N<T> *)node->Left(), first, second);
+			else return LowestCommonAncestor((N<T> *)node->Right(), first, second);
 		}
 
 		static N<T> * LowestCommonAncestor2(N<T> * node, N<T> * first, N<T> * second)
 		{
 			if (node == nullptr || first == nullptr || second == nullptr) return nullptr;
 			if (node == first || node == second) return node;
-			N<T> * left = LowestCommonAncestor2((N<T> *)node->left, first, second);
-			N<T> * right = LowestCommonAncestor2((N<T> *)node->right, first, second);
+			N<T> * left = LowestCommonAncestor2((N<T> *)node->Left(), first, second);
+			N<T> * right = LowestCommonAncestor2((N<T> *)node->Right(), first, second);
 			if (left != nullptr && right != nullptr) return node;
 			if (left != nullptr) return left;
 			else return right;
@@ -71,8 +71,8 @@ namespace Test {
 
 			N<T> * node = new N<T>(value);
 
-			node->left = BuildTreePreOrderInOrderInternal(preOrder+1, index, inOrder, index);
-			node->right = BuildTreePreOrderInOrderInternal(preOrder+index+1, preLength-1-index, inOrder+index+1, inLength-1-index);
+			node->Left() = BuildTreePreOrderInOrderInternal(preOrder+1, index, inOrder, index);
+			node->Right() = BuildTreePreOrderInOrderInternal(preOrder+index+1, preLength-1-index, inOrder+index+1, inLength-1-index);
 
 			return node;
 		}
@@ -95,8 +95,8 @@ namespace Test {
 
 			N<T> * node = new N<T>(value);
 
-			node->left = BuildTreeInOrderPostOrderInternal(inOrder, index, postOrder, index);
-			node->right = BuildTreeInOrderPostOrderInternal(inOrder+index+1, inLength-1-index, postOrder+index, postLength-1-index);
+			node->Left() = BuildTreeInOrderPostOrderInternal(inOrder, index, postOrder, index);
+			node->Right() = BuildTreeInOrderPostOrderInternal(inOrder+index+1, inLength-1-index, postOrder+index, postLength-1-index);
 
 			return node;
 		}
@@ -137,22 +137,22 @@ namespace Test {
 
 			N<T> * p = this->root;
 			unsigned int r = 0;
-			while (p->left != nullptr && p->right != nullptr) {
+			while (p->Left() != nullptr && p->Right() != nullptr) {
 				if (r == 0) {
 					r = Random::Next();
 				}
 				if ((r & 0x1) == 0) {
-					p = (N<T> *)p->left;
+					p = (N<T> *)p->Left();
 				} else {
-					p = (N<T> *)p->right;
+					p = (N<T> *)p->Right();
 				}
 				r = r >> 1;
 			}
 
-			if (p->left == nullptr) {
-				p->left = new N<T>(content);
+			if (p->Left() == nullptr) {
+				p->Left() = new N<T>(content);
 			} else {
-				p->right = new N<T>(content);
+				p->Right() = new N<T>(content);
 			}
 		}
 
@@ -169,7 +169,7 @@ namespace Test {
 			if (node == nullptr) {
 				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
 			}
-			return node->content;
+			return node->Value();
 		}
 
 		virtual const T & LowestCommonAncestor2(const T & first, const T & second)
@@ -180,19 +180,19 @@ namespace Test {
 			if (node == nullptr) {
 				throw new invalid_argument(String::Format("%d and %d have no common ancestor.", first, second));
 			}
-			return node->content;
+			return node->Value();
 		}
 
 		static N<T> * Min(N<T> * node)
 		{
 			if (node == nullptr) return node;
-			N<T> * left = Min((N<T> *)node->left);
-			N<T> * right = Min((N<T> *)node->right);
+			N<T> * left = Min((N<T> *)node->Left());
+			N<T> * right = Min((N<T> *)node->Right());
 			N<T> * min = node;
-			if (left != nullptr && left->content < min->content) {
+			if (left != nullptr && left->Value() < min->Value()) {
 				min = left;
 			}
-			if (right != nullptr && right->content < min->content) {
+			if (right != nullptr && right->Value() < min->Value()) {
 				min = right;
 			}
 			return min;
@@ -201,13 +201,13 @@ namespace Test {
 		static N<T> * Max(N<T> * node)
 		{
 			if (node == nullptr) return node;
-			N<T> * left = Max((N<T> *)node->left);
-			N<T> * right = Max((N<T> *)node->right);
+			N<T> * left = Max((N<T> *)node->Left());
+			N<T> * right = Max((N<T> *)node->Right());
 			N<T> * max = node;
-			if (left != nullptr && left->content > max->content) {
+			if (left != nullptr && left->Value() > max->Value()) {
 				max = left;
 			}
-			if (right != nullptr && right->content > max->content) {
+			if (right != nullptr && right->Value() > max->Value()) {
 				max = right;
 			}
 			return max;
@@ -215,13 +215,13 @@ namespace Test {
 
 		virtual T & Min(void)
 		{
-			if (this->root != nullptr) return Min(this->root)->content;
+			if (this->root != nullptr) return Min(this->root)->Value();
 			else throw runtime_error("Tree is empty");
 		}
 
 		virtual T & Max(void)
 		{
-			if (this->root != nullptr) return Max(this->root)->content;
+			if (this->root != nullptr) return Max(this->root)->Value();
 			else throw runtime_error("Tree is empty");
 		}
 
@@ -367,19 +367,19 @@ namespace Test {
 			i++;
 
 			while (i < preLength) {
-				if (!path.empty() && path.top()->content == inOrder[j]) {
+				if (!path.empty() && path.top()->Value() == inOrder[j]) {
 					t = path.top();
 					path.pop();
 					f = 1;
 					j++;
 				} else {
 					if (f == 0) {
-						t->left = new N<T>(preOrder[i]);
-						t = (N<T>*)t->left;
+						t->Left() = new N<T>(preOrder[i]);
+						t = (N<T>*)t->Left();
 					} else {
 						f = 0;
-						t->right = new N<T>(preOrder[i]);
-						t = (N<T>*)t->right;
+						t->Right() = new N<T>(preOrder[i]);
+						t = (N<T>*)t->Right();
 					}
 					path.push(t);
 					i++;
@@ -420,19 +420,19 @@ namespace Test {
 			i--;
 
 			while (i >= 0) {
-				if (!path.empty() && path.top()->content == inOrder[j]) {
+				if (!path.empty() && path.top()->Value() == inOrder[j]) {
 					t = path.top();
 					path.pop();
 					f = 1;
 					j--;
 				} else {
 					if (f == 0) {
-						t->right = new N<T>(postOrder[i]);
-						t = (N<T>*)t->right;
+						t->Right() = new N<T>(postOrder[i]);
+						t = (N<T>*)t->Right();
 					} else {
 						f = 0;
-						t->left = new N<T>(postOrder[i]);
-						t = (N<T>*)t->left;
+						t->Left() = new N<T>(postOrder[i]);
+						t = (N<T>*)t->Left();
 					}
 					path.push(t);
 					i--;
@@ -445,10 +445,10 @@ namespace Test {
 			if (first == nullptr && second == nullptr) return 0;
 			if (first == nullptr && second != nullptr) return -1;
 			if (first != nullptr && second == nullptr) return 1;
-			if (first->content < second->content) return -1;
-			if (first->content > second->content) return 1;
-			int v = Compare((N<T> *)first->left, (N<T> *)second->left);
-			if (v == 0) return Compare((N<T> *)first->right, (N<T> *)second->right);
+			if (first->Value() < second->Value()) return -1;
+			if (first->Value() > second->Value()) return 1;
+			int v = Compare((N<T> *)first->Left(), (N<T> *)second->Left());
+			if (v == 0) return Compare((N<T> *)first->Right(), (N<T> *)second->Right());
 			return v;
 		}
 
@@ -457,8 +457,8 @@ namespace Test {
 			if (first == nullptr && second == nullptr) return 0;
 			if (first == nullptr && second != nullptr) return -1;
 			if (first != nullptr && second == nullptr) return 1;
-			if (first->content < second->content) return -1;
-			if (first->content > second->content) return 1;
+			if (first->Value() < second->Value()) return -1;
+			if (first->Value() > second->Value()) return 1;
 
 			deque<N<T> *> q;
 			q.push_front(first);
@@ -470,22 +470,22 @@ namespace Test {
 				second = q.back();
 				q.pop_back();
 
-				if (first->right == nullptr && second->right != nullptr) return -1;
-				if (first->right != nullptr && second->right == nullptr) return 1;
-				if (first->right != nullptr && second->right != nullptr) {
-					if (first->right->content < second->right->content) return -1;
-					if (first->right->content > second->right->content) return 1;
-					q.push_front(first->right);
-					q.push_back(second->right);
+				if (first->Right() == nullptr && second->Right() != nullptr) return -1;
+				if (first->Right() != nullptr && second->Right() == nullptr) return 1;
+				if (first->Right() != nullptr && second->Right() != nullptr) {
+					if (first->Right()->Value() < second->Right()->Value()) return -1;
+					if (first->Right()->Value() > second->Right()->Value()) return 1;
+					q.push_front(first->Right());
+					q.push_back(second->Right());
 				}
 
-				if (first->left == nullptr && second->left != nullptr) return -1;
-				if (first->left != nullptr && second->left == nullptr) return 1;
-				if (first->left != nullptr && second->left != nullptr) {
-					if (first->left->content < second->left->content) return -1;
-					if (first->left->content > second->left->content) return 1;
-					q.push_front(first->left);
-					q.push_back(second->left);
+				if (first->Left() == nullptr && second->Left() != nullptr) return -1;
+				if (first->Left() != nullptr && second->Left() == nullptr) return 1;
+				if (first->Left() != nullptr && second->Left() != nullptr) {
+					if (first->Left()->Value() < second->Left()->Value()) return -1;
+					if (first->Left()->Value() > second->Left()->Value()) return 1;
+					q.push_front(first->Left());
+					q.push_back(second->Left());
 				}
 			}
 			return 0;
@@ -495,7 +495,7 @@ namespace Test {
 
 		// http://leetcode.com/2010/11/convert-binary-search-tree-bst-to.html
 		// Flatten a binary tree into a doubly-link-list.
-		// Return head and tail, head->left = nullptr, tail->right = nullptr,
+		// Return head and tail, head->Left() = nullptr, tail->Right() = nullptr,
 		// i.e., the list is not circular.
 		N<T> * ToDoubleLinkList(N<T> * & head, N<T> * & tail)
 		{
@@ -506,26 +506,26 @@ namespace Test {
 
 				N<T> * leftMin = nullptr;
 				N<T> * leftMax = nullptr;
-				convert((N<T> *)node->left, leftMin, leftMax);
+				convert((N<T> *)node->Left(), leftMin, leftMax);
 
 				N<T> * rightMin = nullptr;
 				N<T> * rightMax = nullptr;
-				convert((N<T> *)node->right, rightMin, rightMax);
+				convert((N<T> *)node->Right(), rightMin, rightMax);
 
 				if (leftMax == nullptr) {
 					leftMin = node;
 					leftMax = node;
 				} else {
-					leftMax->right = node;
-					node->left = leftMax;
+					leftMax->Right() = node;
+					node->Left() = leftMax;
 				}
 
 				if (rightMin == nullptr) {
 					rightMin = node;
 					rightMax = node;
 				} else {
-					rightMin->left = node;
-					node->right = rightMin;
+					rightMin->Left() = node;
+					node->Right() = rightMin;
 				}
 
 				min = leftMin;
@@ -570,8 +570,8 @@ namespace Test {
 				N<T> * tree = new N<T>(node->Value());
 
 				parallel_invoke(
-					[&convert, &tree, head] { tree->left = convert(head); },
-					[&convert, &tree, first] { tree->right = convert(first); });
+					[&convert, &tree, head] { tree->Left() = convert(head); },
+					[&convert, &tree, first] { tree->Right() = convert(first); });
 
 				delete node;
 
@@ -594,13 +594,13 @@ namespace Test {
 
 				N<T> * left = convert(head, begin, middle - 1);
 				N<T> * node = new N<T>(head->Value());
-				node->left = left;
+				node->Left() = left;
 
 				SingleNode<T> * p = head;
 				head = head->Next();
 				delete p;
 
-				node->right = convert(head, middle + 1, end);
+				node->Right() = convert(head, middle + 1, end);
 
 				return node;
 			};
@@ -623,48 +623,48 @@ namespace Test {
 		{
 			if (this->root == nullptr) return;
 
-			values.push_back(this->root->content);
+			values.push_back(this->root->Value());
 
 			function<void(N<T> *, bool)> searchLeft = [&](N<T> * node, bool include) {
 				if (node == nullptr) return;
 
 				if (include
-					|| node->left == nullptr && node->right == nullptr) {
-					values.push_back(node->content);
+					|| node->Left() == nullptr && node->Right() == nullptr) {
+					values.push_back(node->Value());
 				}
 
-				if (node->left != nullptr) {
-					searchLeft(node->left, include);
+				if (node->Left() != nullptr) {
+					searchLeft(node->Left(), include);
 				}
 
-				if (node->right != nullptr) {
+				if (node->Right() != nullptr) {
 					// include the right child only if
 					// its parent is included and has no left child
-					searchLeft(node->right, include && node->left == nullptr);
+					searchLeft(node->Right(), include && node->Left() == nullptr);
 				}
 			};
 
 			function<void(N<T>*, bool)> searchRight = [&](N<T> * node, bool include) {
 				if (node == nullptr) return;
 
-				if (node->left != nullptr) {
+				if (node->Left() != nullptr) {
 					// include the left child only if
 					// its parent is included and has no right child
-					searchRight(node->left, include && node->right == nullptr);
+					searchRight(node->Left(), include && node->Right() == nullptr);
 				}
 
-				if (node->right != nullptr) {
-					searchRight(node->right, include);
+				if (node->Right() != nullptr) {
+					searchRight(node->Right(), include);
 				}
 
 				if (include
-					|| node->left == nullptr && node->right == nullptr) {
-					values.push_back(node->content);
+					|| node->Left() == nullptr && node->Right() == nullptr) {
+					values.push_back(node->Value());
 				}
 			};
 
-			searchLeft(this->root->left, true);
-			searchRight(this->root->right, true);
+			searchLeft(this->root->Left(), true);
+			searchRight(this->root->Right(), true);
 		}
 
 		virtual void Serialize(ostream & output)
@@ -673,9 +673,9 @@ namespace Test {
 				if (node == nullptr) {
 					output << '#';
 				} else {
-					output << node->content << ' ';
-					serialize((N<T> *)node->left);
-					serialize((N<T> *)node->right);
+					output << node->Value() << ' ';
+					serialize((N<T> *)node->Left());
+					serialize((N<T> *)node->Right());
 				}
 			};
 
@@ -705,8 +705,8 @@ namespace Test {
 				// the next ' ' character in the stream.
 				input >> value;
 				node = new N<T>(value);
-				deserialize((N<T> * &)node->left);
-				deserialize((N<T> * &)node->right);
+				deserialize((N<T> * &)node->Left());
+				deserialize((N<T> * &)node->Right());
 			};
 
 			deserialize(this->root);

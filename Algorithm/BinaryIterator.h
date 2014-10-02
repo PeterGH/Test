@@ -24,7 +24,7 @@ namespace Test {
 		const T & Current() const
 		{
 			Check();
-			T & d = this->pointer->content;
+			T & d = this->pointer->Value();
 			return d;
 		}
 
