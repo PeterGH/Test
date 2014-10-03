@@ -3,9 +3,10 @@
 #include "..\Algorithm\BinaryNodeWithParent.h"
 #include "..\Algorithm\TestClass.h"
 using namespace std;
-class BinaryNodeTest : public Test::TestClass {
+using namespace Test;
+class BinaryNodeTest : public TestClass {
 public:
-	BinaryNodeTest(Test::Log & log) : Test::TestClass(log) {}
+	BinaryNodeTest(Log & log) : TestClass(log) {}
 	~BinaryNodeTest(void) {}
 	void Init(void);
 };

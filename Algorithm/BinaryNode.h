@@ -18,6 +18,16 @@ namespace Test {
 		static void DeleteTree(BinaryNode * node);
 		void DeleteTree(void) {	DeleteTree(this); }
 
+		// Create a complete binary tree
+		static BinaryNode * ToCompleteTree(vector<T> values);
+		// Fill missing nodes to make a complete tree
+		static BinaryNode * FillToComplete(BinaryNode * node, vector<T> values);
+		static bool IsCompleteTree(BinaryNode * node);
+
+		// Return 0 if two trees are equal
+		static int Compare(BinaryNode * first, BinaryNode * second);
+		static int Compare2(BinaryNode * first, BinaryNode * second);
+
 		// Recursive
 		static int Height(BinaryNode * node);
 		virtual int Height(void) { return Height(this); }
@@ -179,6 +189,130 @@ namespace Test {
 			delete node->Right();
 			node->Right() = nullptr;
 		}
+	}
+
+	// Create a complete binary tree
+	template<class T> BinaryNode<T> * BinaryNode<T>::ToCompleteTree(vector<T> values)
+	{
+		if (values.size() == 0) return nullptr;
+		BinaryNode<T> * node = new BinaryNode<T>(values[0]);
+		queue<BinaryNode<T> *> q;
+		q.push(node);
+		size_t i = 1;
+		BinaryNode<T> * n;
+		while (!q.empty() && i < values.size()) {
+			n = q.front();
+			q.pop();
+			if (n->Left() == nullptr) {
+				n->Left() = new BinaryNode<T>(values[i++]);
+				if (i == values.size()) break;
+			}
+			q.push(n->Left());
+			if (n->Right() == nullptr) {
+				n->Right() = new BinaryNode<T>(values[i++]);
+				if (i == values.size()) break;
+			}
+			q.push(n->Right());
+		}
+		return node;
+	}
+
+	// Fill missing nodes to make a complete tree
+	template<class T> BinaryNode<T> * BinaryNode<T>::FillToComplete(BinaryNode * node, vector<T> values)
+	{
+		if (values.size() == 0) return node;
+		size_t i = 0;
+		if (node == nullptr) node = new BinaryNode<T>(values[i++]);
+		queue<BinaryNode<T> *> q;
+		q.push(node);
+		BinaryNode<T> * n;
+		while (!q.empty() && i < values.size()) {
+			n = q.front();
+			q.pop();
+			if (n->Left() == nullptr) {
+				n->Left() = new BinaryNode<T>(values[i++]);
+				if (i == values.size()) break;
+			}
+			q.push(n->Left());
+			if (n->Right() == nullptr) {
+				n->Right() = new BinaryNode<T>(values[i++]);
+				if (i == values.size()) break;
+			}
+			q.push(n->Right());
+		}
+		return node;
+	}
+
+	template<class T> bool BinaryNode<T>::IsCompleteTree(BinaryNode * node)
+	{
+		if (node == nullptr) return true;
+		queue<BinaryNode<T> *> q;
+		q.push(node);
+		bool end = false;
+		while (!q.empty()) {
+			node = q.front();
+			q.pop();
+			if (node->Left() == nullptr) {
+				if (!end) end = true;
+			} else {
+				if (end) return false;
+				else q.push(node->Left());
+			}
+			if (node->Right() == nullptr) {
+				if (!end) end = true;
+			} else {
+				if (end) return false;
+				else q.push(node->Right());
+			}
+		}
+		return true;
+	}
+
+	template<class T> int BinaryNode<T>::Compare(BinaryNode * first, BinaryNode * second)
+	{
+		if (first == nullptr && second == nullptr) return 0;
+		if (first == nullptr && second != nullptr) return -1;
+		if (first != nullptr && second == nullptr) return 1;
+		if (first->Value() < second->Value()) return -1;
+		if (first->Value() > second->Value()) return 1;
+		int v = Compare(first->Left(), second->Left());
+		if (v == 0) v = Compare(first->Right(), second->Right());
+		return v;
+	}
+
+	template<class T> int BinaryNode<T>::Compare2(BinaryNode * first, BinaryNode * second)
+	{
+		if (first == nullptr && second == nullptr) return 0;
+		if (first == nullptr && second != nullptr) return -1;
+		if (first != nullptr && second == nullptr) return 1;
+		if (first->Value() < second->Value()) return -1;
+		if (first->Value() > second->Value()) return 1;
+		deque<BinaryNode *> q;
+		q.push_front(first);
+		q.push_back(second);
+		while (!q.empty()) {
+			first = q.front();
+			q.pop_front();
+			second = q.back();
+			q.pop_back();
+			if (first->Right() == nullptr && second->Right() != nullptr) return -1;
+			if (first->Right() != nullptr && second->Right() == nullptr) return 1;
+			if (first->Right() != nullptr && second->Right() != nullptr) {
+				if (first->Right()->Value() < second->Right()->Value()) return -1;
+				if (first->Right()->Value() > second->Right()->Value()) return 1;
+				q.push_front(first->Right());
+				q.push_back(second->Right());
+			}
+			if (first->Left() == nullptr && second->Left() != nullptr) return -1;
+			if (first->Left() != nullptr && second->Left() == nullptr) return 1;
+			if (first->Left() != nullptr && second->Left() != nullptr) {
+				if (first->Left()->Value() < second->Left()->Value()) return -1;
+				if (first->Left()->Value() > second->Left()->Value()) return 1;
+				q.push_front(first->Left());
+				q.push_back(second->Left());
+			}
+		}
+		return 0;
 	}
 
 	template<class T> int BinaryNode<T>::Height(BinaryNode * node)
