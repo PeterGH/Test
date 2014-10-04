@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <functional>
 #include <iostream>
 #include <queue>
@@ -18,10 +19,13 @@ namespace Test {
 		static void DeleteTree(BinaryNode * node);
 		void DeleteTree(void) {	DeleteTree(this); }
 
+		// Create a random binary tree
+		static BinaryNode * ToRandomTree(vector<T> & values);
+
 		// Create a complete binary tree
-		static BinaryNode * ToCompleteTree(vector<T> values);
+		static BinaryNode * ToCompleteTree(vector<T> & values);
 		// Fill missing nodes to make a complete tree
-		static BinaryNode * FillToComplete(BinaryNode * node, vector<T> values);
+		static BinaryNode * FillToComplete(BinaryNode * node, vector<T> & values);
 		static bool IsCompleteTree(BinaryNode * node);
 
 		// Return 0 if two trees are equal
@@ -191,8 +195,28 @@ namespace Test {
 		}
 	}
 
+	// Create a random binary tree
+	template<class T> BinaryNode<T> * BinaryNode<T>::ToRandomTree(vector<T> & values)
+	{
+		if (values.size() == 0) return nullptr;
+
+		function<BinaryNode<T> * (vector<T> &, int, int)>
+		create = [&](vector<T> & v, int i, int j) -> BinaryNode<T> * {
+			if (i > j) return nullptr;
+			int k = i + (rand() % (j - i + 1));
+			BinaryNode<T> * n = new BinaryNode<T>(v[k]);
+			n->Left() = create(v, i, k - 1);
+			n->Right() = create(v, k + 1, j);
+			return n;
+		};
+
+		next_permutation(values.begin(), values.end());
+		BinaryNode<T> * node = create(values, 0, values.size() - 1);
+		return node;
+	}
+
 	// Create a complete binary tree
-	template<class T> BinaryNode<T> * BinaryNode<T>::ToCompleteTree(vector<T> values)
+	template<class T> BinaryNode<T> * BinaryNode<T>::ToCompleteTree(vector<T> & values)
 	{
 		if (values.size() == 0) return nullptr;
 		BinaryNode<T> * node = new BinaryNode<T>(values[0]);
@@ -203,22 +227,18 @@ namespace Test {
 		while (!q.empty() && i < values.size()) {
 			n = q.front();
 			q.pop();
-			if (n->Left() == nullptr) {
-				n->Left() = new BinaryNode<T>(values[i++]);
-				if (i == values.size()) break;
-			}
+			n->Left() = new BinaryNode<T>(values[i++]);
+			if (i == values.size()) break;
 			q.push(n->Left());
-			if (n->Right() == nullptr) {
-				n->Right() = new BinaryNode<T>(values[i++]);
-				if (i == values.size()) break;
-			}
+			n->Right() = new BinaryNode<T>(values[i++]);
+			if (i == values.size()) break;
 			q.push(n->Right());
 		}
 		return node;
 	}
 
 	// Fill missing nodes to make a complete tree
-	template<class T> BinaryNode<T> * BinaryNode<T>::FillToComplete(BinaryNode * node, vector<T> values)
+	template<class T> BinaryNode<T> * BinaryNode<T>::FillToComplete(BinaryNode * node, vector<T> & values)
 	{
 		if (values.size() == 0) return node;
 		size_t i = 0;

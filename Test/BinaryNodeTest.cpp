@@ -29,6 +29,42 @@ void BinaryNodeTest::Init(void)
 		}
 	});
 
+	Add("RandomTree", [&](){
+		auto check = [&](vector<int> & v){
+			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			node->Print2();
+			BinaryNode<int>::DeleteTree(node);
+		};
+		{
+			vector<int> v = { 0 };
+			check(v);
+			check(v);
+			check(v);
+		}
+		{
+			vector<int> v = { 0, 1 };
+			for (int i = 0; i < 10; i++) check(v);
+		}
+		{
+			vector<int> v = { 0, 1, 2 };
+			for (int i = 0; i < 10; i++) check(v);
+		}
+		{
+			vector<int> v = { 0, 1, 2, 3, 4 };
+			for (int i = 0; i < 50; i++) check(v);
+		}
+		{
+			for (int i = 0; i < 100; i++) {
+				int n = 1 + (rand() % 25);
+				vector<int> v;
+				for (int j = 0; j < n; j++) {
+					v.push_back(rand());
+				}
+				check(v);
+			}
+		}
+	});
+
 	Add("CompleteTree", [&](){
 		auto check = [&](vector<int> & v){
 			BinaryNode<int> * node = BinaryNode<int>::ToCompleteTree(v);
@@ -147,6 +183,71 @@ void BinaryNodeTest::Init(void)
 			n2->Left() = n5;
 			n3->Left() = n6;
 			check(n0, false);
+		}
+	});
+
+	Add("FillToComplete", [&](){
+		auto check = [&](BinaryNode<int> * node, vector<int> values){
+			node->Print2();
+			node = BinaryNode<int>::FillToComplete(node, values);
+			node->Print2();
+			BinaryNode<int>::DeleteTree(node);
+		};
+		{
+			BinaryNode<int> * n0 = new BinaryNode<int>(0);
+			vector<int> v = { 1 };
+			check(n0, v);
+		}
+		{
+			BinaryNode<int> * n0 = new BinaryNode<int>(0);
+			vector<int> v = { 1, 2 };
+			check(n0, v);
+		}
+		{
+			BinaryNode<int> * n0 = new BinaryNode<int>(0);
+			BinaryNode<int> * n1 = new BinaryNode<int>(1);
+			n0->Left() = n1;
+			vector<int> v = { 2 };
+			check(n0, v);
+		}
+		{
+			BinaryNode<int> * n0 = new BinaryNode<int>(0);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			n0->Right() = n2;
+			vector<int> v = { 1 };
+			check(n0, v);
+		}
+		{
+			BinaryNode<int> * n0 = new BinaryNode<int>(0);
+			BinaryNode<int> * n1 = new BinaryNode<int>(1);
+			n0->Left() = n1;
+			vector<int> v = { 2, 3 };
+			check(n0, v);
+		}
+		{
+			BinaryNode<int> * n0 = new BinaryNode<int>(0);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			n0->Right() = n2;
+			vector<int> v = { 1, 3 };
+			check(n0, v);
+		}
+		{
+			BinaryNode<int> * n0 = new BinaryNode<int>(0);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n5 = new BinaryNode<int>(5);
+			n0->Right() = n2;
+			n2->Left() = n5;
+			vector<int> v = { 1, 3 };
+			check(n0, v);
+		}
+		{
+			BinaryNode<int> * n0 = new BinaryNode<int>(0);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n5 = new BinaryNode<int>(5);
+			n0->Right() = n2;
+			n2->Left() = n5;
+			vector<int> v = { 1, 3, 4, 6 };
+			check(n0, v);
 		}
 	});
 }
