@@ -250,4 +250,177 @@ void BinaryNodeTest::Init(void)
 			check(n0, v);
 		}
 	});
+
+	Add("Search", [&](){
+		auto check = [&](size_t s){
+			vector<int> v;
+			for (size_t i = 0; i < s; i++) {
+				v.push_back(i);
+			}
+			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			node->Print2();
+			bool pass = true;
+			int num;
+			bool pass2 = true;
+			int num2;
+			BinaryNode<int> * n;
+			for_each (v.begin(), v.end(), [&](int i){
+				n = BinaryNode<int>::Search(node, i);
+				if (n == nullptr || n->Value() != i) {
+					pass = false;
+					num = i;
+				}
+				i = s + rand();
+				n = BinaryNode<int>::Search(node, i);
+				if (n != nullptr && n->Value() == i) {
+					pass2 = false;
+					num2 = i;
+				}
+			});
+			BinaryNode<int>::DeleteTree(node);
+			ASSERT2(pass == true, String::Format("%d is not found", num));
+			ASSERT2(pass2 == true, String::Format("%d is found", num2));
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("LowestCommonAncestor", [&](){
+		auto check = [&](size_t s){
+			vector<int> v;
+			for (size_t i = 0; i < s; i++) {
+				v.push_back(i);
+			}
+			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			node->Print2();
+			for (size_t i = 0; i < s - 1; i++) {
+				for (size_t j = i + 1; j < s; j++) {
+					BinaryNode<int> * f = BinaryNode<int>::Search(node, v[i]);
+					BinaryNode<int> * s = BinaryNode<int>::Search(node, v[j]);
+					BinaryNode<int> * a = BinaryNode<int>::LowestCommonAncestor(node, f, s);
+					BinaryNode<int> * a2 = BinaryNode<int>::LowestCommonAncestor(node, f, s);
+					Logger().WriteInformation("LCA(%d, %d) = %d, %d\n", v[i], v[j], a->Value(), a2->Value());
+					ASSERT1(a == a2);
+				}
+			}
+			BinaryNode<int>::DeleteTree(node);
+		};
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("BuildTreePreOrderInOrder", [&](){
+		auto check = [&](size_t s){
+			BinaryNode<int> * node = nullptr;
+			while (node == nullptr) node = BinaryNode<int>::RandomTree(s);
+			node->Print2();
+
+			int count = BinaryNode<int>::Size(node);
+			unique_ptr<int[]> preOrder(new int[count]);
+			unique_ptr<int[]> inOrder(new int[count]);
+
+			function<function<void(int)>(unique_ptr<int[]> &, int &)>
+			f = [&](unique_ptr<int[]> & v, int & k) -> function<void(int)> {
+				function<void(int)> w = [&](int n){
+					v[k++] = n;
+				};
+				return w;
+			};
+
+			int i = 0;
+			int j = 0;
+			BinaryNode<int>::PreOrderWalk(node, f(preOrder, i));
+			BinaryNode<int>::InOrderWalk(node, f(inOrder, j));
+
+			Logger().WriteInformation("PreOrder: ");
+			Logger().Print(preOrder.get(), count);
+			Logger().WriteInformation("InOrder: ");
+			Logger().Print(inOrder.get(), count);
+
+			int equal;
+			BinaryNode<int> * node2 = BinaryNode<int>::BuildTreePreOrderInOrder(preOrder.get(), count, inOrder.get(), count);
+			node2->Print2();
+			equal = BinaryNode<int>::Compare(node, node2);
+			BinaryNode<int>::DeleteTree(node);
+			BinaryNode<int>::DeleteTree(node2);
+			ASSERT1(equal == 0);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		for (int i = 11; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("BuildTreeInOrderPostOrder", [&](){
+		auto check = [&](size_t s){
+			BinaryNode<int> * node = nullptr;
+			while (node == nullptr) node = BinaryNode<int>::RandomTree(s);
+			node->Print2();
+
+			int count = BinaryNode<int>::Size(node);
+			unique_ptr<int[]> inOrder(new int[count]);
+			unique_ptr<int[]> postOrder(new int[count]);
+
+			function<function<void(int)>(unique_ptr<int[]> &, int &)>
+			f = [&](unique_ptr<int[]> & v, int & k) -> function<void(int)> {
+				function<void(int)> w = [&](int n){
+					v[k++] = n;
+				};
+				return w;
+			};
+
+			int i = 0;
+			int j = 0;
+			BinaryNode<int>::InOrderWalk(node, f(inOrder, i));
+			BinaryNode<int>::PostOrderWalk(node, f(postOrder, j));
+
+			Logger().WriteInformation("InOrder: ");
+			Logger().Print(inOrder.get(), count);
+			Logger().WriteInformation("PostOrder: ");
+			Logger().Print(postOrder.get(), count);
+
+			int equal;
+			BinaryNode<int> * node2 = BinaryNode<int>::BuildTreeInOrderPostOrder(inOrder.get(), count, postOrder.get(), count);
+			node2->Print2();
+			equal = BinaryNode<int>::Compare(node, node2);
+			BinaryNode<int>::DeleteTree(node);
+			BinaryNode<int>::DeleteTree(node2);
+			ASSERT1(equal == 0);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		for (int i = 11; i < 50; i++) {
+			check(i);
+		}
+	});
 }

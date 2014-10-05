@@ -20,12 +20,17 @@ namespace Test {
 		void DeleteTree(void) {	DeleteTree(this); }
 
 		// Create a random binary tree
+		// Return nullptr if input is empty
 		static BinaryNode * ToRandomTree(vector<T> & values);
+		// May return nullptr
+		static BinaryNode * RandomTree(size_t maxSize);
 
 		// Create a complete binary tree
 		static BinaryNode * ToCompleteTree(vector<T> & values);
 		// Fill missing nodes to make a complete tree
 		static BinaryNode * FillToComplete(BinaryNode * node, vector<T> & values);
+		// May return nullptr
+		static BinaryNode * RandomCompleteTree(size_t maxSize);
 		static bool IsCompleteTree(BinaryNode * node);
 
 		// Return 0 if two trees are equal
@@ -95,6 +100,9 @@ namespace Test {
 		static void PostOrderWalkWithStack2(BinaryNode * node, function<void(T)> f);
 		void PostOrderWalkWithStack2(function<void(T)> f) { PostOrderWalkWithStack2(this, f); }
 
+		static BinaryNode * BuildTreePreOrderInOrder(T * preOrder, int preLength, T * inOrder, int inLength);
+		static BinaryNode * BuildTreeInOrderPostOrder(T * inOrder, int inLength, T * postOrder, int postLength);
+
 		// Visit level by level, left to right
 		// Breadth-first search
 		static void LevelOrderWalk(BinaryNode * node, function<void(T)> f);
@@ -108,6 +116,11 @@ namespace Test {
 		// Visit nodes level by level from bottom up and left to right
 		static void LevelOrderWalkBottomUp(BinaryNode * node, function<void(T)> f);
 		void LevelOrderWalkBottomUp(function<void(T)> f) { LevelOrderWalkBottomUp(this, f); }
+
+		static BinaryNode * Search(BinaryNode * node, const T & v);
+
+		static BinaryNode * LowestCommonAncestor(BinaryNode * node, BinaryNode * first, BinaryNode * second);
+		static BinaryNode * LowestCommonAncestor2(BinaryNode * node, BinaryNode * first, BinaryNode * second);
 
 		// http://leetcode.com/2010/09/printing-binary-tree-in-zig-zag-level_18.html
 		// Breadth-first-search using stack
@@ -210,8 +223,18 @@ namespace Test {
 			return n;
 		};
 
-		next_permutation(values.begin(), values.end());
 		BinaryNode<T> * node = create(values, 0, values.size() - 1);
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::RandomTree(size_t maxSize)
+	{
+		vector<T> values;
+		int size = rand() % (maxSize + 1);
+		for (int i = 0; i < size; i++) {
+			values.push_back(rand());
+		}
+		BinaryNode<T> * node = ToRandomTree(values);
 		return node;
 	}
 
@@ -258,6 +281,30 @@ namespace Test {
 				n->Right() = new BinaryNode<T>(values[i++]);
 				if (i == values.size()) break;
 			}
+			q.push(n->Right());
+		}
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::RandomCompleteTree(size_t maxSize)
+	{
+		int size = rand() % (maxSize + 1);
+		if (size == 0) return nullptr;
+		BinaryNode<T> * node = new BinaryNode<T>(rand());
+		queue<BinaryNode<T> *> q;
+		q.push(node);
+		size_t i = 1;
+		BinaryNode<T> * n;
+		while (!q.empty() && i < size) {
+			n = q.front();
+			q.pop();
+			n->Left() = new BinaryNode<T>(rand());
+			i++;
+			if (i == values.size()) break;
+			q.push(n->Left());
+			n->Right() = new BinaryNode<T>(rand());
+			i++;
+			if (i == values.size()) break;
 			q.push(n->Right());
 		}
 		return node;
@@ -649,6 +696,54 @@ namespace Test {
 		}
 	}
 
+	template<class T> BinaryNode<T> * BinaryNode<T>::BuildTreePreOrderInOrder(T * preOrder, int preLength, T * inOrder, int inLength)
+	{
+		if (inOrder == nullptr || preOrder == nullptr || inLength <= 0 || preLength <= 0 || inLength != preLength) return nullptr;
+
+		T value = preOrder[0];
+
+		int index = -1;
+		for (int i = 0; i < inLength; i++) {
+			if (inOrder[i] == value) {
+				index = i;
+				break;
+			}
+		}
+
+		if (index == -1) return nullptr;
+
+		BinaryNode<T> * node = new BinaryNode<T>(value);
+
+		node->Left() = BuildTreePreOrderInOrder(preOrder + 1, index, inOrder, index);
+		node->Right() = BuildTreePreOrderInOrder(preOrder + index + 1, preLength - 1 - index, inOrder + index + 1, inLength - 1 - index);
+
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::BuildTreeInOrderPostOrder(T * inOrder, int inLength, T * postOrder, int postLength)
+	{
+		if (inOrder == nullptr || postOrder == nullptr || inLength <= 0 || postLength <= 0 || inLength != postLength) return nullptr;
+
+		T value = postOrder[postLength - 1];
+
+		int index = -1;
+		for (int i = 0; i < inLength; i++) {
+			if (inOrder[i] == value) {
+				index = i;
+				break;
+			}
+		}
+
+		if (index == -1) return nullptr;
+
+		BinaryNode<T> * node = new BinaryNode<T>(value);
+
+		node->Left() = BuildTreeInOrderPostOrder(inOrder, index, postOrder, index);
+		node->Right() = BuildTreeInOrderPostOrder(inOrder + index + 1, inLength - 1 - index, postOrder + index, postLength - 1 - index);
+
+		return node;
+	}
+
 	template<class T> void BinaryNode<T>::LevelOrderWalk(BinaryNode * node, function<void(T)> f)
 	{
 		if (node == nullptr || f == nullptr) return;
@@ -729,6 +824,44 @@ namespace Test {
 				f(c);
 			});
 		});
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::Search(BinaryNode * node, const T & v)
+	{
+		if (node == nullptr || node->Value() == v) return node;
+		BinaryNode<T> * left = Search(node->Left(), v);
+		if (left != nullptr) return left;
+		else return Search(node->Right(), v);
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::LowestCommonAncestor(BinaryNode * node, BinaryNode * first, BinaryNode * second)
+	{
+		if (node == nullptr || first == nullptr || second == nullptr) return nullptr;
+		if (node == first || node == second) return node;
+
+		function<int(BinaryNode<T> *, BinaryNode<T> *, BinaryNode<T> *)>
+		hits = [&](BinaryNode<T> * n, BinaryNode<T> * f, BinaryNode<T> * s) -> int {
+			if (n == nullptr) return 0;
+			int h = hits(n->Left(), f, s) + hits(n->Right(), f, s);
+			if (n == f || n == s) return 1 + h;
+			else return h;
+		};
+
+		int h = hits(node->Left(), first, second);
+		if (h == 1) return node;
+		else if (h == 2) return LowestCommonAncestor(node->Left(), first, second);
+		else return LowestCommonAncestor(node->Right(), first, second);
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::LowestCommonAncestor2(BinaryNode * node, BinaryNode * first, BinaryNode * second)
+	{
+		if (node == nullptr || first == nullptr || second == nullptr) return nullptr;
+		if (node == first || node == second) return node;
+		BinaryNode<T> * left = LowestCommonAncestor2(node->Left(), first, second);
+		BinaryNode<T> * right = LowestCommonAncestor2(node->Right(), first, second);
+		if (left != nullptr && right != nullptr) return node;
+		if (left != nullptr) return left;
+		else return right;
 	}
 
 	// http://leetcode.com/2010/09/printing-binary-tree-in-zig-zag-level_18.html
