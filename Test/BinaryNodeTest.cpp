@@ -350,13 +350,19 @@ void BinaryNodeTest::Init(void)
 			Logger().WriteInformation("InOrder: ");
 			Logger().Print(inOrder.get(), count);
 
-			int equal;
+			int equal2;
+			int equal3;
 			BinaryNode<int> * node2 = BinaryNode<int>::BuildTreePreOrderInOrder(preOrder.get(), count, inOrder.get(), count);
+			BinaryNode<int> * node3 = BinaryNode<int>::BuildTreePreOrderInOrder2(preOrder.get(), count, inOrder.get(), count);
 			node2->Print2();
-			equal = BinaryNode<int>::Compare(node, node2);
+			node3->Print2();
+			equal2 = BinaryNode<int>::Compare(node, node2);
+			equal3 = BinaryNode<int>::Compare(node, node3);
 			BinaryNode<int>::DeleteTree(node);
 			BinaryNode<int>::DeleteTree(node2);
-			ASSERT1(equal == 0);
+			BinaryNode<int>::DeleteTree(node3);
+			ASSERT1(equal2 == 0);
+			ASSERT1(equal3 == 0);
 		};
 		check(1);
 		check(2);
@@ -401,13 +407,19 @@ void BinaryNodeTest::Init(void)
 			Logger().WriteInformation("PostOrder: ");
 			Logger().Print(postOrder.get(), count);
 
-			int equal;
+			int equal2;
+			int equal3;
 			BinaryNode<int> * node2 = BinaryNode<int>::BuildTreeInOrderPostOrder(inOrder.get(), count, postOrder.get(), count);
+			BinaryNode<int> * node3 = BinaryNode<int>::BuildTreeInOrderPostOrder2(inOrder.get(), count, postOrder.get(), count);
 			node2->Print2();
-			equal = BinaryNode<int>::Compare(node, node2);
+			node3->Print2();
+			equal2 = BinaryNode<int>::Compare(node, node2);
+			equal3 = BinaryNode<int>::Compare(node, node3);
 			BinaryNode<int>::DeleteTree(node);
 			BinaryNode<int>::DeleteTree(node2);
-			ASSERT1(equal == 0);
+			BinaryNode<int>::DeleteTree(node3);
+			ASSERT1(equal2 == 0);
+			ASSERT1(equal3 == 0);
 		};
 		check(1);
 		check(2);

@@ -743,7 +743,7 @@ void BinaryTreeTest::Init(void)
 
 			head->PreOrderWalk(f);
 
-			head->ToPreOrderLinkList();
+			head = Test::BinaryNode<int>::ToPreOrderLinkList(head);
 
 			auto print = [&](Test::BinaryNode<int> * n) -> int {
 				if (n == nullptr) return 0;
@@ -807,7 +807,7 @@ void BinaryTreeTest::Init(void)
 
 			head->PreOrderWalk(f);
 
-			head->ToPreOrderLinkList();
+			head = Test::BinaryNode<int>::ToPreOrderLinkList(head);
 
 			auto print = [&](Test::BinaryNode<int> * n) -> int {
 				if (n == nullptr) return 0;
@@ -863,7 +863,7 @@ void BinaryTreeTest::Init(void)
 
 			node->PreOrderWalk(f);
 
-			node->ToPreOrderLinkList();
+			node = Test::BinaryNode<int>::ToPreOrderLinkList(node);
 
 			auto print = [&](Test::BinaryNode<int> * n) -> int {
 				if (n == nullptr) return 0;

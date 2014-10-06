@@ -32,6 +32,8 @@ namespace Test {
 		// May return nullptr
 		static BinaryNode * RandomCompleteTree(size_t maxSize);
 		static bool IsCompleteTree(BinaryNode * node);
+		// Insert a new value using BFS
+		static BinaryNode * Insert(BinaryNode * node, T value);
 
 		// Return 0 if two trees are equal
 		static int Compare(BinaryNode * first, BinaryNode * second);
@@ -101,7 +103,9 @@ namespace Test {
 		void PostOrderWalkWithStack2(function<void(T)> f) { PostOrderWalkWithStack2(this, f); }
 
 		static BinaryNode * BuildTreePreOrderInOrder(T * preOrder, int preLength, T * inOrder, int inLength);
+		static BinaryNode * BuildTreePreOrderInOrder2(T * preOrder, int preLength, T * inOrder, int inLength);
 		static BinaryNode * BuildTreeInOrderPostOrder(T * inOrder, int inLength, T * postOrder, int postLength);
+		static BinaryNode * BuildTreeInOrderPostOrder2(T * inOrder, int inLength, T * postOrder, int postLength);
 
 		// Visit level by level, left to right
 		// Breadth-first search
@@ -118,6 +122,8 @@ namespace Test {
 		void LevelOrderWalkBottomUp(function<void(T)> f) { LevelOrderWalkBottomUp(this, f); }
 
 		static BinaryNode * Search(BinaryNode * node, const T & v);
+		static BinaryNode * Min(BinaryNode * node);
+		static BinaryNode * Max(BinaryNode * node);
 
 		static BinaryNode * LowestCommonAncestor(BinaryNode * node, BinaryNode * first, BinaryNode * second);
 		static BinaryNode * LowestCommonAncestor2(BinaryNode * node, BinaryNode * first, BinaryNode * second);
@@ -127,7 +133,7 @@ namespace Test {
 		void PrintZigZag(void);
 
 		// Convert a binary tree to a linked list so that the list nodes
-		// are linked by the right pointer and are in pre-order of original tree.
+		// are linked by the left and right pointers and are in pre-order of original tree.
 		// e.g.
 		//      1
 		//     / \
@@ -135,21 +141,36 @@ namespace Test {
 		//   / \   \
 		//  3   4   6
 		// to
-		//  1
-		//   \
-		//    2
-		//     \
-		//      3
-		//       \
-		//        4
-		//         \
-		//          5
-		//           \
-		//            6
+		//  1-2-3-4-5-6
 		// This version builds a double-link list by setting node->left also.
 		// If need a single-link list, just remove the statements setting node->left.
-		static void ToPreOrderLinkList(BinaryNode * node);
-		void ToPreOrderLinkList(void) { ToPreOrderLinkList(this); }
+		static BinaryNode * ToPreOrderLinkList(BinaryNode * node);
+		// Convert a binary tree to a linked list so that the list nodes
+		// are linked by the left and right pointers and are in in-order of original tree.
+		// e.g.
+		//      1
+		//     / \
+		//    2   5
+		//   / \   \
+		//  3   4   6
+		// to
+		//  3-2-4-1-5-6
+		// This version builds a double-link list by setting node->left also.
+		// If need a single-link list, just remove the statements setting node->left.
+		static BinaryNode * ToInOrderLinkList(BinaryNode * node);
+		// Convert a binary tree to a linked list so that the list nodes
+		// are linked by the left and right pointers and are in post-order of original tree.
+		// e.g.
+		//      1
+		//     / \
+		//    2   5
+		//   / \   \
+		//  3   4   6
+		// to
+		//  3-4-2-6-5-1
+		// This version builds a double-link list by setting node->left also.
+		// If need a single-link list, just remove the statements setting node->left.
+		static BinaryNode * ToPostOrderLinkList(BinaryNode * node);
 
 		// A tree is balanced if the heights of its left tree and right tree differs no more than 1.
 		static bool IsBalanced(BinaryNode * node);
@@ -333,6 +354,30 @@ namespace Test {
 			}
 		}
 		return true;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::Insert(BinaryNode * node, T value)
+	{
+		if (values.size() == 0) return node;
+		if (node == nullptr) return new BinaryNode<T>(value);
+		queue<BinaryNode<T> *> q;
+		q.push(node);
+		BinaryNode<T> * n;
+		while (!q.empty()) {
+			n = q.front();
+			q.pop();
+			if (n->Left() == nullptr) {
+				n->Left() = new BinaryNode<T>(value);
+				break;
+			}
+			q.push(n->Left());
+			if (n->Right() == nullptr) {
+				n->Right() = new BinaryNode<T>(value);
+				break;
+			}
+			q.push(n->Right());
+		}
+		return node;
 	}
 
 	template<class T> int BinaryNode<T>::Compare(BinaryNode * first, BinaryNode * second)
@@ -720,6 +765,48 @@ namespace Test {
 		return node;
 	}
 
+	template<class T> BinaryNode<T> * BinaryNode<T>::BuildTreePreOrderInOrder2(T * preOrder, int preLength, T * inOrder, int inLength)
+	{
+		if (preOrder == nullptr || preLength <= 0 || inOrder == nullptr || inLength <= 0 || preLength != inLength) return nullptr;
+
+		stack<BinaryNode<T> *> path;
+
+		int i = 0; // index current element in preOrder
+		int j = 0; // index current element in inOrder
+		int f = 0; // flag to insert to left or right
+
+		// Root
+		BinaryNode<T> * node = new BinaryNode<T>(preOrder[i]);
+		path.push(node);
+
+		// Current insertion point
+		BinaryNode<T> * t = node;
+		i++;
+
+		while (i < preLength) {
+			if (!path.empty() && path.top()->Value() == inOrder[j]) {
+				// Done with a left substree, start to insert the right subtree
+				t = path.top();
+				path.pop();
+				f = 1;
+				j++;
+			} else {
+				if (f == 0) {
+					t->Left() = new BinaryNode<T>(preOrder[i]);
+					t = t->Left();
+				} else {
+					f = 0;
+					t->Right() = new BinaryNode<T>(preOrder[i]);
+					t = t->Right();
+				}
+				path.push(t);
+				i++;
+			}
+		}
+
+		return node;
+	}
+
 	template<class T> BinaryNode<T> * BinaryNode<T>::BuildTreeInOrderPostOrder(T * inOrder, int inLength, T * postOrder, int postLength)
 	{
 		if (inOrder == nullptr || postOrder == nullptr || inLength <= 0 || postLength <= 0 || inLength != postLength) return nullptr;
@@ -740,6 +827,48 @@ namespace Test {
 
 		node->Left() = BuildTreeInOrderPostOrder(inOrder, index, postOrder, index);
 		node->Right() = BuildTreeInOrderPostOrder(inOrder + index + 1, inLength - 1 - index, postOrder + index, postLength - 1 - index);
+
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::BuildTreeInOrderPostOrder2(T * inOrder, int inLength, T * postOrder, int postLength)
+	{
+		if (inOrder == nullptr || inLength <= 0 || postOrder == nullptr || postLength <= 0 || inLength != postLength) return nullptr;
+
+		stack<BinaryNode<T> *> path;
+
+		int i = postLength - 1; // index current element in postOrder
+		int j = inLength - 1;   // index current element in inOrder
+		int f = 0; // flag to insert to left or right
+
+		// Root
+		BinaryNode<T> * node = new BinaryNode<T>(postOrder[i]);
+		path.push(node);
+
+		// Current insertion point
+		BinaryNode<T> * t = node;
+		i--;
+
+		while (i >= 0) {
+			if (!path.empty() && path.top()->Value() == inOrder[j]) {
+				// Done with a right subtree, start to insert the left subtree
+				t = path.top();
+				path.pop();
+				f = 1;
+				j--;
+			} else {
+				if (f == 0) {
+					t->Right() = new BinaryNode<T>(postOrder[i]);
+					t = t->Right();
+				} else {
+					f = 0;
+					t->Left() = new BinaryNode<T>(postOrder[i]);
+					t = t->Left();
+				}
+				path.push(t);
+				i--;
+			}
+		}
 
 		return node;
 	}
@@ -834,6 +963,28 @@ namespace Test {
 		else return Search(node->Right(), v);
 	}
 
+	template<class T> BinaryNode<T> * BinaryNode<T>::Min(BinaryNode * node)
+	{
+		if (node == nullptr) return node;
+		BinaryNode<T> * left = Min(node->Left());
+		BinaryNode<T> * right = Min(node->Right());
+		BinaryNode<T> * min = node;
+		if (left != nullptr && left->Value() < min->Value()) min = left;
+		if (right != nullptr && right->Value() < min->Value()) min = right;
+		return min;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::Max(BinaryNode * node)
+	{
+		if (node == nullptr) return node;
+		BinaryNode<T> * left = Max(node->Left());
+		BinaryNode<T> * right = Max(node->Right());
+		BinaryNode<T> * max = node;
+		if (left != nullptr && left->Value() > max->Value()) max = left;
+		if (right != nullptr && right->Value() > max->Value()) max = right;
+		return max;
+	}
+
 	template<class T> BinaryNode<T> * BinaryNode<T>::LowestCommonAncestor(BinaryNode * node, BinaryNode * first, BinaryNode * second)
 	{
 		if (node == nullptr || first == nullptr || second == nullptr) return nullptr;
@@ -893,7 +1044,7 @@ namespace Test {
 	}
 
 	// Convert a binary tree to a linked list so that the list nodes
-	// are linked by the right pointer and are in pre-order of original tree.
+	// are linked by the left and right pointers and are in pre-order of original tree.
 	// e.g.
 	//      1
 	//     / \
@@ -901,22 +1052,12 @@ namespace Test {
 	//   / \   \
 	//  3   4   6
 	// to
-	//  1
-	//   \
-	//    2
-	//     \
-	//      3
-	//       \
-	//        4
-	//         \
-	//          5
-	//           \
-	//            6
+	//  1-2-3-4-5-6
 	// This version builds a double-link list by setting node->left also.
 	// If need a single-link list, just remove the statements setting node->left.
-	template<class T> void BinaryNode<T>::ToPreOrderLinkList(BinaryNode * node)
+	template<class T> BinaryNode<T> * BinaryNode<T>::ToPreOrderLinkList(BinaryNode * node)
 	{
-		if (node == nullptr) return;
+		if (node == nullptr) return node;
 
 		function<void(BinaryNode *, BinaryNode * &)>
 		convert = [&](BinaryNode * head, BinaryNode * & tail){
@@ -955,6 +1096,119 @@ namespace Test {
 
 		BinaryNode * tail;
 		convert(node, tail);
+		return node;
+	}
+
+	// Convert a binary tree to a linked list so that the list nodes
+	// are linked by the left and right pointers and are in in-order of original tree.
+	// e.g.
+	//      1
+	//     / \
+	//    2   5
+	//   / \   \
+	//  3   4   6
+	// to
+	//  3-2-4-1-5-6
+	// This version builds a double-link list by setting node->left also.
+	// If need a single-link list, just remove the statements setting node->left.
+	template<class T> BinaryNode<T> * BinaryNode<T>::ToInOrderLinkList(BinaryNode * node)
+	{
+		if (node == nullptr) return node;
+
+		function<void(BinaryNode *, BinaryNode * &, BinaryNode * &)>
+		convert = [&](BinaryNode * n, BinaryNode * & h, BinaryNode * & t) {
+			h = nullptr;
+			t = nullptr;
+			if (n == nullptr) return;
+
+			BinaryNode * leftHead = nullptr;
+			BinaryNode * leftTail = nullptr;
+			convert(n->Left(), leftHead, leftTail);
+
+			BinaryNode * rightHead = nullptr;
+			BinaryNode * rightTail = nullptr;
+			convert(n->Right(), rightHead, rightTail);
+
+			if (leftTail == nullptr) {
+				leftHead = n;
+				leftTail = n;
+			} else {
+				leftTail->Right() = n;
+				n->Left() = leftTail;
+			}
+
+			if (rightHead == nullptr) {
+				rightHead = n;
+				rightTail = n;
+			} else {
+				rightHead->Left() = n;
+				n->Right() = rightHead;
+			}
+
+			h = leftHead;
+			t = rightTail;
+		};
+
+		head = nullptr;
+		tail = nullptr;
+		convert(node, head, tail);
+		return head;
+	}
+
+	// Convert a binary tree to a linked list so that the list nodes
+	// are linked by the left and right pointers and are in post-order of original tree.
+	// e.g.
+	//      1
+	//     / \
+	//    2   5
+	//   / \   \
+	//  3   4   6
+	// to
+	//  3-4-2-6-5-1
+	// This version builds a double-link list by setting node->left also.
+	// If need a single-link list, just remove the statements setting node->left.
+	template<class T> BinaryNode<T> * BinaryNode<T>::ToPostOrderLinkList(BinaryNode * node)
+	{
+		if (node == nullptr) return node;
+
+		function<void(BinaryNode * &, BinaryNode *)>
+		convert = [&](BinaryNode * & head, BinaryNode * tail){
+			if (tail == nullptr) {
+				head = nullptr;
+				return;
+			}
+
+			if (tail->Left() == nullptr && tail->Right() == nullptr) {
+				head = tail;
+				return;
+			}
+
+			BinaryNode * leftHead = nullptr;
+			convert(leftHead, tail->Left());
+
+			BinaryNode * rightHead = nullptr;
+			convert(rightHead, tail->Right());
+
+			if (tail->Right() != nullptr) {
+				tail->Right()->Right() = tail;
+				rightHead->Left() = tail->Left();
+				tail->Left() = tail->Right();
+				tail->Right() = nullptr;
+				if (rightHead->Left() == nullptr) {
+					head = rightHead;
+				} else {
+					rightHead->Left()->Right() = rightHead;
+					head = leftHead;
+				}
+			} else {
+				tail->Left()->Right() = tail;
+				head = leftHead;
+			}
+		};
+
+		BinaryNode * head;
+		convert(head, node);
+		return head;
 	}
 
 	template<class T> bool BinaryNode<T>::IsBalanced(BinaryNode * node)
