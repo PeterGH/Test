@@ -452,9 +452,9 @@ namespace Test {
 
 	template<class T> ostream & operator<<(ostream & os, SingleNode<T> * list)
 	{
-		cout << "head";
+		os << "head";
 		if (list == nullptr) {
-			cout << "->nullptr" << endl;
+			os << "->nullptr" << endl;
 			return os;
 		}
 
@@ -464,35 +464,35 @@ namespace Test {
 		int i = 4;
 		while (p != c) {
 			s = to_string(p->Value());
-			cout << "->" << s;
+			os << "->" << s;
 			i = i + 2 + s.length();
 			p = p->Next();
 		}
 
 		if (p == nullptr) {
-			cout << "->nullptr" << endl;
+			os << "->nullptr" << endl;
 			return os;
 		}
 
 		int j = i;
 		do {
 			s = to_string(p->Value());
-			cout << "->" << s;
+			os << "->" << s;
 			j = j + 2 + s.length();
 			p = p->Next();
 		} while (p != c);
 
 		auto printChar = [&](int n, char c) {
 			string chars(n, c);
-			cout << chars;
+			os << chars;
 		};
 
-		cout << "-|" << endl;
+		os << "-|" << endl;
 		j++;
 		printChar(i+1, ' ');
-		cout << "|";
+		os << "|";
 		printChar(j-i-2, '_');
-		cout << "|" << endl;
+		os << "|" << endl;
 		return os;
 	}
 }

@@ -1,4 +1,6 @@
 #pragma once
+#include <map>
+#include <queue>
 #include <vector>
 using namespace std;
 
@@ -55,5 +57,35 @@ namespace Test {
 		}
 
 		size_t CountNeighbors(void) { return this->neighbor.size(); }
+
+		// Deep clone a graph at node
+		static Node * Clone(Node * node);
+		virtual Node * Clone(void) { return Clone(this); }
 	};
+
+	template<class T> Node<T> * Node<T>::Clone(Node * node)
+	{
+		if (node == nullptr) return nullptr;
+		queue<Node<T> *> q;
+		map<Node<T> *, Node<T> *> cloned;
+		Node<T> * nodeCopy = new Node<T>(node->Value(), node->CountNeighbors());
+		q.push(node);
+		cloned[node] = nodeCopy;
+		while (!q.empty()) {
+			node = q.front();
+			q.pop();
+			for (size_t i = 0; i < node->CountNeighbors(); i++) {
+				Node<T> * n = node->Neighbor(i);
+				if (n != nullptr) {
+					if (cloned.find(n) == cloned.end()) {
+						Node<T> * nCopy = new Node<T>(n->Value(), n->CountNeighbors());
+						cloned[n] = nCopy;
+						q.push(n);
+					}
+					cloned[node]->Neighbor(i) = cloned[n];
+				}
+			}
+		}
+		return nodeCopy;
+	}
 }
