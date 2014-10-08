@@ -2,11 +2,14 @@
 #include <algorithm>
 #include <functional>
 #include <iostream>
+#include <ppl.h>
 #include <queue>
 #include <stack>
 #include <vector>
 #include "Node.h"
+#include "SingleNode.h"
 #include "String.h"
+using namespace concurrency;
 using namespace std;
 
 namespace Test {
@@ -34,6 +37,10 @@ namespace Test {
 		static bool IsCompleteTree(BinaryNode * node);
 		// Insert a new value using BFS
 		static BinaryNode * Insert(BinaryNode * node, T value);
+
+		// Create a balanced tree from a single link list
+		static BinaryNode * ToBalancedTree(SingleNode<T> * list);
+		static BinaryNode * ToBalancedTree2(SingleNode<T> * list);
 
 		// Return 0 if two trees are equal
 		static int Compare(BinaryNode * first, BinaryNode * second);
@@ -120,6 +127,12 @@ namespace Test {
 		// Visit nodes level by level from bottom up and left to right
 		static void LevelOrderWalkBottomUp(BinaryNode * node, function<void(T)> f);
 		void LevelOrderWalkBottomUp(function<void(T)> f) { LevelOrderWalkBottomUp(this, f); }
+
+		// The boundary values include left-most nodes, leaf nodes and right-most nodes.
+		// A left-most node may be the right child of its parent if its parent is left-most and has no left child.
+		// Same goes to the right-most nodes.
+		static void GetBoundaryValues(BinaryNode * node, vector<T> & values);
+		void GetBoundaryValues(vector<T> & values) { GetBoundaryValues(this, values); }
 
 		static BinaryNode * Search(BinaryNode * node, const T & v);
 		static BinaryNode * Min(BinaryNode * node);
@@ -378,6 +391,83 @@ namespace Test {
 			q.push(n->Right());
 		}
 		return node;
+	}
+
+	// Create a balanced tree from a single link list
+	template<class T> BinaryNode<T> * BinaryNode<T>::ToBalancedTree(SingleNode<T> * list)
+	{
+		if (list == nullptr) return nullptr;
+
+		function<BinaryNode<T> * (SingleNode<T> *)>
+		convert = [&](SingleNode<T> * head) -> BinaryNode<T> * {
+			if (head == nullptr) return nullptr;
+
+			if (head->Next() == nullptr) {
+				BinaryNode<T> * tree = new BinaryNode<T>(head->Value());
+				delete head;
+				return tree;
+			}
+
+			SingleNode<T> * first = head;
+			SingleNode<T> * second = head->Next();
+			while (second->Next() != nullptr && second->Next()->Next() != nullptr) {
+				first = first->Next();
+				second = second->Next();
+				second = second->Next();
+			}
+
+			SingleNode<T> * node = first->Next();
+			first->Next() = nullptr;
+			first = node->Next();
+			node->Next() = nullptr;
+
+			BinaryNode<T> * tree = new BinaryNode<T>(node->Value());
+
+			parallel_invoke(
+				[&convert, &tree, head] { tree->Left() = convert(head); },
+				[&convert, &tree, first] { tree->Right() = convert(first); }
+			);
+
+			delete node;
+			return tree;
+		};
+
+		return convert(list);
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::ToBalancedTree2(SingleNode<T> * list)
+	{
+		if (list == nullptr) return nullptr;
+
+	    function<BinaryNode<T> * (SingleNode<T> * &, int, int)>
+		convert = [&](SingleNode<T> * & head, int begin, int end) -> BinaryNode<T> * {
+			if (head == nullptr || begin > end) return nullptr;
+
+			// Choose the median one if there are odd numbers in [begin, end]
+			// Choose the upper median if there are even numbers in [begin, end]
+			int middle = begin + ((1 + end - begin) >> 1);
+
+		    BinaryNode<T> * left = convert(head, begin, middle - 1);
+			BinaryNode<T> * node = new BinaryNode<T>(head->Value());
+			node->Left() = left;
+
+			SingleNode<T> * p = head;
+			head = head->Next();
+			delete p;
+
+			node->Right() = convert(head, middle + 1, end);
+
+			return node;
+		};
+
+		SingleNode<T> * p = list;
+		int i = 0;
+		while (p != nullptr) {
+			p = p->Next();
+			i++;
+		}
+
+		return convert(list, 0, i-1);
 	}
 
 	template<class T> int BinaryNode<T>::Compare(BinaryNode * first, BinaryNode * second)
@@ -953,6 +1043,52 @@ namespace Test {
 				f(c);
 			});
 		});
+	}
+
+	template<class T> void BinaryNode<T>::GetBoundaryValues(BinaryNode<T> * node, vector<T> & values)
+	{
+		if (node == nullptr) return;
+
+		values.push_back(node->Value());
+
+		function<void(BinaryNode<T> *, bool)>
+		searchLeft = [&](BinaryNode<T> * n, bool include) {
+			if (n == nullptr) return;
+
+			if (include
+				|| n->Left() == nullptr && n->Right() == nullptr) {
+				values.push_back(n->Value());
+			}
+
+			if (n->Left() != nullptr) searchLeft(n->Left(), include);
+
+			if (n->Right() != nullptr) {
+				// include the right child only if
+				// its parent is included and has no left child
+				searchLeft(n->Right(), include && n->Left() == nullptr);
+			}
+		};
+
+		function<void(BinaryNode<T>*, bool)>
+		searchRight = [&](BinaryNode<T> * n, bool include) {
+			if (n == nullptr) return;
+
+			if (n->Left() != nullptr) {
+				// include the left child only if
+				// its parent is included and has no right child
+				searchRight(n->Left(), include && n->Right() == nullptr);
+			}
+
+			if (n->Right() != nullptr) searchRight(n->Right(), include);
+
+			if (include
+				|| n->Left() == nullptr && n->Right() == nullptr) {
+				values.push_back(n->Value());
+			}
+		};
+
+		searchLeft(node->Left(), true);
+		searchRight(node->Right(), true);
 	}
 
 	template<class T> BinaryNode<T> * BinaryNode<T>::Search(BinaryNode * node, const T & v)

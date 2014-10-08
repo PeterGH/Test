@@ -77,6 +77,9 @@ namespace Test {
 
 		// Return the last node. The list may contain a cycle or not.
 		static SingleNode * Tail(SingleNode * list);
+
+		// Create a random list, no cycle
+		static SingleNode * RandomList(size_t length);
 	};
 
 	template<class T> void SingleNode<T>::Delete(const T & v)
@@ -448,6 +451,18 @@ namespace Test {
 		}
 
 		return q;
+	}
+
+	template<class T> SingleNode<T> * SingleNode<T>::RandomList(size_t length)
+	{
+		if (length == 0) return nullptr;
+		SingleNode<T> * list = new SingleNode<T>(rand());
+		SingleNode<T> * p = list;
+		for (size_t i = 1; i < length; i++) {
+			p->Next() = new SingleNode<T>(rand());
+			p = p->Next();
+		}
+		return list;
 	}
 
 	template<class T> ostream & operator<<(ostream & os, SingleNode<T> * list)

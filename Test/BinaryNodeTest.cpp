@@ -555,4 +555,115 @@ void BinaryNodeTest::Init(void)
 			check(i);
 		}
 	});
+
+	Add("ToBalancedTree", [&](){
+		auto check = [&](size_t s){
+			SingleNode<int> * list = SingleNode<int>::RandomList(s);
+			cout << list;
+			SingleNode<int> * list2 = (SingleNode<int> * )Node<int>::Clone(list);
+			cout << list2;
+			BinaryNode<int> * tree = BinaryNode<int>::ToBalancedTree(list);
+			tree->Print2();
+			BinaryNode<int> * tree2 = BinaryNode<int>::ToBalancedTree2(list2);
+			tree2->Print2();
+			int equal = BinaryNode<int>::Compare(tree, tree2);
+			BinaryNode<int>::DeleteTree(tree);
+			BinaryNode<int>::DeleteTree(tree2);
+			ASSERT1(equal == 0);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		for (int i = 11; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("GetBoundaryValues1", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Get boundary values of a binary tree of %d nodes:\n", count);
+			BinaryNode<int> * tree = nullptr;
+			while (tree == nullptr) tree = BinaryNode<int>::RandomTree(count);
+			tree->Print2();
+			vector<int> values;
+			tree->GetBoundaryValues(values);
+			Logger().Print(values);
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
+
+	Add("GetBoundaryValues2", [&](){
+		Logger().WriteInformation("Get boundary values of a binary tree\n");
+		BinaryNode<int> * n0 = new BinaryNode<int>(0);
+		BinaryNode<int> * n1 = new BinaryNode<int>(1);
+		BinaryNode<int> * n2 = new BinaryNode<int>(2);
+		BinaryNode<int> * n3 = new BinaryNode<int>(3);
+		BinaryNode<int> * n4 = new BinaryNode<int>(4);
+		BinaryNode<int> * n5 = new BinaryNode<int>(5);
+		BinaryNode<int> * n6 = new BinaryNode<int>(6);
+		BinaryNode<int> * n7 = new BinaryNode<int>(7);
+		BinaryNode<int> * n8 = new BinaryNode<int>(8);
+		BinaryNode<int> * n9 = new BinaryNode<int>(9);
+		BinaryNode<int> * n10 = new BinaryNode<int>(10);
+		BinaryNode<int> * n11 = new BinaryNode<int>(11);
+		BinaryNode<int> * n12 = new BinaryNode<int>(12);
+		BinaryNode<int> * n13 = new BinaryNode<int>(13);
+		BinaryNode<int> * n14 = new BinaryNode<int>(14);
+		BinaryNode<int> * n15 = new BinaryNode<int>(15);
+		BinaryNode<int> * n16 = new BinaryNode<int>(16);
+		n0->Left() = n1;
+		n0->Right() = n9;
+		n1->Right() = n2;
+		n2->Left() = n3;
+		n2->Right() = n5;
+		n3->Right() = n4;
+		n5->Left() = n6;
+		n5->Right() = n8;
+		n6->Left() = n7;
+		n9->Left() = n10;
+		n10->Left() = n11;
+		n10->Right() = n15;
+		n11->Left() = n12;
+		n11->Right() = n13;
+		n13->Right() = n14;
+		n15->Left() = n16;
+
+		n0->Print2();
+
+		vector<int> expect = { 0, 1, 2, 3, 4, 7, 8, 12, 14, 16, 15, 10, 9 };
+
+		vector<int> values;
+		n0->GetBoundaryValues(values);
+
+		Logger().Print(values);
+
+		ASSERT1(values.size() == expect.size());
+		for (unsigned int i = 0; i < expect.size(); i++) {
+			ASSERT1(values[i] == expect[i]);
+		}
+	});
+
 }
