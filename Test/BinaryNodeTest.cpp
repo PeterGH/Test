@@ -435,4 +435,124 @@ void BinaryNodeTest::Init(void)
 			check(i);
 		}
 	});
+
+	Add("ToPreOrderLinkList", [&](){
+		auto check = [&](size_t s){
+			BinaryNode<int> * node = nullptr;
+			while (node == nullptr) node = BinaryNode<int>::RandomTree(s);
+			node->Print2();
+
+			vector<int> preOrder;
+			auto f = [&](int n){ preOrder.push_back(n); };
+			BinaryNode<int>::PreOrderWalk(node, f);
+			Logger().Print(preOrder);
+
+			DoubleNode<int> * list = (DoubleNode<int> * )BinaryNode<int>::ToPreOrderLinkList(node);
+			cout << list;
+
+			size_t i = 0;
+			DoubleNode<int> * p = list;
+			while (i < preOrder.size() && p != nullptr) {
+				ASSERT1(preOrder[i] == p->Value());
+				i++;
+				p = p->Next();
+			}
+			DoubleNode<int>::DeleteList(list);
+			ASSERT1(i == preOrder.size());
+			ASSERT1(p == nullptr);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		for (int i = 11; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("ToInOrderLinkList", [&](){
+		auto check = [&](size_t s){
+			BinaryNode<int> * node = nullptr;
+			while (node == nullptr) node = BinaryNode<int>::RandomTree(s);
+			node->Print2();
+
+			vector<int> inOrder;
+			auto f = [&](int n){ inOrder.push_back(n); };
+			BinaryNode<int>::InOrderWalk(node, f);
+			Logger().Print(inOrder);
+
+			DoubleNode<int> * list = (DoubleNode<int> * )BinaryNode<int>::ToInOrderLinkList(node);
+			cout << list;
+
+			size_t i = 0;
+			DoubleNode<int> * p = list;
+			while (i < inOrder.size() && p != nullptr) {
+				ASSERT1(inOrder[i] == p->Value());
+				i++;
+				p = p->Next();
+			}
+			DoubleNode<int>::DeleteList(list);
+			ASSERT1(i == inOrder.size());
+			ASSERT1(p == nullptr);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		for (int i = 11; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("ToPostOrderLinkList", [&](){
+		auto check = [&](size_t s){
+			BinaryNode<int> * node = nullptr;
+			while (node == nullptr) node = BinaryNode<int>::RandomTree(s);
+			node->Print2();
+
+			vector<int> postOrder;
+			auto f = [&](int n){ postOrder.push_back(n); };
+			BinaryNode<int>::PostOrderWalk(node, f);
+			Logger().Print(postOrder);
+
+			DoubleNode<int> * list = (DoubleNode<int> * )BinaryNode<int>::ToPostOrderLinkList(node);
+			cout << list;
+
+			size_t i = 0;
+			DoubleNode<int> * p = list;
+			while (i < postOrder.size() && p != nullptr) {
+				ASSERT1(postOrder[i] == p->Value());
+				i++;
+				p = p->Next();
+			}
+			DoubleNode<int>::DeleteList(list);
+			ASSERT1(i == postOrder.size());
+			ASSERT1(p == nullptr);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		for (int i = 11; i < 50; i++) {
+			check(i);
+		}
+	});
 }

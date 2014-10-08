@@ -1149,8 +1149,8 @@ namespace Test {
 			t = rightTail;
 		};
 
-		head = nullptr;
-		tail = nullptr;
+		BinaryNode<T> * head = nullptr;
+		BinaryNode<T> * tail = nullptr;
 		convert(node, head, tail);
 		return head;
 	}
