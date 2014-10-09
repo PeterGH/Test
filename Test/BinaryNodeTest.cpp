@@ -17,8 +17,8 @@ void BinaryNodeTest::Init(void)
 		}
 		{
 			BinaryNodeWithParent<int> * node = new BinaryNodeWithParent<int>(0);
-			node->Left() = new BinaryNodeWithParent<int>(1);
-			node->Right() = new BinaryNodeWithParent<int>(2);
+			node->Left(new BinaryNodeWithParent<int>(1));
+			node->Right(new BinaryNodeWithParent<int>(2));
 			cout << node->Left()->Value() << endl;
 			cout << node->Right()->Value() << endl;
 			cout << node->Value() << endl;
@@ -666,4 +666,35 @@ void BinaryNodeTest::Init(void)
 		}
 	});
 
+	Add("Serialize", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Serialize/deserialize a binary tree of %d nodes:\n", count);
+			BinaryNode<int> * tree = nullptr;
+			while (tree == nullptr) tree = BinaryNode<int>::RandomTree(count);
+			tree->Print2();
+			stringstream ss;
+			BinaryNode<int>::Serialize(tree, ss);
+			Logger().WriteInformation("%s\n", ss.str().c_str());
+			BinaryNode<int> * tree2 = BinaryNode<int>::Deserialize(ss);
+			tree2->Print2();
+			int equal = BinaryNode<int>::Compare(tree, tree2);
+			ASSERT1(equal == 0);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
 }

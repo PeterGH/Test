@@ -15,7 +15,7 @@ namespace Test {
 		// Get the reference of parent pointer
 		BinaryNodeWithParent * & Parent(void) { return (BinaryNodeWithParent * &)this->Neighbor(2); }
 		// Set the parent pointer
-		void Parent(BinaryNode * p) { this->Neighbor(2) = p; }
+		virtual void Parent(BinaryNode * parent) { this->Neighbor(2) = parent; }
 
 		// Non-recursive without stack
 		static void PreOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f);

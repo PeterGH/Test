@@ -20,7 +20,7 @@ namespace Test {
 
 		// Delete a rooted binary tree
 		static void DeleteTree(BinaryNode * node);
-		void DeleteTree(void) {	DeleteTree(this); }
+		virtual void DeleteTree(void) { DeleteTree(this); }
 
 		// Create a random binary tree
 		// Return nullptr if input is empty
@@ -51,14 +51,14 @@ namespace Test {
 		virtual int Height(void) { return Height(this); }
 
 		// Get the reference of left child pointer
-		BinaryNode * & Left(void) { return (BinaryNode * &)this->Neighbor(0); }
+		virtual BinaryNode * & Left(void) { return (BinaryNode * &)this->Neighbor(0); }
 		// Set the left child pointer
-		void Left(BinaryNode * left) { this->Neighbor(0) = left; }
+		virtual void Left(BinaryNode * left) { this->Neighbor(0) = left; }
 
 		// Get the reference of right child pointer
-		BinaryNode * & Right(void) { return (BinaryNode * &)this->Neighbor(1); }
+		virtual BinaryNode * & Right(void) { return (BinaryNode * &)this->Neighbor(1); }
 		// Set the right child pointer
-		void Right(BinaryNode * right) { this->Neighbor(1) = right; }
+		virtual void Right(BinaryNode * right) { this->Neighbor(1) = right; }
 
 		static int Size(BinaryNode * node);
 		virtual int Size(void) { return Size(this); }
@@ -68,6 +68,9 @@ namespace Test {
 
 		void Print(void);
 		void Print2(void);
+
+		static void Serialize(BinaryNode * node, ostream & output);
+		static BinaryNode * Deserialize(istream & input);
 
 		// Recursive
 		static void PreOrderWalk(BinaryNode * node, function<void(T)> f);
@@ -669,6 +672,54 @@ namespace Test {
 		stringstream ss;
 		ToString2(this, ss);
 		cout << ss.str();
+	}
+
+	template<class T> void BinaryNode<T>::Serialize(BinaryNode * node, ostream & output)
+	{
+		function<void(BinaryNode<T> *)> serialize = [&](BinaryNode<T> * n){
+			if (n == nullptr) {
+				output << '#';
+			} else {
+				output << n->Value() << ' ';
+				serialize(n->Left());
+				serialize(n->Right());
+			}
+		};
+
+		serialize(node);
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::Deserialize(istream & input)
+	{
+		function<void(BinaryNode<T> * &)> deserialize = [&](BinaryNode<T> * & n) {
+			char c = input.peek();
+			if (c == ' ') {
+				// Two cases: ' '#, or ' 'number
+				// Skip ' ' using seekg. Using input >> c does not work
+				// because the >> operator actually skips ' ' and reads
+				// next charactor, which is either '#' or a digit.
+				input.seekg(1, ios_base::cur);
+				c = input.peek();
+			}
+
+			if (c == '#') {
+				// Eat '#'
+				input >> c;
+				return;
+			}
+
+			T value;
+			// The istream >> operator reads a value and leaves
+			// the next ' ' character in the stream.
+			input >> value;
+			n = new BinaryNode<T>(value);
+			deserialize(n->Left());
+			deserialize(n->Right());
+		};
+
+		BinaryNode<T> * node;
+		deserialize(node);
+		return node;
 	}
 
 	template<class T> void BinaryNode<T>::PreOrderWalk(BinaryNode * node, function<void(T)> f)
