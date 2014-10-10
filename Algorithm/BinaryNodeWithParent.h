@@ -38,8 +38,8 @@ namespace Test {
 		static int Depth(BinaryNodeWithParent * node);
 		int Depth(void) { return Depth(this); }
 
-		static BinaryNodeWithParent * Clone(BinaryNode * node);
-		BinaryNodeWithParent * Clone(void) { return Clone(this); }
+		static BinaryNodeWithParent * Clone2(BinaryNode * node);
+		BinaryNodeWithParent * Clone2(void) { return Clone2(this); }
 	};
 
 	// Non-recursive without stack
@@ -164,16 +164,16 @@ namespace Test {
 		return d;
 	}
 
-	template<class T> BinaryNodeWithParent<T> * BinaryNodeWithParent<T>::Clone(BinaryNode<T> * node)
+	template<class T> BinaryNodeWithParent<T> * BinaryNodeWithParent<T>::Clone2(BinaryNode<T> * node)
 	{
 		if (node == nullptr) return nullptr;
 		BinaryNodeWithParent * newNode = new BinaryNodeWithParent(node->Value());
-		BinaryNodeWithParent * left = Clone(node->Left());
+		BinaryNodeWithParent * left = Clone2(node->Left());
 		if (left != nullptr) {
 			newNode->Left() = left;
 			left->Parent() = newNode;
 		}
-		BinaryNodeWithParent * right = Clone(node->Right());
+		BinaryNodeWithParent * right = Clone2(node->Right());
 		if (right != nullptr) {
 			newNode->Right() = right;
 			right->Parent() = newNode;

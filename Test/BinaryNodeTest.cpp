@@ -697,4 +697,52 @@ void BinaryNodeTest::Init(void)
 		check(15);
 		check(16);
 	});
+
+	Add("Clone1", [&](){
+		auto check = [&](size_t s) {
+			Node<int> * node = nullptr;
+			while (node == nullptr) node = BinaryNode<int>::RandomTree(s);
+			((BinaryNode<int> *)node)->Print2();
+			BinaryNode<int> * copy = (BinaryNode<int> *)Node<int>::Clone(node);
+			copy->Print2();
+			int equal = BinaryNode<int>::Compare((BinaryNode<int> *)node, copy);
+			BinaryNode<int>::DeleteTree((BinaryNode<int> *)node);
+			BinaryNode<int>::DeleteTree(copy);
+			ASSERT1(equal == 0);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+	});
+
+	Add("Clone2", [&](){
+		auto check = [&](size_t s) {
+			BinaryNode<int> * node = nullptr;
+			while (node == nullptr) node = BinaryNode<int>::RandomTree(s);
+			node->Print2();
+			BinaryNodeWithParent<int> * copy = BinaryNodeWithParent<int>::Clone2(node);
+			copy->Print2();
+			int equal = BinaryNode<int>::Compare(node, copy);
+			BinaryNode<int>::DeleteTree(node);
+			BinaryNode<int>::DeleteTree(copy);
+			ASSERT1(equal == 0);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+	});
 }

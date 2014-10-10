@@ -530,7 +530,7 @@ namespace Test {
 
 			function<void(BinaryNodeWithParent<T> * &, int &, BinaryNodeWithParent<T> *, int)>
 				mergeLeft = [&](BinaryNodeWithParent<T> * & node, int & count, BinaryNodeWithParent<T> * left, int leftCount) {
-				BinaryNodeWithParent<T> * clone = left->Clone();
+				BinaryNodeWithParent<T> * clone = left->Clone2();
 				BinaryNodeWithParent<T> * invalid = firstNodeGreaterThan(clone, node->Value());
 				int invalidSize = invalid == nullptr ? 0 : invalid->Size();
 				node->Left() = clone;
@@ -545,7 +545,7 @@ namespace Test {
 
 			function<void(BinaryNodeWithParent<T> * &, int &, BinaryNodeWithParent<T> *, int)>
 				mergeRight = [&](BinaryNodeWithParent<T> * & node, int & count, BinaryNodeWithParent<T> * right, int rightCount) {
-				BinaryNodeWithParent<T> * clone = right->Clone();
+				BinaryNodeWithParent<T> * clone = right->Clone2();
 				BinaryNodeWithParent<T> * invalid = firstNodeLessThanOrEqual(clone, node->Value());
 				int invalidSize = invalid == nullptr ? 0 : invalid->Size();
 				node->Right() = clone;
@@ -1045,7 +1045,7 @@ namespace Test {
 				T min;
 				T max;
 				if (isSearchTree(node, min, max, currentCount)) {
-					current = BinaryNodeWithParent<T>::Clone(node);
+					current = BinaryNodeWithParent<T>::Clone2(node);
 					return;
 				}
 
