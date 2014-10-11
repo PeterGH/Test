@@ -745,4 +745,346 @@ void BinaryNodeTest::Init(void)
 		check(9);
 		check(10);
 	});
+
+	Add("PreOrder", [&](){
+		for (int i = 0; i < 100; i++) {
+			int count = 1 + rand();
+			BinaryNode<int> * tree = nullptr;
+			while (tree == nullptr) tree = BinaryNode<int>::RandomTree(count);
+			count = tree->Size();
+
+			BinaryNodeWithParent<int> * tree2 = BinaryNodeWithParent<int>::Clone2(tree);
+
+			cout << "Run " << i << ", " << count << " elements" << endl;
+
+			if (count < 50) {
+				tree->Print2();
+				tree2->Print2();
+			}
+
+			vector<int> v1;
+			vector<int> v2;
+			vector<int> v3;
+			vector<int> v4;
+			vector<int> v5;
+			vector<int> v6;
+			vector<int> v7;
+			vector<int> v8;
+			vector<int> v9;
+
+			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
+				function<void(int)> w = [&](int n){
+					v.push_back(n);
+				};
+
+				return w;
+			};
+
+			tree->PreOrderWalk(f(v1));
+			tree->PreOrderWalkWithStack(f(v2));
+			tree->PreOrderWalkWithStack2(f(v3));
+			tree->PreOrderWalkWithStack3(f(v4));
+			tree2->PreOrderWalk(f(v5));
+			tree2->PreOrderWalkWithStack(f(v6));
+			tree2->PreOrderWalkWithStack2(f(v7));
+			tree2->PreOrderWalkWithStack3(f(v8));
+			tree2->PreOrderWalkWithOutStack(f(v9));
+
+			BinaryNode<int>::DeleteTree(tree);
+			BinaryNode<int>::DeleteTree(tree2);
+
+			ASSERT2(v1.size() == count, String::Format("Expect %d elements, actual visited %d", count, v1.size()));
+			ASSERT2(v2.size() == count, String::Format("Expect %d elements, actual visited %d", count, v2.size()));
+			ASSERT2(v3.size() == count, String::Format("Expect %d elements, actual visited %d", count, v3.size()));
+			ASSERT2(v4.size() == count, String::Format("Expect %d elements, actual visited %d", count, v4.size()));
+			ASSERT2(v5.size() == count, String::Format("Expect %d elements, actual visited %d", count, v5.size()));
+			ASSERT2(v6.size() == count, String::Format("Expect %d elements, actual visited %d", count, v6.size()));
+			ASSERT2(v7.size() == count, String::Format("Expect %d elements, actual visited %d", count, v7.size()));
+			ASSERT2(v8.size() == count, String::Format("Expect %d elements, actual visited %d", count, v8.size()));
+			ASSERT2(v9.size() == count, String::Format("Expect %d elements, actual visited %d", count, v9.size()));
+
+			for (int j = 0; j < count; j++) {
+				ASSERT1(v1[j] == v2[j]);
+				ASSERT1(v1[j] == v3[j]);
+				ASSERT1(v1[j] == v4[j]);
+				ASSERT1(v1[j] == v5[j]);
+				ASSERT1(v1[j] == v6[j]);
+				ASSERT1(v1[j] == v7[j]);
+				ASSERT1(v1[j] == v8[j]);
+				ASSERT1(v1[j] == v9[j]);
+			}
+		}
+	});
+
+	Add("InOrder", [&](){
+		for (int i = 0; i < 100; i++) {
+			int count = 1 + rand();
+			BinaryNode<int> * tree = nullptr;
+			while (tree == nullptr) tree = BinaryNode<int>::RandomTree(count);
+			count = tree->Size();
+
+			BinaryNodeWithParent<int> * tree2 = BinaryNodeWithParent<int>::Clone2(tree);
+
+			cout << "Run " << i << ", " << count << " elements" << endl;
+
+			if (count < 50) {
+				tree->Print2();
+				tree2->Print2();
+			}
+
+			vector<int> v1;
+			vector<int> v2;
+			vector<int> v3;
+			vector<int> v4;
+			vector<int> v5;
+			vector<int> v6;
+			vector<int> v7;
+
+			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
+				function<void(int)> w = [&](int n){
+					v.push_back(n);
+				};
+
+				return w;
+			};
+
+			tree->InOrderWalk(f(v1));
+			tree->InOrderWalkWithStack(f(v2));
+			tree->InOrderWalkWithStack2(f(v3));
+			tree2->InOrderWalk(f(v4));
+			tree2->InOrderWalkWithStack(f(v5));
+			tree2->InOrderWalkWithStack2(f(v6));
+			tree2->InOrderWalkWithOutStack(f(v7));
+
+			BinaryNode<int>::DeleteTree(tree);
+			BinaryNode<int>::DeleteTree(tree2);
+
+			ASSERT2(v1.size() == count, String::Format("Expect %d elements, actual visited %d", count, v1.size()));
+			ASSERT2(v2.size() == count, String::Format("Expect %d elements, actual visited %d", count, v2.size()));
+			ASSERT2(v3.size() == count, String::Format("Expect %d elements, actual visited %d", count, v3.size()));
+			ASSERT2(v4.size() == count, String::Format("Expect %d elements, actual visited %d", count, v4.size()));
+			ASSERT2(v5.size() == count, String::Format("Expect %d elements, actual visited %d", count, v5.size()));
+			ASSERT2(v6.size() == count, String::Format("Expect %d elements, actual visited %d", count, v6.size()));
+			ASSERT2(v7.size() == count, String::Format("Expect %d elements, actual visited %d", count, v7.size()));
+
+			for (int j = 0; j < count; j++) {
+				ASSERT1(v1[j] == v2[j]);
+				ASSERT1(v1[j] == v3[j]);
+				ASSERT1(v1[j] == v4[j]);
+				ASSERT1(v1[j] == v5[j]);
+				ASSERT1(v1[j] == v6[j]);
+				ASSERT1(v1[j] == v7[j]);
+			}
+		}
+	});
+
+	Add("PostOrder", [&](){
+		for (int i = 0; i < 100; i++) {
+			int count = 1 + rand();
+			BinaryNode<int> * tree = nullptr;
+			while (tree == nullptr) tree = BinaryNode<int>::RandomTree(count);
+			count = tree->Size();
+
+			BinaryNodeWithParent<int> * tree2 = BinaryNodeWithParent<int>::Clone2(tree);
+
+			cout << "Run " << i << ", " << count << " elements" << endl;
+
+			if (count < 50) {
+				tree->Print2();
+				tree2->Print2();
+			}
+
+			vector<int> v1;
+			vector<int> v2;
+			vector<int> v3;
+			vector<int> v4;
+			vector<int> v5;
+			vector<int> v6;
+			vector<int> v7;
+
+			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
+				function<void(int)> w = [&](int n){
+					v.push_back(n);
+				};
+
+				return w;
+			};
+
+			tree->PostOrderWalk(f(v1));
+			tree->PostOrderWalkWithStack(f(v2));
+			tree->PostOrderWalkWithStack2(f(v3));
+			tree2->PostOrderWalk(f(v4));
+			tree2->PostOrderWalkWithStack(f(v5));
+			tree2->PostOrderWalkWithStack2(f(v6));
+			tree2->PostOrderWalkWithOutStack(f(v7));
+
+			BinaryNode<int>::DeleteTree(tree);
+			BinaryNode<int>::DeleteTree(tree2);
+
+			ASSERT2(v1.size() == count, String::Format("Expect %d elements, actual visited %d", count, v1.size()));
+			ASSERT2(v2.size() == count, String::Format("Expect %d elements, actual visited %d", count, v2.size()));
+			ASSERT2(v3.size() == count, String::Format("Expect %d elements, actual visited %d", count, v3.size()));
+			ASSERT2(v4.size() == count, String::Format("Expect %d elements, actual visited %d", count, v4.size()));
+			ASSERT2(v5.size() == count, String::Format("Expect %d elements, actual visited %d", count, v5.size()));
+			ASSERT2(v6.size() == count, String::Format("Expect %d elements, actual visited %d", count, v6.size()));
+			ASSERT2(v7.size() == count, String::Format("Expect %d elements, actual visited %d", count, v7.size()));
+
+			for (int j = 0; j < count; j++) {
+				ASSERT1(v1[j] == v2[j]);
+				ASSERT1(v1[j] == v3[j]);
+				ASSERT1(v1[j] == v4[j]);
+				ASSERT1(v1[j] == v5[j]);
+				ASSERT1(v1[j] == v6[j]);
+				ASSERT1(v1[j] == v7[j]);
+			}
+		}
+	});
+
+	Add("Height", [&](){
+		for (int i = 0; i < 100; i++) {
+			int count = 1 + rand();
+			BinaryNode<int> * tree = nullptr;
+			while (tree == nullptr) tree = BinaryNode<int>::RandomTree(count);
+			count = tree->Size();
+
+			BinaryNodeWithParent<int> * tree2 = BinaryNodeWithParent<int>::Clone2(tree);
+
+			cout << "Run " << i << ", " << count << " elements" << endl;
+
+			if (count < 50) {
+				tree->Print2();
+				tree2->Print2();
+			}
+
+			int height = BinaryNode<int>::Height(tree);
+			int height2 = BinaryNodeWithParent<int>::Height2(tree2);
+
+			BinaryNode<int>::DeleteTree(tree);
+			BinaryNode<int>::DeleteTree(tree2);
+
+			ASSERT1(height == height2);
+		}
+	});
+
+	Add("LevelOrderWalk1", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Level order walk a binary tree of %d nodes:\n", count);
+			BinaryNode<int> * tree = nullptr;
+			while (tree == nullptr) tree = BinaryNode<int>::RandomTree(count);
+			BinaryNodeWithRightSibling<int> * tree2 = BinaryNodeWithRightSibling<int>::Clone2(tree);
+			BinaryNodeWithRightSibling<int>::SetRightSibling(tree2);
+
+			tree->Print2();
+			tree2->Print2();
+
+			vector<int> v1;
+			vector<int> v2;
+			vector<int> v3;
+
+			auto visit = [&](vector<int> & v) -> function<void(int)> {
+				function<void(int)> f = [&](int c) {
+					v.push_back(c);
+				};
+				return f;
+			};
+
+			tree->LevelOrderWalk(visit(v1));
+			tree->LevelOrderWalk2(visit(v2));
+			tree2->LevelOrderWalk3(visit(v3));
+			Logger().Print(v1);
+			Logger().Print(v2);
+			Logger().Print(v3);
+
+			ASSERT1(v1.size() == v2.size());
+			ASSERT1(v1.size() == v3.size());
+			for (unsigned int i = 0; i < v1.size(); i++) {
+				ASSERT1(v1[i] == v2[i]);
+				ASSERT1(v1[i] == v3[i]);
+			}
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
+
+	Add("LevelOrderWalk2", [&](){
+		auto check = [&](int count) {
+			Logger().WriteInformation("Level order walk a binary tree of %d nodes:\n", count);
+			BinaryNode<int> * tree = nullptr;
+			while (tree == nullptr) tree = BinaryNode<int>::RandomCompleteTree(count);
+
+			BinaryNodeWithRightSibling<int> * tree2 = Test::BinaryNodeWithRightSibling<int>::Clone2(tree);
+			BinaryNodeWithRightSibling<int>::SetRightSibling(tree2);
+
+			BinaryNodeWithRightSibling<int> * tree3 = Test::BinaryNodeWithRightSibling<int>::Clone2(tree);
+			BinaryNodeWithRightSibling<int>::SetRightSibling2(tree3);
+
+			tree->Print2();
+			tree2->Print2();
+			tree3->Print2();
+
+			vector<int> v1;
+			vector<int> v2;
+			vector<int> v3;
+			vector<int> v4;
+
+			auto visit = [&](vector<int> & v) -> function<void(int)> {
+				function<void(int)> f = [&](int c) {
+					v.push_back(c);
+				};
+				return f;
+			};
+
+			tree->LevelOrderWalk(visit(v1));
+			tree->LevelOrderWalk2(visit(v2));
+			tree2->LevelOrderWalk3(visit(v3));
+			tree3->LevelOrderWalk3(visit(v4));
+
+			Logger().Print(v1);
+			Logger().Print(v2);
+			Logger().Print(v3);
+			Logger().Print(v4);
+
+			ASSERT1(v1.size() == v2.size());
+			ASSERT1(v1.size() == v3.size());
+			ASSERT1(v1.size() == v4.size());
+			for (unsigned int i = 0; i < v1.size(); i++) {
+				ASSERT1(v1[i] == v2[i]);
+				ASSERT1(v1[i] == v3[i]);
+				ASSERT1(v1[i] == v4[i]);
+			}
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		check(7);
+		check(8);
+		check(9);
+		check(10);
+		check(11);
+		check(12);
+		check(13);
+		check(14);
+		check(15);
+		check(16);
+	});
+
 }

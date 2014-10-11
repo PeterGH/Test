@@ -1235,7 +1235,7 @@ void BinaryTreeTest::Init(void)
 			}
 
 			Test::BinaryTree<int, Test::BinaryNodeWithRightSibling> tree2;
-			Test::BinaryNodeWithRightSibling<int> * node2 = Test::BinaryNodeWithRightSibling<int>::Clone(tree.Root());
+			Test::BinaryNodeWithRightSibling<int> * node2 = Test::BinaryNodeWithRightSibling<int>::Clone2(tree.Root());
 			node2->SetRightSibling();
 			tree2.Root(node2);
 
@@ -1313,12 +1313,12 @@ void BinaryTreeTest::Init(void)
 			}
 
 			Test::BinaryTree<int, Test::BinaryNodeWithRightSibling> tree2;
-			Test::BinaryNodeWithRightSibling<int> * node2 = Test::BinaryNodeWithRightSibling<int>::Clone(tree.Root());
+			Test::BinaryNodeWithRightSibling<int> * node2 = Test::BinaryNodeWithRightSibling<int>::Clone2(tree.Root());
 			node2->SetRightSibling();
 			tree2.Root(node2);
 
 			Test::BinaryTree<int, Test::BinaryNodeWithRightSibling> tree3;
-			Test::BinaryNodeWithRightSibling<int> * node3 = Test::BinaryNodeWithRightSibling<int>::Clone(tree.Root());
+			Test::BinaryNodeWithRightSibling<int> * node3 = Test::BinaryNodeWithRightSibling<int>::Clone2(tree.Root());
 			node3->SetRightSibling2();
 			tree3.Root(node3);
 

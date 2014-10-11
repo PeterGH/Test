@@ -125,7 +125,7 @@ namespace Test {
 		// Visit level by level, left to right
 		// Depth-first search
 		static void LevelOrderWalk2(BinaryNode * node, function<void(T)> f);
-		void LevelOrderWalk2(function<void(T)> f) { LevelOrderWalk2(this, f); }
+		virtual void LevelOrderWalk2(function<void(T)> f) { LevelOrderWalk2(this, f); }
 
 		// Visit nodes level by level from bottom up and left to right
 		static void LevelOrderWalkBottomUp(BinaryNode * node, function<void(T)> f);
@@ -330,18 +330,18 @@ namespace Test {
 		BinaryNode<T> * node = new BinaryNode<T>(rand());
 		queue<BinaryNode<T> *> q;
 		q.push(node);
-		size_t i = 1;
+		int i = 1;
 		BinaryNode<T> * n;
 		while (!q.empty() && i < size) {
 			n = q.front();
 			q.pop();
 			n->Left() = new BinaryNode<T>(rand());
 			i++;
-			if (i == values.size()) break;
+			if (i == size) break;
 			q.push(n->Left());
 			n->Right() = new BinaryNode<T>(rand());
 			i++;
-			if (i == values.size()) break;
+			if (i == size) break;
 			q.push(n->Right());
 		}
 		return node;

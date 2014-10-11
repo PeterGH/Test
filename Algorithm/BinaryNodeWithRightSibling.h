@@ -24,13 +24,13 @@ namespace Test {
 		static void SetRightSibling2(BinaryNodeWithRightSibling * node);
 		void SetRightSibling2(void) { SetRightSibling2(this); }
 
-		static BinaryNodeWithRightSibling * Clone(BinaryNode * node);
-		BinaryNodeWithRightSibling * Clone(void) { return Clone(this); }
+		static BinaryNodeWithRightSibling * Clone2(BinaryNode * node);
+		BinaryNodeWithRightSibling * Clone2(void) { return Clone2(this); }
 
 		// Visit level by level, left to right
 		// Breadth-first search
-		static void LevelOrderWalk(BinaryNodeWithRightSibling * node, function<void(T)> f);
-		virtual void LevelOrderWalk(function<void(T)> f) { LevelOrderWalk(this, f); }
+		static void LevelOrderWalk3(BinaryNodeWithRightSibling * node, function<void(T)> f);
+		virtual void LevelOrderWalk3(function<void(T)> f) { LevelOrderWalk3(this, f); }
 	};
 
 	// This works for both complete and incomplete binary trees
@@ -120,15 +120,15 @@ namespace Test {
 		SetRightSibling2((BinaryNodeWithRightSibling *)node->Right());
 	}
 
-	template<class T> BinaryNodeWithRightSibling<T> * BinaryNodeWithRightSibling<T>::Clone(BinaryNode<T> * node)
+	template<class T> BinaryNodeWithRightSibling<T> * BinaryNodeWithRightSibling<T>::Clone2(BinaryNode<T> * node)
 	{
 		if (node == nullptr) return nullptr;
 		BinaryNodeWithRightSibling * newNode = new BinaryNodeWithRightSibling(node->Value());
-		BinaryNodeWithRightSibling * left = Clone(node->Left());
+		BinaryNodeWithRightSibling * left = Clone2(node->Left());
 		if (left != nullptr) {
 			newNode->Left() = left;
 		}
-		BinaryNodeWithRightSibling * right = Clone(node->Right());
+		BinaryNodeWithRightSibling * right = Clone2(node->Right());
 		if (right != nullptr) {
 			newNode->Right() = right;
 		}
@@ -138,7 +138,7 @@ namespace Test {
 
 	// Visit level by level, left to right
 	// Breadth-first search
-	template<class T> void BinaryNodeWithRightSibling<T>::LevelOrderWalk(BinaryNodeWithRightSibling * node, function<void(T)> f)
+	template<class T> void BinaryNodeWithRightSibling<T>::LevelOrderWalk3(BinaryNodeWithRightSibling * node, function<void(T)> f)
 	{
 		if (node == nullptr || f == nullptr) return;
 		while (node != nullptr) {
