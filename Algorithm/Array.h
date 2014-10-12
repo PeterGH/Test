@@ -42,6 +42,7 @@ namespace Test {
 		// Parameter sum is the summation of the returned subarray
 		// Parameters start and end are the start and end indices of the returned subarray
 		template<class T> static void MaxSubArray(const T * input, int length, int & start, int & end, T & sum);
+		template<class T> static void MaxSubArray2(const T * input, int length, int & start, int & end, T & sum);
 
 		// Find the indices of min and max elements.
 		// minIndex will be the index of the minimum value (first index if there are more than on minimum value).
@@ -572,7 +573,7 @@ namespace Test {
 			}
 
 			// Record the max element so far
-			if (input[i] > input[max]) max = i;
+			if (input[i] >= input[max]) max = i;
 		}
 
 		if (sum <= 0) {
@@ -581,6 +582,30 @@ namespace Test {
 			start = max;
 			end = max;
 			sum = input[max];
+		}
+	}
+
+	template<class T> void Array::MaxSubArray2(const T * input, int length, int & start, int & end, T & sum)
+	{
+		start = -1;
+		end = -1;
+		sum = INT_MIN;
+		if (input == nullptr || length <= 0) return;
+
+		int minIndex = -1;
+		int minSum = 0; // sum[0..minIndex]
+		int s = 0; // sum[0..i]
+		for (int i = 0; i < length; i++) {
+			s += input[i];
+			if (s - minSum >= sum) {
+				start = minIndex + 1;
+				end = i;
+				sum = s - minSum;
+			}
+			if (s <= minSum) {
+				minSum = s;
+				minIndex = i;
+			}
 		}
 	}
 

@@ -29,7 +29,7 @@ void ArrayTest::Test(int * A, int * B, int length, int columns, int rows)
 	}
 
 	Print(A, length, columns);
-	Test::Array::Transpose<int>(B, length, columns);
+	Array::Transpose<int>(B, length, columns);
 	Print(B, length, rows);
 
 	for (int i = 0; i < rows; i++) {
@@ -40,7 +40,7 @@ void ArrayTest::Test(int * A, int * B, int length, int columns, int rows)
 		}
 	}
 
-	Test::Array::Transpose<int>(B, length, rows);
+	Array::Transpose<int>(B, length, rows);
 	Print(B, length, columns);
 
 	for (int i = 0; i < rows; i++) {
@@ -57,7 +57,7 @@ void ArrayTest::Init(void)
 		int A[] = { 1 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 1, minIndex, maxIndex);
+		Array::MinMax<int>(A, 1, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 0);
 	});
@@ -66,7 +66,7 @@ void ArrayTest::Init(void)
 		int A[] = { 2, 2 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 2, minIndex, maxIndex);
+		Array::MinMax<int>(A, 2, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 1);
 	});
@@ -75,7 +75,7 @@ void ArrayTest::Init(void)
 		int A[] = { 1, 2 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 2, minIndex, maxIndex);
+		Array::MinMax<int>(A, 2, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 1);
 	});
@@ -84,7 +84,7 @@ void ArrayTest::Init(void)
 		int A[] = { 2, 1 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 2, minIndex, maxIndex);
+		Array::MinMax<int>(A, 2, minIndex, maxIndex);
 		ASSERT1(minIndex == 1);
 		ASSERT1(maxIndex == 0);
 	});
@@ -93,7 +93,7 @@ void ArrayTest::Init(void)
 		int A[] = { 2, 2, 2 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		Array::MinMax<int>(A, 3, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 2);
 	});
@@ -102,7 +102,7 @@ void ArrayTest::Init(void)
 		int A[] = { 1, 2, 2 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		Array::MinMax<int>(A, 3, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 2);
 	});
@@ -111,7 +111,7 @@ void ArrayTest::Init(void)
 		int A[] = { 2, 1, 2 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		Array::MinMax<int>(A, 3, minIndex, maxIndex);
 		ASSERT1(minIndex == 1);
 		ASSERT1(maxIndex == 2);
 	});
@@ -120,7 +120,7 @@ void ArrayTest::Init(void)
 		int A[] = { 2, 2, 1 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		Array::MinMax<int>(A, 3, minIndex, maxIndex);
 		ASSERT1(minIndex == 2);
 		ASSERT1(maxIndex == 1);
 	});
@@ -129,7 +129,7 @@ void ArrayTest::Init(void)
 		int A[] = { 1, 1, 2 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		Array::MinMax<int>(A, 3, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 2);
 	});
@@ -138,7 +138,7 @@ void ArrayTest::Init(void)
 		int A[] = { 1, 2, 1 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		Array::MinMax<int>(A, 3, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 1);
 	});
@@ -147,7 +147,7 @@ void ArrayTest::Init(void)
 		int A[] = { 2, 1, 1 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		Array::MinMax<int>(A, 3, minIndex, maxIndex);
 		ASSERT1(minIndex == 1);
 		ASSERT1(maxIndex == 0);
 	});
@@ -156,7 +156,7 @@ void ArrayTest::Init(void)
 		int A[] = { 1, 2, 3 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		Array::MinMax<int>(A, 3, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 2);
 	});
@@ -165,7 +165,7 @@ void ArrayTest::Init(void)
 		int A[] = { 3, 2, 1 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 3, minIndex, maxIndex);
+		Array::MinMax<int>(A, 3, minIndex, maxIndex);
 		ASSERT1(minIndex == 2);
 		ASSERT1(maxIndex == 0);
 	});
@@ -174,7 +174,7 @@ void ArrayTest::Init(void)
 		int A[] = { 4, 4, 4, 4 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		Array::MinMax<int>(A, 4, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 3);
 	});
@@ -183,7 +183,7 @@ void ArrayTest::Init(void)
 		int A[] = { 1, 4, 4, 4 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		Array::MinMax<int>(A, 4, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 3);
 	});
@@ -192,7 +192,7 @@ void ArrayTest::Init(void)
 		int A[] = { 4, 1, 4, 4 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		Array::MinMax<int>(A, 4, minIndex, maxIndex);
 		ASSERT1(minIndex == 1);
 		ASSERT1(maxIndex == 3);
 	});
@@ -201,7 +201,7 @@ void ArrayTest::Init(void)
 		int A[] = { 4, 4, 1, 4 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		Array::MinMax<int>(A, 4, minIndex, maxIndex);
 		ASSERT1(minIndex == 2);
 		ASSERT1(maxIndex == 3);
 	});
@@ -210,7 +210,7 @@ void ArrayTest::Init(void)
 		int A[] = { 4, 4, 4, 1 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		Array::MinMax<int>(A, 4, minIndex, maxIndex);
 		ASSERT1(minIndex == 3);
 		ASSERT1(maxIndex == 2);
 	});
@@ -219,7 +219,7 @@ void ArrayTest::Init(void)
 		int A[] = { 1, 1, 4, 4 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		Array::MinMax<int>(A, 4, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 3);
 	});
@@ -228,7 +228,7 @@ void ArrayTest::Init(void)
 		int A[] = { 1, 4, 1, 4 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		Array::MinMax<int>(A, 4, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 3);
 	});
@@ -237,7 +237,7 @@ void ArrayTest::Init(void)
 		int A[] = { 4, 1, 4, 1 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		Array::MinMax<int>(A, 4, minIndex, maxIndex);
 		ASSERT1(minIndex == 1);
 		ASSERT1(maxIndex == 2);
 	});
@@ -246,7 +246,7 @@ void ArrayTest::Init(void)
 		int A[] = { 4, 4, 1, 1 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		Array::MinMax<int>(A, 4, minIndex, maxIndex);
 		ASSERT1(minIndex == 2);
 		ASSERT1(maxIndex == 1);
 	});
@@ -255,7 +255,7 @@ void ArrayTest::Init(void)
 		int A[] = { 4, 3, 2, 1 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		Array::MinMax<int>(A, 4, minIndex, maxIndex);
 		ASSERT1(minIndex == 3);
 		ASSERT1(maxIndex == 0);
 	});
@@ -264,7 +264,7 @@ void ArrayTest::Init(void)
 		int A[] = { 1, 3, 2, 4 };
 		int minIndex;
 		int maxIndex;
-		Test::Array::MinMax<int>(A, 4, minIndex, maxIndex);
+		Array::MinMax<int>(A, 4, minIndex, maxIndex);
 		ASSERT1(minIndex == 0);
 		ASSERT1(maxIndex == 3);
 	});
@@ -342,7 +342,7 @@ void ArrayTest::Init(void)
 		}
 
 		Print(A, length, columns);
-		Test::Array::TransposeRowsToColumns<int>(B, length, columns);
+		Array::TransposeRowsToColumns<int>(B, length, columns);
 		Print(B, length, rows);
 
 		for (int i = 0; i < rows; i++) {
@@ -353,7 +353,7 @@ void ArrayTest::Init(void)
 			}
 		}
 
-		Test::Array::TransposeColumnsToRows<int>(B, length, columns);
+		Array::TransposeColumnsToRows<int>(B, length, columns);
 		Print(B, length, columns);
 
 		for (int i = 0; i < rows; i++) {
@@ -377,7 +377,7 @@ void ArrayTest::Init(void)
 		}
 
 		Print(A, length, columns);
-		Test::Array::TransposeRowsToColumns<int>(B, length, columns);
+		Array::TransposeRowsToColumns<int>(B, length, columns);
 		Print(B, length, columns);
 
 		// Transpose element (m,n) to ((n % M), (k(m-1) + n/M)) means the index i = Nm + n is mapped to j = (n % M)N + k(m-1) + n/M
@@ -390,7 +390,7 @@ void ArrayTest::Init(void)
 			}
 		}
 
-		Test::Array::TransposeColumnsToRows<int>(B, length, columns);
+		Array::TransposeColumnsToRows<int>(B, length, columns);
 		Print(B, length, columns);
 
 		for (int i = 0; i < rows; i++) {
@@ -414,7 +414,7 @@ void ArrayTest::Init(void)
 		}
 
 		Print(A, length, columns);
-		Test::Array::TransposeRowsToColumns<int>(B, length, columns);
+		Array::TransposeRowsToColumns<int>(B, length, columns);
 		Print(B, length, columns);
 
 		// Transpose element (m,n) to ((m%k)N + n, m/k)) means the index i = Nm + n is mapped to j = (m%k)NN + nN + m/k
@@ -427,7 +427,7 @@ void ArrayTest::Init(void)
 			}
 		}
 
-		Test::Array::TransposeColumnsToRows<int>(B, length, columns);
+		Array::TransposeColumnsToRows<int>(B, length, columns);
 		Print(B, length, columns);
 
 		for (int i = 0; i < rows; i++) {
@@ -441,55 +441,55 @@ void ArrayTest::Init(void)
 	Add("Rotate(1)", [&](){
 		int A[1] = { 1 };
 
-		Test::Array::RotateLeft<int>(A, 1, 0);
+		Array::RotateLeft<int>(A, 1, 0);
 		ASSERT1(A[0] == 1);
-		Test::Array::RotateLeft<int>(A, 1, 1);
+		Array::RotateLeft<int>(A, 1, 1);
 		ASSERT1(A[0] == 1);
-		Test::Array::RotateLeft<int>(A, 1, 2);
+		Array::RotateLeft<int>(A, 1, 2);
 		ASSERT1(A[0] == 1);
-		Test::Array::RotateLeft<int>(A, 1, 3);
+		Array::RotateLeft<int>(A, 1, 3);
 		ASSERT1(A[0] == 1);
-		Test::Array::RotateRight<int>(A, 1, 3);
+		Array::RotateRight<int>(A, 1, 3);
 		ASSERT1(A[0] == 1);
-		Test::Array::RotateRight<int>(A, 1, 2);
+		Array::RotateRight<int>(A, 1, 2);
 		ASSERT1(A[0] == 1);
-		Test::Array::RotateRight<int>(A, 1, 1);
+		Array::RotateRight<int>(A, 1, 1);
 		ASSERT1(A[0] == 1);
-		Test::Array::RotateRight<int>(A, 1, 0);
+		Array::RotateRight<int>(A, 1, 0);
 		ASSERT1(A[0] == 1);
 	});
 
 	Add("Rotate(2)", [&](){
 		int A[2] = { 0, 1 };
 
-		Test::Array::RotateLeft<int>(A, 2, 0);
+		Array::RotateLeft<int>(A, 2, 0);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
-		Test::Array::RotateLeft<int>(A, 2, 1);
+		Array::RotateLeft<int>(A, 2, 1);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 0);
-		Test::Array::RotateLeft<int>(A, 2, 1);
+		Array::RotateLeft<int>(A, 2, 1);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
-		Test::Array::RotateLeft<int>(A, 2, 2);
+		Array::RotateLeft<int>(A, 2, 2);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
-		Test::Array::RotateLeft<int>(A, 2, 3);
+		Array::RotateLeft<int>(A, 2, 3);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 0);
-		Test::Array::RotateRight<int>(A, 2, 1);
+		Array::RotateRight<int>(A, 2, 1);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
-		Test::Array::RotateRight<int>(A, 2, 1);
+		Array::RotateRight<int>(A, 2, 1);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 0);
-		Test::Array::RotateRight<int>(A, 2, 1);
+		Array::RotateRight<int>(A, 2, 1);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
-		Test::Array::RotateRight<int>(A, 2, 2);
+		Array::RotateRight<int>(A, 2, 2);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
-		Test::Array::RotateRight<int>(A, 2, 3);
+		Array::RotateRight<int>(A, 2, 3);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 0);
 	});
@@ -497,83 +497,83 @@ void ArrayTest::Init(void)
 	Add("Rotate(3)", [&](){
 		int A[3] = { 0, 1, 2 };
 
-		Test::Array::RotateLeft<int>(A, 3, 0);
+		Array::RotateLeft<int>(A, 3, 0);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
 		ASSERT1(A[2] == 2);
-		Test::Array::RotateLeft<int>(A, 3, 1);
+		Array::RotateLeft<int>(A, 3, 1);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 		ASSERT1(A[2] == 0);
-		Test::Array::RotateLeft<int>(A, 3, 1);
+		Array::RotateLeft<int>(A, 3, 1);
 		ASSERT1(A[0] == 2);
 		ASSERT1(A[1] == 0);
 		ASSERT1(A[2] == 1);
-		Test::Array::RotateLeft<int>(A, 3, 1);
+		Array::RotateLeft<int>(A, 3, 1);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
 		ASSERT1(A[2] == 2);
-		Test::Array::RotateLeft<int>(A, 3, 2);
+		Array::RotateLeft<int>(A, 3, 2);
 		ASSERT1(A[0] == 2);
 		ASSERT1(A[1] == 0);
 		ASSERT1(A[2] == 1);
-		Test::Array::RotateLeft<int>(A, 3, 2);
+		Array::RotateLeft<int>(A, 3, 2);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 		ASSERT1(A[2] == 0);
-		Test::Array::RotateLeft<int>(A, 3, 2);
+		Array::RotateLeft<int>(A, 3, 2);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
 		ASSERT1(A[2] == 2);
-		Test::Array::RotateLeft<int>(A, 3, 3);
+		Array::RotateLeft<int>(A, 3, 3);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
 		ASSERT1(A[2] == 2);
-		Test::Array::RotateLeft<int>(A, 3, 4);
+		Array::RotateLeft<int>(A, 3, 4);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 		ASSERT1(A[2] == 0);
-		Test::Array::RotateLeft<int>(A, 3, 5);
+		Array::RotateLeft<int>(A, 3, 5);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
 		ASSERT1(A[2] == 2);
-		Test::Array::RotateRight<int>(A, 3, 0);
+		Array::RotateRight<int>(A, 3, 0);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
 		ASSERT1(A[2] == 2);
-		Test::Array::RotateRight<int>(A, 3, 1);
+		Array::RotateRight<int>(A, 3, 1);
 		ASSERT1(A[0] == 2);
 		ASSERT1(A[1] == 0);
 		ASSERT1(A[2] == 1);
-		Test::Array::RotateRight<int>(A, 3, 1);
+		Array::RotateRight<int>(A, 3, 1);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 		ASSERT1(A[2] == 0);
-		Test::Array::RotateRight<int>(A, 3, 1);
+		Array::RotateRight<int>(A, 3, 1);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
 		ASSERT1(A[2] == 2);
-		Test::Array::RotateRight<int>(A, 3, 2);
+		Array::RotateRight<int>(A, 3, 2);
 		ASSERT1(A[0] == 1);
 		ASSERT1(A[1] == 2);
 		ASSERT1(A[2] == 0);
-		Test::Array::RotateRight<int>(A, 3, 2);
+		Array::RotateRight<int>(A, 3, 2);
 		ASSERT1(A[0] == 2);
 		ASSERT1(A[1] == 0);
 		ASSERT1(A[2] == 1);
-		Test::Array::RotateRight<int>(A, 3, 2);
+		Array::RotateRight<int>(A, 3, 2);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
 		ASSERT1(A[2] == 2);
-		Test::Array::RotateRight<int>(A, 3, 3);
+		Array::RotateRight<int>(A, 3, 3);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
 		ASSERT1(A[2] == 2);
-		Test::Array::RotateRight<int>(A, 3, 4);
+		Array::RotateRight<int>(A, 3, 4);
 		ASSERT1(A[0] == 2);
 		ASSERT1(A[1] == 0);
 		ASSERT1(A[2] == 1);
-		Test::Array::RotateRight<int>(A, 3, 5);
+		Array::RotateRight<int>(A, 3, 5);
 		ASSERT1(A[0] == 0);
 		ASSERT1(A[1] == 1);
 		ASSERT1(A[2] == 2);
@@ -596,7 +596,7 @@ void ArrayTest::Init(void)
 
 		for (int i = 0; i < 20; i++) {
 			init();
-			Test::Array::RotateLeft<int>(A, 10, i);
+			Array::RotateLeft<int>(A, 10, i);
 			checkLeft(i);
 		}
 
@@ -609,7 +609,7 @@ void ArrayTest::Init(void)
 
 		for (int i = 0; i < 20; i++) {
 			init();
-			Test::Array::RotateRight<int>(A, 10, i);
+			Array::RotateRight<int>(A, 10, i);
 			checkRight(i);
 		}
 	});
@@ -631,7 +631,7 @@ void ArrayTest::Init(void)
 
 		for (int i = 0; i < 22; i++) {
 			init();
-			Test::Array::RotateLeft<int>(A, 11, i);
+			Array::RotateLeft<int>(A, 11, i);
 			checkLeft(i);
 		}
 
@@ -644,7 +644,7 @@ void ArrayTest::Init(void)
 
 		for (int i = 0; i < 22; i++) {
 			init();
-			Test::Array::RotateRight<int>(A, 11, i);
+			Array::RotateRight<int>(A, 11, i);
 			checkRight(i);
 		}
 	});
@@ -654,11 +654,17 @@ void ArrayTest::Init(void)
 		int L = sizeof(A1) / sizeof(A1[0]);
 
 		auto check = [&](int a[], int n, int el, int er, int es) -> void {
+			Logger().Print(a, n);
 			int l, r, sum;
 			Array::MaxSubArray<int>(a, n, l, r, sum);
+			Logger().WriteInformation("a[%d..%d] = %d\n", l, r, sum);
+			int l2, r2, sum2;
+			Array::MaxSubArray2<int>(a, n, l2, r2, sum2);
+			Logger().WriteInformation("a[%d..%d] = %d\n", l2, r2, sum2);
 			ASSERT1(el == l);
 			ASSERT1(er == r);
 			ASSERT1(es == sum);
+			ASSERT1(es == sum2);
 		};
 
 		check(A1, L, 7, 10, 43);
@@ -676,12 +682,12 @@ void ArrayTest::Init(void)
 		check(A2, 3, 0, 2, 41);
 
 		int A3[] = { -13, -3, -25, -20, -3, -16, -23, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
-		check(A3, L, 1, 1, -3);
+		check(A3, L, 4, 4, -3);
 		check(A3, 1, 0, 0, -13);
 		check(A3, 2, 1, 1, -3);
 
 		int A4[] = { 0, 0, -25, -20, -3, -16, -23, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
-		check(A4, L, 0, 0, 0);
+		check(A4, L, 1, 1, 0);
 		check(A4, 1, 0, 0, 0);
 
 		int A5[] = { 0, 0, 25, 20, 3, 16, 23, 18, 20, 7, 12, 5, 22, 15, 0, 0 };
@@ -689,10 +695,10 @@ void ArrayTest::Init(void)
 		check(A5, 1, 0, 0, 0);
 
 		int A6[] = { -25, -20, -3, 0, 0, -16, -23, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
-		check(A6, L, 3, 3, 0);
+		check(A6, L, 4, 4, 0);
 		check(A6, 1, 0, 0, -25);
 		check(A6, 2, 1, 1, -20);
-		check(A6, 5, 3, 3, 0);
+		check(A6, 5, 4, 4, 0);
 
 		int A7[] = { 1, 1, 1, -1, -1, -1, -1, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
 		check(A7, L, 0, 2, 3);
@@ -707,8 +713,8 @@ void ArrayTest::Init(void)
 			Logger().Print(A, l);
 			int first, first2;
 			int distance, distance2;
-			Test::Array::MaxInversionDistance(A, l, first, distance);
-			Test::Array::MaxInversionDistance2(A, l, first2, distance2);
+			Array::MaxInversionDistance(A, l, first, distance);
+			Array::MaxInversionDistance2(A, l, first2, distance2);
 			Logger().WriteInformation("\t%d(%d)\t%d(%d)\n\n", first, f, distance, d);
 			Logger().WriteInformation("\t%d(%d)\t%d(%d)\n\n", first2, f, distance2, d);
 			ASSERT1(first == f);
@@ -797,8 +803,8 @@ void ArrayTest::Init(void)
 		auto checkWindow = [&](int A[], int l, int w) {
 			vector<int> output;
 			vector<int> output2;
-			Test::Array::MaxSlidingWindow(A, l, w, output);
-			Test::Array::MaxSlidingWindow2(A, l, w, output2);
+			Array::MaxSlidingWindow(A, l, w, output);
+			Array::MaxSlidingWindow2(A, l, w, output2);
 			ASSERT1(output.size() == output2.size());
 			for (unsigned int i = 0; i < output.size(); i++) {
 				ASSERT1(output[i] == output2[i]);
@@ -928,11 +934,11 @@ void ArrayTest::Init(void)
 		check(A37, 4);
 
 		for (int i = 0; i < 100; i++) {
-			int length = 1 + Test::Random::Next(100);
+			int length = 1 + Random::Next(100);
 
 			unique_ptr<int[]> input(new int[length]);
 			for (int j = 0; j < length; j++) {
-				input[j] = Test::Random::Next();
+				input[j] = Random::Next();
 			}
 
 			int w = 1;
@@ -943,7 +949,7 @@ void ArrayTest::Init(void)
 				if (w >= length - 10 && w < length) {
 					w = length;
 				} else {
-					w += (1 + Test::Random::Next(9));
+					w += (1 + Random::Next(9));
 				}
 			} while (w <= length);
 		}
@@ -1048,10 +1054,10 @@ void ArrayTest::Init(void)
 		}
 		{
 			for (int i = 0; i < 100; i++) {
-				int len = 1 + Test::Random::Next(100);
+				int len = 1 + Random::Next(100);
 				unique_ptr<int[]> A(new int[len]);
 				for (int j = 0; j < len; j++) {
-					A[j] = Test::Random::Next();
+					A[j] = Random::Next();
 				}
 				Logger().WriteInformation("\nRun %d with %d elements\n", i, len);
 				check(A.get(), len);
@@ -1289,10 +1295,10 @@ void ArrayTest::Init(void)
 		}
 		{
 			for (int i = 0; i < 100; i++) {
-				int len = 1 + Test::Random::Next(100);
+				int len = 1 + Random::Next(100);
 				unique_ptr<int[]> A(new int[len]);
 				for (int j = 0; j < len; j++) {
-					A[j] = Test::Random::Next();
+					A[j] = Random::Next();
 				}
 				Logger().WriteInformation("\nRun %d with %d elements\n", i, len);
 				check(A.get(), len);
