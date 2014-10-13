@@ -69,21 +69,31 @@ void BinaryNodeTest::Init(void)
 		auto check = [&](vector<int> & v){
 			BinaryNode<int> * node = BinaryNode<int>::ToCompleteTree(v);
 			BinaryNode<int> * node2 = BinaryNode<int>::FillToComplete(nullptr, v);
+			BinaryNode<int> * node3 = nullptr;
+			for_each (v.begin(), v.end(), [&](int i){
+				node3 = BinaryNode<int>::Insert(node3, i);
+			});
 			if (v.size() == 0) {
 				ASSERT1(node == nullptr);
 				ASSERT1(node2 == nullptr);
+				ASSERT1(node3 == nullptr);
 			} else {
 				node->Print2();
 				bool complete = BinaryNode<int>::IsCompleteTree(node);
 				bool complete2 = BinaryNode<int>::IsCompleteTree(node2);
+				bool complete3 = BinaryNode<int>::IsCompleteTree(node3);
 				int equal = BinaryNode<int>::Compare(node, node2);
 				int equal2 = BinaryNode<int>::Compare2(node, node2);
+				int equal3 = BinaryNode<int>::Compare(node, node3);
 				BinaryNode<int>::DeleteTree(node);
 				BinaryNode<int>::DeleteTree(node2);
+				BinaryNode<int>::DeleteTree(node3);
 				ASSERT1(complete == true);
 				ASSERT1(complete2 == true);
+				ASSERT1(complete3 == true);
 				ASSERT1(equal == 0);
 				ASSERT1(equal2 == 0);
+				ASSERT1(equal3 == 0);
 			}
 		};
 		check(vector<int> { });

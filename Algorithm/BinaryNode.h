@@ -374,7 +374,6 @@ namespace Test {
 
 	template<class T> BinaryNode<T> * BinaryNode<T>::Insert(BinaryNode * node, T value)
 	{
-		if (values.size() == 0) return node;
 		if (node == nullptr) return new BinaryNode<T>(value);
 		queue<BinaryNode<T> *> q;
 		q.push(node);
