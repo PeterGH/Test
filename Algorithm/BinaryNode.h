@@ -228,21 +228,40 @@ namespace Test {
 		//   3   3
 		static bool IsSymmetric2(BinaryNode * node);
 		bool IsSymmetric2(void) { return IsSymmetric2(this); }
+
+		//
+		// BinarySearchTree
+		//
+
+		// Create a random binary search tree
+		// Return nullptr if input is empty
+		static BinaryNode * RandomSearchTree(vector<T> & values);
+		// May return nullptr
+		static BinaryNode * RandomSearchTree(size_t maxSize);
+
+		// Insert a new value to binary search tree
+		static BinaryNode * InsertSearchTree(BinaryNode * node, T value);
+
+		// Search a node in binary search tree
+		static BinaryNode * SearchSearchTree(BinaryNode * node, T value);
+		static BinaryNode * SearchSearchTree2(BinaryNode * node, T value);
+
+		// Find the minimum node
+		static BinaryNode * MinSearchTree(BinaryNode * node);
+		// Find the maximum node
+		static BinaryNode * MaxSearchTree(BinaryNode * node);
+
+		// Assume first and second exist in the tree
+		static BinaryNode * LowestCommonAncestorSearchTree(BinaryNode * node, const T & first, const T & second);
 	};
 
 	template<class T> void BinaryNode<T>::DeleteTree(BinaryNode * node)
 	{
 		if (node == nullptr) return;
-		if (node->Left() != nullptr) {
-			DeleteTree(node->Left());
-			delete node->Left();
-			node->Left() = nullptr;
-		}
-		if (node->Right() != nullptr) {
-			DeleteTree(node->Right());
-			delete node->Right();
-			node->Right() = nullptr;
-		}
+		DeleteTree(node->Left());
+		DeleteTree(node->Right());
+		delete node;
+		node = nullptr;
 	}
 
 	// Create a random binary tree
@@ -1550,5 +1569,86 @@ namespace Test {
 			}
 		}
 		return true;
+	}
+
+	// Create a random binary search tree
+	template<class T> BinaryNode<T> * BinaryNode<T>::RandomSearchTree(vector<T> & values)
+	{
+		if (values.size() == 0) return nullptr;
+		sort(values.begin(), values.end());
+		BinaryNode<T> * node = ToRandomTree(values);
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::RandomSearchTree(size_t maxSize)
+	{
+		vector<T> values;
+		int size = rand() % (maxSize + 1);
+		for (int i = 0; i < size; i++) {
+			values.push_back(rand());
+		}
+		BinaryNode<T> * node = RandomSearchTree(values);
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::InsertSearchTree(BinaryNode * node, T value)
+	{
+		BinaryNode<T> * newNode = new BinaryNode<T>(value);
+		if (node == nullptr) return newNode;
+		BinaryNode<T> * parent = node;
+		BinaryNode<T> * current = node;
+		while (current != nullptr) {
+			parent = current;
+			if (value <= current->Value()) current = current->Left();
+			else current = current->Right();
+		}
+		if (value() <= parent->Value()) parent->Left() = newNode;
+		else parent->Right() = newNode;
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchSearchTree(BinaryNode * node, T value)
+	{
+		if (node == nullptr || node->Value() == value) return node;
+		if (value <= node->Value()) return SearchSearchTree(node->Left(), value);
+		else return SearchSearchTree(node->Right(), value);
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchSearchTree2(BinaryNode * node, T value)
+	{
+		if (node == nullptr || node->Value() == value) return node;
+		while (node != nullptr && node->Value() != value) {
+			if (value <= node->Value())	node = node->Left();
+			else node = node->Right();
+		}
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::MinSearchTree(BinaryNode * node)
+	{
+		if (node == nullptr) return nullptr;
+		while (node->Left() != nullptr) node = node->Left();
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::MaxSearchTree(BinaryNode * node)
+	{
+		if (node == nullptr) return node;
+		while (node->Right() != nullptr) node = node->Right();
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::LowestCommonAncestorSearchTree(BinaryNode<T> * node, const T & first, const T & second)
+	{
+		if (node == nullptr) return nullptr;
+		while (node != nullptr) {
+			if (node->Value() > std::max(first, second))
+				node = node->Left();
+			else if (node->Value() < std::min(first, second))
+				node = node->Right();
+			else
+				break;
+		}
+		return node;
 	}
 }

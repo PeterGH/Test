@@ -302,7 +302,7 @@ void BinaryNodeTest::Init(void)
 		}
 	});
 
-	Add("LowestCommonAncestor", [&](){
+	Add("LowestCommonAncestor1", [&](){
 		auto check = [&](size_t s){
 			vector<int> v;
 			for (size_t i = 0; i < s; i++) {
@@ -315,9 +315,79 @@ void BinaryNodeTest::Init(void)
 					BinaryNode<int> * f = BinaryNode<int>::Search(node, v[i]);
 					BinaryNode<int> * s = BinaryNode<int>::Search(node, v[j]);
 					BinaryNode<int> * a = BinaryNode<int>::LowestCommonAncestor(node, f, s);
-					BinaryNode<int> * a2 = BinaryNode<int>::LowestCommonAncestor(node, f, s);
+					BinaryNode<int> * a2 = BinaryNode<int>::LowestCommonAncestor2(node, f, s);
 					Logger().WriteInformation("LCA(%d, %d) = %d, %d\n", v[i], v[j], a->Value(), a2->Value());
 					ASSERT1(a == a2);
+				}
+			}
+			BinaryNode<int>::DeleteTree(node);
+		};
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("LowestCommonAncestor2", [&](){
+		auto check = [&](size_t s){
+			vector<int> v;
+			for (size_t i = 0; i < s; i++) {
+				v.push_back(i);
+			}
+			BinaryNode<int> * n = BinaryNode<int>::ToRandomTree(v);
+			BinaryNodeWithParent<int> * node = BinaryNodeWithParent<int>::Clone2(n);
+			BinaryNode<int>::DeleteTree(n);
+			node->Print2();
+			for (size_t i = 0; i < s - 1; i++) {
+				for (size_t j = i + 1; j < s; j++) {
+					BinaryNodeWithParent<int> * f = (BinaryNodeWithParent<int> *)BinaryNode<int>::Search(node, v[i]);
+					BinaryNodeWithParent<int> * s = (BinaryNodeWithParent<int> *)BinaryNode<int>::Search(node, v[j]);
+					BinaryNodeWithParent<int> * a = BinaryNodeWithParent<int>::LowestCommonAncestor(f, s);
+					BinaryNodeWithParent<int> * a2 = BinaryNodeWithParent<int>::LowestCommonAncestor2(f, s);
+					Logger().WriteInformation("LCA(%d, %d) = %d, %d\n", v[i], v[j], a->Value(), a2->Value());
+					ASSERT1(a == a2);
+				}
+			}
+			BinaryNode<int>::DeleteTree(node);
+		};
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("LowestCommonAncestor3", [&](){
+		auto check = [&](size_t s){
+			vector<int> v;
+			for (size_t i = 0; i < s; i++) {
+				v.push_back(i);
+			}
+			BinaryNode<int> * n = BinaryNode<int>::RandomSearchTree(v);
+			BinaryNodeWithParent<int> * node = BinaryNodeWithParent<int>::Clone2(n);
+			BinaryNode<int>::DeleteTree(n);
+			node->Print2();
+			for (size_t i = 0; i < s - 1; i++) {
+				for (size_t j = i + 1; j < s; j++) {
+					BinaryNodeWithParent<int> * f = (BinaryNodeWithParent<int> *)BinaryNode<int>::Search(node, v[i]);
+					BinaryNodeWithParent<int> * s = (BinaryNodeWithParent<int> *)BinaryNode<int>::Search(node, v[j]);
+					BinaryNodeWithParent<int> * a = (BinaryNodeWithParent<int> *)BinaryNode<int>::LowestCommonAncestor(node, f, s);
+					BinaryNodeWithParent<int> * a2 = (BinaryNodeWithParent<int> *)BinaryNode<int>::LowestCommonAncestor2(node, f, s);
+					BinaryNodeWithParent<int> * a3 = BinaryNodeWithParent<int>::LowestCommonAncestor(f, s);
+					BinaryNodeWithParent<int> * a4 = BinaryNodeWithParent<int>::LowestCommonAncestor2(f, s);
+					BinaryNodeWithParent<int> * a5 = (BinaryNodeWithParent<int> *)BinaryNode<int>::LowestCommonAncestorSearchTree(node, v[i], v[j]);
+					Logger().WriteInformation("LCA(%d, %d) = %d, %d, %d, %d, %d\n", v[i], v[j], a->Value(), a2->Value(), a3->Value(), a4->Value(), a5->Value());
+					ASSERT1(a == a2);
+					ASSERT1(a == a3);
+					ASSERT1(a == a4);
+					ASSERT1(a == a5);
 				}
 			}
 			BinaryNode<int>::DeleteTree(node);
@@ -1097,4 +1167,55 @@ void BinaryNodeTest::Init(void)
 		check(16);
 	});
 
+	Add("Min", [&](){
+		auto check = [&](size_t s){
+			vector<int> v;
+			for (size_t i = 0; i < s; i++) {
+				v.push_back(rand());
+			}
+			BinaryNode<int> * node = BinaryNode<int>::RandomSearchTree(v);
+			node->Print2();
+			int m = *min_element(v.begin(), v.end());
+			BinaryNode<int> * m1 = BinaryNode<int>::Min(node);
+			BinaryNode<int> * m2 = BinaryNode<int>::MinSearchTree(node);
+			Logger().WriteInformation("Min = %d, %d, %d\n", m, m1->Value(), m2->Value());
+			ASSERT1(m == m1->Value());
+			ASSERT1(m == m2->Value());
+			BinaryNode<int>::DeleteTree(node);
+		};
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("Max", [&](){
+		auto check = [&](size_t s){
+			vector<int> v;
+			for (size_t i = 0; i < s; i++) {
+				v.push_back(rand());
+			}
+			BinaryNode<int> * node = BinaryNode<int>::RandomSearchTree(v);
+			node->Print2();
+			int m = *max_element(v.begin(), v.end());
+			BinaryNode<int> * m1 = BinaryNode<int>::Max(node);
+			BinaryNode<int> * m2 = BinaryNode<int>::MaxSearchTree(node);
+			Logger().WriteInformation("Max = %d, %d, %d\n", m, m1->Value(), m2->Value());
+			ASSERT1(m == m1->Value());
+			ASSERT1(m == m2->Value());
+			BinaryNode<int>::DeleteTree(node);
+		};
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
 }

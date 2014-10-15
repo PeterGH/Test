@@ -29,6 +29,9 @@ namespace Test {
 		static void PostOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f);
 		void PostOrderWalkWithOutStack(function<void(T)> f) { PostOrderWalkWithOutStack(this, f); }
 
+		static BinaryNodeWithParent<T> * LowestCommonAncestor(BinaryNodeWithParent<T> * first, BinaryNodeWithParent<T> * second);
+		static BinaryNodeWithParent<T> * LowestCommonAncestor2(BinaryNodeWithParent<T> * first, BinaryNodeWithParent<T> * second);
+
 		// Count height of tree rooted at node
 		// Non-recursive
 		static int Height2(BinaryNodeWithParent * node);
@@ -107,6 +110,51 @@ namespace Test {
 				}
 			}
 		}
+	}
+
+	template<class T> BinaryNodeWithParent<T> * BinaryNodeWithParent<T>::LowestCommonAncestor(BinaryNodeWithParent<T> * first, BinaryNodeWithParent<T> * second)
+	{
+		if (first == nullptr || second == nullptr) return nullptr;
+		set<BinaryNodeWithParent<T> *> visited;
+		pair<set<BinaryNodeWithParent<T> *>::iterator, bool> result;
+		auto checkAndMoveUp = [&](BinaryNodeWithParent<T> ** p) -> bool {
+			if (*p != nullptr) {
+				// set.insert returns a pair, where the second value is a bool indicating
+				// whether the first value points to a new element or an existing element.
+				result = visited.insert(*p);
+				if (!result.second) {
+					// Insert failed because the same element already exists
+					return true;
+				}
+				*p = (*p)->Parent();
+			}
+			return false;
+		};
+
+		while (first != nullptr || second != nullptr) {
+			if (checkAndMoveUp(&first)) return first;
+			if (checkAndMoveUp(&second)) return second;
+		}
+		return nullptr;
+	}
+
+	template<class T> BinaryNodeWithParent<T> * BinaryNodeWithParent<T>::LowestCommonAncestor2(BinaryNodeWithParent<T> * first, BinaryNodeWithParent<T> * second)
+	{
+		if (first == nullptr || second == nullptr) return nullptr;
+		int df = first->Depth();
+		int ds = second->Depth();
+		int dd = df > ds ? df - ds : ds - df;
+		BinaryNodeWithParent<T> * h = df < ds ? first : second;
+		BinaryNodeWithParent<T> * l = df < ds ? second : first;
+		for (int i = 0; i < dd; i++) {
+			l = l->Parent();
+		}
+		while (h != nullptr && l != nullptr) {
+			if (h == l) return h;
+			h = h->Parent();
+			l = l->Parent();
+		}
+		return nullptr;
 	}
 
 	// Count height of tree rooted at node
