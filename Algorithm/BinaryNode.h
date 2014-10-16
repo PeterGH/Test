@@ -235,24 +235,24 @@ namespace Test {
 
 		// Create a random binary search tree
 		// Return nullptr if input is empty
-		static BinaryNode * RandomSearchTree(vector<T> & values);
+		static BinaryNode * SearchTreeRandom(vector<T> & values);
 		// May return nullptr
-		static BinaryNode * RandomSearchTree(size_t maxSize);
+		static BinaryNode * SearchTreeRandom(size_t maxSize);
 
 		// Insert a new value to binary search tree
-		static BinaryNode * InsertSearchTree(BinaryNode * node, T value);
+		static BinaryNode * SearchTreeInsert(BinaryNode * node, T value);
 
 		// Search a node in binary search tree
-		static BinaryNode * SearchSearchTree(BinaryNode * node, T value);
-		static BinaryNode * SearchSearchTree2(BinaryNode * node, T value);
+		static BinaryNode * SearchTreeSearch(BinaryNode * node, T value);
+		static BinaryNode * SearchTreeSearch2(BinaryNode * node, T value);
 
 		// Find the minimum node
-		static BinaryNode * MinSearchTree(BinaryNode * node);
+		static BinaryNode * SearchTreeMin(BinaryNode * node);
 		// Find the maximum node
-		static BinaryNode * MaxSearchTree(BinaryNode * node);
+		static BinaryNode * SearchTreeMax(BinaryNode * node);
 
 		// Assume first and second exist in the tree
-		static BinaryNode * LowestCommonAncestorSearchTree(BinaryNode * node, const T & first, const T & second);
+		static BinaryNode * SearchTreeLowestCommonAncestor(BinaryNode * node, const T & first, const T & second);
 	};
 
 	template<class T> void BinaryNode<T>::DeleteTree(BinaryNode * node)
@@ -1572,7 +1572,7 @@ namespace Test {
 	}
 
 	// Create a random binary search tree
-	template<class T> BinaryNode<T> * BinaryNode<T>::RandomSearchTree(vector<T> & values)
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeRandom(vector<T> & values)
 	{
 		if (values.size() == 0) return nullptr;
 		sort(values.begin(), values.end());
@@ -1580,7 +1580,7 @@ namespace Test {
 		return node;
 	}
 
-	template<class T> BinaryNode<T> * BinaryNode<T>::RandomSearchTree(size_t maxSize)
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeRandom(size_t maxSize)
 	{
 		vector<T> values;
 		int size = rand() % (maxSize + 1);
@@ -1591,7 +1591,7 @@ namespace Test {
 		return node;
 	}
 
-	template<class T> BinaryNode<T> * BinaryNode<T>::InsertSearchTree(BinaryNode * node, T value)
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeInsert(BinaryNode * node, T value)
 	{
 		BinaryNode<T> * newNode = new BinaryNode<T>(value);
 		if (node == nullptr) return newNode;
@@ -1607,14 +1607,14 @@ namespace Test {
 		return node;
 	}
 
-	template<class T> BinaryNode<T> * BinaryNode<T>::SearchSearchTree(BinaryNode * node, T value)
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeSearch(BinaryNode * node, T value)
 	{
 		if (node == nullptr || node->Value() == value) return node;
-		if (value <= node->Value()) return SearchSearchTree(node->Left(), value);
-		else return SearchSearchTree(node->Right(), value);
+		if (value <= node->Value()) return SearchTreeSearch(node->Left(), value);
+		else return SearchTreeSearch(node->Right(), value);
 	}
 
-	template<class T> BinaryNode<T> * BinaryNode<T>::SearchSearchTree2(BinaryNode * node, T value)
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeSearch2(BinaryNode * node, T value)
 	{
 		if (node == nullptr || node->Value() == value) return node;
 		while (node != nullptr && node->Value() != value) {
@@ -1624,21 +1624,21 @@ namespace Test {
 		return node;
 	}
 
-	template<class T> BinaryNode<T> * BinaryNode<T>::MinSearchTree(BinaryNode * node)
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeMin(BinaryNode * node)
 	{
 		if (node == nullptr) return nullptr;
 		while (node->Left() != nullptr) node = node->Left();
 		return node;
 	}
 
-	template<class T> BinaryNode<T> * BinaryNode<T>::MaxSearchTree(BinaryNode * node)
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeMax(BinaryNode * node)
 	{
 		if (node == nullptr) return node;
 		while (node->Right() != nullptr) node = node->Right();
 		return node;
 	}
 
-	template<class T> BinaryNode<T> * BinaryNode<T>::LowestCommonAncestorSearchTree(BinaryNode<T> * node, const T & first, const T & second)
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeLowestCommonAncestor(BinaryNode<T> * node, const T & first, const T & second)
 	{
 		if (node == nullptr) return nullptr;
 		while (node != nullptr) {

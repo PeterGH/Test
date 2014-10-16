@@ -17,6 +17,12 @@ namespace Test {
 		// Set the parent pointer
 		virtual void Parent(BinaryNode * parent) { this->Neighbor(2) = parent; }
 
+		// Create a random binary tree
+		// Return nullptr if input is empty
+		static BinaryNodeWithParent * RandomTree2(vector<T> & values);
+		// May return nullptr
+		static BinaryNodeWithParent * RandomTree2(size_t maxSize);
+
 		// Non-recursive without stack
 		static void PreOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f);
 		void PreOrderWalkWithOutStack(function<void(T)> f) { PreOrderWalkWithOutStack(this, f); }
@@ -43,7 +49,38 @@ namespace Test {
 
 		static BinaryNodeWithParent * Clone2(BinaryNode * node);
 		BinaryNodeWithParent * Clone2(void) { return Clone2(this); }
+
+		//
+		// Binary Search Tree
+		//
+
+		static BinaryNodeWithParent<T> * SearchTreeSuccessor(BinaryNodeWithParent<T> * node);
+		static BinaryNodeWithParent<T> * SearchTreePredecessor(BinaryNodeWithParent<T> * node);
+
+		// Delete a node from a binary search tree. Return the root of tree.
+		static BinaryNodeWithParent<T> * SearchTreeDelete(BinaryNodeWithParent<T> * tree, BinaryNodeWithParent<T> * node);
 	};
+
+	template<class T> BinaryNodeWithParent<T> * BinaryNodeWithParent<T>::RandomTree2(vector<T> & values)
+	{
+		if (values.size() == 0) return nullptr;
+
+		BinaryNode<T> * n = ToRandomTree(values);
+		BinaryNodeWithParent<T> * node = Clone2(n);
+		DeleteTree(n);
+		return node;
+	}
+
+	template<class T> BinaryNodeWithParent<T> * BinaryNodeWithParent<T>::RandomTree2(size_t maxSize)
+	{
+		vector<T> values;
+		int size = rand() % (maxSize + 1);
+		for (int i = 0; i < size; i++) {
+			values.push_back(rand());
+		}
+		BinaryNodeWithParent<T> * node = RandomTree2(values);
+		return node;
+	}
 
 	// Non-recursive without stack
 	template<class T> void BinaryNodeWithParent<T>::PreOrderWalkWithOutStack(BinaryNodeWithParent * node, function<void(T)> f)
@@ -229,4 +266,193 @@ namespace Test {
 		return newNode;
 	}
 
+	template<class T> BinaryNodeWithParent<T> * BinaryNodeWithParent<T>::SearchTreeSuccessor(BinaryNodeWithParent<T> * node)
+	{
+		if (node == nullptr) return node;
+		//  (A)
+		//  / \
+		// () (B)
+		// The successor of A is the minimum node of subtree B
+		if (node->Right() != nullptr) return (BinaryNodeWithParent<T> *)SearchTreeMin(node->Right());
+		//    (B)
+		//   /
+		// (C)
+		//   \
+		//    ()
+		//      \
+		//      (A)
+		//      / \
+		//     () NULL
+		// The successor of A is the lowest ancestor B whose left child C contains A in its right substree
+		BinaryNodeWithParent<T> * parent = node->Parent();
+		while (parent != nullptr && node == parent->Right()) {
+			node = parent;
+			parent = parent->Parent();
+		}
+		// parent could be NULL if node is the maximum node of tree, i.e.,
+		//
+		//  (A)
+		//  / \
+		// () NULL
+		//
+		// or
+		//
+		// ()
+		//   \
+		//   (A)
+		//   / \
+		//  () NULL
+		return parent;
+	}
+
+	template<class T> BinaryNodeWithParent<T> * BinaryNodeWithParent<T>::SearchTreePredecessor(BinaryNodeWithParent<T> * node)
+	{
+		if (node == nullptr) return nullptr;
+		//   (A)
+		//   /
+		// (B)
+		// The predecessor of A is the maximum node of subtree B
+		if (node->Left() != nullptr) return (BinaryNodeWithParent<T> *)SearchTreeMax(node->Left());
+		//     (B)
+		//       \
+		//       (C)
+		//       /
+		//      ()
+		//     /
+		//   (A)
+		//   / \
+		// NULL ()
+		// The predecessor of A is the lowest ancestor B whose right child C contains A in its left substree
+		BinaryNodeWithParent<T> * parent = node->Parent();
+		while (parent != nullptr && node == parent->Left()) {
+			node = parent;
+			parent = parent->Parent();
+		}
+		// parent could be NULL if node is the minimum node of tree, i.e.,
+		//
+		//   (A)
+		//   / \
+		// NULL ()
+		//
+		// or
+		//
+		//      ()
+		//     /
+		//   (A)
+		//   / \
+		// NULL ()
+		return parent;
+	}
+
+	// Delete a node from a binary search tree. Return the root of tree.
+	template<class T> BinaryNodeWithParent<T> * BinaryNodeWithParent<T>::SearchTreeDelete(BinaryNodeWithParent<T> * tree, BinaryNodeWithParent<T> * node)
+	{
+		if (tree == nullptr || node == nullptr) return tree;
+
+		// Replace the subtree at dst with the subtree at src. Return dst.
+		auto transplant = [&](BinaryNodeWithParent<T> * dst, BinaryNodeWithParent<T> * src) -> BinaryNodeWithParent<T> * {
+			if (dst == nullptr) return dst;
+			if (dst->Parent() == nullptr) {
+				// src becomes the new root
+				if (src != nullptr) src->Parent() = nullptr;
+				return dst;
+			}
+			if (dst == dst->Parent()->Left()) dst->Parent()->Left() = src;
+			else dst->Parent()->Right() = src;
+			if (src != nullptr) src->Parent() = dst->Parent();
+			return dst;
+		};
+
+		if (node->Left() == nullptr) {
+			//   ()
+			//    |
+			//   (A)
+			//   /  \
+			// NULL (B)
+			BinaryNodeWithParent<T> * r = (BinaryNodeWithParent<T> *)node->Right();
+			transplant(node, r);
+			node->Right() = nullptr;
+			if (tree == node) {
+				// r is the new root
+				tree = r;
+			}
+			delete node;
+			node = nullptr;
+			return tree;
+		}
+
+		if (node->Right() == nullptr) {
+			//   ()
+			//    |
+			//   (A)
+			//   /  \
+			// (B) NULL
+			BinaryNodeWithParent<T> * l = (BinaryNodeWithParent<T> *)node->Left();
+			transplant(node, l);
+			node->Left() = nullptr;
+			if (tree == node) {
+				// l is the new root
+				tree = l;
+			}
+			delete node;
+			node = nullptr;
+			return tree;
+		}
+
+		BinaryNodeWithParent<T> * successor = (BinaryNodeWithParent<T> *)SearchTreeMin(node->Right());
+
+		if (successor->Parent() != node) {
+			//     ()
+			//     |
+			//    (A)
+			//    / \
+			//   ()  (D)
+			//        \
+			//         ()
+			//        /
+			//      (B)
+			//      / \
+			//    NULL (C)
+			transplant(successor, (BinaryNodeWithParent<T> *)successor->Right());
+			//     ()
+			//     |
+			//    (A)
+			//    / \
+			//   () (D)
+			//        \
+			//         ()
+			//        /
+			//      (C)           (B)
+			successor->Right() = node->Right();
+			((BinaryNodeWithParent<T> *)successor->Right())->Parent() = successor;
+			//     ()
+			//     |
+			//    (A)
+			//    /
+			//   ()
+			//       (B)
+			//         \
+			//         (D)
+			//           \
+			//            ()
+			//           /
+			//         (C)
+		}
+
+		transplant(node, successor);
+		successor->Left() = node->Left();
+		((BinaryNodeWithParent<T> *)successor->Left())->Parent() = successor;
+
+		if (tree == node) {
+			// successor is the new root
+			tree = successor;
+		}
+
+		node->Left() = nullptr;
+		node->Right() = nullptr;
+		delete node;
+		node = nullptr;
+
+		return tree;
+	}
 }
