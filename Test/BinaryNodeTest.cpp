@@ -1329,4 +1329,95 @@ void BinaryNodeTest::Init(void)
 			check(i);
 		}
 	});
+
+	Add("Verify1", [&](){
+		auto check = [&](BinaryNode<int> * n, bool expect){
+			bool r = BinaryNode<int>::SearchTreeVerify(n);
+			bool r2 = BinaryNode<int>::SearchTreeVerify2(n);
+			bool r3 = BinaryNode<int>::SearchTreeVerify3(n);
+			BinaryNode<int>::DeleteTree(n);
+			ASSERT1(expect == r);
+			ASSERT1(expect == r2);
+			ASSERT1(expect == r3);
+		};
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(80);
+			BinaryNode<int> * n2 = new BinaryNode<int>(70);
+			BinaryNode<int> * n3 = new BinaryNode<int>(100);
+			n1->Left() = n2;
+			n2->Right() = n3;
+			n1->Print2();
+			check(n1, false);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(80);
+			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(80);
+			Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(70);
+			n1->Left() = n2;
+			n2->Right() = n3;
+			n1->Print2();
+			check(n1, false);
+		}
+		{
+			Test::BinaryNode<int> * n1 = new Test::BinaryNode<int>(80);
+			Test::BinaryNode<int> * n2 = new Test::BinaryNode<int>(80);
+			Test::BinaryNode<int> * n3 = new Test::BinaryNode<int>(70);
+			n1->Left() = n3;
+			n1->Right() = n2;
+			n1->Print2();
+			check(n1, false);
+		}
+	});
+
+	Add("Verify2", [&]() {
+		auto check = [&](size_t s){
+			vector<int> v(s);
+			generate(v.begin(), v.end(), rand);
+			sort(v.begin(), v.end());
+			BinaryNode<int> * node = BinaryNode<int>::SearchTreeRandom(v);
+			node->Print2();
+			bool r = BinaryNode<int>::SearchTreeVerify(node);
+			bool r2 = BinaryNode<int>::SearchTreeVerify2(node);
+			bool r3 = BinaryNode<int>::SearchTreeVerify3(node);
+			BinaryNode<int>::DeleteTree(node);
+			ASSERT1(true == r);
+			ASSERT1(true == r2);
+			ASSERT1(true == r3);
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("Verify3", [&]() {
+		auto check = [&](size_t s){
+			vector<int> v(s);
+			generate(v.begin(), v.end(), rand);
+			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			node->Print2();
+			bool r = BinaryNode<int>::SearchTreeVerify(node);
+			bool r2 = BinaryNode<int>::SearchTreeVerify2(node);
+			bool r3 = BinaryNode<int>::SearchTreeVerify3(node);
+			BinaryNode<int>::DeleteTree(node);
+			ASSERT1(r == r2);
+			ASSERT1(r == r3);
+		};
+
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
 }

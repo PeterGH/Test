@@ -242,6 +242,11 @@ namespace Test {
 		// Insert a new value to binary search tree
 		static BinaryNode * SearchTreeInsert(BinaryNode * node, T value);
 
+		// Verify if a tree is a binary search tree
+		static bool SearchTreeVerify(BinaryNode * node);
+		static bool SearchTreeVerify2(BinaryNode * node);
+		static bool SearchTreeVerify3(BinaryNode * node);
+
 		// Search a node in binary search tree
 		static BinaryNode * SearchTreeSearch(BinaryNode * node, T value);
 		static BinaryNode * SearchTreeSearch2(BinaryNode * node, T value);
@@ -1605,6 +1610,104 @@ namespace Test {
 		if (value() <= parent->Value()) parent->Left() = newNode;
 		else parent->Right() = newNode;
 		return node;
+	}
+
+	// Verify if a subtree at node is a valid binary search tree.
+	template<class T> bool BinaryNode<T>::SearchTreeVerify(BinaryNode<T> * node)
+	{
+		if (node == nullptr) return true;
+
+		// ensure min < n->Value() <= max
+		function<bool(BinaryNode<T> *, T, T)> between = [&](BinaryNode<T> * n, T min, T max) -> bool {
+			if (n == nullptr) return true;
+			if (n->Value() <= min || n->Value() > max) return false;
+			return between(n->Left(), min, n->Value()) && between(n->Right(), n->Value(), max);
+		};
+
+		// ensure n->Value() <= max
+		function<bool(BinaryNode<T> *, T)> less = [&](BinaryNode<T> * n, T max) -> bool {
+			if (n == nullptr) return true;
+			if (n->Value() > max) return false;
+			return less(n->Left(), n->Value()) && between(n->Right(), n->Value(), max);
+		};
+
+		// ensure min < n->Value()
+		function<bool(BinaryNode<T> *, T)> greater = [&](BinaryNode<T> * n, T min) -> bool {
+			if (n == nullptr) return true;
+			if (n->Value() <= min) return false;
+			return greater(n->Right(), n->Value()) && between(n->Left(), min, n->Value());
+		};
+
+		return less(node->Left(), node->Value()) && greater(node->Right(), node->Value());
+	}
+
+	template<class T> bool BinaryNode<T>::SearchTreeVerify2(BinaryNode<T> * node)
+	{
+		function<bool(BinaryNode<T> *, T &, T &)>
+		verify = [&](BinaryNode<T> * n, T & min, T & max) -> bool {
+			if (n == nullptr) return true;
+			if (n->Left() == nullptr && n->Right() == nullptr) {
+				min = n->Value();
+				max = n->Value();
+				return true;
+			}
+
+			if (n->Left() == nullptr) {
+				min = n->Value();
+			} else {
+				T leftMin;
+				T leftMax;
+				if (!verify(n->Left(), leftMin, leftMax)) return false;
+				if (leftMax > n->Value()) return false;
+				min = leftMin;
+			}
+
+			if (n->Right() == nullptr) {
+				max = n->Value();
+			} else {
+				T rightMin;
+				T rightMax;
+				if (!verify(n->Right(), rightMin, rightMax)) return false;
+				if (rightMin <= n->Value()) return false;
+				max = rightMax;
+			}
+
+			return true;
+		};
+
+		T min;
+		T max;
+		return verify(node, min, max);
+	}
+
+	template<class T> bool BinaryNode<T>::SearchTreeVerify3(BinaryNode<T> * node)
+	{
+		if (node == nullptr) return true;
+		stack<BinaryNode<T> *> path;
+		path.push(node);
+		BinaryNode<T> * prev = nullptr;
+		BinaryNode<T> * lastVisited = nullptr;
+		while (!path.empty()) {
+			node = path.top();
+			if (node->Right() != nullptr && node->Right() == lastVisited) {
+				path.pop();
+			} else if (node->Left() != nullptr && node->Left() != lastVisited) {
+				path.push(node->Left());
+			} else {
+				if (prev != nullptr) {
+					if (prev->Right() == node) {
+						if (prev->Value() >= node->Value()) return false;
+					} else {
+						if (prev->Value() > node->Value()) return false;
+					}
+				}
+				prev = node;
+				if (node->Right() == nullptr) path.pop();
+				else path.push(node->Right());
+			}
+			lastVisited = node;
+		}
+		return true;
 	}
 
 	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeSearch(BinaryNode * node, T value)
