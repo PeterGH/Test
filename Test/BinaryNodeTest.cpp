@@ -1420,4 +1420,83 @@ void BinaryNodeTest::Init(void)
 			check(i);
 		}
 	});
+
+	Add("MaxSearchTreeInBinaryTree1", [&](){
+		auto check = [&](size_t s) {
+			Logger().WriteInformation("Test a binary tree of %d nodes\n", s);
+			vector<int> v(s);
+			generate(v.begin(), v.end(), rand);
+			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			node->Print2();
+			BinaryNodeWithParent<int> * tree = BinaryNodeWithParent<int>::MaxSearchTreeInBinaryTree(node);
+			tree->Print2();
+			BinaryNodeWithParent<int> * tree2 = BinaryNodeWithParent<int>::MaxSearchTreeInBinaryTree2(node);
+			tree2->Print2();
+			BinaryNode<int>::DeleteTree(node);
+			bool r = BinaryNode<int>::SearchTreeVerify(tree);
+			bool r2 = BinaryNode<int>::SearchTreeVerify(tree2);
+			int size = BinaryNode<int>::Size(tree);
+			int size2 = BinaryNode<int>::Size(tree2);
+			BinaryNode<int>::DeleteTree(tree);
+			BinaryNode<int>::DeleteTree(tree2);
+			ASSERT1(r == true);
+			ASSERT1(r2 == true);
+			ASSERT1(size == size2);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("MaxSearchTreeInBinaryTree2", [&](){
+		auto check = [&](BinaryNode<int> * node) {
+			node->Print2();
+			BinaryNodeWithParent<int> * tree = BinaryNodeWithParent<int>::MaxSearchTreeInBinaryTree(node);
+			tree->Print2();
+			BinaryNodeWithParent<int> * tree2 = BinaryNodeWithParent<int>::MaxSearchTreeInBinaryTree2(node);
+			tree2->Print2();
+			BinaryNode<int>::DeleteTree(node);
+			bool r = BinaryNode<int>::SearchTreeVerify(tree);
+			bool r2 = BinaryNode<int>::SearchTreeVerify(tree2);
+			int size = BinaryNode<int>::Size(tree);
+			int size2 = BinaryNode<int>::Size(tree2);
+			BinaryNode<int>::DeleteTree(tree);
+			BinaryNode<int>::DeleteTree(tree2);
+			ASSERT1(r == true);
+			ASSERT1(r2 == true);
+			ASSERT1(size == size2);
+		};
+
+		BinaryNode<int> * n0 = new BinaryNode<int>(10);
+		BinaryNode<int> * n1 = new BinaryNode<int>(50);
+		BinaryNode<int> * n2 = new BinaryNode<int>(5);
+		BinaryNode<int> * n3 = new BinaryNode<int>(80);
+		BinaryNode<int> * n4 = new BinaryNode<int>(4);
+		BinaryNode<int> * n5 = new BinaryNode<int>(6);
+		BinaryNode<int> * n6 = new BinaryNode<int>(70);
+		BinaryNode<int> * n7 = new BinaryNode<int>(75);
+		BinaryNode<int> * n8 = new BinaryNode<int>(3);
+		BinaryNode<int> * n9 = new BinaryNode<int>(7);
+		BinaryNode<int> * n10 = new BinaryNode<int>(60);
+		BinaryNode<int> * n11 = new BinaryNode<int>(75);
+		n0->Right() = n1;
+		n1->Left() = n2;
+		n1->Right() = n3;
+		n2->Left() = n4;
+		n2->Right() = n5;
+		n3->Left() = n6;
+		n3->Right() = n7;
+		n4->Left() = n8;
+		n5->Right() = n9;
+		n6->Left() = n10;
+		n6->Right() = n11;
+
+		check(n0);
+	});
 }
