@@ -1499,4 +1499,113 @@ void BinaryNodeTest::Init(void)
 
 		check(n0);
 	});
+
+	Add("MaxSearchTreeInBinaryTree3", [&](){
+		auto check = [&](size_t s) {
+			Logger().WriteInformation("Test a binary search tree of %d nodes\n", s);
+			vector<int> v(s);
+			generate(v.begin(), v.end(), rand);
+			sort(v.begin(), v.end());
+			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			node->Print2();
+			BinaryNodeWithParent<int> * tree = BinaryNodeWithParent<int>::MaxSearchTreeInBinaryTree(node);
+			tree->Print2();
+			BinaryNodeWithParent<int> * tree2 = BinaryNodeWithParent<int>::MaxSearchTreeInBinaryTree2(node);
+			tree2->Print2();
+			bool r = BinaryNode<int>::SearchTreeVerify(tree);
+			bool r2 = BinaryNode<int>::SearchTreeVerify(tree2);
+			int size = BinaryNode<int>::Size(tree);
+			int size2 = BinaryNode<int>::Size(tree2);
+			int equal = BinaryNode<int>::Compare(node, tree);
+			int equal2 = BinaryNode<int>::Compare(node, tree2);
+			BinaryNode<int>::DeleteTree(node);
+			BinaryNode<int>::DeleteTree(tree);
+			BinaryNode<int>::DeleteTree(tree2);
+			ASSERT1(r == true);
+			ASSERT1(r2 == true);
+			ASSERT1(size == size2);
+			ASSERT1(equal == 0);
+			ASSERT1(equal2 == 0);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("MaxSubSearchTreeInBinaryTree1", [&](){
+		auto check = [&](size_t s) {
+			Logger().WriteInformation("Test a binary tree of %d nodes\n", s);
+			vector<int> v(s);
+			generate(v.begin(), v.end(), rand);
+			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			node->Print2();
+			BinaryNodeWithParent<int> * tree = BinaryNodeWithParent<int>::MaxSubSearchTreeInBinaryTree(node);
+			tree->Print2();
+			BinaryNodeWithParent<int> * tree2 = BinaryNodeWithParent<int>::MaxSubSearchTreeInBinaryTree2(node);
+			tree2->Print2();
+			bool r = BinaryNode<int>::SearchTreeVerify(tree);
+			bool r2 = BinaryNode<int>::SearchTreeVerify(tree2);
+			int size = BinaryNode<int>::Size(tree);
+			int size2 = BinaryNode<int>::Size(tree2);
+			int equal = BinaryNode<int>::Compare(node, tree);
+			int equal2 = BinaryNode<int>::Compare(node, tree2);
+			BinaryNode<int>::DeleteTree(node);
+			BinaryNode<int>::DeleteTree(tree);
+			BinaryNode<int>::DeleteTree(tree2);
+			ASSERT1(r == true);
+			ASSERT1(r2 == true);
+			ASSERT1(size == size2);
+			ASSERT1(equal == 0);
+			ASSERT1(equal2 == 0);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
+
+	Add("MaxSubSearchTreeInBinaryTree2", [&](){
+		auto check = [&](size_t s) {
+			Logger().WriteInformation("Test a binary search tree of %d nodes\n", s);
+			vector<int> v(s);
+			generate(v.begin(), v.end(), rand);
+			sort(v.begin(), v.end());
+			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			node->Print2();
+			BinaryNodeWithParent<int> * tree = BinaryNodeWithParent<int>::MaxSubSearchTreeInBinaryTree(node);
+			tree->Print2();
+			BinaryNodeWithParent<int> * tree2 = BinaryNodeWithParent<int>::MaxSubSearchTreeInBinaryTree2(node);
+			tree2->Print2();
+			BinaryNode<int>::DeleteTree(node);
+			bool r = BinaryNode<int>::SearchTreeVerify(tree);
+			bool r2 = BinaryNode<int>::SearchTreeVerify(tree2);
+			int size = BinaryNode<int>::Size(tree);
+			int size2 = BinaryNode<int>::Size(tree2);
+			BinaryNode<int>::DeleteTree(tree);
+			BinaryNode<int>::DeleteTree(tree2);
+			ASSERT1(r == true);
+			ASSERT1(r2 == true);
+			ASSERT1(size == size2);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
 }
