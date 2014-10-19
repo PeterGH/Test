@@ -1608,4 +1608,41 @@ void BinaryNodeTest::Init(void)
 			check(i);
 		}
 	});
+
+	Add("SearchTreeSerialize", [&](){
+		auto check = [&](size_t s) {
+			Logger().WriteInformation("Test a binary search tree of %d nodes\n", s);
+			vector<int> v(s);
+			generate(v.begin(), v.end(), rand);
+			sort(v.begin(), v.end());
+			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			node->Print2();
+			stringstream ss;
+			BinaryNode<int>::SearchTreeSerialize(node, ss);
+			Logger().WriteInformation("%s\n", ss.str().c_str());
+			BinaryNode<int> * node2 = BinaryNode<int>::SearchTreeDeserialize(ss);
+			node2->Print2();
+			stringstream ss2;
+			BinaryNode<int>::SearchTreeSerialize(node, ss2);
+			Logger().WriteInformation("%s\n", ss2.str().c_str());
+			BinaryNode<int> * node3 = BinaryNode<int>::SearchTreeDeserialize2(ss2);
+			node3->Print2();
+			int equal2 = BinaryNode<int>::Compare(node, node2);
+			int equal3 = BinaryNode<int>::Compare(node, node3);
+			BinaryNode<int>::DeleteTree(node);
+			BinaryNode<int>::DeleteTree(node2);
+			BinaryNode<int>::DeleteTree(node3);
+			ASSERT1(equal2 == 0);
+			ASSERT1(equal3 == 0);
+		};
+		check(1);
+		check(2);
+		check(3);
+		check(4);
+		check(5);
+		check(6);
+		for (int i = 7; i < 50; i++) {
+			check(i);
+		}
+	});
 }

@@ -258,6 +258,13 @@ namespace Test {
 
 		// Assume first and second exist in the tree
 		static BinaryNode * SearchTreeLowestCommonAncestor(BinaryNode * node, const T & first, const T & second);
+
+		// Serialize a binary search tree
+		static void SearchTreeSerialize(BinaryNode * node, ostream & output);
+
+		// Deserialize a binary search tree
+		static BinaryNode * SearchTreeDeserialize(istream & input);
+		static BinaryNode * SearchTreeDeserialize2(istream & input);
 	};
 
 	template<class T> void BinaryNode<T>::DeleteTree(BinaryNode * node)
@@ -1607,7 +1614,7 @@ namespace Test {
 			if (value <= current->Value()) current = current->Left();
 			else current = current->Right();
 		}
-		if (value() <= parent->Value()) parent->Left() = newNode;
+		if (value <= parent->Value()) parent->Left() = newNode;
 		else parent->Right() = newNode;
 		return node;
 	}
@@ -1751,6 +1758,79 @@ namespace Test {
 				node = node->Right();
 			else
 				break;
+		}
+		return node;
+	}
+
+	template<class T> void BinaryNode<T>::SearchTreeSerialize(BinaryNode * node, ostream & output)
+	{
+		function<void(T)> serialize = [&](T v) { output << v << ' '; };
+		PreOrderWalk(node, serialize);
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeDeserialize(istream & input)
+	{
+		function<void(T, T, T &, BinaryNode<T> * &)>
+		deserialize = [&](T l, T h, T & value, BinaryNode<T> * & node) {
+			if (l < value && value <= h) {
+				T v = value;
+				node = new BinaryNode<T>(v);
+				input >> value;
+				if (input.good() && !input.eof()) {
+					deserialize(l, v, value, node->Left());
+					deserialize(v, h, value, node->Right());
+				}
+			}
+		};
+
+		function<void(T, T &, BinaryNode<T> * &)>
+		deserializeLeft = [&](T p, T & value, BinaryNode<T> * & node) {
+			if (value <= p) {
+				T v = value;
+				node = new BinaryNode<T>(v);
+				input >> value;
+				if (input.good() && !input.eof()) {
+					deserializeLeft(v, value, node->Left());
+					deserialize(v, p, value, node->Right());
+				}
+			}
+		};
+
+		function<void(T, T &, BinaryNode<T> * &)>
+		deserializeRight = [&](T p, T & value, BinaryNode<T> * & node) {
+			if (value > p) {
+				T v = value;
+				node = new BinaryNode<T>(v);
+				input >> value;
+				if (input.good() && !input.eof()) {
+					deserialize(p, v, value, node->Left());
+					deserializeRight(v, value, node->Right());
+				}
+			}
+		};
+
+		BinaryNode<T> * node = nullptr;
+		T value;
+		input >> value;
+		if (input.good() && !input.eof()) {
+			node = new BinaryNode<T>(value);
+			input >> value;
+			if (input.good() && !input.eof()) {
+				deserializeLeft(node->Value(), value, node->Left());
+				deserializeRight(node->Value(), value, node->Right());
+			}
+		}
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeDeserialize2(istream & input)
+	{
+		BinaryNode<T> * node = nullptr;
+		T value;
+		input >> value;
+		while (input.good() && !input.eof()) {
+			node = SearchTreeInsert(node, value);
+			input >> value;
 		}
 		return node;
 	}
