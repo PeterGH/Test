@@ -229,6 +229,11 @@ namespace Test {
 		static bool IsSymmetric2(BinaryNode * node);
 		bool IsSymmetric2(void) { return IsSymmetric2(this); }
 
+		// Swap values of two nodes
+		static void SwapValues(BinaryNode * first, BinaryNode * second);
+
+		static BinaryNode * Clone1(BinaryNode * node);
+
 		//
 		// BinarySearchTree
 		//
@@ -266,6 +271,19 @@ namespace Test {
 		static BinaryNode * SearchTreeDeserialize(istream & input);
 		static BinaryNode * SearchTreeDeserialize2(istream & input);
 		static BinaryNode * SearchTreeDeserialize3(istream & input);
+
+		// Two elements of a binary search tree are swapped by mistake.
+		// Recover the tree without changing its structure.
+		// If we traverse a binary search tree in-order, we will get an increasing
+		// sequence, e.g.,
+		//    1, 2, 3, 4, 5, 6, 7, .......
+		// If two neighboring elements are swapped, we will have one inversion, e.g.,
+		//    1, 2, 4, 3, 5, 6, 7, .......
+		// If two non-neighboring elements are swapped, we will have two inversions, e.g.,
+		//    1, 2, 3, 6, 5, 4, 7, ....... , or
+		//    1, 2, 6, 4, 5, 3, 7, .......
+		static BinaryNode * SearchTreeRecover(BinaryNode * node);
+		static BinaryNode * SearchTreeRecover2(BinaryNode * node);
 	};
 
 	template<class T> void BinaryNode<T>::DeleteTree(BinaryNode * node)
@@ -1584,6 +1602,23 @@ namespace Test {
 		return true;
 	}
 
+	template<class T> void BinaryNode<T>::SwapValues(BinaryNode * first, BinaryNode * second)
+	{
+		if (first == nullptr || second == nullptr) return;
+		T t = first->Value();
+		first->Value() = second->Value();
+		second->Value() = t;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::Clone1(BinaryNode * node)
+	{
+		if (node == nullptr) return nullptr;
+		BinaryNode * newNode = new BinaryNode(node->Value());
+		newNode->Left() = Clone1(node->Left());
+		newNode->Right() = Clone1(node->Right());
+		return newNode;
+	}
+
 	// Create a random binary search tree
 	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeRandom(vector<T> & values)
 	{
@@ -1861,6 +1896,122 @@ namespace Test {
 			}
 			path.push(n);
 		}
+		return node;
+	}
+
+	// Two elements of a binary search tree are swapped by mistake.
+	// Recover the tree without changing its structure.
+	// If we traverse a binary search tree in-order, we will get an increasing
+	// sequence, e.g.,
+	//    1, 2, 3, 4, 5, 6, 7, .......
+	// If two neighboring elements are swapped, we will have one inversion, e.g.,
+	//    1, 2, 4, 3, 5, 6, 7, .......
+	// If two non-neighboring elements are swapped, we will have two inversions, e.g.,
+	//    1, 2, 3, 6, 5, 4, 7, ....... , or
+	//    1, 2, 6, 4, 5, 3, 7, .......
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeRecover(BinaryNode * node)
+	{
+		if (node == nullptr || node->Left() == nullptr && node->Right() == nullptr) return node;
+
+		// Track the first inversion
+		BinaryNode * n1 = nullptr;
+		BinaryNode * n2 = nullptr;
+		// Track the second inversion
+		BinaryNode * n3 = nullptr;
+		BinaryNode * n4 = nullptr;
+
+		stack<BinaryNode *> path;
+		path.push(node);
+
+		// Track the in-order previous and current nodes
+		BinaryNode * prev = nullptr;
+		BinaryNode * current = nullptr;
+		// Track the last visited node
+		BinaryNode * lastVisited = nullptr;
+
+		while (!path.empty()) {
+			current = path.top();
+			if (current->Right() != nullptr && current->Right() == lastVisited) {
+				path.pop();
+			} else if (current->Left() != nullptr && current->Left() != lastVisited) {
+				path.push(current->Left());
+			} else {
+				if (prev != nullptr && prev->Value() > current->Value()) {
+					if (n1 == nullptr && n2 == nullptr) {
+						n1 = prev;
+						n2 = current;
+					} else {
+						n3 = prev;
+						n4 = current;
+						break;
+					}
+				}
+				prev = current;
+				if (current->Right() == nullptr) path.pop();
+				else path.push(current->Right());
+			}
+			lastVisited = current;
+		}
+
+		if (n3 == nullptr && n4 == nullptr
+			&& n1 != nullptr && n2 != nullptr) {
+			SwapValues(n1, n2);
+		} else if (n3 != nullptr && n4 != nullptr
+			&& n1 != nullptr && n2 != nullptr) {
+			SwapValues(n1, n4);
+		}
+
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeRecover2(BinaryNode * node)
+	{
+		if (node == nullptr || node->Left() == nullptr && node->Right() == nullptr) return node;
+
+		function<void(BinaryNode *, BinaryNode * &, BinaryNode * &, BinaryNode * &, BinaryNode * &, BinaryNode * &)>
+		search = [&](
+			BinaryNode * current,
+			BinaryNode * & prev,
+			BinaryNode * & n1,
+			BinaryNode * & n2,
+			BinaryNode * & n3,
+			BinaryNode * & n4)
+		{
+			if (current == nullptr) return;
+
+			search(current->Left(), prev, n1, n2, n3, n4);
+
+			if (prev != nullptr && prev->Value() > current->Value()) {
+				if (n1 == nullptr && n2 == nullptr) {
+					n1 = prev;
+					n2 = current;
+				} else {
+					n3 = prev;
+					n4 = current;
+					return;
+				}
+			}
+
+			prev = current;
+
+			search(current->Right(), prev, n1, n2, n3, n4);
+		};
+
+		BinaryNode * prev = nullptr;
+		BinaryNode * n1 = nullptr;
+		BinaryNode * n2 = nullptr;
+		BinaryNode * n3 = nullptr;
+		BinaryNode * n4 = nullptr;
+		search(node, prev, n1, n2, n3, n4);
+
+		if (n3 == nullptr && n4 == nullptr
+			&& n1 != nullptr && n2 != nullptr) {
+			SwapValues(n1, n2);
+		} else if (n3 != nullptr && n4 != nullptr
+			&& n1 != nullptr && n2 != nullptr) {
+			SwapValues(n1, n4);
+		}
+
 		return node;
 	}
 }

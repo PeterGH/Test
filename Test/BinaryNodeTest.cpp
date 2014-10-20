@@ -1653,4 +1653,461 @@ void BinaryNodeTest::Init(void)
 			check(i);
 		}
 	});
+
+	Add("SearchTreeRecover", [&](){
+		auto check = [&](BinaryNode<int> * node) {
+			Logger().WriteInformation("Recover tree\n");
+			node->Print2();
+			bool valid = BinaryNode<int>::SearchTreeVerify(node);
+			bool valid2 = BinaryNode<int>::SearchTreeVerify2(node);
+			bool valid3 = BinaryNode<int>::SearchTreeVerify3(node);
+			BinaryNode<int> * copy = BinaryNode<int>::Clone1(node);
+			copy->Print2();
+			Logger().WriteInformation("to\n");
+			node = BinaryNode<int>::SearchTreeRecover(node);
+			copy = BinaryNode<int>::SearchTreeRecover2(copy);
+			node->Print2();
+			copy->Print2();
+			bool valid4 = BinaryNode<int>::SearchTreeVerify(node);
+			bool valid5 = BinaryNode<int>::SearchTreeVerify2(node);
+			bool valid6 = BinaryNode<int>::SearchTreeVerify3(node);
+			int equal = BinaryNode<int>::Compare(node, copy);
+			BinaryNode<int>::DeleteTree(node);
+			BinaryNode<int>::DeleteTree(copy);
+			ASSERT1(valid == valid2);
+			ASSERT1(valid == valid3);
+			ASSERT1(valid4 == true);
+			ASSERT1(valid5 == true);
+			ASSERT1(valid6 == true);
+			ASSERT1(equal == 0);
+		};
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(1);
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(1);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			n1->Left() = n2;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(2);
+			BinaryNode<int> * n2 = new BinaryNode<int>(1);
+			n1->Right() = n2;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(1);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(3);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(3);
+			BinaryNode<int> * n2 = new BinaryNode<int>(1);
+			BinaryNode<int> * n3 = new BinaryNode<int>(2);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(2);
+			BinaryNode<int> * n2 = new BinaryNode<int>(3);
+			BinaryNode<int> * n3 = new BinaryNode<int>(1);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(3);
+			BinaryNode<int> * n2 = new BinaryNode<int>(1);
+			BinaryNode<int> * n3 = new BinaryNode<int>(2);
+			n1->Left() = n2;
+			n2->Left() = n3;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(2);
+			BinaryNode<int> * n2 = new BinaryNode<int>(3);
+			BinaryNode<int> * n3 = new BinaryNode<int>(1);
+			n1->Left() = n2;
+			n2->Left() = n3;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(2);
+			BinaryNode<int> * n2 = new BinaryNode<int>(1);
+			BinaryNode<int> * n3 = new BinaryNode<int>(3);
+			n1->Right() = n2;
+			n2->Right() = n3;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(1);
+			BinaryNode<int> * n2 = new BinaryNode<int>(3);
+			BinaryNode<int> * n3 = new BinaryNode<int>(2);
+			n1->Right() = n2;
+			n2->Right() = n3;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(1);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(2);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(3);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(2);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(3);
+			BinaryNode<int> * n5 = new BinaryNode<int>(1);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(2);
+			BinaryNode<int> * n2 = new BinaryNode<int>(4);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(1);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(4);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(3);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(4);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(5);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(6);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(7);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(6);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(7);
+			BinaryNode<int> * n7 = new BinaryNode<int>(5);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(6);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(4);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(5);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(4);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(7);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(4);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(5);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(1);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(7);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(3);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(7);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(1);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(5);
+			BinaryNode<int> * n6 = new BinaryNode<int>(3);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(6);
+			BinaryNode<int> * n3 = new BinaryNode<int>(2);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(1);
+			BinaryNode<int> * n4 = new BinaryNode<int>(6);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(2);
+			BinaryNode<int> * n3 = new BinaryNode<int>(3);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(6);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(5);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(2);
+			BinaryNode<int> * n7 = new BinaryNode<int>(7);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			BinaryNode<int> * n1 = new BinaryNode<int>(4);
+			BinaryNode<int> * n2 = new BinaryNode<int>(7);
+			BinaryNode<int> * n3 = new BinaryNode<int>(6);
+			BinaryNode<int> * n4 = new BinaryNode<int>(1);
+			BinaryNode<int> * n5 = new BinaryNode<int>(3);
+			BinaryNode<int> * n6 = new BinaryNode<int>(5);
+			BinaryNode<int> * n7 = new BinaryNode<int>(2);
+			n1->Left() = n2;
+			n1->Right() = n3;
+			n2->Left() = n4;
+			n2->Right() = n5;
+			n3->Left() = n6;
+			n3->Right() = n7;
+			check(n1);
+		}
+		{
+			for (int i = 0; i < 100; i++) {
+				int size = 1 + (rand() % 100);
+				vector<int> v;
+				for (int t = 0; t < size; t++) v.push_back(t);
+				BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+				int j = rand() % size;
+				int k = rand() % size;
+				if (k == j) {
+					if (j == size - 1) k--;
+					else k++;
+				}
+				BinaryNode<int> * p = BinaryNode<int>::SearchTreeSearch(node, v[j]);
+				BinaryNode<int> * q = BinaryNode<int>::SearchTreeSearch(node, v[k]);
+				BinaryNode<int>::SwapValues(p, q);
+				Logger().WriteInformation("Test a tree of %d nodes\n", size);
+				check(node);
+			}
+		}
+	});
+
 }
