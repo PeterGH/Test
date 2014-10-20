@@ -265,6 +265,7 @@ namespace Test {
 		// Deserialize a binary search tree
 		static BinaryNode * SearchTreeDeserialize(istream & input);
 		static BinaryNode * SearchTreeDeserialize2(istream & input);
+		static BinaryNode * SearchTreeDeserialize3(istream & input);
 	};
 
 	template<class T> void BinaryNode<T>::DeleteTree(BinaryNode * node)
@@ -1831,6 +1832,34 @@ namespace Test {
 		while (input.good() && !input.eof()) {
 			node = SearchTreeInsert(node, value);
 			input >> value;
+		}
+		return node;
+	}
+
+	template<class T> BinaryNode<T> * BinaryNode<T>::SearchTreeDeserialize3(istream & input)
+	{
+		BinaryNode<T> * node = nullptr;
+		T value;
+		input >> value;
+		if(input.good() && !input.eof()) node = new BinaryNode<T>(value);
+		else return node;
+		stack<BinaryNode<T> *> path;
+		path.push(node);
+		BinaryNode<T> * prev = nullptr;
+		while (true) {
+			input >> value;
+			if (!input.good() || input.eof()) break;
+			BinaryNode<T> * n = new BinaryNode<T>(value);
+			if (!path.empty() && value <= path.top()->Value()) {
+				path.top()->Left() = n;
+			} else {
+				while (!path.empty() && path.top()->Value() < value) {
+					prev = path.top();
+					path.pop();
+				}
+				if (prev != nullptr) prev->Right() = n;
+			}
+			path.push(n);
 		}
 		return node;
 	}
