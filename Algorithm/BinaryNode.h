@@ -24,7 +24,10 @@ namespace Test {
 
 		// Create a random binary tree
 		// Return nullptr if input is empty
-		static BinaryNode * ToRandomTree(vector<T> & values);
+		static BinaryNode * RandomTreeFromPreOrder(vector<T> & values);
+		static BinaryNode * RandomTreeFromInOrder(vector<T> & values);
+		static BinaryNode * RandomTreeFromPostOrder(vector<T> & values);
+		static BinaryNode * RandomTree(vector<T> & values);
 		// May return nullptr
 		static BinaryNode * RandomTree(size_t maxSize);
 
@@ -295,8 +298,27 @@ namespace Test {
 		node = nullptr;
 	}
 
-	// Create a random binary tree
-	template<class T> BinaryNode<T> * BinaryNode<T>::ToRandomTree(vector<T> & values)
+	// Create a random binary tree from a pre-order sequence
+	template<class T> BinaryNode<T> * BinaryNode<T>::RandomTreeFromPreOrder(vector<T> & values)
+	{
+		if (values.size() == 0) return nullptr;
+
+		function<BinaryNode<T> * (vector<T> &, int, int)>
+		create = [&](vector<T> & v, int i, int j) -> BinaryNode<T> * {
+			if (i > j) return nullptr;
+			BinaryNode<T> * n = new BinaryNode<T>(v[i]);
+			int k = i + 1 + (rand() % (j - i + 1));
+			n->Left() = create(v, i + 1, k - 1);
+			n->Right() = create(v, k, j);
+			return n;
+		};
+
+		BinaryNode<T> * node = create(values, 0, values.size() - 1);
+		return node;
+	}
+
+	// Create a random binary tree from an in-order sequence
+	template<class T> BinaryNode<T> * BinaryNode<T>::RandomTreeFromInOrder(vector<T> & values)
 	{
 		if (values.size() == 0) return nullptr;
 
@@ -314,6 +336,62 @@ namespace Test {
 		return node;
 	}
 
+	// Create a random binary tree from a post-order sequence
+	template<class T> BinaryNode<T> * BinaryNode<T>::RandomTreeFromPostOrder(vector<T> & values)
+	{
+		if (values.size() == 0) return nullptr;
+
+		function<BinaryNode<T> * (vector<T> &, int, int)>
+		create = [&](vector<T> & v, int i, int j) -> BinaryNode<T> * {
+			if (i > j) return nullptr;
+			BinaryNode<T> * n = new BinaryNode<T>(v[j]);
+			int k = i - 1 + (rand() % (j - i + 1));
+			n->Left() = create(v, i, k);
+			n->Right() = create(v, k + 1, j - 1);
+			return n;
+		};
+
+		BinaryNode<T> * node = create(values, 0, values.size() - 1);
+		return node;
+	}
+
+	// Create a random binary tree
+	template<class T> BinaryNode<T> * BinaryNode<T>::RandomTree(vector<T> & values)
+	{
+		if (values.size() == 0) return nullptr;
+
+		function<BinaryNode<T> * (vector<T> &, int, int)>
+		create = [&](vector<T> & v, int i, int j) -> BinaryNode<T> * {
+			if (i > j) return nullptr;
+			BinaryNode<T> * n = nullptr;
+			int k = rand() % 3;
+			switch (k) {
+			case 0:
+				n = new BinaryNode<T>(v[i]);
+				k = i + 1 + (rand() % (j - i + 1));
+				n->Left() = create(v, i + 1, k - 1);
+				n->Right() = create(v, k, j);
+				break;
+			case 1:
+				k = i + (rand() % (j - i + 1));
+				n = new BinaryNode<T>(v[k]);
+				n->Left() = create(v, i, k - 1);
+				n->Right() = create(v, k + 1, j);
+				break;
+			case 2:
+				n = new BinaryNode<T>(v[j]);
+				k = i - 1 + (rand() % (j - i + 1));
+				n->Left() = create(v, i, k);
+				n->Right() = create(v, k + 1, j - 1);
+				break;
+			}
+			return n;
+		};
+
+		BinaryNode<T> * node = create(values, 0, values.size() - 1);
+		return node;
+	}
+
 	template<class T> BinaryNode<T> * BinaryNode<T>::RandomTree(size_t maxSize)
 	{
 		vector<T> values;
@@ -321,7 +399,7 @@ namespace Test {
 		for (int i = 0; i < size; i++) {
 			values.push_back(rand());
 		}
-		BinaryNode<T> * node = ToRandomTree(values);
+		BinaryNode<T> * node = RandomTree(values);
 		return node;
 	}
 
@@ -1624,7 +1702,7 @@ namespace Test {
 	{
 		if (values.size() == 0) return nullptr;
 		sort(values.begin(), values.end());
-		BinaryNode<T> * node = ToRandomTree(values);
+		BinaryNode<T> * node = RandomTreeFromInOrder(values);
 		return node;
 	}
 
@@ -1635,7 +1713,7 @@ namespace Test {
 		for (int i = 0; i < size; i++) {
 			values.push_back(rand());
 		}
-		BinaryNode<T> * node = RandomSearchTree(values);
+		BinaryNode<T> * node = SearchTreeRandom(values);
 		return node;
 	}
 

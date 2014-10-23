@@ -73,7 +73,7 @@ namespace Test {
 	{
 		if (values.size() == 0) return nullptr;
 
-		BinaryNode<T> * n = ToRandomTree(values);
+		BinaryNode<T> * n = RandomTreeFromInOrder(values);
 		BinaryNodeWithParent<T> * node = Clone2(n);
 		DeleteTree(n);
 		return node;

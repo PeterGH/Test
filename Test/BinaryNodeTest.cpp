@@ -13,7 +13,6 @@ void BinaryNodeTest::Init(void)
 			node->Print();
 			node->Print2();
 			node->DeleteTree();
-			delete node;
 		}
 		{
 			BinaryNodeWithParent<int> * node = new BinaryNodeWithParent<int>(0);
@@ -25,33 +24,119 @@ void BinaryNodeTest::Init(void)
 			node->Print();
 			node->Print2();
 			node->DeleteTree();
-			delete node;
 		}
 	});
 
-	Add("RandomTree", [&](){
+	Add("RandomTreePreOrder", [&](){
 		auto check = [&](vector<int> & v){
-			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			BinaryNode<int> * node = BinaryNode<int>::RandomTreeFromPreOrder(v);
 			node->Print2();
+			vector<int> v1;
+			function<void(int)> w = [&](int n){ v1.push_back(n); };
+			BinaryNode<int>::PreOrderWalk(node, w);
 			BinaryNode<int>::DeleteTree(node);
+			ASSERT1(v.size() == v1.size());
+			for (size_t i = 0; i < v.size(); i++) {
+				ASSERT1(v[i] == v1[i]);
+			}
 		};
 		{
 			vector<int> v = { 0 };
 			check(v);
+		}
+		{
+			vector<int> v = { 0, 1 };
 			check(v);
+		}
+		{
+			vector<int> v = { 0, 1, 2 };
+			check(v);
+		}
+		{
+			vector<int> v = { 0, 1, 2, 3, 4 };
+			check(v);
+		}
+		{
+			for (int i = 0; i < 100; i++) {
+				int n = 1 + (rand() % 25);
+				vector<int> v;
+				for (int j = 0; j < n; j++) {
+					v.push_back(rand());
+				}
+				check(v);
+			}
+		}
+	});
+
+	Add("RandomTreeInOrder", [&](){
+		auto check = [&](vector<int> & v){
+			BinaryNode<int> * node = BinaryNode<int>::RandomTreeFromInOrder(v);
+			node->Print2();
+			vector<int> v1;
+			function<void(int)> w = [&](int n){ v1.push_back(n); };
+			BinaryNode<int>::InOrderWalk(node, w);
+			BinaryNode<int>::DeleteTree(node);
+			ASSERT1(v.size() == v1.size());
+			for (size_t i = 0; i < v.size(); i++) {
+				ASSERT1(v[i] == v1[i]);
+			}
+		};
+		{
+			vector<int> v = { 0 };
 			check(v);
 		}
 		{
 			vector<int> v = { 0, 1 };
-			for (int i = 0; i < 10; i++) check(v);
+			check(v);
 		}
 		{
 			vector<int> v = { 0, 1, 2 };
-			for (int i = 0; i < 10; i++) check(v);
+			check(v);
 		}
 		{
 			vector<int> v = { 0, 1, 2, 3, 4 };
-			for (int i = 0; i < 50; i++) check(v);
+			check(v);
+		}
+		{
+			for (int i = 0; i < 100; i++) {
+				int n = 1 + (rand() % 25);
+				vector<int> v;
+				for (int j = 0; j < n; j++) {
+					v.push_back(rand());
+				}
+				check(v);
+			}
+		}
+	});
+
+	Add("RandomTreePostOrder", [&](){
+		auto check = [&](vector<int> & v){
+			BinaryNode<int> * node = BinaryNode<int>::RandomTreeFromPostOrder(v);
+			node->Print2();
+			vector<int> v1;
+			function<void(int)> w = [&](int n){ v1.push_back(n); };
+			BinaryNode<int>::PostOrderWalk(node, w);
+			BinaryNode<int>::DeleteTree(node);
+			ASSERT1(v.size() == v1.size());
+			for (size_t i = 0; i < v.size(); i++) {
+				ASSERT1(v[i] == v1[i]);
+			}
+		};
+		{
+			vector<int> v = { 0 };
+			check(v);
+		}
+		{
+			vector<int> v = { 0, 1 };
+			check(v);
+		}
+		{
+			vector<int> v = { 0, 1, 2 };
+			check(v);
+		}
+		{
+			vector<int> v = { 0, 1, 2, 3, 4 };
+			check(v);
 		}
 		{
 			for (int i = 0; i < 100; i++) {
@@ -261,13 +346,13 @@ void BinaryNodeTest::Init(void)
 		}
 	});
 
-	Add("Search", [&](){
+	Add("Search1", [&](){
 		auto check = [&](size_t s){
 			vector<int> v;
 			for (size_t i = 0; i < s; i++) {
 				v.push_back(i);
 			}
-			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			BinaryNode<int> * node = BinaryNode<int>::RandomTreeFromInOrder(v);
 			node->Print2();
 			bool pass = true;
 			int num;
@@ -308,7 +393,7 @@ void BinaryNodeTest::Init(void)
 			for (size_t i = 0; i < s; i++) {
 				v.push_back(i);
 			}
-			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			BinaryNode<int> * node = BinaryNode<int>::RandomTreeFromInOrder(v);
 			node->Print2();
 			for (size_t i = 0; i < s - 1; i++) {
 				for (size_t j = i + 1; j < s; j++) {
@@ -338,7 +423,7 @@ void BinaryNodeTest::Init(void)
 			for (size_t i = 0; i < s; i++) {
 				v.push_back(i);
 			}
-			BinaryNode<int> * n = BinaryNode<int>::ToRandomTree(v);
+			BinaryNode<int> * n = BinaryNode<int>::RandomTreeFromInOrder(v);
 			BinaryNodeWithParent<int> * node = BinaryNodeWithParent<int>::Clone2(n);
 			BinaryNode<int>::DeleteTree(n);
 			node->Print2();
@@ -1193,7 +1278,7 @@ void BinaryNodeTest::Init(void)
 		}
 	});
 
-	Add("Max", [&](){
+	Add("Max1", [&](){
 		auto check = [&](size_t s){
 			vector<int> v;
 			for (size_t i = 0; i < s; i++) {
@@ -1400,7 +1485,7 @@ void BinaryNodeTest::Init(void)
 		auto check = [&](size_t s){
 			vector<int> v(s);
 			generate(v.begin(), v.end(), rand);
-			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			BinaryNode<int> * node = BinaryNode<int>::RandomTreeFromInOrder(v);
 			node->Print2();
 			bool r = BinaryNode<int>::SearchTreeVerify(node);
 			bool r2 = BinaryNode<int>::SearchTreeVerify2(node);
@@ -1426,7 +1511,7 @@ void BinaryNodeTest::Init(void)
 			Logger().WriteInformation("Test a binary tree of %d nodes\n", s);
 			vector<int> v(s);
 			generate(v.begin(), v.end(), rand);
-			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			BinaryNode<int> * node = BinaryNode<int>::RandomTreeFromInOrder(v);
 			node->Print2();
 			BinaryNodeWithParent<int> * tree = BinaryNodeWithParent<int>::MaxSearchTreeInBinaryTree(node);
 			tree->Print2();
@@ -1506,7 +1591,7 @@ void BinaryNodeTest::Init(void)
 			vector<int> v(s);
 			generate(v.begin(), v.end(), rand);
 			sort(v.begin(), v.end());
-			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			BinaryNode<int> * node = BinaryNode<int>::RandomTreeFromInOrder(v);
 			node->Print2();
 			BinaryNodeWithParent<int> * tree = BinaryNodeWithParent<int>::MaxSearchTreeInBinaryTree(node);
 			tree->Print2();
@@ -1543,7 +1628,7 @@ void BinaryNodeTest::Init(void)
 			Logger().WriteInformation("Test a binary tree of %d nodes\n", s);
 			vector<int> v(s);
 			generate(v.begin(), v.end(), rand);
-			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			BinaryNode<int> * node = BinaryNode<int>::RandomTreeFromInOrder(v);
 			node->Print2();
 			BinaryNodeWithParent<int> * tree = BinaryNodeWithParent<int>::MaxSubSearchTreeInBinaryTree(node);
 			tree->Print2();
@@ -1581,7 +1666,7 @@ void BinaryNodeTest::Init(void)
 			vector<int> v(s);
 			generate(v.begin(), v.end(), rand);
 			sort(v.begin(), v.end());
-			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			BinaryNode<int> * node = BinaryNode<int>::RandomTreeFromInOrder(v);
 			node->Print2();
 			BinaryNodeWithParent<int> * tree = BinaryNodeWithParent<int>::MaxSubSearchTreeInBinaryTree(node);
 			tree->Print2();
@@ -1615,7 +1700,7 @@ void BinaryNodeTest::Init(void)
 			vector<int> v(s);
 			generate(v.begin(), v.end(), rand);
 			sort(v.begin(), v.end());
-			BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+			BinaryNode<int> * node = BinaryNode<int>::RandomTreeFromInOrder(v);
 			node->Print2();
 			stringstream ss;
 			BinaryNode<int>::SearchTreeSerialize(node, ss);
@@ -2094,7 +2179,7 @@ void BinaryNodeTest::Init(void)
 				int size = 1 + (rand() % 100);
 				vector<int> v;
 				for (int t = 0; t < size; t++) v.push_back(t);
-				BinaryNode<int> * node = BinaryNode<int>::ToRandomTree(v);
+				BinaryNode<int> * node = BinaryNode<int>::RandomTreeFromInOrder(v);
 				int j = rand() % size;
 				int k = rand() % size;
 				if (k == j) {
