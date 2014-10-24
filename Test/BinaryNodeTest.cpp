@@ -2195,4 +2195,159 @@ void BinaryNodeTest::Init(void)
 		}
 	});
 
+	Add("UniqueTreesFromPreOrder1", [&](){
+		auto check = [&](int n, int c){
+			vector<int> v;
+			for (int i = 0; i < n; i++) {
+				v.push_back(i);
+			}
+			vector<BinaryNode<int> *> trees = BinaryNode<int>::UniqueTreesFromPreOrder(v);
+			Logger().WriteInformation("%d numbers can build %d unique binary trees.\n", n, trees.size());
+			for_each (trees.begin(), trees.end(), [&](BinaryNode<int> * t){
+				t->Print2();
+				vector<int> u;
+				auto f = [&](int w){ u.push_back(w); };
+				BinaryNode<int>::PreOrderWalk(t, f);
+				BinaryNode<int>::DeleteTree(t);
+				ASSERT1(v.size() == u.size());
+				for (size_t i = 0; i < v.size(); i++) {
+					ASSERT1(v[i] == u[i]);
+				}
+			});
+			ASSERT1((int)trees.size() == c);
+		};
+
+		check(1, 1);
+		check(2, 2);
+		check(3, 5);
+		check(4, 14);
+	});
+
+	Add("UniqueTreesFromPreOrder2", [&](){
+		auto check = [&](int n){
+			vector<int> v(n);
+			generate(v.begin(), v.end(), rand);
+			vector<BinaryNode<int> *> trees = BinaryNode<int>::UniqueTreesFromPreOrder(v);
+			Logger().WriteInformation("%d numbers can build %d unique binary trees.\n", n, trees.size());
+			for_each (trees.begin(), trees.end(), [&](BinaryNode<int> * t){
+				t->Print2();
+				vector<int> u;
+				auto f = [&](int w){ u.push_back(w); };
+				BinaryNode<int>::PreOrderWalk(t, f);
+				BinaryNode<int>::DeleteTree(t);
+				ASSERT1(v.size() == u.size());
+				for (size_t i = 0; i < v.size(); i++) {
+					ASSERT1(v[i] == u[i]);
+				}
+			});
+		};
+
+		for (int i = 1; i < 9; i++) {
+			check(i);
+		}
+	});
+
+	Add("UniqueTreesFromInOrder1", [&](){
+		auto check = [&](int n, int c){
+			vector<int> v;
+			for (int i = 0; i < n; i++) {
+				v.push_back(i);
+			}
+			vector<BinaryNode<int> *> trees = BinaryNode<int>::UniqueTreesFromInOrder(v);
+			Logger().WriteInformation("%d numbers can build %d unique binary trees.\n", n, trees.size());
+			for_each (trees.begin(), trees.end(), [&](BinaryNode<int> * t){
+				t->Print2();
+				vector<int> u;
+				auto f = [&](int w){ u.push_back(w); };
+				BinaryNode<int>::InOrderWalk(t, f);
+				BinaryNode<int>::DeleteTree(t);
+				ASSERT1(v.size() == u.size());
+				for (size_t i = 0; i < v.size(); i++) {
+					ASSERT1(v[i] == u[i]);
+				}
+			});
+			ASSERT1((int)trees.size() == c);
+		};
+
+		check(1, 1);
+		check(2, 2);
+		check(3, 5);
+		check(4, 14);
+	});
+
+	Add("UniqueTreesFromInOrder2", [&](){
+		auto check = [&](int n){
+			vector<int> v(n);
+			generate(v.begin(), v.end(), rand);
+			vector<BinaryNode<int> *> trees = BinaryNode<int>::UniqueTreesFromInOrder(v);
+			Logger().WriteInformation("%d numbers can build %d unique binary trees.\n", n, trees.size());
+			for_each (trees.begin(), trees.end(), [&](BinaryNode<int> * t){
+				t->Print2();
+				vector<int> u;
+				auto f = [&](int w){ u.push_back(w); };
+				BinaryNode<int>::InOrderWalk(t, f);
+				BinaryNode<int>::DeleteTree(t);
+				ASSERT1(v.size() == u.size());
+				for (size_t i = 0; i < v.size(); i++) {
+					ASSERT1(v[i] == u[i]);
+				}
+			});
+		};
+
+		for (int i = 1; i < 9; i++) {
+			check(i);
+		}
+	});
+
+	Add("UniqueTreesFromPostOrder1", [&](){
+		auto check = [&](int n, int c){
+			vector<int> v;
+			for (int i = 0; i < n; i++) {
+				v.push_back(i);
+			}
+			vector<BinaryNode<int> *> trees = BinaryNode<int>::UniqueTreesFromPostOrder(v);
+			Logger().WriteInformation("%d numbers can build %d unique binary trees.\n", n, trees.size());
+			for_each (trees.begin(), trees.end(), [&](BinaryNode<int> * t){
+				t->Print2();
+				vector<int> u;
+				auto f = [&](int w){ u.push_back(w); };
+				BinaryNode<int>::PostOrderWalk(t, f);
+				BinaryNode<int>::DeleteTree(t);
+				ASSERT1(v.size() == u.size());
+				for (size_t i = 0; i < v.size(); i++) {
+					ASSERT1(v[i] == u[i]);
+				}
+			});
+			ASSERT1((int)trees.size() == c);
+		};
+
+		check(1, 1);
+		check(2, 2);
+		check(3, 5);
+		check(4, 14);
+	});
+
+	Add("UniqueTreesFromPostOrder2", [&](){
+		auto check = [&](int n){
+			vector<int> v(n);
+			generate(v.begin(), v.end(), rand);
+			vector<BinaryNode<int> *> trees = BinaryNode<int>::UniqueTreesFromPostOrder(v);
+			Logger().WriteInformation("%d numbers can build %d unique binary trees.\n", n, trees.size());
+			for_each (trees.begin(), trees.end(), [&](BinaryNode<int> * t){
+				t->Print2();
+				vector<int> u;
+				auto f = [&](int w){ u.push_back(w); };
+				BinaryNode<int>::PostOrderWalk(t, f);
+				BinaryNode<int>::DeleteTree(t);
+				ASSERT1(v.size() == u.size());
+				for (size_t i = 0; i < v.size(); i++) {
+					ASSERT1(v[i] == u[i]);
+				}
+			});
+		};
+
+		for (int i = 1; i < 9; i++) {
+			check(i);
+		}
+	});
 }

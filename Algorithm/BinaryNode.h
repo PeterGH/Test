@@ -31,6 +31,11 @@ namespace Test {
 		// May return nullptr
 		static BinaryNode * RandomTree(size_t maxSize);
 
+		// Create all unique binary trees that can be built with a sequence
+		static vector<BinaryNode *> UniqueTreesFromPreOrder(vector<T> & values);
+		static vector<BinaryNode *> UniqueTreesFromInOrder(vector<T> & values);
+		static vector<BinaryNode *> UniqueTreesFromPostOrder(vector<T> & values);
+
 		// Create a complete binary tree
 		static BinaryNode * ToCompleteTree(vector<T> & values);
 		// Fill missing nodes to make a complete tree
@@ -401,6 +406,181 @@ namespace Test {
 		}
 		BinaryNode<T> * node = RandomTree(values);
 		return node;
+	}
+
+	template<class T> vector<BinaryNode<T> *> BinaryNode<T>::UniqueTreesFromPreOrder(vector<T> & values)
+	{
+		function<vector<BinaryNode *>(int, int)>
+		create = [&](int i, int j)->vector<BinaryNode *>{
+			vector<BinaryNode *> trees;
+
+			if (i > j) return trees;
+
+			if (i == j) {
+				trees.push_back(new BinaryNode(values[i]));
+				return trees;
+			}
+
+			vector<BinaryNode *> firstTrees = create(i+1, j);
+			for_each (firstTrees.begin(), firstTrees.end(), [&](BinaryNode * f){
+				BinaryNode * n = new BinaryNode(values[i]);
+				n->Left() = Clone1(f);
+				trees.push_back(n);
+			});
+
+			for_each (firstTrees.begin(), firstTrees.end(), [&](BinaryNode * f){
+				BinaryNode * n = new BinaryNode(values[i]);
+				n->Right() = Clone1(f);
+				trees.push_back(n);
+			});
+
+			for_each (firstTrees.begin(), firstTrees.end(), [&](BinaryNode * f){
+				DeleteTree(f);
+			});
+
+			for (int k = i+2; k <= j; k++) {
+				vector<BinaryNode *> leftTrees = create(i+1, k-1);
+				vector<BinaryNode *> rightTrees = create(k, j);
+				for_each (leftTrees.begin(), leftTrees.end(), [&](BinaryNode * l){
+					for_each (rightTrees.begin(), rightTrees.end(), [&](BinaryNode * r){
+						BinaryNode * n = new BinaryNode(values[i]);
+						n->Left() = Clone1(l);
+						n->Right() = Clone1(r);
+						trees.push_back(n);
+					});
+				});
+
+				for_each (leftTrees.begin(), leftTrees.end(), [&](BinaryNode * l){
+					DeleteTree(l);
+				});
+				for_each (rightTrees.begin(), rightTrees.end(), [&](BinaryNode * r){
+					DeleteTree(r);
+				});
+			}
+
+			return trees;
+		};
+
+		return create(0, values.size() - 1);
+	}
+
+	template<class T> vector<BinaryNode<T> *> BinaryNode<T>::UniqueTreesFromInOrder(vector<T> & values)
+	{
+		function<vector<BinaryNode *>(int, int)>
+		create = [&](int i, int j)->vector<BinaryNode *>{
+			vector<BinaryNode *> trees;
+
+			if (i > j) return trees;
+
+			if (i == j) {
+				trees.push_back(new BinaryNode(values[i]));
+				return trees;
+			}
+
+			if (i + 1 == j) {
+				BinaryNode * n = new BinaryNode(values[j]);
+				n->Left() = new BinaryNode(values[i]);
+				trees.push_back(n);
+				n = new BinaryNode(values[i]);
+				n->Right() = new BinaryNode(values[j]);
+				trees.push_back(n);
+				return trees;
+			}
+
+			vector<BinaryNode *> firstTrees = create(i+1, j);
+			for_each (firstTrees.begin(), firstTrees.end(), [&](BinaryNode * f){
+				BinaryNode * n = new BinaryNode(values[i]);
+				n->Right() = f;
+				trees.push_back(n);
+			});
+
+			vector<BinaryNode *> lastTrees = create(i, j-1);
+			for_each (lastTrees.begin(), lastTrees.end(), [&](BinaryNode * l){
+				BinaryNode * n = new BinaryNode(values[j]);
+				n->Left() = l;
+				trees.push_back(n);
+			});
+
+			for (int k = i+1; k < j; k++) {
+				vector<BinaryNode *> leftTrees = create(i, k-1);
+				vector<BinaryNode *> rightTrees = create(k+1, j);
+				for_each (leftTrees.begin(), leftTrees.end(), [&](BinaryNode * l){
+					for_each (rightTrees.begin(), rightTrees.end(), [&](BinaryNode * r){
+						BinaryNode * n = new BinaryNode(values[k]);
+						n->Left() = Clone1(l);
+						n->Right() = Clone1(r);
+						trees.push_back(n);
+					});
+				});
+
+				for_each (leftTrees.begin(), leftTrees.end(), [&](BinaryNode * l){
+					DeleteTree(l);
+				});
+				for_each (rightTrees.begin(), rightTrees.end(), [&](BinaryNode * r){
+					DeleteTree(r);
+				});
+			}
+
+			return trees;
+		};
+
+		return create(0, values.size() - 1);
+	}
+
+	template<class T> vector<BinaryNode<T> *> BinaryNode<T>::UniqueTreesFromPostOrder(vector<T> & values)
+	{
+		function<vector<BinaryNode *>(int, int)>
+		create = [&](int i, int j)->vector<BinaryNode *>{
+			vector<BinaryNode *> trees;
+
+			if (i > j) return trees;
+
+			if (i == j) {
+				trees.push_back(new BinaryNode(values[i]));
+				return trees;
+			}
+
+			vector<BinaryNode *> firstTrees = create(i, j-1);
+			for_each (firstTrees.begin(), firstTrees.end(), [&](BinaryNode * f){
+				BinaryNode * n = new BinaryNode(values[j]);
+				n->Left() = Clone1(f);
+				trees.push_back(n);
+			});
+
+			for_each (firstTrees.begin(), firstTrees.end(), [&](BinaryNode * f){
+				BinaryNode * n = new BinaryNode(values[j]);
+				n->Right() = Clone1(f);
+				trees.push_back(n);
+			});
+
+			for_each (firstTrees.begin(), firstTrees.end(), [&](BinaryNode * f){
+				DeleteTree(f);
+			});
+
+			for (int k = i; k < j - 1; k++) {
+				vector<BinaryNode *> leftTrees = create(i, k);
+				vector<BinaryNode *> rightTrees = create(k+1, j-1);
+				for_each (leftTrees.begin(), leftTrees.end(), [&](BinaryNode * l){
+					for_each (rightTrees.begin(), rightTrees.end(), [&](BinaryNode * r){
+						BinaryNode * n = new BinaryNode(values[j]);
+						n->Left() = Clone1(l);
+						n->Right() = Clone1(r);
+						trees.push_back(n);
+					});
+				});
+
+				for_each (leftTrees.begin(), leftTrees.end(), [&](BinaryNode * l){
+					DeleteTree(l);
+				});
+				for_each (rightTrees.begin(), rightTrees.end(), [&](BinaryNode * r){
+					DeleteTree(r);
+				});
+			}
+
+			return trees;
+		};
+
+		return create(0, values.size() - 1);
 	}
 
 	// Create a complete binary tree
