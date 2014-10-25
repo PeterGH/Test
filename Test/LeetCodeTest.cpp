@@ -33,29 +33,6 @@ void LeetCodeTest::Init(void)
 		check("aabcc", "dbbca", "aadbbbaccc", false);
 	});
 
-	Add("UniqueBinarySearchTrees", [&](){
-		auto check = [&](int n, int c){
-			int m = Test::LeetCode::UniqueBinarySearchTrees(n);
-			Logger().WriteInformation("%d distinct numbers can build %d unique binary search trees.\n", n, m);
-			vector<Test::LeetCode::TreeNode *> trees = Test::LeetCode::CreateUniqueBinarySearchTrees(n);
-			for_each (trees.begin(), trees.end(), [&](Test::LeetCode::TreeNode * t){
-				bool valid1 = Test::LeetCode::IsBinarySearchTree(t);
-				bool valid2 = Test::LeetCode::IsBinarySearchTree2(t);
-				Test::LeetCode::Print(t);
-				Test::LeetCode::DeleteTree(t);
-				ASSERT1(valid1 == true);
-				ASSERT1(valid2 == true);
-			});
-			ASSERT1(m == c);
-			ASSERT1((int)trees.size() == c);
-		};
-
-		check(1, 1);
-		check(2, 2);
-		check(3, 5);
-		check(4, 14);
-	});
-
 	Add("IpAddresses", [&](){
 		auto check = [&](const string & s){
 			Logger().WriteInformation("%s\n", s.c_str());

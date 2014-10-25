@@ -21,7 +21,7 @@ namespace Test {
 		// if rows > cols
 		//   cols + (cols - 1) + ... + 2 + 1 = (cols + 1) * cols / 2
 		size_t c;
-		if (rows > cols) c = ((rows + 1) * rows) >> 1;
+		if (rows > cols) c = ((cols + 1) * cols) >> 1;
 		else c = cols * rows - (((rows - 1) * rows) >> 1);
 		this->buffer = new T[c];
 		memset(this->buffer, 0, c * sizeof(T));

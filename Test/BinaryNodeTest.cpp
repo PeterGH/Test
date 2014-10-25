@@ -2201,6 +2201,7 @@ void BinaryNodeTest::Init(void)
 			for (int i = 0; i < n; i++) {
 				v.push_back(i);
 			}
+			unsigned long long count = BinaryNode<int>::CountUniqueTreesFromPreOrderOfSize(v.size());
 			vector<BinaryNode<int> *> trees = BinaryNode<int>::UniqueTreesFromPreOrder(v);
 			Logger().WriteInformation("%d numbers can build %d unique binary trees.\n", n, trees.size());
 			for_each (trees.begin(), trees.end(), [&](BinaryNode<int> * t){
@@ -2215,6 +2216,7 @@ void BinaryNodeTest::Init(void)
 				}
 			});
 			ASSERT1((int)trees.size() == c);
+			ASSERT1(count == c);
 		};
 
 		check(1, 1);
@@ -2227,6 +2229,7 @@ void BinaryNodeTest::Init(void)
 		auto check = [&](int n){
 			vector<int> v(n);
 			generate(v.begin(), v.end(), rand);
+			unsigned long long count = BinaryNode<int>::CountUniqueTreesFromPreOrderOfSize(v.size());
 			vector<BinaryNode<int> *> trees = BinaryNode<int>::UniqueTreesFromPreOrder(v);
 			Logger().WriteInformation("%d numbers can build %d unique binary trees.\n", n, trees.size());
 			for_each (trees.begin(), trees.end(), [&](BinaryNode<int> * t){
@@ -2240,6 +2243,7 @@ void BinaryNodeTest::Init(void)
 					ASSERT1(v[i] == u[i]);
 				}
 			});
+			ASSERT1(count == trees.size());
 		};
 
 		for (int i = 1; i < 9; i++) {
@@ -2253,6 +2257,7 @@ void BinaryNodeTest::Init(void)
 			for (int i = 0; i < n; i++) {
 				v.push_back(i);
 			}
+			unsigned long long count = BinaryNode<int>::CountUniqueTreesFromInOrderOfSize(v.size());
 			vector<BinaryNode<int> *> trees = BinaryNode<int>::UniqueTreesFromInOrder(v);
 			Logger().WriteInformation("%d numbers can build %d unique binary trees.\n", n, trees.size());
 			for_each (trees.begin(), trees.end(), [&](BinaryNode<int> * t){
@@ -2267,6 +2272,7 @@ void BinaryNodeTest::Init(void)
 				}
 			});
 			ASSERT1((int)trees.size() == c);
+			ASSERT1(count == c);
 		};
 
 		check(1, 1);
@@ -2279,6 +2285,7 @@ void BinaryNodeTest::Init(void)
 		auto check = [&](int n){
 			vector<int> v(n);
 			generate(v.begin(), v.end(), rand);
+			unsigned long long count = BinaryNode<int>::CountUniqueTreesFromInOrderOfSize(v.size());
 			vector<BinaryNode<int> *> trees = BinaryNode<int>::UniqueTreesFromInOrder(v);
 			Logger().WriteInformation("%d numbers can build %d unique binary trees.\n", n, trees.size());
 			for_each (trees.begin(), trees.end(), [&](BinaryNode<int> * t){
@@ -2292,6 +2299,7 @@ void BinaryNodeTest::Init(void)
 					ASSERT1(v[i] == u[i]);
 				}
 			});
+			ASSERT1(count == trees.size());
 		};
 
 		for (int i = 1; i < 9; i++) {
@@ -2305,6 +2313,7 @@ void BinaryNodeTest::Init(void)
 			for (int i = 0; i < n; i++) {
 				v.push_back(i);
 			}
+			unsigned long long count = BinaryNode<int>::CountUniqueTreesFromPostOrderOfSize(v.size());
 			vector<BinaryNode<int> *> trees = BinaryNode<int>::UniqueTreesFromPostOrder(v);
 			Logger().WriteInformation("%d numbers can build %d unique binary trees.\n", n, trees.size());
 			for_each (trees.begin(), trees.end(), [&](BinaryNode<int> * t){
@@ -2319,6 +2328,7 @@ void BinaryNodeTest::Init(void)
 				}
 			});
 			ASSERT1((int)trees.size() == c);
+			ASSERT1(count == c);
 		};
 
 		check(1, 1);
@@ -2331,6 +2341,7 @@ void BinaryNodeTest::Init(void)
 		auto check = [&](int n){
 			vector<int> v(n);
 			generate(v.begin(), v.end(), rand);
+			unsigned long long count = BinaryNode<int>::CountUniqueTreesFromPostOrderOfSize(v.size());
 			vector<BinaryNode<int> *> trees = BinaryNode<int>::UniqueTreesFromPostOrder(v);
 			Logger().WriteInformation("%d numbers can build %d unique binary trees.\n", n, trees.size());
 			for_each (trees.begin(), trees.end(), [&](BinaryNode<int> * t){
@@ -2344,9 +2355,22 @@ void BinaryNodeTest::Init(void)
 					ASSERT1(v[i] == u[i]);
 				}
 			});
+			ASSERT1(count == trees.size());
 		};
 
 		for (int i = 1; i < 9; i++) {
+			check(i);
+		}
+	});
+
+	Add("CountUniqueTrees", [&](){
+		auto check = [&](int n){
+			unsigned long long count1 = BinaryNode<int>::CountUniqueTreesFromPreOrderOfSize(n);
+			unsigned long long count2 = BinaryNode<int>::CountUniqueTreesFromInOrderOfSize(n);
+			unsigned long long count3 = BinaryNode<int>::CountUniqueTreesFromPostOrderOfSize(n);
+			Logger().WriteInformation("%d\t%llu\t%llu\t%llu\n", n, count1, count2, count3);
+		};
+		for (int i = 1; i <= 20; i++) {
 			check(i);
 		}
 	});

@@ -9,6 +9,7 @@
 #include "Node.h"
 #include "SingleNode.h"
 #include "String.h"
+#include "UpperTriangularMatrix.h"
 using namespace concurrency;
 using namespace std;
 
@@ -35,6 +36,16 @@ namespace Test {
 		static vector<BinaryNode *> UniqueTreesFromPreOrder(vector<T> & values);
 		static vector<BinaryNode *> UniqueTreesFromInOrder(vector<T> & values);
 		static vector<BinaryNode *> UniqueTreesFromPostOrder(vector<T> & values);
+
+		// Given a pre-order sequence of n numbers (e.g., 1, 2, 3, ..., n)
+		// count unique binary trees that can be built with the n numbers
+		static unsigned long long CountUniqueTreesFromPreOrderOfSize(int n);
+		// Given an in-order sequence of n numbers (e.g., 1, 2, 3, ..., n)
+		// count unique binary trees that can be built with the n numbers
+		static unsigned long long CountUniqueTreesFromInOrderOfSize(int n);
+		// Given a post-order sequence of n numbers (e.g., 1, 2, 3, ..., n)
+		// count unique binary trees that can be built with the n numbers
+		static unsigned long long CountUniqueTreesFromPostOrderOfSize(int n);
 
 		// Create a complete binary tree
 		static BinaryNode * ToCompleteTree(vector<T> & values);
@@ -581,6 +592,94 @@ namespace Test {
 		};
 
 		return create(0, values.size() - 1);
+	}
+
+	// Given a pre-order sequence of n numbers (e.g., 1, 2, 3, ..., n)
+	// count unique binary trees that can be built with the n numbers
+	// Let C[i,j] be the count of unique binary trees using numbers i to j
+	// Then chose a k between i+1 and j and solve sub problems
+	// C[i,j] = 2 * C[i+1, j]
+	//        + C[i+1, k-1] * C[k, j]
+	template<class T> unsigned long long BinaryNode<T>::CountUniqueTreesFromPreOrderOfSize(int n)
+	{
+		if (n <= 0) return 0;
+
+		UpperTriangularMatrix<unsigned long long> count(n, n);
+
+		for (int i = 0; i < n; i++) {
+			count(i, i) = 1;
+		}
+
+		for (int l = 1; l < n; l++) {
+			for (int i = 0; i < n - l; i++) {
+				int j = i + l;
+				count(i, j) = count(i+1, j) << 1;
+				for (int k = i+2; k <= j; k++) {
+					count(i, j) += count(i+1, k-1) * count(k, j);
+				}
+			}
+		}
+
+		return count(0, n-1);
+	}
+
+	// Given an in-order sequence of n numbers (e.g., 1, 2, 3, ..., n)
+	// count unique binary trees that can be built with the n numbers
+	// Let C[i,j] be the count of unique binary trees using numbers i to j
+	// Then chose a k between i and j and solve sub problems
+	// C[i,j] = C[i+1, j]
+	//        + C[i, j-1]
+	//        + C[i, k-1] * C[k+1, j]
+	template<class T> unsigned long long BinaryNode<T>::CountUniqueTreesFromInOrderOfSize(int n)
+	{
+		if (n <= 0) return 0;
+
+		UpperTriangularMatrix<unsigned long long> count(n, n);
+
+		for (int i = 0; i < n; i++) {
+			count(i, i) = 1;
+		}
+
+		for (int l = 1; l < n; l++) {
+			for (int i = 0; i < n - l; i++) {
+				int j = i + l;
+				count(i, j) = count(i+1, j) + count(i, j-1);
+				for (int k = i+1; k < j; k++) {
+					count(i, j) += count(i, k-1) * count(k+1, j);
+				}
+			}
+		}
+
+		return count(0, n-1);
+	}
+
+	// Given a post-order sequence of n numbers (e.g., 1, 2, 3, ..., n)
+	// count unique binary trees that can be built with the n numbers
+	// Let C[i,j] be the count of unique binary trees using numbers i to j
+	// Then chose a k between i+1 and j and solve sub problems
+	// C[i,j] = 2 * C[i, j-1]
+	//        + C[i, k] * C[k+1, j-1]
+	template<class T> unsigned long long BinaryNode<T>::CountUniqueTreesFromPostOrderOfSize(int n)
+	{
+		if (n <= 0) return 0;
+
+		UpperTriangularMatrix<unsigned long long> count(n, n);
+
+		for (int i = 0; i < n; i++) {
+			count(i, i) = 1;
+		}
+
+		for (int l = 1; l < n; l++) {
+			for (int i = 0; i < n - l; i++) {
+				int j = i + l;
+				count(i, j) = count(i, j-1) << 1;
+				for (int k = i; k < j-1; k++) {
+					count(i, j) += count(i, k) * count(k+1, j-1);
+				}
+			}
+		}
+
+		return count(0, n-1);
 	}
 
 	// Create a complete binary tree
