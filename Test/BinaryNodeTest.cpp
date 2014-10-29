@@ -936,6 +936,8 @@ void BinaryNodeTest::Init(void)
 			vector<int> v7;
 			vector<int> v8;
 			vector<int> v9;
+			vector<int> v10;
+			vector<int> v11;
 
 			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
 				function<void(int)> w = [&](int n){
@@ -955,6 +957,14 @@ void BinaryNodeTest::Init(void)
 			tree2->PreOrderWalkWithStack3(f(v8));
 			tree2->PreOrderWalkWithOutStack(f(v9));
 
+			for (PreOrderBinaryIterator<int, BinaryNode> it = PreOrderBinaryIterator<int, BinaryNode>(tree); it != PreOrderBinaryIterator<int, BinaryNode>(); it++) {
+				v10.push_back(*it);
+			}
+
+			for (PreOrderBinaryIteratorWithOutStack<int> it = PreOrderBinaryIteratorWithOutStack<int>(tree2); it != PreOrderBinaryIteratorWithOutStack<int>(); it++) {
+				v11.push_back(*it);
+			}
+
 			BinaryNode<int>::DeleteTree(tree);
 			BinaryNode<int>::DeleteTree(tree2);
 
@@ -967,6 +977,8 @@ void BinaryNodeTest::Init(void)
 			ASSERT2(v7.size() == count, String::Format("Expect %d elements, actual visited %d", count, v7.size()));
 			ASSERT2(v8.size() == count, String::Format("Expect %d elements, actual visited %d", count, v8.size()));
 			ASSERT2(v9.size() == count, String::Format("Expect %d elements, actual visited %d", count, v9.size()));
+			ASSERT2(v10.size() == count, String::Format("Expect %d elements, actual visited %d", count, v10.size()));
+			ASSERT2(v11.size() == count, String::Format("Expect %d elements, actual visited %d", count, v11.size()));
 
 			for (int j = 0; j < count; j++) {
 				ASSERT1(v1[j] == v2[j]);
@@ -977,6 +989,8 @@ void BinaryNodeTest::Init(void)
 				ASSERT1(v1[j] == v7[j]);
 				ASSERT1(v1[j] == v8[j]);
 				ASSERT1(v1[j] == v9[j]);
+				ASSERT1(v1[j] == v10[j]);
+				ASSERT1(v1[j] == v11[j]);
 			}
 		}
 	});
@@ -1004,6 +1018,8 @@ void BinaryNodeTest::Init(void)
 			vector<int> v5;
 			vector<int> v6;
 			vector<int> v7;
+			vector<int> v8;
+			vector<int> v9;
 
 			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
 				function<void(int)> w = [&](int n){
@@ -1021,6 +1037,14 @@ void BinaryNodeTest::Init(void)
 			tree2->InOrderWalkWithStack2(f(v6));
 			tree2->InOrderWalkWithOutStack(f(v7));
 
+			for (InOrderBinaryIterator<int, BinaryNode> it = InOrderBinaryIterator<int, BinaryNode>(tree); it != InOrderBinaryIterator<int, BinaryNode>(); it++) {
+				v8.push_back(*it);
+			}
+
+			for (InOrderBinaryIteratorWithOutStack<int> it = InOrderBinaryIteratorWithOutStack<int>(tree2); it != InOrderBinaryIteratorWithOutStack<int>(); it++) {
+				v9.push_back(*it);
+			}
+
 			BinaryNode<int>::DeleteTree(tree);
 			BinaryNode<int>::DeleteTree(tree2);
 
@@ -1031,6 +1055,8 @@ void BinaryNodeTest::Init(void)
 			ASSERT2(v5.size() == count, String::Format("Expect %d elements, actual visited %d", count, v5.size()));
 			ASSERT2(v6.size() == count, String::Format("Expect %d elements, actual visited %d", count, v6.size()));
 			ASSERT2(v7.size() == count, String::Format("Expect %d elements, actual visited %d", count, v7.size()));
+			ASSERT2(v8.size() == count, String::Format("Expect %d elements, actual visited %d", count, v8.size()));
+			ASSERT2(v9.size() == count, String::Format("Expect %d elements, actual visited %d", count, v9.size()));
 
 			for (int j = 0; j < count; j++) {
 				ASSERT1(v1[j] == v2[j]);
@@ -1039,6 +1065,8 @@ void BinaryNodeTest::Init(void)
 				ASSERT1(v1[j] == v5[j]);
 				ASSERT1(v1[j] == v6[j]);
 				ASSERT1(v1[j] == v7[j]);
+				ASSERT1(v1[j] == v8[j]);
+				ASSERT1(v1[j] == v9[j]);
 			}
 		}
 	});
@@ -1066,6 +1094,8 @@ void BinaryNodeTest::Init(void)
 			vector<int> v5;
 			vector<int> v6;
 			vector<int> v7;
+			vector<int> v8;
+			vector<int> v9;
 
 			function<function<void(int)>(vector<int> &)> f = [&](vector<int> & v)->function < void(int) > {
 				function<void(int)> w = [&](int n){
@@ -1083,6 +1113,14 @@ void BinaryNodeTest::Init(void)
 			tree2->PostOrderWalkWithStack2(f(v6));
 			tree2->PostOrderWalkWithOutStack(f(v7));
 
+			for (PostOrderBinaryIterator<int, BinaryNode> it = PostOrderBinaryIterator<int, BinaryNode>(tree); it != PostOrderBinaryIterator<int, BinaryNode>(); it++) {
+				v8.push_back(*it);
+			}
+
+			for (PostOrderBinaryIteratorWithOutStack<int> it = PostOrderBinaryIteratorWithOutStack<int>(tree2); it != PostOrderBinaryIteratorWithOutStack<int>(); it++) {
+				v9.push_back(*it);
+			}
+
 			BinaryNode<int>::DeleteTree(tree);
 			BinaryNode<int>::DeleteTree(tree2);
 
@@ -1093,6 +1131,8 @@ void BinaryNodeTest::Init(void)
 			ASSERT2(v5.size() == count, String::Format("Expect %d elements, actual visited %d", count, v5.size()));
 			ASSERT2(v6.size() == count, String::Format("Expect %d elements, actual visited %d", count, v6.size()));
 			ASSERT2(v7.size() == count, String::Format("Expect %d elements, actual visited %d", count, v7.size()));
+			ASSERT2(v8.size() == count, String::Format("Expect %d elements, actual visited %d", count, v8.size()));
+			ASSERT2(v9.size() == count, String::Format("Expect %d elements, actual visited %d", count, v9.size()));
 
 			for (int j = 0; j < count; j++) {
 				ASSERT1(v1[j] == v2[j]);
@@ -1101,6 +1141,8 @@ void BinaryNodeTest::Init(void)
 				ASSERT1(v1[j] == v5[j]);
 				ASSERT1(v1[j] == v6[j]);
 				ASSERT1(v1[j] == v7[j]);
+				ASSERT1(v1[j] == v8[j]);
+				ASSERT1(v1[j] == v9[j]);
 			}
 		}
 	});

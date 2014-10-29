@@ -90,9 +90,6 @@
     <ClInclude Include="StackTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BinaryTreeTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RedBlackTreeTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -151,9 +148,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DestructorTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BinarySearchTreeTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BinaryIteratorTest.h">
@@ -260,9 +254,6 @@
     <ClCompile Include="StackTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BinaryTreeTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RedBlackTreeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -321,9 +312,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DestructorTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BinarySearchTreeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BinaryIteratorTest.cpp">

@@ -81,8 +81,6 @@
     <ClInclude Include="BinaryIteratorTest.h" />
     <ClInclude Include="BinaryNodeTest.h" />
     <ClInclude Include="BinarySearchTest.h" />
-    <ClInclude Include="BinarySearchTreeTest.h" />
-    <ClInclude Include="BinaryTreeTest.h" />
     <ClInclude Include="BitSetTest.h" />
     <ClInclude Include="BreakStringTest.h" />
     <ClInclude Include="CircularSingleLinkListTest.h" />
@@ -139,8 +137,6 @@
     <ClCompile Include="BinaryIteratorTest.cpp" />
     <ClCompile Include="BinaryNodeTest.cpp" />
     <ClCompile Include="BinarySearchTest.cpp" />
-    <ClCompile Include="BinarySearchTreeTest.cpp" />
-    <ClCompile Include="BinaryTreeTest.cpp" />
     <ClCompile Include="BitSetTest.cpp" />
     <ClCompile Include="BreakStringTest.cpp" />
     <ClCompile Include="CircularSingleLinkListTest.cpp" />

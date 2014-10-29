@@ -83,8 +83,6 @@
     <ClInclude Include="BinaryNodeWithParent.h" />
     <ClInclude Include="BinaryNodeWithRightSibling.h" />
     <ClInclude Include="BinarySearch.h" />
-    <ClInclude Include="BinarySearchTree.h" />
-    <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="BitSet.h" />
     <ClInclude Include="BreakString.h" />
     <ClInclude Include="CircularSingleLinkList.h" />
