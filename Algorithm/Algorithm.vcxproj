@@ -98,6 +98,7 @@
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphSearchTree.h" />
+    <ClInclude Include="Search.h" />
     <ClInclude Include="Heap.h" />
     <ClInclude Include="HeapSort.h" />
     <ClInclude Include="InOrderBinaryIterator.h" />

@@ -47,6 +47,7 @@
 #include "RandomTest.h"
 #include "RedBlackTreeTest.h"
 #include "RodCutTest.h"
+#include "SearchTest.h"
 #include "SeamCarvingTest.h"
 #include "SingleLinkListTest.h"
 #include "SortedCircularSingleLinkListTest.h"
@@ -123,6 +124,7 @@ int main(int argc, char * argv[])
 	suite.Add(new RandomTest(log));
 	suite.Add(new RedBlackTreeTest(log));
 	suite.Add(new RodCutTest(log));
+	suite.Add(new SearchTest(log));
 	suite.Add(new SeamCarvingTest(log));
 	suite.Add(new SingleLinkListTest(log));
 	suite.Add(new SortedCircularSingleLinkListTest(log));

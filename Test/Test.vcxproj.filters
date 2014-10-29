@@ -177,6 +177,9 @@
     <ClInclude Include="MatrixTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SearchTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -339,6 +342,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MatrixTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SearchTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

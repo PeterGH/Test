@@ -120,6 +120,7 @@
     <ClInclude Include="RedBlackTreeTest.h" />
     <ClInclude Include="RodCutTest.h" />
     <ClInclude Include="SeamCarvingTest.h" />
+    <ClInclude Include="SearchTest.h" />
     <ClInclude Include="SingleLinkListTest.h" />
     <ClInclude Include="SortedCircularSingleLinkListTest.h" />
     <ClInclude Include="SortedSingleLinkListTest.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="RedBlackTreeTest.cpp" />
     <ClCompile Include="RodCutTest.cpp" />
     <ClCompile Include="SeamCarvingTest.cpp" />
+    <ClCompile Include="SearchTest.cpp" />
     <ClCompile Include="SingleLinkListTest.cpp" />
     <ClCompile Include="SortedCircularSingleLinkListTest.cpp" />
     <ClCompile Include="SortedSingleLinkListTest.cpp" />
