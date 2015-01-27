@@ -2,6 +2,59 @@
 
 void MathTest::Init(void)
 {
+	Add("AddBits", [&](){
+		auto bits = [&](unsigned int n) -> size_t {
+			int c = 0;
+			while (n != 0) {
+				n = n >> 1;
+				c++;
+			}
+			return c;
+		};
+		auto toArray = [&](int n, size_t l, int * a){
+			for (size_t i = 0; i < l; i++) {
+				a[i] = n & 0x1;
+				n = n >> 1;
+			}
+		};
+		auto toNum = [&](int * a, size_t l)->int{
+			int n = 0;
+			for (size_t i = 0; i < l; i++) {
+				if (a[i] == 1) {
+					n = n + (0x1 << i);
+				}
+			}
+			return n;
+		};
+		auto check = [&](int n0, int n1, int e) {
+			size_t l0 = bits(n0);
+			unique_ptr<int[]> b0(new int[l0]);
+			toArray(n0, l0, b0.get());
+
+			size_t l1 = bits(n1);
+			unique_ptr<int[]> b1(new int[l1]);
+			toArray(n1, l1, b1.get());
+
+			size_t l2 = 1 + max(l0, l1);
+			unique_ptr<int[]> b2(new int[l2]);
+
+			Test::Math::AddBits(b0.get(), l0, b1.get(), l1, b2.get());
+
+			int a = toNum(b2.get(), l2);
+
+			Logger().WriteInformation("%d + %d = %d\n", n0, n1, a);
+			ASSERT1(a == e);
+		};
+		check(2, 1, 3);
+		check(3, 1, 4);
+		check(3, 2, 5);
+		for (int i = 0; i < 10; i++) {
+			int n0 = 1 + rand();
+			int n1 = 1 + rand();
+			check(n0, n1, n0 + n1);
+		}
+	});
+
 	Add("Decode", [&](){
 		auto check = [&](const string & input, unsigned long long expect) {
 			Logger().WriteInformation("%s = ", input.c_str());

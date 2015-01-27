@@ -6,6 +6,7 @@
 #include <vector>
 #include "BinarySearch.h"
 #include "BitSet.h"
+#include "Search.h"
 #include "String.h"
 
 using namespace std;
@@ -376,7 +377,7 @@ namespace Test {
 
 			while (i <= firstIndices[index]) index--;
 
-			int f =	BinarySearch::FindPositionToInsert<int,int>(
+			int f =	Search::FindPositionToInsert<int,int>(
 				i,
 				firstIndices.get(),
 				index+1,

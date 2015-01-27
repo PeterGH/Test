@@ -52,6 +52,7 @@
 #include "SingleLinkListTest.h"
 #include "SortedCircularSingleLinkListTest.h"
 #include "SortedSingleLinkListTest.h"
+#include "SortTest.h"
 #include "StackTest.h"
 #include "StringTest.h"
 #include "TestClassTest.h"
@@ -129,6 +130,7 @@ int main(int argc, char * argv[])
 	suite.Add(new SingleLinkListTest(log));
 	suite.Add(new SortedCircularSingleLinkListTest(log));
 	suite.Add(new SortedSingleLinkListTest(log));
+	suite.Add(new SortTest(log));
 	suite.Add(new StackTest(log));
 	suite.Add(new StringTest(log));
 	suite.Add(new TestClassTest(log));

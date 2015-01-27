@@ -5,6 +5,7 @@
 #include "Array.h"
 #include "MergeSort.h"
 #include "String.h"
+#include "Sort.h"
 
 using namespace std;
 using namespace concurrency;
@@ -243,7 +244,7 @@ namespace Test {
 		for (int i = 0; i < rows; i++) {
 			int end = begin + columns - 1;
 			if (end >= length) end = length - 1;
-			MergeSort::Sort<T>(input, begin, end);
+			Sort::Merge::Sort<T>(input, begin, end);
 			begin += columns;
 		}
 	}
@@ -364,7 +365,7 @@ namespace Test {
 			int begin = i * columns;
 			int end = begin + columns - 1;
 			if (end >= length) end = length - 1;
-			MergeSort::Sort<T>(input, begin, end);
+			Sort::Merge::Sort<T>(input, begin, end);
 		});
 	}
 

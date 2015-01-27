@@ -140,6 +140,7 @@
     <ClInclude Include="SeamCarving.h" />
     <ClInclude Include="SingleLinkList.h" />
     <ClInclude Include="SingleNode.h" />
+    <ClInclude Include="Sort.h" />
     <ClInclude Include="SortedCircularSingleLinkList.h" />
     <ClInclude Include="SortedSingleLinkList.h" />
     <ClInclude Include="Stack.h" />

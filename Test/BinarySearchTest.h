@@ -5,6 +5,7 @@
 #include "..\Algorithm\BinarySearch.h"
 #include "..\Algorithm\MergeSort.h"
 #include "..\Algorithm\Random.h"
+#include "..\Algorithm\Sort.h"
 #include "..\Algorithm\TestClass.h"
 
 using namespace std;

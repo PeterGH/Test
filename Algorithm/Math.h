@@ -15,6 +15,9 @@ namespace Test {
 		Math();
 		~Math();
 
+		// Add two bit arrays, n2 = n0 + n1. Assume bit-0 is the LSB.
+		__declspec(dllexport) static void AddBits(int * n0, size_t l0, int * n1, size_t l1, int * n2);
+
 		__declspec(dllexport) static unsigned long long ExcelDecode(const string & input);
 		__declspec(dllexport) static string ExcelEncode(unsigned long long input);
 

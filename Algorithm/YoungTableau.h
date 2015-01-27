@@ -3,6 +3,8 @@
 #include "Array.h"
 #include "BinarySearch.h"
 #include "MergeSort.h"
+#include "Search.h"
+#include "Sort.h"
 using namespace std;
 namespace Test {
 	template<class T> class YoungTableau {
@@ -261,12 +263,12 @@ namespace Test {
 		for (int i = 0; i < rows; i++) {
 			int p = i * this->cols;
 			int r = p + this->cols - 1;
-			MergeSort::Sort(input, p, r);
+			Sort::Merge::Sort(input, p, r);
 		}
 
 		int remainders = length % this->cols;
 		if (remainders > 0)
-			MergeSort::Sort(input, rows * this->cols, length - 1);
+			Sort::Merge::Sort(input, rows * this->cols, length - 1);
 	}
 
 	template<class T> void YoungTableau<T>::SortColumns(T * input, int length)
@@ -471,7 +473,7 @@ namespace Test {
 		if (this->size == 0) return r;
 
 		if (this->Rows() == 1) {
-			int j = BinarySearch::Search<T>(e, this->buffer, this->size);
+			int j = Search::BinarySearch<T>(e, this->buffer, this->size);
 			if (j == -1) return r;
 			return make_pair(0, j);
 		}
@@ -498,7 +500,7 @@ namespace Test {
 			int lastRow = this->size / this->cols;
 			if (i == lastRow) {
 				// Need to check the last row, which is not filled up fully
-				int j = BinarySearch::Search<T>(e, this->buffer + i * this->cols, remainders);
+				int j = Search::BinarySearch<T>(e, this->buffer + i * this->cols, remainders);
 				if (j != -1) return make_pair(i, j);
 			}
 		}
@@ -509,7 +511,7 @@ namespace Test {
 	template<class T> pair<int, int> YoungTableau<T>::SearchInternal(const T & e, int i0, int j0, int i1, int j1)
 	{
 		if (i0 == i1) {
-			int j = BinarySearch::Search<T>(e, this->buffer + this->Index(i0, j0), j1 - j0 + 1);
+			int j = Search::BinarySearch<T>(e, this->buffer + this->Index(i0, j0), j1 - j0 + 1);
 			if (j == -1) return make_pair(-1, -1);
 			else return make_pair(i0, j0 + j);
 		}
@@ -524,7 +526,7 @@ namespace Test {
 
 		int i = (i0 + i1) >> 1;
 		// j is biased by j0
-		int j = BinarySearch::FindPositionToInsert<T>(e, this->buffer + this->Index(i, j0), j1 - j0 + 1);
+		int j = Search::FindPositionToInsert<T>(e, this->buffer + this->Index(i, j0), j1 - j0 + 1);
 
 		if (j < j1 - j0) {
 			T & v = this->buffer[this->Index(i, j0 + j + 1)];
@@ -561,7 +563,7 @@ namespace Test {
 			if (r.first != -1 && r.second != -1) return r;
 		}
 
-		int j = BinarySearch::Search<T>(e, this->buffer + this->Index(rows - 1, 0), remainders);
+		int j = Search::BinarySearch<T>(e, this->buffer + this->Index(rows - 1, 0), remainders);
 		if (j == -1) return make_pair(-1, -1);
 		else return make_pair(rows - 1, j);
 	}
@@ -605,7 +607,7 @@ namespace Test {
 			count = this->CountLessThanInternal(e, 0, 0, rows - 2, this->cols - 1);
 		}
 
-		int j = BinarySearch::FindPositionToInsert<T>(e, this->buffer + this->Index(rows - 1, 0), remainders);
+		int j = Search::FindPositionToInsert<T>(e, this->buffer + this->Index(rows - 1, 0), remainders);
 		count += (j + 1);
 
 		return count;
@@ -672,7 +674,7 @@ namespace Test {
 		}
 
 		if (remainders > 0) {
-			int j = BinarySearch::FindPositionToInsert<T>(e, this->buffer + this->Index(rows - 1, 0), remainders);
+			int j = Search::FindPositionToInsert<T>(e, this->buffer + this->Index(rows - 1, 0), remainders);
 			count += (j + 1);
 		}
 

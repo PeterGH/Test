@@ -74,6 +74,7 @@
     <ClInclude Include="UpperTriangularMatrix.h" />
     <ClInclude Include="LowerTriangularMatrix.h" />
     <ClInclude Include="Search.h" />
+    <ClInclude Include="Sort.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BitSet.cpp" />

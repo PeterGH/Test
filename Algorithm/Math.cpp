@@ -1,5 +1,46 @@
 #include "Math.h"
 namespace Test {
+
+	void Math::AddBits(int * n0, size_t l0, int * n1, size_t l1, int * n2)
+	{
+		if (n0 == nullptr || n1 == nullptr) return;
+		if (l0 == 0 || l1 == 0) return;
+		if (n2 == nullptr) return;
+
+		// adjust so that n0 is shorter than n1
+		if (l0 > l1) {
+			swap(n0, n1);
+			swap(l0, l1);
+		}
+
+		memset(n2, 0, (l1 + 1) * sizeof(int));
+		memcpy(n2, n0, l0 * sizeof(int));
+
+		int c = 0;
+		size_t i = 0;
+		for (i = 0; i < l1; i++) {
+			int s = n2[i] + n1[i] + c;
+			switch (s) {
+			case 0:
+			case 1:
+				n2[i] = s;
+				c = 0;
+				break;
+			case 2:
+			case 3:
+				n2[i] = s & 0x1;
+				c = 1;
+				break;
+			default:
+				break;
+			}
+		}
+
+		if (c == 1) {
+			n2[i] = 1;
+		}
+	}
+
 	// Convert Excel column number to integer:
 	//     A, B, ..., Z,  AA, AB, ..., AZ, BA, BB, ..., ZZ,  AAA, AAB, ...
 	//     0, 1, ..., 25, 26, 27, ..., 51, 52, 53, ..., 701, 702, 703, ...

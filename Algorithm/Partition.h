@@ -190,7 +190,7 @@ namespace Test {
 		int m = PartitionArrayRandomly(input, low, high);
 
 		// Find the last element index in indices less than m
-		int k = first + BinarySearch::FindPositionToInsert<int>(m, &indices[first], last - first + 1);
+		int k = first + Search::FindPositionToInsert<int>(m, &indices[first], last - first + 1);
 
 		// low ................................ m ............................... high
 		//        indices[fist] .... indices[k]   indices[k+1] .... indices[last]

@@ -32,10 +32,6 @@ namespace Test {
 		// them into a sorted array input[head..tail].
 		template<class T> static int CountInversions(T * input, int head, int middle, int tail);
 
-		// Sort input[head..tail] using merge
-		template<class T> static void Sort(T * input, int head, int tail);
-		template<class T> static void Sort(T * input, int length) { Sort(input, 0, length - 1); }
-
 		template<class T> static void Sort(T * input, int head, int tail, int step);
 
 		template<class T> static void Sort(SingleNode<T> * & list);
@@ -177,34 +173,6 @@ namespace Test {
 		}
 
 		return count;
-	}
-
-	template<class T> void MergeSort::Sort(T * input, int head, int tail)
-	{
-		if (input == nullptr || head < 0 || tail < 0 || tail < head) return;
-		if (head < tail) {
-			int middle = head + ((tail - head) >> 1) + 1;
-			Sort(input, head, middle - 1);
-			Sort(input, middle, tail);
-			Merge(input, head, middle, tail);
-		}
-	}
-
-	template<class T> void MergeSort::ParallelSort(T * input, int head, int tail)
-	{
-		if (input == nullptr || head < 0 || tail < 0 || tail < head) return;
-		if (head < tail) {
-			int middle = head + ((tail - head) >> 1) + 1;
-
-			// parallel_invoke returns only when two actions finish
-			parallel_invoke(
-				[&input, head, middle]{ ParallelSort(input, head, middle - 1); },
-				[&input, middle, tail]{ ParallelSort(input, middle, tail); }
-			);
-
-			// Now two sub arrays are sorted, it is safe to merge
-			Merge(input, head, middle, tail);
-		}
 	}
 
 	template<class T> void MergeSort::Sort(T * input, int head, int tail, int step)
