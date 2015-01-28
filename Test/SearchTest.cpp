@@ -315,7 +315,7 @@ void SearchTest::Init()
 
 			min = min << 1;
 			max = max << 1;
-			int loops = 100;
+			int loops = 10;
 			int delta = (max - min) / loops;
 
 			LONGLONG ticks, time1, time2, time3, time4;
