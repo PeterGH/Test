@@ -138,7 +138,7 @@ namespace Test {
 
 	template<class T> void Sort::Merge::Sort(T * input, size_t head, size_t tail)
 	{
-		if (input == nullptr || head + 1 <= tail) return;
+		if (input == nullptr || head >= tail) return;
 
 		Sort(input + head, tail - head + 1);
 	}

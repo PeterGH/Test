@@ -2,6 +2,8 @@
 #include <functional>
 #include <unordered_map>
 #include <vector>
+#include "Partition.h"
+#include "Sort.h"
 using namespace std;
 namespace Test {
 	class _declspec(dllexport) Search {
@@ -41,8 +43,8 @@ namespace Test {
 		// where index1 must be less than index2. You may assume that each input would have many solutions.
 		// Input: numbers={2, 7, 11, 15}, target=9
 		// Output: index1=1, index2=2
-		template<class T> static vector<pair<int, int>> TwoSum(vector<T> & numbers, int target);
-		template<class T> static vector<pair<int, int>> TwoSum2(vector<T> & numbers, int target);
+		template<class T> static void TwoSum3(T * input, int length, const T sum, vector<pair<int, int>> & indices);
+		template<class T> static void TwoSum4(T * input, int length, const T sum, vector<pair<int, int>> & indices);
 
 	};
 
@@ -266,22 +268,21 @@ namespace Test {
 		}
 	}
 
-	template<class T> static vector<pair<int, int>> Search::TwoSum(vector<T> & numbers, int target)
+	template<class T> static void Search::TwoSum3(T * input, int length, const T sum, vector<pair<int, int>> & indices)
 	{
-		vector<pair<int, int>> indices;
-		if (numbers.size() < 2) return indices;
+		if (length < 2) return;
 		vector<pair<T, int>> m;
-		for (int i = 0; i < (int)numbers.size(); i++) {
-			m.push_back(make_pair(numbers[i], i));
+		for (int i = 0; i < length; i++) {
+			m.push_back(make_pair(input[i], i));
 		}
 		sort(m.begin(), m.end());
 		int i = 0;
 		int j = m.size() - 1;
 		while (i < j) {
 			T s = m[i].first + m[j].first;
-			if (s < target) {
+			if (s < sum) {
 				i++;
-			} else if (s > target) {
+			} else if (s > sum) {
 				j--;
 			} else {
 				int p = i;
@@ -306,22 +307,19 @@ namespace Test {
 				}
 			}
 		}
-		return indices;
 	}
 
-	template<class T> static vector<pair<int, int>> TwoSum2(vector<T> & numbers, int target)
+	template<class T> static void Search::TwoSum4(T * input, int length, const T sum, vector<pair<int, int>> & indices)
 	{
-		vector<pair<int, int>> indices;
-		if (numbers.size() < 2) return indices;
+		if (length < 2) return;
 		unordered_multimap<T, int> m;
-		for (int i = 0; i < (int)numbers.size(); i++) {
-			T d = target - numbers[i];
+		for (int i = 0; i < length; i++) {
+			T d = sum - input[i];
 			auto range = m.equal_range(d);
-			for_each(range.first, range.second, [](unordered_multimap<T, int>::value_type & v){
-				indices.push_back(v.second, i);
+			for_each(range.first, range.second, [&](unordered_multimap<T, int>::value_type & v){
+				indices.push_back(make_pair(v.second, i));
 			});
-			m.insert(make_pair(numbers[i], i));
+			m.insert(make_pair(input[i], i));
 		}
-		return indices;
 	}
 }
