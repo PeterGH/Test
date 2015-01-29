@@ -280,13 +280,13 @@ namespace Test {
 		for (int i = 0; i < remainders; i++) {
 			int p = i;
 			int r = i + rows * this->cols;
-			MergeSort::Sort(input, p, r, this->cols);
+			Sort::Merge::Sort(input, p, r, this->cols);
 		}
 
 		for (unsigned int i = remainders; i < this->cols; i++) {
 			int p = i;
 			int r = i + (rows - 1) * this->cols;
-			MergeSort::Sort(input, p, r, this->cols);
+			Sort::Merge::Sort(input, p, r, this->cols);
 		}
 	}
 

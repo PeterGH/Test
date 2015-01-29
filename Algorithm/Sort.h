@@ -24,6 +24,15 @@ namespace Test {
 		public:
 			template<class T> static void Sort(T * input, size_t length);
 			template<class T> static void Sort(T * input, size_t head, size_t tail);
+			template<class T> static void Sort(T * input, size_t head, size_t tail, size_t step);
+		};
+
+		class Util {
+		public:
+			// Assuming input[head..(middle-1)] and input[middle..tail] are already sorted,
+			// rearrange elements every step so that input[head..tail] is sorted.
+			// In-place and stable.
+			template<class T> static void Merge(T * input, int head, int middle, int tail, int step = 1);
 		};
 	};
 
@@ -103,24 +112,6 @@ namespace Test {
 	{
 		if (input == nullptr || length <= 1) return;
 
-		// Merge a[h..(m-1)] and a[m..t], assuming both subarrays are sorted
-		function<void(T *, size_t, size_t, size_t)> merge = [&](T * a, size_t h, size_t m, size_t t){
-			while (h < m && m <= t) {
-				if (a[h] <= a[m]) {
-					h++;
-				}
-				else {
-					T e = a[m];
-					for (size_t i = m; i > h; i--) {
-						a[i] = a[i - 1];
-					}
-					a[h] = e;
-					h++;
-					m++;
-				}
-			}
-		};
-
 		function<void(T *, size_t, size_t)> sort = [&](T * a, size_t h, size_t t){
 			if (h < t) {
 				size_t m = h + ((t - h) >> 1) + 1;
@@ -129,7 +120,7 @@ namespace Test {
 					[&sort, &a, h, m]{ sort(a, h, m - 1); },
 					[&sort, &a, m, t]{ sort(a, m, t); }
 				);
-				merge(a, h, m, t);
+				Util::Merge(a, h, m, t);
 			}
 		};
 
@@ -143,5 +134,38 @@ namespace Test {
 		Sort(input + head, tail - head + 1);
 	}
 
+	template<class T> void Sort::Merge::Sort(T * input, size_t head, size_t tail, size_t step)
+	{
+		if (input == nullptr || head < 0 || tail < 0 || tail < head || step <= 0) return;
+		if (head < tail) {
+			int middle = head + (((tail - head) / step) >> 1) * step + step;
+			parallel_invoke(
+				[&input, head, middle, step]{ Sort(input, head, middle - step, step); },
+				[&input, middle, tail, step]{ Sort(input, middle, tail, step); }
+			);
+			Util::Merge(input, head, middle, tail, step);
+		}
+	}
+
+	template<class T> void Sort::Util::Merge(T * input, int head, int middle, int tail, int step)
+	{
+		if (input == nullptr || head < 0 || middle <= 0 || tail < middle || tail <= head || step <= 0) return;
+		// head and middle point to the heads of two sub sorted arrays.
+		while (head < middle && middle <= tail) {
+			if (input[head] <= input[middle]) {
+				head += step;
+			} else {
+				T t = input[middle];
+				// Shift input[head..(middle-step)] to input[(head+step)..middle]
+				for (int i = middle; i > head; i -= step) {
+					input[i] = input[i - step];
+				}
+				input[head] = t;
+				// Move to the next pair of elements
+				head += step;
+				middle += step;
+			}
+		}
+	}
 
 }
