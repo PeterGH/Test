@@ -16,6 +16,7 @@
 #include "CoinSelectTest.h"
 #include "ColumnSortTest.h"
 #include "CountingSortTest.h"
+#include "CountTest.h"
 #include "DestructorTest.h"
 #include "DynamicProgrammingTest.h"
 #include "FiniteAutomationTest.h"
@@ -94,6 +95,7 @@ int main(int argc, char * argv[])
 	suite.Add(new CoinSelectTest(log));
 	suite.Add(new ColumnSortTest(log));
 	suite.Add(new CountingSortTest(log));
+	suite.Add(new CountTest(log));
 	suite.Add(new DestructorTest(log));
 	suite.Add(new DynamicProgrammingTest(log));
 	suite.Add(new FiniteAutomationTest(log));

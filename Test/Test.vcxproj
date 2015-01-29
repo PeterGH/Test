@@ -88,6 +88,7 @@
     <ClInclude Include="CoinSelectTest.h" />
     <ClInclude Include="ColumnSortTest.h" />
     <ClInclude Include="CountingSortTest.h" />
+    <ClInclude Include="CountTest.h" />
     <ClInclude Include="DestructorTest.h" />
     <ClInclude Include="DynamicProgrammingTest.h" />
     <ClInclude Include="FiniteAutomationTest.h" />
@@ -146,6 +147,7 @@
     <ClCompile Include="CoinSelectTest.cpp" />
     <ClCompile Include="ColumnSortTest.cpp" />
     <ClCompile Include="CountingSortTest.cpp" />
+    <ClCompile Include="CountTest.cpp" />
     <ClCompile Include="DestructorTest.cpp" />
     <ClCompile Include="DynamicProgrammingTest.cpp" />
     <ClCompile Include="FiniteAutomationTest.cpp" />

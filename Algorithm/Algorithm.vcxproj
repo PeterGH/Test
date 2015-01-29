@@ -90,6 +90,7 @@
     <ClInclude Include="CoinSelect.h" />
     <ClInclude Include="ColumnSort.h" />
     <ClInclude Include="CompleteBinaryTree.h" />
+    <ClInclude Include="Count.h" />
     <ClInclude Include="CountingSort.h" />
     <ClInclude Include="AVLTree.h" />
     <ClInclude Include="DoubleNode.h" />

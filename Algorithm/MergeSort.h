@@ -9,39 +9,9 @@ using namespace concurrency;
 namespace Test {
 	class _declspec(dllexport) MergeSort {
 	public:
-		// Assuming input[head..(middle-1)] and input[middle..tail] are already sorted,
-		// rearrange input so that input[head..tail] is sorted.
-		// In-place and stable.
-		template<class T> static void Merge(T * input, int head, int middle, int tail);
-
-		// Assuming input[head..(middle-1)] and input[middle..tail] are already sorted,
-		// rearrange elements every step so that input[head..tail] is sorted.
-		// In-place and stable.
-		template<class T> static void Merge(T * input, int head, int middle, int tail, int step);
-
 		template<class T> static void Merge(SingleNode<T> * & first, SingleNode<T> * second);
 
-		// An inversion is a pair {input[i], input[j]} such that input[i] > input[j] when i < j.
-		// We can extend the concept to two sub arrays of input, and the set of inversions
-		// contains every inversion whose elements each falls into different sub arrays, e.g.,
-		// input[i] is in the first sub array while input[j] is in the second.
-		// Sorting the two sub arrays separately does not change the count of inversions
-		// between the two sub arrays.
-		// Assuming input[head..(middle-1)] and input[middle..tail] are already sorted,
-		// count inversions between input[head..(middle-1)] and input[middle..tail] by merging 
-		// them into a sorted array input[head..tail].
-		template<class T> static int CountInversions(T * input, int head, int middle, int tail);
-
-		template<class T> static void Sort(T * input, int head, int tail, int step);
-
 		template<class T> static void Sort(SingleNode<T> * & list);
-
-		template<class T> static void ParallelSort(T * input, int head, int tail);
-		template<class T> static void ParallelSort(T * input, int length) { ParallelSort(input, 0, length - 1); }
-
-		// Count inversions in input[head..tail]
-		template<class T> static int CountInversions(T * input, int head, int tail);
-		template<class T> static int CountInversions(T * input, int length) { return CountInversions(input, 0, length - 1); }
 
 		// Merg sort multiple sorted sets
 		// Each element of inputs points to a sorted array, whose length is in array sizes.
@@ -50,56 +20,6 @@ namespace Test {
 		template<class T> static void Sort(T * inputs[], size_t * sizes, size_t size, vector<T> & output);
 	};
 
-	template<class T> void MergeSort::Merge(T * input, int head, int middle, int tail)
-	{
-		if (input == nullptr || head < 0 || middle <= 0 || tail < middle || tail <= head) return;
-		// head and middle point to the heads of two sub sorted arrays.
-		while (head < middle && middle <= tail) {
-			if (input[head] <= input[middle]) {
-				head++;
-			} else {
-				// Should move input[middle] to position head
-				T t = input[middle];
-
-				// Shift input[head..(middle-1)] to input[(head+1)..middle]
-				for (int i = middle; i > head; i--) {
-					input[i] = input[i - 1];
-				}
-
-				input[head] = t;
-
-				// Move to the next pair of elements
-				head++;
-				middle++;
-			}
-		}
-	}
-
-	template<class T> void MergeSort::Merge(T * input, int head, int middle, int tail, int step)
-	{
-		if (input == nullptr || head < 0 || middle <= 0 || tail < middle || tail <= head || step <= 0) return;
-		// head and middle point to the heads of two sub sorted arrays.
-		while (head < middle && middle <= tail) {
-			if (input[head] <= input[middle]) {
-				head += step;
-			} else {
-				// Should move input[middle] to position head
-				T t = input[middle];
-
-				// Shift input[head..(middle-step)] to input[(head+step)..middle]
-				for (int i = middle; i > head; i -= step) {
-					input[i] = input[i - step];
-				}
-
-				input[head] = t;
-
-				// Move to the next pair of elements
-				head += step;
-				middle += step;
-			}
-		}
-	}
-	
 	// Merge two sorted single link lists
 	template<class T> void MergeSort::Merge(SingleNode<T> * & first, SingleNode<T> * second)
 	{
@@ -143,49 +63,6 @@ namespace Test {
 		}
 	}
 
-	template<class T> int MergeSort::CountInversions(T * input, int head, int middle, int tail)
-	{
-		if (input == nullptr || head < 0 || middle <= 0 || tail < middle || tail <= head) return 0;
-		int count = 0;
-		// head and middle point to the heads of two sub sorted arrays.
-		while (head < middle && middle <= tail) {
-			if (input[head] <= input[middle]) {
-				head++;
-			} else {
-				// Should move input[middle] to position head
-				T t = input[middle];
-				
-				// Shift input[head..(middle-1)] to input[(head+1)..middle]
-				for (int i = middle; i > head; i--) {
-					input[i] = input[i - 1];
-				}
-
-				input[head] = t;
-				
-				// There (middle - head) elements moved.
-				// Each of them paired with input[middle] is an inversion.
-				count += (middle - head);
-
-				// Move to the next pair of elements
-				head++;
-				middle++;
-			}
-		}
-
-		return count;
-	}
-
-	template<class T> void MergeSort::Sort(T * input, int head, int tail, int step)
-	{
-		if (input == nullptr || head < 0 || tail < 0 || tail < head || step <= 0) return;
-		if (head < tail) {
-			int middle = head + (((tail - head) / step) >> 1) * step + step;
-			Sort(input, head, middle - step, step);
-			Sort(input, middle, tail, step);
-			Merge(input, head, middle, tail, step);			
-		}
-	}
-
 	// Sort a single link list or a circular list
 	template<class T> void MergeSort::Sort(SingleNode<T> * & list)
 	{
@@ -226,24 +103,6 @@ namespace Test {
 		}
 	}
 	
-	template<class T> int MergeSort::CountInversions(T * input, int head, int tail)
-	{
-		if (input == nullptr || head < 0 || tail < 0 || tail < head) return 0;
-		int count = 0;
-		if (head < tail) {
-			int middle = head + ((tail - head) >> 1) + 1;
-
-			// Sort and count inversions in each sub array
-			count += CountInversions(input, head, middle - 1);
-			count += CountInversions(input, middle, tail);
-
-			// Sort and count inversions between two sub arrays
-			count += CountInversions(input, head, middle, tail);
-		}
-
-		return count;
-	}
-
 	// Merge-sort multiple sorted arrays
 
 	// Contain information to point to an element of a sorted array
