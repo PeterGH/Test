@@ -440,4 +440,87 @@ void SearchTest::Init()
 
 		Logger().WriteInformation("In total %d runs, fastest runs per method are (TwoSum %d, TwoSum2 %d, TwoSum3 %d, TwoSum4 %d)\n", times1.size(), count1, count2, count3, count4);
 	});
+
+	Add("MaxSum", [&](){
+		int A1[] = { 13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7 };
+		int L = sizeof(A1) / sizeof(A1[0]);
+
+		auto check = [&](int a[], int n, int el, int er, int es) -> void {
+			Logger().Print(a, n);
+			int l, r, sum;
+			Search::MaxSum<int>(a, n, l, r, sum);
+			Logger().WriteInformation("a[%d..%d] = %d\n", l, r, sum);
+			int l2, r2, sum2;
+			Search::MaxSum2<int>(a, n, l2, r2, sum2);
+			Logger().WriteInformation("a[%d..%d] = %d\n", l2, r2, sum2);
+			ASSERT1(el == l);
+			ASSERT1(er == r);
+			ASSERT1(es == sum);
+			ASSERT1(el == l2);
+			ASSERT1(er == r2);
+			ASSERT1(es == sum2);
+		};
+
+		check(A1, L, 7, 10, 43);
+		check(A1, 1, 0, 0, 13);
+		check(A1, 2, 0, 0, 13);
+		check(A1, 3, 0, 0, 13);
+		check(A1, 4, 3, 3, 20);
+		check(A1, 5, 3, 3, 20);
+		check(A1, 8, 3, 3, 20);
+
+		int A2[] = { 13, 3, 25, 20, 3, 16, 23, 18, 20, 7, 12, 5, 22, 15, 4, 7 };
+		check(A2, L, 0, L - 1, 213);
+		check(A2, 1, 0, 0, 13);
+		check(A2, 2, 0, 1, 16);
+		check(A2, 3, 0, 2, 41);
+
+		int A3[] = { -13, -3, -25, -20, -3, -16, -23, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
+		check(A3, L, 4, 4, -3);
+		check(A3, 1, 0, 0, -13);
+		check(A3, 2, 1, 1, -3);
+
+		int A4[] = { 0, 0, -25, -20, -3, -16, -23, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
+		check(A4, L, 1, 1, 0);
+		check(A4, 1, 0, 0, 0);
+
+		int A5[] = { 0, 0, 25, 20, 3, 16, 23, 18, 20, 7, 12, 5, 22, 15, 0, 0 };
+		check(A5, L, 2, 13, 186);
+		check(A5, 1, 0, 0, 0);
+
+		int A6[] = { -25, -20, -3, 0, 0, -16, -23, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
+		check(A6, L, 4, 4, 0);
+		check(A6, 1, 0, 0, -25);
+		check(A6, 2, 1, 1, -20);
+		check(A6, 5, 4, 4, 0);
+
+		int A7[] = { 1, 1, 1, -1, -1, -1, -1, -18, -20, -7, -12, -5, -22, -15, -4, -7 };
+		check(A7, L, 0, 2, 3);
+		check(A7, 6, 0, 2, 3);
+
+		int A8[] = { 1, 1, 1, -1, -1, -1, -1, -18, -20, -7, -12, -5, -22, -15, -4, 7 };
+		check(A8, L, L - 1, L - 1, 7);
+	});
+
+	Add("MaxSum2", [&](){
+		int d = RAND_MAX >> 1;
+		for (int i = 0; i < 1000; i++) {
+			int length = 1 + (rand() % 100);
+			unique_ptr<int[]> input(new int[length]);
+			for (int j = 0; j < length; j++) {
+				input[j] = rand() - d;
+			}
+			Logger().Print(input.get(), length);
+			int l, r, sum;
+			Search::MaxSum<int>(input.get(), length, l, r, sum);
+			Logger().WriteInformation("a[%d..%d] = %d\n", l, r, sum);
+			int l2, r2, sum2;
+			Search::MaxSum2<int>(input.get(), length, l2, r2, sum2);
+			Logger().WriteInformation("a[%d..%d] = %d\n", l2, r2, sum2);
+			ASSERT1(l == l2);
+			ASSERT1(r == r2);
+			ASSERT1(sum == sum2);
+		}
+	});
+
 }

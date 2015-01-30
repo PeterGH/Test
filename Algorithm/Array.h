@@ -36,15 +36,6 @@ namespace Test {
 		template<class T> static void MaxSlidingWindow(const T * input, int length, int window, vector<T> & output);
 		template<class T> static void MaxSlidingWindow2(const T * input, int length, int window, vector<T> & output);
 
-		// Find a subarray of contiguous elements whose sum is maximized
-		// If array contains both positive and negative numbers, return the maximum subarray
-		// If array contains positive numbers, return entire array A
-		// If array contains non-positive numbers, return the maximum number
-		// Parameter sum is the summation of the returned subarray
-		// Parameters start and end are the start and end indices of the returned subarray
-		template<class T> static void MaxSubArray(const T * input, int length, int & start, int & end, T & sum);
-		template<class T> static void MaxSubArray2(const T * input, int length, int & start, int & end, T & sum);
-
 		// Find the indices of min and max elements.
 		// minIndex will be the index of the minimum value (first index if there are more than on minimum value).
 		// maxIndex will be the index of the maximum value (last index if there are more than on maximum value).
@@ -529,84 +520,6 @@ namespace Test {
 			queue.push_back(i);
 
 			output.push_back(input[queue.front()]);
-		}
-	}
-
-	// This is a solution to the buy-sell-stock problem in Introduction to Algorithms
-	template<class T> void Array::MaxSubArray(const T * input, int length, int & start, int & end, T & sum)
-	{
-		start = -1;
-		end = -1;
-		sum = 0;
-
-		if (input == nullptr || length <= 0) return;
-
-		// Track the last maximum sum so far
-		start = 0;
-		end = 0;
-		sum = 0;
-
-		// Track the current streak
-		// Beginning
-		int l = 0;
-		// Cumulative sum up to current element
-		T c = 0;
-		// The index of the maximum element seen so far
-		int max = 0;
-
-		for (int i = 0; i < length; i++) {
-			// Add current element
-			c += input[i];
-
-			if (c > sum) {
-				// Current element is positive,
-				// and the current sum is larger than the last one.
-				// Update the last seen maximum sum
-				start = l;
-				end = i;
-				sum = c;
-			} else if (c <= 0) {
-				// Current element is negative
-				// and everything cancel out
-				// Reset and start from the next element
-				l = i + 1;
-				c = 0;
-			}
-
-			// Record the max element so far
-			if (input[i] >= input[max]) max = i;
-		}
-
-		if (sum <= 0) {
-			// All elements are zero or negative
-			// Return the maximum element
-			start = max;
-			end = max;
-			sum = input[max];
-		}
-	}
-
-	template<class T> void Array::MaxSubArray2(const T * input, int length, int & start, int & end, T & sum)
-	{
-		start = -1;
-		end = -1;
-		sum = INT_MIN;
-		if (input == nullptr || length <= 0) return;
-
-		int minIndex = -1;
-		int minSum = 0; // sum[0..minIndex]
-		int s = 0; // sum[0..i]
-		for (int i = 0; i < length; i++) {
-			s += input[i];
-			if (s - minSum >= sum) {
-				start = minIndex + 1;
-				end = i;
-				sum = s - minSum;
-			}
-			if (s <= minSum) {
-				minSum = s;
-				minIndex = i;
-			}
 		}
 	}
 
