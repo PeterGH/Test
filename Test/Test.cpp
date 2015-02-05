@@ -37,6 +37,7 @@
 #include "MatrixTest.h"
 #include "MazeTest.h"
 #include "MergeSortTest.h"
+#include "MongeTest.h"
 #include "MRIntegerTest.h"
 #include "NodeGraphTest.h"
 #include "NodeTest.h"
@@ -116,6 +117,7 @@ int main(int argc, char * argv[])
 	suite.Add(new MatrixTest(log));
 	suite.Add(new MazeTest(log));
 	suite.Add(new MergeSortTest(log));
+	suite.Add(new MongeTest(log));
 	suite.Add(new MRIntegerTest(log));
 	suite.Add(new NodeGraphTest(log));
 	suite.Add(new NodeTest(log));

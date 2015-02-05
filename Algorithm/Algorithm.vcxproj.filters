@@ -76,6 +76,7 @@
     <ClInclude Include="Search.h" />
     <ClInclude Include="Sort.h" />
     <ClInclude Include="Count.h" />
+    <ClInclude Include="Monge.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BitSet.cpp" />
