@@ -16,7 +16,7 @@ namespace Test {
 		virtual ~Matrix(void);
 
 		virtual T & operator()(size_t r, size_t c);
-		virtual T operator()(size_t r, size_t c) const { return this->operator()(r, c); }
+		// virtual T operator()(size_t r, size_t c) const { return this->operator()(r, c); }
 		const size_t Rows(void) const { return this->rows; }
 		const size_t Cols(void) const { return this->cols; }
 	};
