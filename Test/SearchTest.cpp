@@ -318,19 +318,12 @@ void SearchTest::Init()
 			int loops = 10;
 			int delta = (max - min) / loops;
 
-			LONGLONG ticks, time1, time2, time3, time4;
-			function<LONGLONG(void)> GetTicks = [&](void)->LONGLONG{
-				LARGE_INTEGER t;
-				if (!QueryPerformanceCounter(&t)) t.QuadPart = 0;
-				return t.QuadPart;
-			};
+			LONGLONG time1, time2, time3, time4;
 
 			vector<pair<int, int>> pairs1, pairs2, pairs3, pairs4;
 			for (long s = min; s <= max; s += delta) {
 				memcpy_s(input1.get(), size, input.get(), size);
-				ticks = GetTicks();
-				Test::Search::TwoSum<long>(input1.get(), length, s, pairs1);
-				time1 = GetTicks() - ticks;
+				time1 = TimedCall([&](){ Test::Search::TwoSum<long>(input1.get(), length, s, pairs1); });
 				times1.push_back(time1);
 				for_each(pairs1.begin(), pairs1.end(), [&](pair<int, int> p){
 					ASSERT2(
@@ -341,9 +334,7 @@ void SearchTest::Init()
 				});
 
 				memcpy_s(input2.get(), size, input.get(), size);
-				ticks = GetTicks();
-				Test::Search::TwoSum2<long>(input2.get(), length, s, pairs2);
-				time2 = GetTicks() - ticks;
+				time2 = TimedCall([&](){ Test::Search::TwoSum2<long>(input2.get(), length, s, pairs2); });
 				times2.push_back(time2);
 				for_each(pairs2.begin(), pairs2.end(), [&](pair<int, int> p){
 					ASSERT2(
@@ -354,9 +345,7 @@ void SearchTest::Init()
 				});
 
 				memcpy_s(input3.get(), size, input.get(), size);
-				ticks = GetTicks();
-				Test::Search::TwoSum3<long>(input3.get(), length, s, pairs3);
-				time3 = GetTicks() - ticks;
+				time3 = TimedCall([&](){ Test::Search::TwoSum3<long>(input3.get(), length, s, pairs3); });
 				times3.push_back(time3);
 				for_each(pairs3.begin(), pairs3.end(), [&](pair<int, int> p){
 					ASSERT2(
@@ -367,9 +356,7 @@ void SearchTest::Init()
 				});
 
 				memcpy_s(input4.get(), size, input.get(), size);
-				ticks = GetTicks();
-				Test::Search::TwoSum4<long>(input4.get(), length, s, pairs4);
-				time4 = GetTicks() - ticks;
+				time4 = TimedCall([&](){ Test::Search::TwoSum4<long>(input4.get(), length, s, pairs4); });
 				times4.push_back(time4);
 				for_each(pairs4.begin(), pairs4.end(), [&](pair<int, int> p){
 					ASSERT2(

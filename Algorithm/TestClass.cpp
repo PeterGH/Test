@@ -89,4 +89,18 @@ namespace Test {
 	{
 		cout << _pass << " passed, " << _fail << " failed." << endl;
 	}
+
+	LONGLONG TestClass::TimedCall(const function<void(void)> & func)
+	{
+		function<LONGLONG(void)> GetTicks = [&](void)->LONGLONG{
+			LARGE_INTEGER t;
+			if (!QueryPerformanceCounter(&t)) t.QuadPart = 0;
+			return t.QuadPart;
+		};
+
+		LONGLONG ticks = GetTicks();
+		func();
+		ticks = GetTicks() - ticks;
+		return ticks;
+	}
 }

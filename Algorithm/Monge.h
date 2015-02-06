@@ -49,20 +49,26 @@ namespace Test {
 		if (mins.size() < this->Rows()) throw invalid_argument(String::Format("mins length %d is less than %d", mins.size(), this->Rows()));
 
 		function<void(size_t, size_t, size_t, size_t)> find = [&](size_t i1, size_t j1, size_t i2, size_t j2) {
-			size_t i = i1 + ((i2 - i1) >> 1);
-			T m = this->operator()(i, j1);
-			mins[i] = j1;
-			for (size_t j = j1 + 1; j <= j2; j++) {
-				if (this->operator()(i, j) < m) {
-					m = this->operator()(i, j);
-					mins[i] = j;
+			if (j1 == j2) {
+				for (size_t i = i1; i <= i2; i++) {
+					mins[i] = j1;
 				}
-			}
-			if (i1 < i) {
-				find(i1, j1, i - 1, mins[i]);
-			}
-			if (i < i2) {
-				find(i + 1, mins[i], i2, j2);
+			} else {
+				size_t i = i1 + ((i2 - i1) >> 1);
+				T m = this->operator()(i, j1);
+				mins[i] = j1;
+				for (size_t j = j1 + 1; j <= j2; j++) {
+					if (this->operator()(i, j) < m) {
+						m = this->operator()(i, j);
+						mins[i] = j;
+					}
+				}
+				if (i1 < i) {
+					find(i1, j1, i - 1, mins[i]);
+				}
+				if (i < i2) {
+					find(i + 1, mins[i], i2, j2);
+				}
 			}
 		};
 

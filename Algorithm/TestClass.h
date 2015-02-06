@@ -72,6 +72,8 @@ namespace Test {
 
 		// Print a report of test run result
 		__declspec(dllexport) void Report(void) const;
+
+		__declspec(dllexport) LONGLONG TimedCall(const function<void(void)> & func);
 	};
 
 	class AssertError : public domain_error {
