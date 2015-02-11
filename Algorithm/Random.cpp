@@ -47,4 +47,18 @@ namespace Test {
 			samples.push_back(n - 1);
 		}
 	}
+
+	void Random::Sample2(unsigned int n, unsigned int m, vector<unsigned int> & samples)
+	{
+		if (m == 0) return;
+		if (m > n) throw invalid_argument(String::Format("%d is less than %d", n, m));
+		for (unsigned int j = n - m; j < n; j++) {
+			unsigned int i = (unsigned int)Next(j);
+			if (find(samples.begin(), samples.end(), i) == samples.end()) {
+				samples.push_back(i);
+			} else {
+				samples.push_back(j);
+			}
+		}
+	}
 }

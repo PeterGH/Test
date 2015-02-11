@@ -11,8 +11,7 @@ void RandomTest::Init(void)
 				map<int, int>::iterator it = freq.find(v);
 				if (it == freq.end()) {
 					freq.insert(pair<int, int>(v, 1));
-				}
-				else {
+				} else {
 					it->second++;
 				}
 			}
@@ -85,12 +84,13 @@ void RandomTest::Init(void)
 	});
 
 	Add("Sample(n,m)", [&](){
-		function<void(int, int, int)> test = [&](int n, int m, int count){
-			Logger().WriteInformation("Sample(%d, %d)\n", n, m);
+		function<void(int, int, int, function<void(unsigned int, unsigned int, vector<unsigned int> &)>)>
+		test = [&](int n, int m, int count, function<void(unsigned int, unsigned int, vector<unsigned int> &)> sample){
+			Logger().WriteInformation("Sample(%d, %d) %d times\n", n, m, count);
 			map<string, int> freq;
 			for (int i = 0; i < count; i++) {
 				vector<unsigned int> samples;
-				Test::Random::Sample(n, m, samples);
+				sample(n, m, samples);
 
 				std::sort(samples.begin(), samples.end());
 				string key = "";
@@ -114,16 +114,26 @@ void RandomTest::Init(void)
 			int delta = ave >> 1;
 
 			for_each(freq.begin(), freq.end(), [&](pair<string, int> it){
+				Logger().WriteInformation("%s, %d times\n", it.first.c_str(), it.second);
 				ASSERT1(it.second <= (ave + delta));
 				ASSERT1(it.second >= (ave - delta));
 			});
 		};
 
-		test(10, 1, 1000);
-		test(10, 2, 10000);
-		test(10, 4, 100000);
-		test(10, 6, 100000);
-		test(10, 8, 10000);
-		test(10, 10, 1000);
+		auto sample = [&](unsigned int n, unsigned int m, vector<unsigned int> & s) { Test::Random::Sample(n, m, s); };
+		test(10, 1, 1000, sample);
+		test(10, 2, 10000, sample);
+		test(10, 4, 100000, sample);
+		test(10, 6, 100000, sample);
+		test(10, 8, 10000, sample);
+		test(10, 10, 1000, sample);
+
+		auto sample2 = [&](unsigned int n, unsigned int m, vector<unsigned int> & s) { Test::Random::Sample2(n, m, s); };
+		test(10, 1, 1000, sample2);
+		test(10, 2, 10000, sample2);
+		test(10, 4, 100000, sample2);
+		test(10, 6, 100000, sample2);
+		test(10, 8, 10000, sample2);
+		test(10, 10, 1000, sample2);
 	});
 }

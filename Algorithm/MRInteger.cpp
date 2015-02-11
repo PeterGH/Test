@@ -1,5 +1,4 @@
 #include "MRInteger.h"
-#include "Random.h"
 
 namespace Test {
 
@@ -8,18 +7,17 @@ namespace Test {
 	{
 		if (bases == nullptr) throw invalid_argument("bases is nullptr");
 		if (length <= 0) throw invalid_argument(String::Format("length %d is invalid", length));
+		for (unsigned int i = 0; i < length; i++) {
+			if (bases[i] <= 0) {
+				throw invalid_argument(String::Format("bases[%d] %d is invalid", i, bases[i]));
+			}
+		}
 
 		_bases = new unsigned int[length];
 		_digits = new unsigned int[length];
 		_length = length;
 		_max = 1;
 		for (unsigned int i = 0; i < length; i++) {
-			if (bases[i] <= 0) {
-				delete[] _bases;
-				delete[] _digits;
-				throw invalid_argument(String::Format("bases[%d] %d is invalid", i, bases[i]));
-			}
-
 			_bases[i] = bases[i];
 			_digits[i] = 0;
 			_max = _max * bases[i];
@@ -32,18 +30,17 @@ namespace Test {
 		if (bases == nullptr) throw invalid_argument("bases is nullptr");
 		if (digits == nullptr) throw invalid_argument("digits is nullptr");		
 		if (length <= 0) throw invalid_argument(String::Format("length %d is invalid", length));
-		
+		for (unsigned int i = 0; i < length; i++) {
+			if (bases[i] <= 0) {
+				throw invalid_argument(String::Format("bases[%d] %d is invalid", i, bases[i]));
+			}
+		}
+
 		_bases = new unsigned int[length];
 		_digits = new unsigned int[length];
 		_length = length;
 		_max = 1;
 		for (unsigned int i = 0; i < length; i++) {
-			if (bases[i] <= 0) {
-				delete[] _bases;
-				delete[] _digits;
-				throw invalid_argument(String::Format("bases[%d] %d is invalid", i, bases[i]));
-			}
-			
 			_bases[i] = bases[i];
 			_digits[i] = digits[i] % _bases[i];
 			_max = _max * bases[i];

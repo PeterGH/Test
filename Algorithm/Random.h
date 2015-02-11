@@ -27,6 +27,7 @@ namespace Test {
 		// which each m samples is equally likely.
 		// The algorithm is described in exercise 5.3-7 in MIT Introduction to Algorithm, Third Edition.
 		__declspec(dllexport) static void Sample(unsigned int n, unsigned int m, vector<unsigned int> & samples);
+		__declspec(dllexport) static void Sample2(unsigned int n, unsigned int m, vector<unsigned int> & samples);
 	};
 }
 
