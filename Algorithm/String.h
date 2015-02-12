@@ -137,11 +137,24 @@ namespace Test {
 		template<class T, class C> static basic_string<C> Join(const T * input, int length, const C * separator)
 		{
 			basic_stringstream<C> ss;
-			ss << input[0];
-			for (int i = 1; i < length; i++) {
-				ss << separator << input[i];
+			if (length > 0) {
+				ss << input[0];
+				for (int i = 1; i < length; i++) {
+					ss << separator << input[i];
+				}
 			}
+			return ss.str();
+		}
 
+		template<class T, class C> static basic_string<C> Join(const vector<T> & input, const C * separator)
+		{
+			basic_stringstream<C> ss;
+			if (input.size() > 0) {
+				ss << input[0];
+				for (size_t i = 1; i < input.size(); i++) {
+					ss << separator << input[i];
+				}
+			}
 			return ss.str();
 		}
 	};

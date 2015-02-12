@@ -91,14 +91,8 @@ void RandomTest::Init(void)
 			for (int i = 0; i < count; i++) {
 				vector<unsigned int> samples;
 				sample(n, m, samples);
-
 				std::sort(samples.begin(), samples.end());
-				string key = "";
-				for_each(samples.begin(), samples.end(), [&](unsigned int s){
-					if (key.compare("") == 0) key.append(Test::String::Format("%d", s));
-					else key.append(Test::String::Format(":%d", s));
-				});
-				
+				string key = Test::String::Join(samples, ":");
 				map<string, int>::iterator it = freq.find(key);
 				if (it == freq.end()) {
 					freq.insert(pair<string, int>(key, 1));

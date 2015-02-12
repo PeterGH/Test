@@ -2627,36 +2627,6 @@ namespace Test {
 			}
 		}
 
-		// Given a collection of numbers, return all possible permutations.
-		// For example,
-		// [1,2,3] have the following permutations:
-		// [1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], and [3,2,1].
-		static vector<vector<int>> Permute(vector<int> & num)
-		{
-			if (num.size() == 0) return vector<vector<int>> { };
-
-			function<void(vector<int> &, size_t, vector<vector<int>> &)>
-			p = [&](vector<int> & n, size_t i, vector<vector<int>> & o) {
-				if (i == n.size() - 1) {
-					o.push_back(n);
-					return;
-				}
-				for (size_t j = i; j < n.size(); j++) {
-					vector<int> m(n);
-					if (j != i) {
-						int t = m[j];
-						m.erase(m.begin() + j);
-						m.insert(m.begin() + i, t);
-					}
-					p(m, i + 1, o);
-				}
-			};
-
-			vector<vector<int>> output;
-			p(num, 0, output);
-			return output;
-		}
-
 		// Given a collection of numbers that might contain duplicates, return all possible unique permutations.
 		// For example,
 		// [1,1,2] have the following unique permutations:
