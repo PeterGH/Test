@@ -2647,39 +2647,6 @@ void LeetCodeTest::Init(void)
 		}
 	});
 
-	Add("GetPermutation", [&](){
-		auto fact = [&](int n)-> int {
-			int m = 1;
-			for ( int i = 1; i <= n; i++) {
-				m *= i;
-			}
-			return m;
-		};
-		auto print = [&](int n){
-			for (int i = 1; i <= n; i++) {
-				Logger().WriteInformation("%c", '0' + i);
-			}
-			Logger().WriteInformation("\n");
-		};
-		auto check = [&](int n){
-			print(n);
-			int m = fact(n);
-			for (int i = 1; i <= m; i++) {
-				string p = Test::LeetCode::GetPermutation(n, i);
-				Logger().WriteInformation("  %d  %s\n", i, p.c_str());
-			}
-		};
-		check(1);
-		check(2);
-		check(3);
-		check(4);
-		check(5);
-		check(6);
-		check(7);
-		check(8);
-		check(9);
-	});
-
 	Add("SpiralOrder1", [&](){
 		auto print = [&](vector<vector<int>> & m) {
 			Logger().WriteInformation("Matrix:\n");
@@ -2934,28 +2901,6 @@ void LeetCodeTest::Init(void)
 		check(0.5, INT_MAX);
 		check(1, INT_MIN);
 		check(1, INT_MAX);
-	});
-
-	Add("PermuteUnique", [&](){
-		auto print = [&](vector<int> & n){
-			for (size_t i = 0; i < n.size(); i++) {
-				Logger().WriteInformation("%s%d", i == 0 ? "" : ", ", n[i]);
-			}
-			Logger().WriteInformation("\n");
-		};
-		auto check = [&](vector<int> & n) {
-			Logger().WriteInformation("Permute: ");
-			print(n);
-			vector<vector<int>> p = Test::LeetCode::PermuteUnique(n);
-			for_each (p.begin(), p.end(), [&](vector<int> & i){
-				print(i);
-			});
-		};
-		check(vector<int> { 1, 1 });
-		check(vector<int> { 1, 1, 1 });
-		check(vector<int> { 1, 1, 2 });
-		check(vector<int> { 1, 1, 2, 2 });
-		check(vector<int> { 1, 2, 3, 1, 2, 3 });
 	});
 
 	Add("WildcharMatch", [&](){

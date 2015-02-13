@@ -2041,80 +2041,6 @@ namespace Test {
 			return head;
 		}
 
-		// The set [1,2,3,…,n] contains a total of n! unique permutations.
-		// By listing and labeling all of the permutations in order,
-		// We get the following sequence (ie, for n = 3):
-		// 1."123"
-		// 2."132"
-		// 3."213"
-		// 4."231"
-		// 5."312"
-		// 6."321"
-		// Given n and k, return the k-th permutation sequence.
-		// Note: Given n will be between 1 and 9 inclusive.
-		static string GetPermutation(int n, int k)
-		{
-			if (n <= 0 || k <= 0) return string();
-			int i = 1; // Count number of digits
-			int m = 1; // Count number of permutations of i digits, i.e. i!
-			while (m < k && i < n) {
-				i++;
-				m *= i;
-			}
-			if (m < k) return string(); // k > n!
-			// 1 2 3 ...... n-i n-i+1 n-i+2 ...... n-1 n
-			// ~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~
-			//     not permute         permute
-			string output;
-			for (int j = 1; j <= n - i; j++) {
-				output.append(1, '0' + j);
-			}
-
-			vector<int> permute;
-			for (int j = n-i+1; j <= n; j++) {
-				permute.push_back(j);
-			}
-
-			while (i > 0) {
-				if (i == 1) {
-					// k = 1 since k <= m = i! = 1
-					output.append(1, '0' + permute[permute.size()-1]);
-					break;
-				} else if (i == 2) {
-					if (k == 1) {
-						output.append(1, '0' + permute[permute.size()-2]);
-						output.append(1, '0' + permute[permute.size()-1]);
-					} else { // k = 2
-						output.append(1, '0' + permute[permute.size()-1]);
-						output.append(1, '0' + permute[permute.size()-2]);
-					}
-					break;
-				}
-				// Permute 1 2 3 4 5 ...... i-1 i, will get i ranges determined by the first digit
-				//   1 ......
-				//   1 ......
-				//   2 ......
-				//   2 ......
-				//   ......
-				//   ......
-				//   i-1 ......
-				//   i-1 ......
-				//   i ......
-				//   i ......
-				m = m / i; // Count permutations per range
-				int j = (k - 1) / m + 1; // Get the range index which k falls into
-				// 1 2 3 4 5 ... j-1 j j+1 ... i-1 i
-				// j 1 2 3 4 5 ... j-1 j+1 ... i-1 i
-				int t = permute[j-1];
-				permute.erase(permute.begin() + j - 1);
-				output.append(1, '0' + t);
-				i--; // Get the i-th range
-				k = ((k - 1) % m) + 1; // Get the index in the i-th range
-			}
-
-			return output;
-		}
-
 		// Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
 		// For example,
 		// Given the following matrix:
@@ -2625,40 +2551,6 @@ namespace Test {
 					matrix[i][n-1-j] = t;
 				}
 			}
-		}
-
-		// Given a collection of numbers that might contain duplicates, return all possible unique permutations.
-		// For example,
-		// [1,1,2] have the following unique permutations:
-		// [1,1,2], [1,2,1], and [2,1,1].
-		static vector<vector<int>> PermuteUnique(vector<int> & num)
-		{
-			if (num.size() == 0) return vector<vector<int>> { };
-
-			function<void(vector<int> &, size_t, vector<vector<int>> &)>
-			p = [&](vector<int> & n, size_t i, vector<vector<int>> & o) {
-				if (i == n.size() - 1) {
-					o.push_back(n);
-					return;
-				}
-				unordered_set<int> swapped;
-				swapped.insert(n[i]);
-				for (size_t j = i; j < n.size(); j++) {
-					if (j != i && swapped.find(n[j]) != swapped.end()) continue;
-					swapped.insert(n[j]);
-					vector<int> m(n);
-					if (j != i) {
-						int t = m[j];
-						m.erase(m.begin() + j);
-						m.insert(m.begin() + i, t);
-					}
-					p(m, i + 1, o);
-				}
-			};
-
-			vector<vector<int>> output;
-			p(num, 0, output);
-			return output;
 		}
 
 		// Implement wildcard pattern matching with support for '?' and '*'.
