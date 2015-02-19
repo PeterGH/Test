@@ -223,4 +223,26 @@ void PermutationTest::Init(void)
 		// check(8);
 		// check(9);
 	});
+
+	Add("NextPermutation", [&](){
+		auto check = [&](vector<int> & n) {
+			Logger().WriteInformation("Permute: ");
+			Logger().Print(n);
+			vector<vector<int>> p = Test::Permutation::Unique(n);
+			for_each(p.begin(), p.end(), [&](vector<int> & i){
+				Logger().WriteInformation("Unique:\t");
+				Logger().Print(i);
+				Logger().WriteInformation("Next:\t");
+				Logger().Print(n);
+				bool e = Equal(i, n);
+				ASSERT1(e == true);
+				Test::Permutation::NextPermutation(n);
+			});
+		};
+		check(vector<int> { 1, 1 });
+		check(vector<int> { 1, 1, 1 });
+		check(vector<int> { 1, 1, 2 });
+		check(vector<int> { 1, 1, 2, 2 });
+		check(vector<int> { 1, 1, 2, 2, 3, 3 });
+	});
 }

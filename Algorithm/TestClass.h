@@ -74,6 +74,8 @@ namespace Test {
 		__declspec(dllexport) void Report(void) const;
 
 		__declspec(dllexport) LONGLONG TimedCall(const function<void(void)> & func);
+
+		template<class T> static bool Equal(const vector<T> & left, const vector<T> & right);
 	};
 
 	class AssertError : public domain_error {
@@ -95,4 +97,13 @@ namespace Test {
 	}
 
 #define STRING(statement) #statement
+
+	template<class T> bool TestClass::Equal(const vector<T> & left, const vector<T> & right)
+	{
+		if (left.size() != right.size()) return false;
+		for (size_t i = 0; i < left.size(); i++) {
+			if (left[i] != right[i]) return false;
+		}
+		return true;
+	}
 }
