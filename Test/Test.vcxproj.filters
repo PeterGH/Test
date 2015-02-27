@@ -75,9 +75,6 @@
     <ClInclude Include="PermutationTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HeapSortTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="YoungTableauTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -249,9 +246,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PermutationTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HeapSortTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="YoungTableauTest.cpp">

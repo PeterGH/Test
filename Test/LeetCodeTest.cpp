@@ -3476,25 +3476,4 @@ void LeetCodeTest::Init(void)
 			check(a, 2, b, 7, 5);
 		}
 	});
-
-	Add("TwoSum", [&](){
-		auto print = [&](vector<int> & n){
-			for_each (n.begin(), n.end(), [&](int r){
-				Logger().WriteInformation("  %d", r);
-			});
-			Logger().WriteInformation("\n");
-		};
-		auto check = [&](vector<int> & nums, int t){
-			vector<int> m = Test::LeetCode::TwoSum(nums, t);
-			Logger().WriteInformation("n[%d] + n[%d] = %d + %d = %d\n", m[0] - 1, m[1] - 1, nums[m[0] - 1], nums[m[1] - 1], t);
-		};
-		{
-			vector<int> n = { 5, 7, 2, 56, 2, 1, 4 };
-			print(n);
-			check(n, 9);
-			check(n, 7);
-			check(n, 5);
-			check(n, 58);
-		}
-	});
 }

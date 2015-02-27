@@ -596,4 +596,49 @@ namespace Test {
 		}
 		return min;
 	}
+
+	//         0
+	//    1          2
+	//  3   4     5     6
+	// 7 8 9 10 11 12 13 14
+	// Given height H, the number of nodes are in [2^(H - 1), 2^H - 1]
+	// The indices of nodes at height H are in [2^(H - 1) - 1, 2^H - 2]
+	//
+	// 2^(H - 1) <= count <= 2^H - 1
+	// There are H bits and the pattern is between:
+	// 10000 ... 000
+	// 11111 ... 111
+	unsigned int Math::Tree::Height(unsigned int count)
+	{
+		unsigned int h = 0;
+		while (count > 0) {
+			count = count >> 1;
+			h++;
+		}
+		return h;
+	}
+
+	// d-ary
+	//                                                  0
+	//                   1                              2                    ...          d
+	// (d+1)                   (d+2) ... (d+d) | (2d+1) (2d+2) ... (2d+d) | (d^2+1) (d^2+2) ... (d^2+d)
+	// (d^2+d+1) (d^2+d+2) ...
+	// ......
+	// Given height h, the number of nodes are [(d^(h-1)-1)/(d-1)+1, (d^h-1)/(d-1)]
+	// The indices at height h are [(d^(h-1)-1)/(d-1), (d^h-1)/(d-1)-1]
+	//
+	// (d^(h-1)-1)/(d-1) < count <= (d^h-1)/(d-1)
+	// There are h d-bits and the pattern is between:
+	// 1    0    0    0     ... 0    0    0
+	// (d-1)(d-1)(d-1)(d-1) ... (d-1)(d-1)(d-1)
+	unsigned int Math::Tree::Height(unsigned int count, unsigned int d)
+	{
+		count = count * (d - 1);
+		unsigned int h = 0;
+		while (count > 0) {
+			count = count / d;
+			h++;
+		}
+		return h;
+	}
 }

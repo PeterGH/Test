@@ -4688,54 +4688,5 @@ namespace Test {
 			}
 			throw runtime_error("median is not found");
 		}
-
-		// Given an array of integers, find two numbers such that they add up to a specific target number.
-		// The function twoSum should return indices of the two numbers such that they add up to the target,
-		// where index1 must be less than index2. Please note that your returned answers (both index1 and index2)
-		// are not zero-based. You may assume that each input would have exactly one solution.
-		// Input: numbers={2, 7, 11, 15}, target=9
-		// Output: index1=1, index2=2
-		static vector<int> TwoSum(vector<int> & numbers, int target)
-		{
-			vector<int> indices;
-			if (numbers.size() < 2) return indices;
-			vector<pair<int, int>> m;
-			for (int i = 0; i < (int)numbers.size(); i++) {
-				m.push_back(make_pair(numbers[i], i+1));
-			}
-			sort(m.begin(), m.end());
-			int i = 0;
-			int j = m.size() - 1;
-			while (i < j) {
-				int s = m[i].first + m[j].first;
-				if (s < target) {
-					i++;
-				} else if (s > target) {
-					j--;
-				} else {
-					indices.push_back(min(m[i].second, m[j].second));
-					indices.push_back(max(m[i].second, m[j].second));
-					break;
-				}
-			}
-			return indices;
-		}
-
-		static vector<int> TwoSum2(vector<int> & numbers, int target)
-		{
-			vector<int> indices;
-			if (numbers.size() < 2) return indices;
-			unordered_map<int, int> m;
-			for (int i = 0; i < (int)numbers.size(); i++) {
-				int d = target - numbers[i];
-				if (m.find(d) != m.end()) {
-					indices.push_back(m[d]);
-					indices.push_back(i + 1);
-					break;
-				}
-				m[numbers[i]] = i + 1;
-			}
-			return indices;
-		}
 	};
 }

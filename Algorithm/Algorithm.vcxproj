@@ -102,7 +102,6 @@
     <ClInclude Include="Monge.h" />
     <ClInclude Include="Search.h" />
     <ClInclude Include="Heap.h" />
-    <ClInclude Include="HeapSort.h" />
     <ClInclude Include="InOrderBinaryIterator.h" />
     <ClInclude Include="InOrderBinaryIteratorWithOutStack.h" />
     <ClInclude Include="InsertionSort.h" />
@@ -163,7 +162,6 @@
     <ClCompile Include="FiniteAutomation.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="GraphSearchTree.cpp" />
-    <ClCompile Include="HeapSort.cpp" />
     <ClCompile Include="KMP.cpp" />
     <ClCompile Include="Knapsack.cpp" />
     <ClCompile Include="Log.cpp" />

@@ -22,7 +22,6 @@
 #include "FiniteAutomationTest.h"
 #include "GraphTest.h"
 #include "GeometryTest.h"
-#include "HeapSortTest.h"
 #include "HeapTest.h"
 #include "InsertionSortTest.h"
 #include "KnapsackTest.h"
@@ -102,7 +101,6 @@ int main(int argc, char * argv[])
 	suite.Add(new FiniteAutomationTest(log));
 	suite.Add(new GraphTest(log));
 	suite.Add(new GeometryTest(log));
-	suite.Add(new HeapSortTest(log));
 	suite.Add(new HeapTest(log));
 	suite.Add(new InsertionSortTest(log));
 	suite.Add(new KnapsackTest(log));
