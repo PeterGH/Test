@@ -3,6 +3,7 @@
 #include <functional>
 #include <ppl.h>
 #include "Array.h"
+#include "Heap.h"
 #include "Math.h"
 #include "Search.h"
 using namespace concurrency;
@@ -24,10 +25,35 @@ namespace Test {
 		};
 
 		class Merge {
+		private:
+			// Contain information to point to an element of a sorted array
+			template<class T> class Element	{
+			public:
+				// Sorted array
+				const T * _sorted;
+				// Size of array
+				const size_t _size;
+				// The index of this element in the array
+				size_t _index;
+				Element(const T * sorted, const size_t size, size_t index) : _sorted(sorted), _size(size), _index(index) {}
+			};
+
+			// A comparator betweeb two Element<T> instances
+			template<class T> struct Greater : public binary_function<const Element<T> *, const Element<T> *, bool>
+			{
+				bool operator() (const Element<T> * left, const Element<T> * right) const;
+			};
+
 		public:
 			template<class T> static void Sort(T * input, size_t length);
 			template<class T> static void Sort(T * input, size_t head, size_t tail);
 			template<class T> static void Sort(T * input, size_t head, size_t tail, size_t step);
+
+			// Merg sort multiple sorted sets
+			// Each element of inputs points to a sorted array, whose length is in array sizes.
+			// The length of inputs is size.
+			// The final merged array is output.
+			template<class T> static void Sort(T * inputs[], size_t * sizes, size_t size, vector<T> & output);
 		};
 
 		class Heap {
@@ -166,6 +192,47 @@ namespace Test {
 				[&input, middle, tail, step]{ Sort(input, middle, tail, step); }
 			);
 			Util::Merge(input, head, middle, tail, step);
+		}
+	}
+
+	template<class T> bool Sort::Merge::Greater<T>::operator() (const Element<T> * left, const Element<T> * right) const
+	{
+		return left->_sorted[left->_index] > right->_sorted[right->_index];
+	}
+
+	// Implementation of merge-sort multiple sorted arrays
+	template<class T> void Sort::Merge::Sort(T * inputs[], size_t * sizes, size_t size, vector<T> & output)
+	{
+		if (inputs == nullptr || sizes == nullptr || size == 0) return;
+
+		// A minimum heap
+		Test::Heap<Element<T> *, Greater<T>> heap(size);
+
+		for (size_t i = 0; i < size; i++) {
+			if (inputs[i] != nullptr && sizes[i] > 0) {
+				// Initialize the heap with the first element in each sorted array
+				heap.Push(new Element<T>(inputs[i], sizes[i], 0));
+			}
+		}
+
+		while (heap.Size() > 0) {
+			// Extract the minimum element from the heap
+			Element<T> * min = heap.Pop();
+
+			// append the minum element into the output vector
+			output.push_back(min->_sorted[min->_index]);
+
+			// Move to the next element in the same array
+			min->_index++;
+
+			if (min->_index < min->_size) {
+				// The array still has elements.
+				// Push the next element into the heap.
+				heap.Push(min);
+			} else {
+				// The array has been processed. Discard it.
+				delete min;
+			}
 		}
 	}
 

@@ -242,4 +242,59 @@ void SortTest::Init()
 			}
 		}
 	});
+
+	Add("MergeInputs", [&](){
+		int * inputs[3];
+		size_t sizes[3];
+
+		int a0[] = { 0, 5, 9, 11 };
+		inputs[0] = a0;
+		sizes[0] = 4;
+
+		int a1[] = { 0, 1, 2, 3, 5, 6 };
+		inputs[1] = a1;
+		sizes[1] = 6;
+
+		int a2[] = { 6, 7, 8 };
+		inputs[2] = a2;
+		sizes[2] = 3;
+
+		vector<int> output;
+
+		Test::Sort::Merge::Sort<int>(inputs, sizes, (size_t)3, output);
+
+		ASSERT1(is_sorted(output.begin(), output.end()));
+		ASSERT1(output.size() == 13);
+
+		Logger().Print(output);
+		Logger().WriteInformation("\n");
+	});
+
+	Add("MergeInputs2", [&](){
+		for (int i = 0; i < 100; i++) {
+			size_t size = 2 + (rand() % 50);
+			unique_ptr<int * []> inputs(new int * [size]);
+			unique_ptr<size_t[]> sizes(new size_t[size]);
+			size_t total = 0;
+			for (size_t j = 0; j < size; j++) {
+				sizes[j] = 2 + (rand() % 50);
+				total += sizes[j];
+				inputs[j] = (int *)malloc(sizes[j] * sizeof(int));
+				for (size_t k = 0; k < sizes[j]; k++) {
+					inputs[j][k] = rand();
+				}
+				Test::Sort::Merge::Sort(inputs[j], sizes[j]);
+			}
+			Logger().WriteInformation("Run %d, %d inputs, %d elements\n", i, size, total);
+			vector<int> output;
+			Test::Sort::Merge::Sort<int>(inputs.get(), sizes.get(), size, output);
+			for (size_t j = 0; j < size; j++) {
+				delete[] inputs[j];
+			}
+			ASSERT1(is_sorted(output.begin(), output.end()));
+			ASSERT1(output.size() == total);
+			Logger().Print(output);
+			Logger().WriteInformation("\n");
+		}
+	});
 }
