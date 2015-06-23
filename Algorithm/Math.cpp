@@ -628,9 +628,10 @@ namespace Test {
 	// The indices at height h are [(d^(h-1)-1)/(d-1), (d^h-1)/(d-1)-1]
 	//
 	// (d^(h-1)-1)/(d-1) < count <= (d^h-1)/(d-1)
+	// d^(h-1) - 1 < count * (d-1) <= d^h - 1
 	// There are h d-bits and the pattern is between:
-	//   1 1 1 ... 1 1 2
-	// 1 1 1 1 ... 1 1 1
+	//  1    0    0    ...  0    0    0
+	// (d-1)(d-1)(d-1) ... (d-1)(d-1)(d-1)
 	unsigned int Math::Tree::Height(unsigned int count, unsigned int d)
 	{
 		count = count * (d - 1);
